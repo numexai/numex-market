@@ -1,0 +1,32 @@
+<div class="page-head">
+  <h1>Kategoriler</h1>
+  <div class="page-actions">
+    <a href="/api/categories/new" class="btn btn-primary">+ Yeni Kategori</a>
+  </div>
+</div>
+
+<div class="card">
+  <table class="table">
+    <thead>
+      <tr><th>ID</th><th>Kategori Adı</th><th>Slug</th><th>Ürün Sayısı</th><th>İşlemler</th></tr>
+    </thead>
+    <tbody>
+      <% if (categories.length === 0) { %>
+        <tr><td colspan="5" class="muted center">Henüz kategori yok.</td></tr>
+      <% } %>
+      <% categories.forEach(c => { %>
+        <tr>
+          <td><%= c.id %></td>
+          <td><strong><%= c.name %></strong></td>
+          <td class="muted"><%= c.slug %></td>
+          <td><%= c.products %></td>
+          <td class="actions">
+            <button class="btn btn-sm btn-danger delete-category" data-id="<%= c.id %>" data-name="<%= c.name %>">🗑️</button>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<script src="/js/categories.js"></script>

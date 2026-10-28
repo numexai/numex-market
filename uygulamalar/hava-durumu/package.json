@@ -1,0 +1,15 @@
+{
+  "name": "hava-durumu",
+  "version": "1.0.0",
+  "description": "4 sehir icin canli hava durumu uygulamasi",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": ["hava-durumu", "istanbul", "ankara", "izmir", "antalya"],
+  "author": "Numex AI",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

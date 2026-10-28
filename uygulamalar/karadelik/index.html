@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NUMEX CORE — EVENT HORIZON | Kara Delik Simülatörü</title>
+<style>
+  :root{
+    --bg:#05060a;
+    --panel:rgba(10,13,20,.82);
+    --panel-2:rgba(16,20,30,.9);
+    --line:rgba(120,160,220,.18);
+    --line-2:rgba(120,160,220,.30);
+    --txt:#c9d6e8;
+    --txt-dim:#7f8ea6;
+    --accent:#5ec8ff;
+    --accent-2:#ffb45e;
+    --ok:#4ade80;
+    --warn:#fbbf24;
+    --err:#f87171;
+    --mono:"Cascadia Mono","JetBrains Mono",Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:var(--bg);color:var(--txt);
+    font-family:"Segoe UI",-apple-system,system-ui,sans-serif;overflow:hidden}
+  #canvas{position:fixed;inset:0;width:100%;height:100%;display:block;
+    background:radial-gradient(ellipse at 50% 50%,#0b1020 0%,#04050a 70%)}
+
+  /* ---------- ÜST BAR ---------- */
+  .topbar{position:fixed;top:0;left:0;right:0;height:52px;display:flex;align-items:center;
+    gap:16px;padding:0 16px;z-index:20;
+    background:linear-gradient(180deg,rgba(4,6,12,.94),rgba(4,6,12,.55) 70%,transparent);
+    backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+  .brand{display:flex;flex-direction:column;line-height:1.1}
+  .brand b{font-size:13px;letter-spacing:.22em;color:#e8f2ff;font-weight:600}
+  .brand span{font-size:9.5px;letter-spacing:.18em;color:var(--txt-dim)}
+  .modes{display:flex;gap:0;border:1px solid var(--line-2);border-radius:6px;overflow:hidden}
+  .modes button{background:transparent;color:var(--txt-dim);border:0;padding:6px 14px;
+    font-size:11px;letter-spacing:.1em;cursor:pointer;transition:.18s}
+  .modes button:hover{color:var(--txt);background:rgba(94,200,255,.07)}
+  .modes button.on{background:rgba(94,200,255,.16);color:#dff2ff;
+    box-shadow:inset 0 0 0 1px rgba(94,200,255,.35)}
+  .topbar .spacer{flex:1}
+  .stat{font-family:var(--mono);font-size:10.5px;color:var(--txt-dim);
+    display:flex;gap:14px;align-items:center;white-space:nowrap}
+  .stat b{color:#dff2ff;font-weight:600}
+  .pill{border:1px solid var(--line);border-radius:4px;padding:3px 8px;font-size:10px;
+    letter-spacing:.06em;color:var(--txt-dim)}
+  .pill.ok{color:var(--ok);border-color:rgba(74,222,128,.35)}
+  .pill.warn{color:var(--warn);border-color:rgba(251,191,36,.35)}
+  .pill.err{color:var(--err);border-color:rgba(248,113,113,.4)}
+
+  /* ---------- SOL PANEL ---------- */
+  .panel{position:fixed;top:52px;bottom:0;width:286px;z-index:15;overflow-y:auto;
+    background:var(--panel);backdrop-filter:blur(14px);
+    border-right:1px solid var(--line);padding:12px 12px 28px;
+    transition:transform .28s ease}
+  .panel.hide{transform:translateX(-100%)}
+  .panel::-webkit-scrollbar{width:6px}
+  .panel::-webkit-scrollbar-thumb{background:rgba(94,200,255,.22);border-radius:3px}
+  .sec{border:1px solid var(--line);border-radius:8px;margin-bottom:10px;
+    background:linear-gradient(180deg,rgba(20,26,38,.5),rgba(10,13,20,.35))}
+  .sec h3{font-size:10px;letter-spacing:.16em;color:var(--accent);font-weight:600;
+    padding:9px 10px 7px;text-transform:uppercase;display:flex;justify-content:space-between;
+    align-items:center;cursor:pointer;user-select:none}
+  .sec h3 .tag{font-size:8.5px;letter-spacing:.08em;color:var(--txt-dim);
+    border:1px solid var(--line);border-radius:3px;padding:1px 5px;font-weight:400}
+  .sec h3 .tag.phys{color:var(--ok);border-color:rgba(74,222,128,.3)}
+  .sec h3 .tag.art{color:var(--accent-2);border-color:rgba(255,180,94,.3)}
+  .sec .body{padding:0 10px 10px;display:block}
+  .sec.closed .body{display:none}
+  .row{margin:7px 0}
+  .row label{display:flex;justify-content:space-between;font-size:10.5px;
+    color:var(--txt);margin-bottom:3px;gap:8px}
+  .row label .v{font-family:var(--mono);color:var(--accent);font-size:10.5px}
+  input[type=range]{-webkit-appearance:none;width:100%;height:3px;border-radius:2px;
+    background:rgba(120,160,220,.22);outline:none}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:11px;height:11px;
+    border-radius:50%;background:var(--accent);cursor:pointer;
+    box-shadow:0 0 8px rgba(94,200,255,.7)}
+  input[type=range]::-moz-range-thumb{width:11px;height:11px;border:0;border-radius:50%;
+    background:var(--accent);cursor:pointer}
+  select{width:100%;background:rgba(8,11,18,.9);color:var(--txt);border:1px solid var(--line-2);
+    border-radius:5px;padding:5px 7px;font-size:10.5px;font-family:inherit;outline:none}
+  .btn{width:100%;background:rgba(94,200,255,.08);color:#dff2ff;border:1px solid var(--line-2);
+    border-radius:6px;padding:7px 8px;font-size:10.5px;letter-spacing:.06em;cursor:pointer;
+    transition:.16s;text-align:center;font-family:inherit}
+  .btn:hover{background:rgba(94,200,255,.18);border-color:rgba(94,200,255,.5)}
+  .btn.on{background:rgba(255,180,94,.2);border-color:rgba(255,180,94,.6);color:#ffd9ad}
+  .btn.sm{padding:5px 6px;font-size:10px}
+  .btns{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .btns.three{grid-template-columns:1fr 1fr 1fr}
+  .check{display:flex;align-items:center;gap:7px;font-size:10.5px;margin:6px 0;cursor:pointer}
+  .check input{accent-color:var(--accent);width:12px;height:12px;cursor:pointer}
+  .note{font-size:9.5px;line-height:1.45;color:var(--txt-dim);margin-top:6px}
+
+  /* ---------- SAĞ: BİLGİ ---------- */
+  .infobar{position:fixed;right:12px;bottom:12px;z-index:15;max-width:330px;
+    background:var(--panel-2);border:1px solid var(--line);border-radius:8px;
+    padding:10px 12px;font-family:var(--mono);font-size:9.5px;line-height:1.65;
+    color:var(--txt-dim);backdrop-filter:blur(10px)}
+  .infobar b{color:#dff2ff}
+  .infobar .k{color:var(--accent)}
+  .hud{position:fixed;left:298px;bottom:12px;z-index:15;font-family:var(--mono);
+    font-size:9.5px;color:var(--txt-dim);line-height:1.5;pointer-events:none;
+    transition:left .28s ease}
+  .panel.hide ~ .hud{left:12px}
+
+  /* ---------- YÜKLEME / HATA ---------- */
+  #overlay{position:fixed;inset:0;z-index:40;display:flex;align-items:center;
+    justify-content:center;background:rgba(3,5,10,.94);backdrop-filter:blur(4px);
+    transition:opacity .5s}
+  #overlay.gone{opacity:0;pointer-events:none;visibility:hidden}
+  .ldbox{text-align:center}
+  .ring{width:52px;height:52px;margin:0 auto 16px;border-radius:50%;
+    border:2px solid rgba(94,200,255,.16);border-top-color:var(--accent);
+    animation:spin 1s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .ldbox p{font-size:11px;letter-spacing:.24em;color:var(--txt-dim)}
+  #errbox{display:none;max-width:640px;margin:0 20px;background:rgba(30,10,12,.92);
+    border:1px solid rgba(248,113,113,.45);border-radius:10px;padding:20px 22px;
+    text-align:left}
+  #errbox h2{color:var(--err);font-size:13px;letter-spacing:.12em;margin-bottom:10px}
+  #errbox p{font-size:11.5px;color:#f0c4c4;line-height:1.6;margin-bottom:10px}
+  #errbox pre{font-family:var(--mono);font-size:10px;color:#ffd9d9;white-space:pre-wrap;
+    max-height:260px;overflow:auto;background:rgba(0,0,0,.45);padding:10px;
+    border-radius:6px;border:1px solid rgba(248,113,113,.2)}
+
+  .toggle-panel{position:fixed;top:60px;left:298px;z-index:16;background:var(--panel-2);
+    border:1px solid var(--line-2);border-radius:5px;width:22px;height:26px;cursor:pointer;
+    color:var(--txt-dim);font-size:11px;transition:left .28s ease}
+  .panel.hide ~ .toggle-panel{left:8px}
+
+  @media(max-width:900px){
+    .panel{width:250px}
+    .hud{left:12px}
+    .infobar{display:none}
+    .toggle-panel{left:262px}
+    .stat .hide-sm{display:none}
+  }
+</style>
+</head>
+<body>
+
+<canvas id="canvas"></canvas>
+
+<header class="topbar">
+  <div class="brand">
+    <b>NUMEX CORE</b><span>EVENT HORIZON</span>
+  </div>
+  <div class="modes">
+    <button id="mode-sci" class="on">BİLİMSEL</button>
+    <button id="mode-cin">SİNEMATİK</button>
+  </div>
+  <div class="spacer"></div>
+  <div class="stat">
+    <span class="hide-sm">FPS <b id="hud-fps">—</b></span>
+    <span class="hide-sm">KARE <b id="hud-ms">—</b></span>
+    <span class="hide-sm">ÇÖZ. <b id="hud-res">—</b></span>
+    <span class="hide-sm">ADIM <b id="hud-steps">—</b></span>
+    <span class="pill" id="hud-quality">KALİTE: —</span>
+  </div>
+</header>
+
+<aside class="panel" id="panel">
+
+  <div class="sec">
+    <h3>GÖZLEM KONUMLARI <span class="tag">KAMERA</span></h3>
+    <div class="body">
+      <button class="btn sm" style="margin-bottom:6px" id="cam-far">UZAK GÖZLEMCİ</button>
+      <button class="btn sm" style="margin-bottom:6px" id="cam-orbit">DİSK YÖRÜNGESİ</button>
+      <button class="btn sm" style="margin-bottom:6px" id="cam-horizon">OLAY UFKUNA YAKLAŞMA</button>
+      <div class="btns">
+        <button class="btn sm" id="cam-tour">SİNEMATİK TUR</button>
+        <button class="btn sm" id="cam-reset">SIFIRLA</button>
+      </div>
+      <div class="note">Tüm konumlar dış gözlemcidir (r &gt; r_s). Olay ufkunun içi modellenmez.</div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <h3>KARA DELİK <span class="tag phys">FİZİK</span></h3>
+    <div class="body">
+      <div class="row"><label>Kütle (M) <span class="v" id="v-mass">1.0</span></label>
+        <input type="range" id="mass" min="0.3" max="4" step="0.01" value="1"></div>
+      <div class="row"><label><span>Kamera mesafesi (r/r<sub>s</sub>)</span> <span class="v" id="v-dist">18.0</span></label>
+        <input type="range" id="dist" min="2.2" max="60" step="0.1" value="18"></div>
+      <div class="row"><label>Kamera eğimi (θ°) <span class="v" id="v-incl">12</span></label>
+        <input type="range" id="incl" min="-89" max="89" step="1" value="12"></div>
+      <div class="row"><label>Görüş alanı (FOV°) <span class="v" id="v-fov">52</span></label>
+        <input type="range" id="fov" min="18" max="100" step="1" value="52"></div>
+      <div class="note">r<sub>s</sub> = 2GM/c² = <span id="rs-val">1.000</span> · r<sub>ph</sub> = 1.5 r<sub>s</sub> = <span id="rph-val">1.500</span> · ISCO = 3 r<sub>s</sub> = <span id="isco-val">3.000</span></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <h3>YIĞILMA DİSKİ <span class="tag art">YAKLAŞIK</span></h3>
+    <div class="body">
+      <div class="row"><label><span>İç yarıçap (r/r<sub>s</sub>)</span> <span class="v" id="v-inner">3.00</span></label>
+        <input type="range" id="inner" min="1.6" max="8" step="0.05" value="3"></div>
+      <div class="row"><label><span>Dış yarıçap (r/r<sub>s</sub>)</span> <span class="v" id="v-outer">12.0</span></label>
+        <input type="range" id="outer" min="4" max="26" step="0.1" value="12"></div>
+      <div class="row"><label>Sıcaklık ölçeği (T) <span class="v" id="v-temp">1.00</span></label>
+        <input type="range" id="temp" min="0.15" max="2.5" step="0.01" value="1"></div>
+      <div class="row"><label>Dönüş hızı <span class="v" id="v-spin">1.00</span></label>
+        <input type="range" id="spin" min="0" max="3" step="0.01" value="1"></div>
+      <div class="row"><label>Türbülans <span class="v" id="v-turb">0.55</span></label>
+        <input type="range" id="turb" min="0" max="1.5" step="0.01" value="0.55"></div>
+      <label class="check"><input type="checkbox" id="doppler" checked> Doppler parlaklık asimetrisi</label>
+      <div class="note">Disk, ışınların disk düzlemiyle kesişimi üzerinden örneklenir; T ∝ r<sup>-3/4</sup> (Shakura–Sunyaev ince disk yaklaşımı).</div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <h3>RENDER &amp; KALİTE <span class="tag">GPU</span></h3>
+    <div class="body">
+      <div class="row"><label>Işın izleme örnekleme (adım) <span class="v" id="v-steps">220</span></label>
+        <input type="range" id="steps" min="40" max="520" step="10" value="220"></div>
+      <div class="row"><label>Render ölçeği <span class="v" id="v-scale">1.00</span></label>
+        <input type="range" id="scale" min="0.4" max="1.5" step="0.05" value="1"></div>
+      <div class="row"><label>Bloom yoğunluğu <span class="v" id="v-bloom">1.00</span></label>
+        <input type="range" id="bloom" min="0" max="2.5" step="0.05" value="1"></div>
+      <div class="row"><label>Pozlama <span class="v" id="v-exposure">1.00</span></label>
+        <input type="range" id="exposure" min="0.2" max="3" step="0.05" value="1"></div>
+      <label class="check"><input type="checkbox" id="adaptive" checked> Dinamik kalite (FPS'e göre uyarla)</label>
+      <label class="check"><input type="checkbox" id="lensing-on" checked> Kütleçekimsel merceklenme</label>
+      <label class="check"><input type="checkbox" id="radii-on"> Karakteristik yarıçapları çiz</label>
+      <div class="btns" style="margin-top:8px">
+        <button class="btn sm" id="pause">DURAKLAT</button>
+        <button class="btn sm" id="tour2">SİNEMATİK TUR</button>
+      </div>
+      <div class="row" style="margin-top:8px"><label>Simülasyon hızı <span class="v" id="v-speed">1.00</span></label>
+        <input type="range" id="speed" min="0" max="4" step="0.05" value="1"></div>
+    </div>
+  </div>
+
+  <div class="sec closed">
+    <h3>MODEL VE YÖNTEM <span class="tag">BİLGİ</span></h3>
+    <div class="body">
+      <div class="note" id="method-text" style="font-size:9.5px;line-height:1.6"></div>
+    </div>
+  </div>
+
+</aside>
+
+<button class="toggle-panel" id="toggle-panel" title="Paneli aç/kapat">‹</button>
+
+<div class="hud" id="hud">
+  <div id="hud-mode">BİLİMSEL MOD</div>
+  <div id="hud-cam">r = 18.0 r_s · θ = 12°</div>
+</div>
+
+<div class="infobar">
+  <div><span class="k">Schwarzschild</span> ışın izleme — <b>GPU fragment shader</b></div>
+  <div>Yörünge denklemi: <b>u'' = −u + 1.5 r<sub>s</sub> u²</b> (u = 1/r)</div>
+  <div>İntegratör: <b>RK4</b>, değişken adım</div>
+  <div>Disk: düzlem kesişimi + <b>Shakura–Sunyaev</b> T(r) ∝ r<sup>−3/4</sup></div>
+  <div style="margin-top:5px;color:#5f6d82">Fare: sürükle = yörünge · tekerlek = mesafe · Shift+sürükle = eğim</div>
+</div>
+
+<div id="overlay">
+  <div class="ldbox" id="ldbox">
+    <div class="ring"></div>
+    <p>IŞIK YOLLARI HESAPLANIYOR</p>
+  </div>
+  <div id="errbox">
+    <h2>SHADER DERLEME HATASI</h2>
+    <p>GPU programı derlenemedi. Simülatör çalışmıyor — aşağıdaki tanılama bilgisini paylaşabilirsin.</p>
+    <pre id="errtext"></pre>
+  </div>
+</div>
+
+<script src="vertex.js"></script>
+<script src="shader.js"></script>
+<script src="post.js"></script>
+<script src="ui.js"></script>
+</body>
+</html>

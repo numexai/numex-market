@@ -1,0 +1,119 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: #f4f6fb;
+  color: #1e293b;
+  min-height: 100vh;
+}
+
+header {
+  background: linear-gradient(135deg, #1e3a8a, #2563eb);
+  color: white;
+  padding: 24px 32px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+header h1 { font-size: 1.7rem; }
+header .alt { opacity: 0.85; font-size: 0.95rem; margin-top: 6px; }
+
+.sekmeler {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 16px 32px;
+  background: white;
+  border-bottom: 1px solid #e2e8f0;
+}
+.sekm {
+  border: 1px solid #cbd5e1;
+  background: white;
+  color: #475569;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+.sekm:hover { background: #f1f5f9; }
+.sekm.secili {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: white;
+}
+
+main { padding: 24px 32px; max-width: 1200px; margin: 0 auto; }
+
+.panel { display: none; }
+.panel.aktif { display: block; animation: fadeIn 0.25s; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px);} to { opacity: 1; transform: none;} }
+
+.kart {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.kart h2 { font-size: 1.15rem; margin-bottom: 14px; color: #1e3a8a; }
+
+form { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+form input, form select {
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  min-width: 160px;
+  flex: 1;
+}
+form input:focus, form select:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.btn:hover { transform: translateY(-1px); box-shadow: 0 3px 8px rgba(0,0,0,0.15); }
+.btn-ekle { background: #16a34a; color: white; }
+.btn-transfer { background: #2563eb; color: white; }
+.btn-sil {
+  background: transparent; color: #dc2626; padding: 6px 10px;
+  border: 1px solid #fecaca; border-radius: 6px;
+}
+
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid #eef2f7; font-size: 0.93rem; }
+th { background: #f8fafc; color: #64748b; font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px; }
+tr:hover td { background: #f8fafc; }
+
+.mesaj { margin-top: 12px; font-size: 0.9rem; }
+.mesaj.ok { color: #16a34a; }
+.mesaj.hata { color: #dc2626; }
+
+/* Stok görünümü kartları */
+.stok-blok { margin-bottom: 16px; }
+.stok-blok h3 { color: #1e3a8a; margin-bottom: 8px; font-size: 1.05rem; }
+
+/* Düşük stok rozetleri */
+.badge {
+  display: inline-block; padding: 3px 10px; border-radius: 20px;
+  font-size: 0.78rem; font-weight: 700;
+}
+.badge.dusuk { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+.badge.iyi { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+
+.uyari-satir { background: #fff7ed; }
+
+@media (max-width: 600px) {
+  main, .sekmeler { padding: 16px; }
+  header { padding: 18px; }
+  form { flex-direction: column; }
+  form input, form select { width: 100%; min-width: 0; }
+}

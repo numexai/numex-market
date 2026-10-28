@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>İnsan Dolaşım & Sinir Sistemi Simülasyonu</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="uygulama">
+    <canvas id="tuval" width="1100" height="760"></canvas>
+
+    <!-- Aktivite kontrolü -->
+    <div id="kontrolPanel">
+      <div class="panelBaslik">🫀 Aktivite Durumu</div>
+      <button class="aktiviteBtn" id="btnOtur" data-aktivite="idle">🪑 Otur (Normal)</button>
+      <button class="aktiviteBtn" id="btnYavas" data-aktivite="jog">🏃 Hafif Koşu</button>
+      <button class="aktiviteBtn" id="btnHizli" data-aktivite="sprint">⚡ Hızlı Koşu</button>
+      <div class="bilgiNotlar">😌 Dinlenme hâli — kalbin normal atıyor.</div>
+    </div>
+
+    <!-- Canlı HUD -->
+    <div id="hud">
+      <div class="hudKayit">
+        <span class="hudEtiket">Kalp Atışı</span>
+        <span class="hudDeger normal" id="bpmDeger">72</span>
+        <span class="hudBirim">bpm</span>
+      </div>
+      <div class="hudKayit">
+        <span class="hudEtiket">Aktivite</span>
+        <span class="hudDeger" id="aktivDeger">Otur</span>
+      </div>
+      <div class="hudKayit">
+        <span class="hudEtiket">Akan Kan Hücresi</span>
+        <span class="hudDeger" id="kanHucresiDeger">0</span>
+      </div>
+      <div class="hudKayit">
+        <span class="hudEtiket">Sinir Dürtüsü</span>
+        <span class="hudDeger" id="sinirDeger">0</span>
+      </div>
+      <div class="hudKayit">
+        <span class="hudEtiket">Nabız Dalgası</span>
+        <span class="hudDeger" id="nabizDeger">0</span>
+      </div>
+    </div>
+
+    <div id="legende">
+      <span class="renkOksijenli"></span> Oksijenli Arter Kanı
+      <span class="renkOksijensiz"></span> Oksijensiz Ven Kanı
+      <span class="renkSinir"></span> Sinir Dürtüsü
+      <span class="renkAkciger"></span> Akciğer Oksijenlenme
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canli Doviz Kurlari</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="baslik">Canli Doviz Kurlari</h1>
+            <p class="alt-baslik">Anlik piyasa verileri</p>
+        </header>
+        <div class="doviz-grid" id="dovizGrid">
+            <div class="doviz-kart" data-id="usd">
+                <div class="doviz-icon">$</div>
+                <div class="doviz-adi">Amerikan Dolari</div>
+                <div class="doviz-sembol">USD</div>
+                <div class="doviz-kur" id="usd-kur">₺32.4500</div>
+                <div class="doviz-degisim yukari" id="usd-degisim">
+                    <span class="ok">▲</span>
+                    <span>+0.15%</span>
+                </div>
+            </div>
+            <div class="doviz-kart" data-id="eur">
+                <div class="doviz-icon">€</div>
+                <div class="doviz-adi">Euro</div>
+                <div class="doviz-sembol">EUR</div>
+                <div class="doviz-kur" id="eur-kur">₺35.2800</div>
+                <div class="doviz-degisim asagi" id="eur-degisim">
+                    <span class="ok">▼</span>
+                    <span>-0.08%</span>
+                </div>
+            </div>
+            <div class="doviz-kart" data-id="gbp">
+                <div class="doviz-icon">£</div>
+                <div class="doviz-adi">Ingiliz Sterlini</div>
+                <div class="doviz-sembol">GBP</div>
+                <div class="doviz-kur" id="gbp-kur">₺41.1200</div>
+                <div class="doviz-degisim yukari" id="gbp-degisim">
+                    <span class="ok">▲</span>
+                    <span>+0.22%</span>
+                </div>
+            </div>
+            <div class="doviz-kart" data-id="gold">
+                <div class="doviz-icon">Au</div>
+                <div class="doviz-adi">Gram Altin</div>
+                <div class="doviz-sembol">XAU</div>
+                <div class="doviz-kur" id="gold-kur">₺2450.7500</div>
+                <div class="doviz-degisim yukari" id="gold-degisim">
+                    <span class="ok">▲</span>
+                    <span>+12.30%</span>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <p>Son guncelleme: <span id="sonGuncelleme">--:--:--</span></p>
+        </footer>
+    </div>
+    <script src="js/app.js"></script>
+</body>
+</html>

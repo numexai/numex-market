@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Yapılacaklar Listesi</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 3rem 1rem;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 480px;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      padding: 2rem;
+      align-self: flex-start;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      color: #333;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .ekleme {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    #yeni-gorev {
+      flex: 1;
+      padding: 0.7rem 1rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    #yeni-gorev:focus {
+      border-color: #667eea;
+    }
+
+    #ekle-btn {
+      padding: 0.7rem 1.2rem;
+      background: #667eea;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    #ekle-btn:hover {
+      background: #5566d6;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    .gorev {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: #f9f9f9;
+      border: 1px solid #eee;
+      border-radius: 8px;
+      padding: 0.7rem 1rem;
+      margin-bottom: 0.5rem;
+      transition: background 0.2s;
+    }
+
+    .gorev.tamamlandi {
+      opacity: 0.7;
+    }
+
+    .gorev.tamamlandi .metin {
+      text-decoration: line-through;
+      color: #999;
+    }
+
+    .gorev input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+
+    .gorev .metin {
+      flex: 1;
+      font-size: 1rem;
+      color: #333;
+      word-break: break-word;
+    }
+
+    .sil-btn {
+      background: #e74c3c;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 0.35rem 0.7rem;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .sil-btn:hover {
+      background: #c0392b;
+    }
+
+    .bos {
+      text-align: center;
+      color: #aaa;
+      font-size: 0.95rem;
+      padding: 1.5rem 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h1>Yapılacaklar 📝</h1>
+
+    <form class="ekleme" id="ekleme-form">
+      <input type="text" id="yeni-gorev" placeholder="Yeni görev yazın..." autocomplete="off" />
+      <button type="submit" id="ekle-btn">Ekle</button>
+    </form>
+
+    <ul id="liste"></ul>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'yapilacaklar';
+
+    let gorevler = [];
+
+    function yukle() {
+      try {
+        gorevler = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+      } catch (e) {
+        gorevler = [];
+      }
+    }
+
+    function kaydet() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(gorevler));
+    }
+
+    const liste = document.getElementById('liste');
+    const form = document.getElementById('ekleme-form');
+    const input = document.getElementById('yeni-gorev');
+
+    function render() {
+      liste.innerHTML = '';
+
+      if (gorevler.length === 0) {
+        liste.innerHTML = '<li class="bos">Henüz görev yok. Bir şeyler ekleyin!</li>';
+        return;
+      }
+
+      gorevler.forEach((gorev, index) => {
+        const li = document.createElement('li');
+        li.className = 'gorev' + (gorev.tamamlandi ? ' tamamlandi' : '');
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = gorev.tamamlandi;
+        checkbox.addEventListener('change', () => {
+          gorevler[index].tamamlandi = checkbox.checked;
+          kaydet();
+          render();
+        });
+
+        const metin = document.createElement('span');
+        metin.className = 'metin';
+        metin.textContent = gorev.metin;
+
+        const silBtn = document.createElement('button');
+        silBtn.className = 'sil-btn';
+        silBtn.textContent = 'Sil';
+        silBtn.addEventListener('click', () => {
+          gorevler.splice(index, 1);
+          kaydet();
+          render();
+        });
+
+        li.appendChild(checkbox);
+        li.appendChild(metin);
+        li.appendChild(silBtn);
+        liste.appendChild(li);
+      });
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const metin = input.value.trim();
+      if (!metin) return;
+      gorevler.push({ metin, tamamlandi: false });
+      kaydet();
+      input.value = '';
+      render();
+    });
+
+    yukle();
+    render();
+  </script>
+</body>
+</html>

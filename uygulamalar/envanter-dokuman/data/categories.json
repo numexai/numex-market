@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "name": "Elektronik",
+    "slug": "elektronik"
+  },
+  {
+    "id": 2,
+    "name": "Gıda",
+    "slug": "gida"
+  },
+  {
+    "id": 3,
+    "name": "Giyim",
+    "slug": "giyim"
+  },
+  {
+    "id": 4,
+    "name": "Diğer",
+    "slug": "diger"
+  }
+]

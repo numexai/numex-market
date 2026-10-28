@@ -1,0 +1,57 @@
+{
+  "marka": "Ömer Kalpat Cep Telefonu Tamiri",
+  "tagline": "Yerinde (kapınıza gelerek) cep telefonu tamir hizmeti",
+  "adres": "Fatih Bulvarı No:46 D:76/3, Sultanbeyli / İstanbul",
+  "telefon": "+90 (555) 123 45 67",
+  "email": "info@omerkalpattamir.com",
+  "hizmetler": [
+    {
+      "ad": "Ekran Değişimi",
+      "ikon": "📱",
+      "aciklama": "Kırık, çatlak veya dokunmatik sorunlu ekranları orijinal ve A+ kalite yedek parçayla değiştiriyoruz.",
+      "etiketler": ["iPhone", "Samsung", "Xiaomi", "Oppo"]
+    },
+    {
+      "ad": "Batarya Değişimi",
+      "ikon": "🔋",
+      "aciklama": "Hızlı biten ve şişen bataryaları yüksek kapasiteli, güvenli bataryayla yeniliyoruz.",
+      "etiketler": ["Tüm markalar"]
+    },
+    {
+      "ad": "Şarj Soketi / Anakart",
+      "ikon": "🔌",
+      "aciklama": "Şarj almayan, şarjda durmayan ve anakart arızası yaşayan cihazlara yerinde müdahale.",
+      "etiketler": ["Lehim onarımı", "Mikroskoplu işlem"]
+    },
+    {
+      "ad": "Yazılım & Format",
+      "ikon": "💾",
+      "aciklama": "Donma, kasma, kilitlenme ve işletim sistemi hatalarında veri yedekleyerek yazılım çözümü.",
+      "etiketler": ["Android", "iOS"]
+    },
+    {
+      "ad": "Su / Sıvı Teması",
+      "ikon": "💧",
+      "aciklama": "Suya düşen cihazlara hızlı ilk müdahale ve korozyon temizliği, veri kurtarma şansını artırır.",
+      "etiketler": ["Acil servis"]
+    },
+    {
+      "ad": "Diğer Arızalar",
+      "ikon": "🛠️",
+      "aciklama": "Kamera, hoparlör, mikrofon, ana tuş ve bağlantı sorunlarında geniş kapsamlı yerinde onarım.",
+      "etiketler": ["Kamera", "Ses", "Sensor"]
+    }
+  ],
+  "fiyatlar": [
+    { "hizmet": "Arıza Tespiti & Keşif", "fiyat": "Ücretsiz", "not": "Yerinde ücretsiz keşif ve tanı", "oncelik": true },
+    { "hizmet": "Batarya Değişimi", "fiyat": "600₺'den", "not": "Modele göre değişir", "oncelik": false },
+    { "hizmet": "Ekran Değişimi", "fiyat": "1.200₺'den", "not": "A+ kalite yedek parça", "oncelik": false },
+    { "hizmet": "Yazılım & Format", "fiyat": "350₺'den", "not": "Veri yedekleme dahil", "oncelik": false }
+  ],
+  "calisma_saatleri": {
+    "hafta_ici": "09:00 – 19:00",
+    "cumartesi": "10:00 – 17:00",
+    "pazar": "Kapalı"
+  },
+  "hizmet_bolgeleri": ["Sultanbeyli", "Sancaktepe", "Pendik", "Kartal", "Ümraniye", "Çevre ilçeler"]
+}

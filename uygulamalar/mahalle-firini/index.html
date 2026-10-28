@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#2b1a0f">
+<title>Mahalle Fırını · Sipariş Takip</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A5%96%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="ust">
+  <div class="ust-ic">
+    <div class="marka">
+      <span class="marka-ikon" aria-hidden="true">🥖</span>
+      <div>
+        <h1>Mahalle Fırını</h1>
+        <p class="marka-alt" id="tarihMetni">—</p>
+      </div>
+    </div>
+    <div class="ust-sag">
+      <div class="ciro-kutu" aria-live="polite">
+        <span class="ciro-etiket">Bugünkü ciro</span>
+        <strong class="ciro-deger" id="ustCiro">0,00 TL</strong>
+      </div>
+      <button class="ikon-btn" id="ayarBtn" title="Ürün ve fiyat ayarları" aria-label="Ürün ve fiyat ayarları">⚙️</button>
+    </div>
+  </div>
+</header>
+
+<main class="govde">
+
+  <!-- SEKMELER -->
+  <nav class="sekmeler" role="tablist" aria-label="Bölümler">
+    <button class="sekme aktif" data-sekme="siparis" role="tab" aria-selected="true">🧾 Sipariş</button>
+    <button class="sekme" data-sekme="liste" role="tab" aria-selected="false">📋 Siparişler <span class="rozet" id="rozetAktif">0</span></button>
+    <button class="sekme" data-sekme="gun" role="tab" aria-selected="false">📊 Gün Sonu</button>
+  </nav>
+
+  <!-- ================= SİPARİŞ GİRİŞİ ================= -->
+  <section class="panel aktif" id="panel-siparis" role="tabpanel">
+
+    <div class="kart">
+      <label class="etiket" for="musteri">Müşteri adı</label>
+      <div class="girdi-satir">
+        <input type="text" id="musteri" placeholder="Örn: Ayşe Hanım" autocomplete="off" enterkeyhint="done">
+        <button class="mini-btn" id="temizleMusteri" title="Temizle" aria-label="Müşteri adını temizle">✕</button>
+      </div>
+    </div>
+
+    <div class="kart">
+      <div class="kart-baslik">
+        <h2>Ürünler</h2>
+        <span class="ipucu">Adet seçmek için + / −</span>
+      </div>
+      <div class="urunler" id="urunSecimListesi"></div>
+    </div>
+
+    <div class="ozet-kart">
+      <div class="ozet-satir">
+        <span id="sepetOzet">Henüz ürün seçilmedi</span>
+        <strong id="sepetToplam">0,00 TL</strong>
+      </div>
+      <button class="ana-btn" id="siparisEkleBtn" disabled>Siparişi Kaydet</button>
+    </div>
+  </section>
+
+  <!-- ================= SİPARİŞLER ================= -->
+  <section class="panel" id="panel-liste" role="tabpanel">
+    <div class="liste-arac">
+      <div class="filtreler" id="filtreler">
+        <button class="cip aktif" data-filtre="aktif">Bekleyen &amp; Hazır</button>
+        <button class="cip" data-filtre="teslim">Teslim edilen</button>
+        <button class="cip" data-filtre="tumu">Tümü</button>
+      </div>
+    </div>
+    <div id="siparisListesi" class="siparis-listesi"></div>
+  </section>
+
+  <!-- ================= GÜN SONU ================= -->
+  <section class="panel" id="panel-gun" role="tabpanel">
+    <div class="ciro-buyuk">
+      <span class="ciro-buyuk-etiket">Gün sonu toplam ciro</span>
+      <strong class="ciro-buyuk-deger" id="gunCiro">0,00 TL</strong>
+      <div class="ciro-alt-satir">
+        <div><span>Sipariş</span><strong id="gunSiparisSayisi">0</strong></div>
+        <div><span>Teslim edilen</span><strong id="gunTeslimSayisi">0</strong></div>
+        <div><span>Bekleyen</span><strong id="gunBekleyenSayisi">0</strong></div>
+      </div>
+      <p class="ciro-not">Ciro yalnız <strong>teslim edilen</strong> siparişleri sayar.</p>
+    </div>
+
+    <div class="kart">
+      <div class="kart-baslik"><h2>Ürün bazlı satış</h2></div>
+      <div id="urunOzet" class="urun-ozet"></div>
+    </div>
+
+    <div class="kart">
+      <div class="kart-baslik"><h2>Geçmiş günler</h2></div>
+      <div id="gecmisGunler" class="gecmis"></div>
+      <button class="ikincil-btn tehlike" id="gunuKapatBtn">Günü kapat ve sıfırla</button>
+      <p class="kucuk-not">Gün kapatınca bugünün siparişleri geçmişe taşınır, yeni gün sıfırdan başlar.</p>
+    </div>
+  </section>
+</main>
+
+<!-- ================= AYAR MODALI ================= -->
+<div class="modal-arka" id="ayarModal" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="ayarBaslik">
+    <div class="modal-ust">
+      <h2 id="ayarBaslik">Ürünler &amp; Fiyatlar</h2>
+      <button class="mini-btn" id="ayarKapat" aria-label="Kapat">✕</button>
+    </div>
+    <div id="ayarUrunler" class="ayar-liste"></div>
+    <div class="yeni-urun">
+      <input type="text" id="yeniUrunAd" placeholder="Yeni ürün adı" autocomplete="off">
+      <input type="number" id="yeniUrunFiyat" placeholder="Fiyat (TL)" min="0" step="0.5" inputmode="decimal">
+      <button class="mini-btn koyu" id="yeniUrunEkle" aria-label="Ürün ekle">Ekle</button>
+    </div>
+    <button class="ana-btn" id="ayarTamam">Tamam</button>
+  </div>
+</div>
+
+<div id="bildirim" class="bildirim" role="status" aria-live="polite"></div>
+
+<script src="app.js"></script>
+</body>
+</html>

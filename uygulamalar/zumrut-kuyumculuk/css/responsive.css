@@ -1,0 +1,250 @@
+/* ============================================================
+   ZÜMRÜT KUYUMCULUK — RESPONSIVE
+   Kırılımlar: 1400 / 1200 / 992 / 768 / 560 / 380
+   ============================================================ */
+
+/* -------------------- 1400px -------------------- */
+@media (max-width: 1400px) {
+  .kur-tablo { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* -------------------- 1200px -------------------- */
+@media (max-width: 1200px) {
+  :root { --container: 1040px; }
+
+  .hero-baslik { font-size: clamp(2.4rem, 5.6vw, 3.8rem); }
+  .hero-rozetler { gap: 34px; }
+
+  .hakkimizda-ic { gap: 48px; }
+  .footer-ic { grid-template-columns: 1.4fr 1fr 1.2fr; }
+  .footer-kol:last-child { display: none; }
+
+  .urun-grid { gap: 22px; }
+  .hizmet-kart { padding: 32px 26px; }
+
+  .nav-link { padding: 10px 11px; font-size: .86rem; }
+  .nav-cta { padding: 10px 18px; }
+}
+
+/* -------------------- 992px (tablet yatay) -------------------- */
+@media (max-width: 992px) {
+  :root { --container: 100%; --header-h: 70px; }
+
+  .bolum { padding-block: 84px; }
+  .bolum-baslik { margin-bottom: 46px; }
+
+  /* Nav → mobil panel */
+  .menu-toggle { display: block; }
+  .nav {
+    position: fixed;
+    top: calc(var(--header-h) + 40px);
+    left: 0; right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 14px 22px 26px;
+    background: rgba(6,6,6,.98);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(212,175,55,.28);
+    box-shadow: 0 26px 50px rgba(0,0,0,.7);
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: max-height .4s ease, opacity .3s ease, padding .3s ease;
+  }
+  .nav.acik {
+    max-height: 560px;
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .nav-link {
+    padding: 15px 6px;
+    font-size: 1rem;
+    border-bottom: 1px solid rgba(212,175,55,.1);
+  }
+  .nav-link::after { display: none; }
+  .nav-link:hover, .nav-link.aktif { padding-left: 12px; }
+  .nav-cta {
+    margin: 20px 0 0;
+    text-align: center;
+    padding: 15px 22px;
+    display: block;
+  }
+
+  /* Hero */
+  .hero { min-height: auto; }
+  .hero-ic { padding-block: 66px 80px; }
+  .hero-aciklama { font-size: 1rem; }
+  .hero-rozetler { gap: 26px; padding-top: 26px; }
+  .hero-rozetler strong { font-size: 1.5rem; }
+  .hero-asagi { display: none; }
+
+  /* Kur */
+  .kur-tablo { grid-template-columns: repeat(2, 1fr); }
+
+  /* Vitrin */
+  .urun-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* Hakkımızda */
+  .hakkimizda-ic {
+    grid-template-columns: 1fr;
+    gap: 46px;
+  }
+  .hakkimizda-gorsel { order: -1; max-width: 300px; margin-inline: auto; }
+  .bolum-baslik.sol { text-align: center; }
+  .bolum-baslik.sol .bolum-etiket { text-align: center; }
+  .hakkimizda-metin .bolum-baslik.sol { text-align: center; }
+
+  /* Hizmetler */
+  .hizmet-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* İletişim */
+  .iletisim-grid { grid-template-columns: 1fr; gap: 30px; }
+  .harita-kap { height: 340px; }
+
+  /* Footer */
+  .footer-ic {
+    grid-template-columns: 1fr 1fr;
+    gap: 38px;
+    padding-block: 56px 40px;
+  }
+  .footer-kol:last-child { display: block; }
+  .footer-marka { grid-column: 1 / -1; }
+
+  /* Lightbox */
+  .lightbox { padding: 50px 24px; }
+  .lightbox-ok { width: 44px; height: 44px; font-size: 1.8rem; }
+  .lightbox-sol { left: 10px; }
+  .lightbox-sag { right: 10px; }
+}
+
+/* -------------------- 768px (mobil yatay / tablet dikey) -------------------- */
+@media (max-width: 768px) {
+  body { font-size: 15.5px; }
+
+  .ust-bant-ic { justify-content: center; text-align: center; row-gap: 4px; }
+  .ust-bant-sol { display: none; }
+  .ust-bant-sag .ust-bant-ayrac,
+  .ust-bant-sag span:last-child { display: none; }
+
+  .bolum { padding-block: 66px; }
+  .bolum-baslik h2 { font-size: clamp(1.7rem, 6vw, 2.2rem); }
+  .bolum-etiket { letter-spacing: 3px; font-size: .7rem; padding-inline: 28px; }
+
+  .logo-amblem { width: 36px; height: 36px; }
+  .logo-yazi strong { font-size: 1.1rem; letter-spacing: 2px; }
+  .logo-yazi em { font-size: .55rem; letter-spacing: 4px; }
+
+  .hero-ic { padding-block: 52px 60px; }
+  .hero-baslik { font-size: clamp(2rem, 8.5vw, 2.9rem); }
+  .hero-ustyazi { font-size: .68rem; letter-spacing: 2.6px; padding: 7px 15px; }
+  .hero-aciklama { font-size: .95rem; margin-bottom: 30px; }
+  .hero-butonlar { gap: 12px; margin-bottom: 44px; }
+  .btn { padding: 14px 26px; font-size: .84rem; }
+
+  .hero-rozetler {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    width: 100%;
+  }
+  .hero-rozetler strong { font-size: 1.35rem; }
+  .hero-rozetler span { font-size: .68rem; }
+
+  /* Kur */
+  .kur-band-ust {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 14px 18px;
+    font-size: .74rem;
+  }
+  .kur-saat-grup { margin-left: 0; width: 100%; }
+  .kur-tablo { grid-template-columns: 1fr; }
+  .kur-kart { padding: 22px 20px; }
+  .kur-fiyatlar { gap: 22px; }
+  .kur-fiyat strong { font-size: 1.12rem; }
+  .kur-dipnot { padding: 16px 20px; font-size: .74rem; }
+
+  /* Vitrin */
+  .vitrin-filtre { gap: 9px; margin-bottom: 36px; }
+  .filtre-btn { padding: 9px 18px; font-size: .76rem; }
+  .urun-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .urun-bilgi { padding: 14px 14px 16px; }
+  .urun-bilgi h3 { font-size: .95rem; }
+  .urun-fiyat { font-size: .84rem; }
+  .urun-etiket { font-size: .6rem; padding: 5px 9px; }
+  .urun-zoom { display: none; }
+
+  /* Hakkımızda */
+  .sayaclar { grid-template-columns: repeat(2, 1fr); gap: 22px 14px; }
+  .sayac-kutu strong { font-size: 1.55rem; }
+  .hakkimizda-liste { margin-bottom: 30px; }
+
+  /* Hizmetler */
+  .hizmet-grid { grid-template-columns: 1fr; gap: 18px; }
+  .hizmet-kart { padding: 28px 24px; }
+  .hizmet-ikon { width: 54px; height: 54px; margin-bottom: 18px; }
+
+  /* İletişim */
+  .bilgi-kart { padding: 20px 20px; gap: 15px; }
+  .bilgi-ikon { width: 42px; height: 42px; }
+  .iletisim-form { padding: 28px 22px; }
+  .harita-kap { height: 290px; }
+
+  /* Footer */
+  .footer-ic { grid-template-columns: 1fr; gap: 32px; }
+  .footer-alt-ic { flex-direction: column; text-align: center; gap: 8px; }
+
+  /* Lightbox */
+  .lightbox { padding: 70px 14px 50px; }
+  .lightbox-kapat { top: 14px; right: 14px; width: 42px; height: 42px; font-size: 1.7rem; }
+  .lightbox-ok { top: auto; bottom: 14px; transform: none; }
+  .lightbox-sol { left: calc(50% - 56px); }
+  .lightbox-sag { right: calc(50% - 56px); }
+  .lightbox-icerik figcaption { font-size: 1.05rem; margin-top: 16px; }
+}
+
+/* -------------------- 560px -------------------- */
+@media (max-width: 560px) {
+  .container { padding-inline: 18px; }
+  .bolum { padding-block: 56px; }
+
+  .hero-baslik { font-size: clamp(1.8rem, 9.5vw, 2.4rem); }
+  .hero-butonlar { flex-direction: column; }
+  .hero-butonlar .btn { width: 100%; }
+  .hero-rozetler { grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .kur-fiyatlar { flex-direction: row; gap: 16px; }
+  .kur-fiyat strong { font-size: 1.05rem; }
+
+  .urun-grid { grid-template-columns: 1fr; }
+  .urun-gorsel { aspect-ratio: 16 / 11; }
+
+  .sayaclar { grid-template-columns: 1fr 1fr; }
+
+  .btn-tam { padding: 15px 20px; }
+}
+
+/* -------------------- 380px -------------------- */
+@media (max-width: 380px) {
+  .logo-yazi strong { font-size: .98rem; letter-spacing: 1.5px; }
+  .logo-yazi em { letter-spacing: 3px; font-size: .5rem; }
+  .hero-rozetler { grid-template-columns: 1fr; gap: 14px; }
+  .filtre-btn { padding: 8px 13px; font-size: .7rem; }
+  .kur-fiyat strong { font-size: .98rem; }
+}
+
+/* -------------------- YAZDIRMA -------------------- */
+@media print {
+  .ust-bant, .site-header, .menu-toggle, .lightbox,
+  .harita-kap, .iletisim-form, .hero-asagi { display: none !important; }
+  body { background: #fff; color: #000; }
+  .bolum { padding-block: 20px; page-break-inside: avoid; }
+  .altin-metin {
+    -webkit-text-fill-color: #000;
+    background: none;
+    color: #000;
+  }
+}

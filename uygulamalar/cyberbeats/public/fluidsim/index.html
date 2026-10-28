@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FluidSim — Navier–Stokes 2D Sıvı Simülatörü</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='9' cy='9' r='3' fill='%2337e0ff'/%3E%3Ccircle cx='23' cy='9' r='3' fill='%23ff2bd6'/%3E%3Ccircle cx='16' cy='17' r='9' fill='none' stroke='%2300f0ff' stroke-width='2'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="stage">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-icon">◇</span>
+        <h1>FLUID<span class="accent">SIM</span></h1>
+        <span class="tagline">Navier-Stokes · Stable Fluids · 2D</span>
+      </div>
+      <div class="hud">
+        <div class="hud-cell">
+          <span class="hud-label">FPS</span>
+          <span class="hud-value" id="fpsReadout">0</span>
+        </div>
+        <div class="hud-cell">
+          <span class="hud-label">GRID</span>
+          <span class="hud-value" id="gridReadout">128</span>
+        </div>
+        <div class="hud-cell accent">
+          <span class="hud-label">MOD</span>
+          <span class="hud-value" id="modeReadout">VELOCITY</span>
+        </div>
+        <div class="hud-cell">
+          <span class="hud-label">PARÇACIK</span>
+          <span class="hud-value" id="partReadout">200</span>
+        </div>
+      </div>
+    </header>
+    <main class="workspace">
+      <section class="sig-panel">
+        <canvas id="fluidCanvas"></canvas>
+        <div class="legend">
+          <span class="lg-item"><kbd>sürükle</kbd> sıvı bas</span>
+          <span class="lg-item"><kbd>W</kbd> rüzgar</span>
+          <span class="lg-item"><kbd>V</kbd> vortex</span>
+          <span class="lg-item"><kbd>C</kbd> renk modu</span>
+          <span class="lg-item"><kbd>R</kbd> sıfırla</span>
+        </div>
+      </section>
+
+      <aside class="panel edit-panel">
+        <div class="panel-title"><span class="t-bullet"></span> FİZİK</div>
+        <div class="slider-group">
+          <div class="slider-head">
+            <label for="viscosity">VISCOSITY</label>
+            <output id="viscosityOut">0.0002</output>
+          </div>
+          <input type="range" id="viscosity" min="0" max="200" value="20" step="1">
+        </div>
+        <div class="slider-group">
+          <div class="slider-head">
+            <label for="diffusion">DIFFUSION</label>
+            <output id="diffusionOut">0.0002</output>
+          </div>
+          <input type="range" id="diffusion" min="0" max="200" value="20" step="1">
+        </div>
+
+        <div class="panel-title sub"><span class="t-bullet"></span> PARÇACIKLAR</div>
+        <div class="slider-group">
+          <div class="slider-head">
+            <label for="particles">PARÇACIK SAYISI</label>
+            <output id="partsOut">200</output>
+          </div>
+          <input type="range" id="particles" min="0" max="600" value="200" step="1">
+        </div>
+
+        <div class="panel-title sub"><span class="t-bullet"></span> GÖRÜNÜM</div>
+        <div class="mode-list" id="modeList">
+          <div class="ml-item" data-mode="density" title="Yoğunluk (alfa)"><span class="ml-ic">🌊</span>DENSITY</div>
+          <div class="ml-item active" data-mode="velocity" title="Hız — renk = yön"><span class="ml-ic">🧭</span>VELOCITY</div>
+          <div class="ml-item" data-mode="magnitude" title="Hız büyüklüğü heatmap"><span class="ml-ic">🔥</span>MAGNITUDE</div>
+        </div>
+
+        <div class="stat-box">
+          <div class="sb-row"><span>solver iter</span><b id="stIter">20</b></div>
+          <div class="sb-row"><span>otomatik grid küçültme</span><b id="stAuto">açık</b></div>
+        </div>
+      </aside>
+    </main>
+
+    <footer class="footbar">
+      <span class="hint">sıfır kütüphane — Jos Stam Stable Fluids çekirdeği elle</span>
+      <span class="hint">128x96x64 grid · 60 FPS hedefli · düşünce oto küçülür</span>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

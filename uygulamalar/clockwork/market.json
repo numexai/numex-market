@@ -1,0 +1,41 @@
+{
+  "name": "numex-clockwork",
+  "title": "NUMEX CLOCKWORK — Zamanın İçini Gör",
+  "version": "1.0.0",
+  "author": "Numex AI",
+  "license": "MIT",
+  "category": "3D / Görsel Deneyim",
+  "entry": "index.html",
+  "description": "Tamamen kodla üretilmiş, gerçek zamanlı 3D mekanik saat. Birbirine geçmiş dişliler, işleyen kadran, sarkan sarkaç, cam kasa ve sinematik ışık. Hazır model ya da video kullanılmadı — her parça matematikle çizildi.",
+  "tags": ["three.js", "3d", "saat", "mekanik", "webgl", "dişli", "türkçe"],
+  "features": [
+    "Evolvent dişli üreteci — dişliler gerçek kavrama geometrisiyle (r1+r2) yerleşir",
+    "Dönüş hızları fiziksel oranla: w_çocuk = -w_ebeveyn × (z_ebeveyn / z_çocuk)",
+    "Gerçek zamanlı akrep, yelkovan ve saniye kolu",
+    "Saniyelik ritimle sarkan sarkaç",
+    "Cam kasa arkasında görünen mekanizma",
+    "Sinematik ışık: anahtar spot, rim light, alt dolgu, PMREM ortam yansıması",
+    "Bloom + vinyet post-process",
+    "Fareyle 360° kamera, tekerlekle yakınlaşma",
+    "Hız kontrolü: normal / ağır çekim / durdur / hızlı",
+    "Tek tuşla parçalara ayırma ve birleştirme animasyonu",
+    "Mekanizma ve kadran görünüm modu",
+    "Sinematik kamera turu",
+    "Çevrimdışı çalışır — tüm kütüphaneler yerel (vendor/)"
+  ],
+  "controls": [
+    { "key": "Sürükle", "action": "Kamerayı döndür" },
+    { "key": "Tekerlek", "action": "Yakınlaş / uzaklaş" },
+    { "key": "Space", "action": "Zamanı durdur / başlat" },
+    { "key": "E", "action": "Parçalara ayır / birleştir" },
+    { "key": "R", "action": "Kamerayı sıfırla" },
+    { "key": "1 / 2 / 3", "action": "Normal / ağır çekim / hızlı" }
+  ],
+  "technical": {
+    "engine": "three.js 0.160.0 (yerel)",
+    "files": ["index.html", "style.css", "clockwork.js", "vendor/"],
+    "build": "Yok — statik dosyalar, doğrudan açılır",
+    "offline": true,
+    "externalAssets": "Yok (model, video, görsel dosyası kullanılmadı)"
+  }
+}

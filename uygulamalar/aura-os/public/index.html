@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aura OS — Sanal Siber Web İşletim Sistemi</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Masaüstü Arka Planı (koyu siber tema) -->
+  <div id="desktop-bg">
+    <div class="grid-overlay"></div>
+    <div class="scanlines"></div>
+    <div class="radial-glow"></div>
+
+    <!-- Sistem durum bilgisi (dekoratif) -->
+    <div id="sys-info">
+      <span id="sys-name">AURA_OS</span>
+      <span class="sys-sep">//</span>
+      <span id="sys-ver">v3.1.7 STABLE</span>
+      <span class="sys-sep">//</span>
+      <span id="sys-security">SECURE CHANNEL</span>
+    </div>
+  </div>
+
+  <!-- Masaüstü Simgeler Konteyneri -->
+  <div id="desktop-icons"></div>
+
+  <!-- Pencere Katmanı -->
+  <div id="window-layer"></div>
+
+  <!-- Başlat Menüsü Paneli -->
+  <div id="start-menu" class="hidden">
+    <div class="start-header">
+      <div class="start-logo">⚡</div>
+      <div class="start-title">AURA OS</div>
+    </div>
+    <div class="start-body">
+      <div class="start-user">
+        <div class="user-avatar">UA</div>
+        <div class="user-meta">
+          <span class="user-name">root@aura</span>
+          <span class="user-status">Sistem aktif</span>
+        </div>
+      </div>
+
+      <div class="start-apps-title">UYGULAMALAR</div>
+      <div class="start-apps" id="start-apps-list">
+        <!-- JS ile doldurulur -->
+      </div>
+
+      <div class="start-actions">
+        <div class="start-action">
+          <span>🛡️</span><span>Sistem güvenli</span>
+        </div>
+        <div class="start-action muted">
+          <span>⚙️</span><span>Ayarlar — yakında</span>
+        </div>
+        <div class="start-action">
+          <span>💾</span><span id="start-date">--</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Görev Çubuğu (Taskbar) -->
+  <div id="taskbar">
+    <!-- Sol: Başlat Menüsü Butonu -->
+    <div id="start-btn" title="Başlat Menüsü">
+      <span class="start-icon">▲</span>
+      <span class="start-text">Başlat</span>
+    </div>
+
+    <div id="taskbar-separator"></div>
+
+    <!-- Orta: Açık Pencere Butonları -->
+    <div id="taskbar-windows"></div>
+
+    <!-- Sağ: Canlı Dijital Saat + tarih -->
+    <div id="taskbar-right">
+      <div id="taskbar-date"></div>
+      <div id="taskbar-clock">--:--:--</div>
+    </div>
+  </div>
+
+  <!-- Önceden tanımlı 3 pencere şablonu (uygulama içerik şablonları) -->
+  <template id="tpl-note-editor">
+    <div class="note-app">
+      <div class="note-statusbar">
+        <span class="note-status-dot"></span>
+        <span class="note-status-text">local_session — AES-256 bağlı</span>
+        <span class="note-enc-tag">🔒</span>
+      </div>
+      <textarea class="note-textarea" placeholder="// Siber notunu yaz...&#10;// Ctrl+S ile de kaydedebilirsin."></textarea>
+      <div class="note-toolbar">
+        <button class="note-save-btn">💾 Kaydet</button>
+        <span class="note-save-hint">Ctrl+S</span>
+        <span class="note-saved-msg"></span>
+      </div>
+      <div class="note-list-label">— KAYITLI NOTLAR —</div>
+      <div class="note-list"></div>
+    </div>
+  </template>
+
+  <template id="tpl-terminal">
+    <div class="term-app">
+      <div class="term-crt">
+        <div class="term-output"></div>
+        <div class="term-inputline">
+          <span class="term-prompt">root@aura:~$</span>
+          <input type="text" class="term-input" autocomplete="off" spellcheck="false" placeholder="komut yaz... (help)">
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <template id="tpl-paint">
+    <div class="paint-app">
+      <div class="paint-toolbar">
+        <div class="paint-tools">
+          <button class="color-btn active" data-color="#00ffcc" title="Neon Camgöbeği" style="background:#00ffcc"></button>
+          <button class="color-btn" data-color="#ff00ff" title="Neon Magenta" style="background:#ff00ff"></button>
+          <button class="color-btn" data-color="#39ff14" title="Neon Yeşil" style="background:#39ff14"></button>
+          <button class="color-btn" data-color="#ffaa00" title="Neon Turuncu" style="background:#ffaa00"></button>
+        </div>
+        <button class="paint-clear-btn">🧹 Tuvali Temizle</button>
+      </div>
+      <div class="paint-canvas-wrap">
+        <canvas class="paint-canvas" width="760" height="440"></canvas>
+      </div>
+      <div class="paint-hint">Fareyle serbest çizim yap · sağ tık ile silgi-aslı yok ama Shift basılıyken silgi modu</div>
+    </div>
+  </template>
+
+  <!-- Senkron scriptler: appManager globalini paylaşır -->
+  <script src="js/windowManager.js" defer></script>
+  <script src="js/taskbar.js" defer></script>
+  <script src="js/desktop.js" defer></script>
+  <script src="js/app-notes.js" defer></script>
+  <script src="js/app-terminal.js" defer></script>
+  <script src="js/app-paint.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+{
+  "name": "numex-isletme",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Numex Core — otonom isletme yonetimi (frontend + backend + kalici veri)",
+  "type": "module",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node server/index.js",
+    "seed": "node scripts/seed.js",
+    "reset": "node scripts/reset.js",
+    "test:exam": "node scripts/exam.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.5.0",
+    "express": "^4.21.1"
+  }
+}

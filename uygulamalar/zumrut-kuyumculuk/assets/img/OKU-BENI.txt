@@ -1,0 +1,23 @@
+ÜRÜN FOTOĞRAFLARI KLASÖRÜ
+=========================
+
+Bu klasöre ürün fotoğraflarınızı aşağıdaki adlarla koyun.
+Fotoğraf olmayan ürünlerde site otomatik olarak altın renkli
+kategori simgesini gösterir — sayfa bozulmaz.
+
+Beklenen dosyalar:
+  bilezik-1.jpg   bilezik-2.jpg   bilezik-3.jpg
+  kolye-1.jpg     kolye-2.jpg     kolye-3.jpg
+  yuzuk-1.jpg     yuzuk-2.jpg     yuzuk-3.jpg
+  ceyrek-1.jpg    ceyrek-2.jpg    ceyrek-3.jpg
+
+Renk teması:
+  Siyah zemin  : #0a0a0a / #161616
+  Altın vurgu  : #d4af37 / #f5d76e
+
+Öneri:
+  - Ölçü        : 1200 x 900 px (4:3)
+  - Dosya boyutu: 300 KB altı
+  - Format      : .jpg (koyu zemin üzerinde çekilmiş, iyi ışıklı)
+
+Bu klasörü tümüyle silmeyin; index.html bu yola referans verir.

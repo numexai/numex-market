@@ -1,0 +1,32 @@
+✔ tahta oluşturma doğru boyutta ve boş (0.9597ms)
+✔ doldurulan tahtada hazır eşleşme olmamalı (1.7877ms)
+✔ blok hücreler doldurulmaz (0.1865ms)
+✔ yatay üçlü eşleşme bulunur (0.5868ms)
+✔ dikey üçlü eşleşme bulunur (0.2824ms)
+✔ 2x2 KARE eşleşmesi bulunur (kare üretir) (0.1344ms)
+✔ kare 4'lü anında patlar: patlamaYayilimi 2x2 + çevreyi temizler (0.3117ms)
+✔ kare grubu tahtada KALMAZ (anında patlama kuralı) (0.1231ms)
+✔ kare 4'lü puanı normal 4'lüden yüksek (0.1876ms)
+✔ 4'lü eşleşme çizgili şeker üretir (0.1898ms)
+✔ 5'li eşleşme renkli şeker üretir (0.1605ms)
+✔ L şekli bomba üretir (0.2008ms)
+✔ blok hücreler eşleşmeye dahil olmaz (0.0914ms)
+✔ geçerli hamle tespiti (0.1669ms)
+✔ yerçekimi şekerleri aşağı kaydırır (0.1755ms)
+✔ yerçekimi üstteki boşlukları yeni şekerle doldurur (0.1027ms)
+✔ puan hesaplama temel kural (0.0587ms)
+✔ yıldız eşikleri (0.1039ms)
+✔ zincirleme patlama sonrası tahta stabil olur (0.6618ms)
+✔ tüm bölümler geçerli tanımlanmış (0.2797ms)
+✔ her bölümün tahtası üretilebilir ve oynanabilir (1.0252ms)
+✔ şeker tipi sayısı 6 (0.074ms)
+✔ bölüm değerlendirme başarılı senaryo (0.128ms)
+✔ tekil hedef durumu hesaplanır (0.1342ms)
+ℹ tests 24
+ℹ suites 0
+ℹ pass 24
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 109.9205

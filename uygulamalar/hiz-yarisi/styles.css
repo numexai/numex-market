@@ -1,0 +1,437 @@
+/* Süper Racing 3D - Ultimate Edition Styles */
+:root {
+  --racing-red: #ef4444;
+  --racing-gold: #f59e0b;
+  --racing-blue: #0284c7;
+  --racing-green: #10b981;
+  --bg-gradient: linear-gradient(135deg, #090d16 0%, #1e1b4b 50%, #0284c7 100%);
+  --panel-bg: rgba(15, 23, 42, 0.95);
+  --glass-border: rgba(255, 255, 255, 0.15);
+  --neon-cyan: #38bdf8;
+  --font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+
+body {
+  font-family: var(--font-family);
+  background: var(--bg-gradient);
+  color: #ffffff;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* Menü Ekranları */
+.menu-screen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--bg-gradient);
+  z-index: 1000;
+}
+
+.menu-container, .results-container {
+  background: var(--panel-bg);
+  border: 2px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 40px rgba(0, 162, 237, 0.3);
+}
+
+.game-title {
+  font-size: 48px;
+  font-weight: 900;
+  text-align: center;
+  background: linear-gradient(135deg, var(--racing-red), var(--racing-gold), var(--neon-cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+  text-shadow: 0 0 30px rgba(239, 68, 68, 0.5);
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 14px;
+  opacity: 0.7;
+  margin-bottom: 24px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.menu-section {
+  margin-bottom: 24px;
+}
+
+.menu-section h3 {
+  font-size: 16px;
+  margin-bottom: 12px;
+  color: var(--neon-cyan);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Araba Seçimi */
+.car-selection {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.car-option {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.car-option:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.car-option.selected {
+  border-color: var(--neon-cyan);
+  background: rgba(56, 189, 248, 0.15);
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+}
+
+.car-preview {
+  width: 60px;
+  height: 80px;
+  margin: 0 auto 8px;
+  border-radius: 8px;
+}
+
+.sport-car { background: linear-gradient(135deg, #ef4444, #dc2626); }
+.muscle-car { background: linear-gradient(135deg, #f59e0b, #d97706); }
+.super-car { background: linear-gradient(135deg, #10b981, #059669); }
+
+.car-name {
+  display: block;
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.car-stats {
+  display: block;
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+/* Pist ve Rakip Seçimi */
+.track-selection, .rival-selection {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.track-btn, .rival-btn {
+  flex: 1;
+  min-width: 100px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.track-btn:hover, .rival-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.track-btn.selected, .rival-btn.selected {
+  border-color: var(--racing-gold);
+  background: rgba(245, 158, 11, 0.2);
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
+}
+
+/* Başlat Butonu */
+.start-btn {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--racing-red), var(--racing-gold));
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4);
+}
+
+.start-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 30px rgba(239, 68, 68, 0.6);
+}
+
+.controls-info {
+  margin-top: 20px;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  font-size: 12px;
+  text-align: center;
+  opacity: 0.8;
+}
+
+.controls-info p { margin: 4px 0; }
+
+/* Oyun Konteyneri */
+.game-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#gameCanvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* HUD */
+.hud {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.hud-left, .hud-right {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hud-center {
+  text-align: center;
+}
+
+.hud-item {
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 8px 16px;
+  backdrop-filter: blur(10px);
+}
+
+.hud-label {
+  display: block;
+  font-size: 10px;
+  text-transform: uppercase;
+  opacity: 0.7;
+  letter-spacing: 1px;
+  margin-bottom: 2px;
+}
+
+.hud-value {
+  display: inline-block;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--neon-cyan);
+  text-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+}
+
+.hud-unit {
+  font-size: 12px;
+  opacity: 0.7;
+  margin-left: 4px;
+}
+
+/* Nitro Bar */
+.nitro-bar {
+  width: 120px;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.nitro-fill {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, var(--racing-blue), var(--neon-cyan));
+  transition: width 0.3s;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+}
+
+/* Power-up */
+.powerup-display {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--racing-gold);
+  min-width: 80px;
+  text-align: center;
+}
+
+.sound-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 8px 12px;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  pointer-events: all;
+  transition: all 0.3s;
+}
+
+.sound-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Geri Sayım */
+.countdown {
+  font-size: 72px;
+  font-weight: 900;
+  color: var(--racing-gold);
+  text-shadow: 0 0 30px rgba(245, 158, 11, 0.8);
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+.race-time {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+}
+
+/* Minimapa */
+.minimap {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  background: rgba(0, 0, 0, 0.7);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 8px;
+  z-index: 100;
+}
+
+#minimapCanvas {
+  display: block;
+}
+
+/* Power-up Bildirimi */
+.powerup-notification {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.9);
+  border: 2px solid var(--racing-gold);
+  border-radius: 12px;
+  padding: 16px 32px;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--racing-gold);
+  text-shadow: 0 0 20px rgba(245, 158, 11, 0.8);
+  animation: slideIn 0.5s, fadeOut 0.5s 2s forwards;
+  z-index: 200;
+}
+
+@keyframes slideIn {
+  from { transform: translate(-50%, -100%); opacity: 0; }
+  to { transform: translate(-50%, -50%); opacity: 1; }
+}
+
+@keyframes fadeOut {
+  to { opacity: 0; }
+}
+
+/* Sonuç Ekranı */
+.result-title {
+  font-size: 36px;
+  font-weight: 900;
+  text-align: center;
+  margin-bottom: 24px;
+  background: linear-gradient(135deg, var(--racing-gold), var(--neon-cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.result-content {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.result-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.result-row:last-child { border-bottom: none; }
+
+.result-row.player {
+  background: rgba(56, 189, 248, 0.1);
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin: 4px 0;
+}
+
+.result-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.menu-btn {
+  flex: 1;
+  padding: 14px;
+  background: linear-gradient(135deg, var(--racing-red), var(--racing-gold));
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.menu-btn.secondary {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.menu-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4);
+}

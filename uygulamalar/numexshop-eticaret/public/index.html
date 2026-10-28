@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NumexShop — Saf Mantık E-Ticaret</title>
+  <meta name="description" content="Framework yok, kütüphane yok: sepet, kupon, stok ve ödeme mantığı saf JavaScript ile." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ============ ÜST BAR ============ -->
+  <header class="ustbar">
+    <div class="kapsayici ustbar-ic">
+      <a class="logo" href="#" data-git="anasayfa">
+        <span class="logo-isaret">N</span>
+        <span class="logo-yazi">Numex<strong>Shop</strong></span>
+      </a>
+
+      <div class="arama-kutu">
+        <input id="arama" type="search" placeholder="Ürün, kategori veya marka ara..." autocomplete="off" aria-label="Ürün ara" />
+        <button id="arama-temizle" class="arama-temizle" type="button" title="Temizle" hidden>×</button>
+      </div>
+
+      <button id="sepet-btn" class="sepet-btn" type="button" aria-label="Sepeti aç">
+        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+          <path d="M6 6h15l-1.6 9.2a2 2 0 0 1-2 1.8H9.5a2 2 0 0 1-2-1.7L6 6Zm0 0L5.2 3.6A1 1 0 0 0 4.2 3H3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="9.5" cy="20" r="1.4" fill="currentColor"/>
+          <circle cx="17" cy="20" r="1.4" fill="currentColor"/>
+        </svg>
+        <span>Sepet</span>
+        <span id="sepet-adet" class="sepet-adet" aria-live="polite">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="kapsayici hero-ic">
+      <div class="hero-metin">
+        <p class="hero-etiket">Saf JavaScript · Sıfır Bağımlılık</p>
+        <h1>Alışverişin mantığı burada, süslü paketlerde değil.</h1>
+        <p class="hero-alt">Sepet, stok kontrolü, kupon motoru ve sipariş akışı — hepsi tarayıcıda saf mantıkla çalışıyor. Sayfayı yenile, sepetin yerinde durur.</p>
+        <div class="hero-butonlar">
+          <button class="btn btn-birincil" type="button" data-git="urunler">Ürünleri Keşfet</button>
+          <button class="btn btn-cerceve" type="button" id="kupon-tanitim">Kupon Deneyin</button>
+        </div>
+        <div class="hero-istatistik" id="hero-istatistik"></div>
+      </div>
+      <div class="hero-gorsel" aria-hidden="true">
+        <div class="hero-kart kart-a"><span>Sepet</span><b id="hero-sepet-mini">₺0</b></div>
+        <div class="hero-kart kart-b"><span>Stok</span><b id="hero-stok-mini">—</b></div>
+        <div class="hero-kart kart-c"><span>Kupon</span><b>NUMEX10</b></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FİLTRE ÇUBUĞU ============ -->
+  <section class="filtre-bari">
+    <div class="kapsayici filtre-ic">
+      <div class="kategori-listesi" id="kategori-listesi" role="tablist" aria-label="Kategoriler"></div>
+      <div class="sirala-kutu">
+        <label for="siralama">Sırala</label>
+        <select id="siralama">
+          <option value="onerilen">Önerilen</option>
+          <option value="artan">Fiyat: Artan</option>
+          <option value="azalan">Fiyat: Azalan</option>
+          <option value="puan">Puana Göre</option>
+          <option value="stok">Stok: Azalan</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ÜRÜN LİSTESİ ============ -->
+  <main class="kapsayici" id="urunler">
+    <div class="bolum-baslik">
+      <h2 id="liste-baslik">Tüm Ürünler</h2>
+      <span class="sonuc-sayisi" id="sonuc-sayisi"></span>
+    </div>
+    <div id="urun-izgara" class="urun-izgara" aria-live="polite"></div>
+    <div id="bos-durum" class="bos-durum" hidden>
+      <b>Aradığın kriterde ürün yok.</b>
+      <span>Filtreyi sıfırlayıp tekrar dene.</span>
+      <button class="btn btn-cerceve" type="button" id="filtre-sifirla">Filtreleri Sıfırla</button>
+    </div>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="altbilgi">
+    <div class="kapsayici altbilgi-ic">
+      <div>
+        <b>NumexShop</b>
+        <p>Saf mantıkla kurulmuş vitrin. Sepet, kupon ve sipariş akışı tamamen istemci tarafında; verilerin bu cihazda kalır.</p>
+      </div>
+      <div class="altbilgi-imgeler">
+        <span>Aynı gün kargo</span>
+        <span>14 gün iade</span>
+        <span>Güvenli ödeme</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============ SEPET ÇEKMECESİ ============ -->
+  <div class="perde" id="perde" hidden></div>
+  <aside class="cekmec" id="sepet-cekmec" role="dialog" aria-modal="true" aria-label="Sepet" aria-hidden="true">
+    <header class="cekmec-ust">
+      <h2>Sepetim <span id="cekmec-adet" class="rozet">0</span></h2>
+      <button class="kapat-btn" type="button" id="sepet-kapat" aria-label="Kapat">×</button>
+    </header>
+
+    <div class="cekmec-govde" id="sepet-govde"></div>
+
+    <div class="cekmec-alt">
+      <div class="kupon-satir">
+        <input id="kupon-kod" type="text" placeholder="Kupon kodu" aria-label="Kupon kodu" />
+        <button class="btn btn-mini" type="button" id="kupon-uygula">Uygula</button>
+      </div>
+      <p class="kupon-mesaj" id="kupon-mesaj" hidden></p>
+
+      <dl class="ozet" id="sepet-ozet"></dl>
+      <button class="btn btn-birincil btn-tam" type="button" id="odeme-basla">Ödemeye Geç</button>
+      <button class="btn btn-metin" type="button" id="sepet-temizle">Sepeti boşalt</button>
+    </div>
+  </aside>
+
+  <!-- ============ ÖDEME MODALI ============ -->
+  <div class="modal" id="odeme-modal" role="dialog" aria-modal="true" aria-labelledby="odeme-baslik" hidden>
+    <div class="modal-kart">
+      <header class="modal-ust">
+        <h2 id="odeme-baslik">Ödeme</h2>
+        <button class="kapat-btn" type="button" id="odeme-kapat" aria-label="Kapat">×</button>
+      </header>
+
+      <form id="odeme-form" novalidate>
+        <div class="adim-gostergesi" id="adim-gostergesi">
+          <span class="adim aktif" data-adim="1">1 · Teslimat</span>
+          <span class="adim" data-adim="2">2 · Ödeme</span>
+          <span class="adim" data-adim="3">3 · Onay</span>
+        </div>
+
+        <!-- Adım 1 -->
+        <fieldset class="adim-alan aktif" data-adim="1">
+          <div class="alan">
+            <label for="ad">Ad Soyad</label>
+            <input id="ad" name="ad" type="text" required placeholder="Ayşe Yılmaz" />
+            <small class="hata" data-hata="ad"></small>
+          </div>
+          <div class="alan-ikili">
+            <div class="alan">
+              <label for="eposta">E-posta</label>
+              <input id="eposta" name="eposta" type="email" required placeholder="ayse@ornek.com" />
+              <small class="hata" data-hata="eposta"></small>
+            </div>
+            <div class="alan">
+              <label for="telefon">Telefon</label>
+              <input id="telefon" name="telefon" type="tel" required placeholder="05XX XXX XX XX" />
+              <small class="hata" data-hata="telefon"></small>
+            </div>
+          </div>
+          <div class="alan">
+            <label for="adres">Adres</label>
+            <textarea id="adres" name="adres" rows="2" required placeholder="Mahalle, sokak, no, ilçe / il"></textarea>
+            <small class="hata" data-hata="adres"></small>
+          </div>
+        </fieldset>
+
+        <!-- Adım 2 -->
+        <fieldset class="adim-alan" data-adim="2">
+          <div class="alan">
+            <label for="kartno">Kart Numarası</label>
+            <input id="kartno" name="kartno" type="text" inputmode="numeric" placeholder="4242 4242 4242 4242" autocomplete="cc-number" />
+            <small class="hata" data-hata="kartno"></small>
+          </div>
+          <div class="alan-ikili">
+            <div class="alan">
+              <label for="sonkullanma">Son Kullanma</label>
+              <input id="sonkullanma" name="sonkullanma" type="text" inputmode="numeric" placeholder="AA/YY" autocomplete="cc-exp" />
+              <small class="hata" data-hata="sonkullanma"></small>
+            </div>
+            <div class="alan">
+              <label for="cvv">CVV</label>
+              <input id="cvv" name="cvv" type="text" inputmode="numeric" placeholder="123" autocomplete="cc-csc" />
+              <small class="hata" data-hata="cvv"></small>
+            </div>
+          </div>
+          <p class="not-kutu">🔒 Bu bir demo ödeme ekranıdır; kart bilgisi hiçbir yere gönderilmez, yalnızca bu sayfada doğrulanır (Luhn algoritması).</p>
+        </fieldset>
+
+        <!-- Adım 3 -->
+        <fieldset class="adim-alan" data-adim="3">
+          <div id="onay-ozet" class="onay-ozet"></div>
+        </fieldset>
+      </form>
+
+      <footer class="modal-alt">
+        <button class="btn btn-metin" type="button" id="geri-btn" hidden>← Geri</button>
+        <button class="btn btn-birincil" type="button" id="ileri-btn">Devam Et</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- ============ BAŞARI MODALI ============ -->
+  <div class="modal" id="basari-modal" role="dialog" aria-modal="true" hidden>
+    <div class="modal-kart basari-kart">
+      <div class="basari-isaret">✓</div>
+      <h2>Siparişin alındı!</h2>
+      <p id="siparis-kod" class="siparis-kod"></p>
+      <p class="basari-alt">Sipariş özetin bu cihazda saklandı. Teşekkürler!</p>
+      <div id="siparis-detay" class="siparis-detay"></div>
+      <button class="btn btn-birincil btn-tam" type="button" id="basari-kapat">Alışverişe Devam</button>
+    </div>
+  </div>
+
+  <!-- ============ BİLDİRİM ============ -->
+  <div id="bildirim-alani" class="bildirim-alani" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="data/urunler.js"></script>
+  <script src="js/sepet.js"></script>
+  <script src="js/odeme.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

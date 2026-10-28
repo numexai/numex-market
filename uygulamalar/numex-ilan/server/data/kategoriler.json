@@ -1,0 +1,8 @@
+[
+  { "id": 1, "ad": "Emlak", "ikon": "🏠", "alt": ["Konut", "Arsa", "İşyeri"] },
+  { "id": 2, "ad": "Vasıta", "ikon": "🚗", "alt": ["Otomobil", "Motosiklet", "Ticari Araç"] },
+  { "id": 3, "ad": "İkinci El & Sıfır Alışveriş", "ikon": "🛍️", "alt": ["Beyaz Eşya", "Elektronik", "Mobilya", "Giyim"] },
+  { "id": 4, "ad": "Aynı Gün Teslimat", "ikon": "🚚", "alt": ["Market", "İçecek", "Hızlı Tüketici"] },
+  { "id": 5, "ad": "Hizmetler", "ikon": "🧰", "alt": ["Ev Hizmetleri", "Vasıta Hizmetleri", "Güzellik & Bakım"] },
+  { "id": 6, "ad": "İş İlanları", "ikon": "💼", "alt": ["Tam Zamanlı", "Yarı Zamanlı", "Staj"] }
+]

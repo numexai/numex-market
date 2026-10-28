@@ -1,0 +1,96 @@
+/* =========================================================
+   PulseBoard — Tasarım Tokenları
+   Koyu tema varsayılan; açık tema [data-tema="acik"] ile.
+   ========================================================= */
+
+:root {
+  /* --- Koyu tema (varsayılan) --- */
+  --zemin: #070b14;
+  --zemin-2: #0b1120;
+  --yuzey: rgba(19, 27, 46, 0.72);
+  --yuzey-duz: #131b2e;
+  --yuzey-2: rgba(28, 38, 62, 0.55);
+  --yuzey-yuksek: rgba(34, 46, 74, 0.72);
+  --cizgi: rgba(148, 176, 224, 0.14);
+  --cizgi-guclu: rgba(148, 176, 224, 0.26);
+
+  --metin: #eaf2ff;
+  --metin-2: #a9bcd8;
+  --metin-3: #6f84a3;
+
+  --teal: #2dd4bf;
+  --teal-koyu: #14b8a6;
+  --mavi: #38bdf8;
+  --mor: #a855f7;
+  --yesil: #34d399;
+  --sari: #fbbf24;
+  --turuncu: #fb923c;
+  --kirmizi: #f87171;
+
+  --aksan: linear-gradient(135deg, var(--teal) 0%, var(--mavi) 52%, var(--mor) 100%);
+  --aksan-yumusak: linear-gradient(135deg, rgba(45, 212, 191, .18), rgba(168, 85, 247, .18));
+
+  --glow-teal: 0 0 0 1px rgba(45, 212, 191, .28), 0 10px 34px -12px rgba(45, 212, 191, .5);
+  --glow-mor: 0 0 0 1px rgba(168, 85, 247, .26), 0 10px 34px -12px rgba(168, 85, 247, .5);
+  --golge-1: 0 1px 2px rgba(3, 7, 18, .5), 0 12px 32px -18px rgba(3, 7, 18, .9);
+  --golge-2: 0 20px 50px -24px rgba(3, 7, 18, .95);
+
+  --blur: saturate(1.35) blur(14px);
+
+  /* --- Ölçek --- */
+  --r-xs: 8px;
+  --r-sm: 12px;
+  --r-md: 16px;
+  --r-lg: 22px;
+  --r-full: 999px;
+
+  --bosluk-1: 4px;
+  --bosluk-2: 8px;
+  --bosluk-3: 12px;
+  --bosluk-4: 16px;
+  --bosluk-5: 22px;
+  --bosluk-6: 30px;
+  --bosluk-7: 44px;
+
+  --sidebar-g: 264px;
+  --icerik-maks: 1320px;
+
+  --font: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "Cascadia Code", Consolas, ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --gecis-hizli: 130ms cubic-bezier(.4, 0, .2, 1);
+  --gecis: 200ms cubic-bezier(.4, 0, .2, 1);
+  --gecis-yavas: 320ms cubic-bezier(.22, .8, .28, 1);
+
+  --z-perde: 40;
+  --z-sidebar: 50;
+  --z-modal: 70;
+  --z-toast: 90;
+}
+
+/* --- Açık tema --- */
+[data-tema="acik"] {
+  --zemin: #f4f7fd;
+  --zemin-2: #ffffff;
+  --yuzey: rgba(255, 255, 255, 0.86);
+  --yuzey-duz: #ffffff;
+  --yuzey-2: rgba(240, 245, 253, 0.9);
+  --yuzey-yuksek: rgba(255, 255, 255, 0.96);
+  --cizgi: rgba(30, 58, 102, 0.12);
+  --cizgi-guclu: rgba(30, 58, 102, 0.22);
+
+  --metin: #0d1729;
+  --metin-2: #43536e;
+  --metin-3: #6d7f9b;
+
+  --teal: #0d9488;
+  --teal-koyu: #0f766e;
+  --mavi: #0284c7;
+  --mor: #7c3aed;
+
+  --golge-1: 0 1px 2px rgba(15, 23, 42, .06), 0 10px 28px -18px rgba(15, 23, 42, .28);
+  --golge-2: 0 22px 48px -26px rgba(15, 23, 42, .34);
+  --glow-teal: 0 0 0 1px rgba(13, 148, 136, .22), 0 10px 30px -14px rgba(13, 148, 136, .35);
+  --glow-mor: 0 0 0 1px rgba(124, 58, 237, .2), 0 10px 30px -14px rgba(124, 58, 237, .35);
+  --blur: saturate(1.2) blur(12px);
+}

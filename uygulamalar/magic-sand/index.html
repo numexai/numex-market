@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>Numex Magic Sand — Büyülü Kum</title>
+<meta name="description" content="Fareyle çizilen renkli kum taneleri; yerçekimiyle akan, yüzeylerde biriken interaktif kum sanatı. Su ve ateş modları." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#f2ead8;
+    --dim:rgba(240,230,210,.55);
+    --panel:rgba(20,16,12,.55);
+    --brd:rgba(255,220,160,.18);
+    --accent:#ffc46b;
+  }
+  *{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body{ height:100%; margin:0; overflow:hidden; }
+  body{
+    background:#0a0806; color:var(--ink); touch-action:none;
+    font-family:'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  }
+  #sand{ position:fixed; inset:0; display:block; width:100%; height:100%; cursor:crosshair; }
+
+  #veil{
+    position:fixed; inset:0; background:#0a0806; z-index:60;
+    display:flex; align-items:center; justify-content:center; flex-direction:column; gap:16px;
+    letter-spacing:.30em; font-size:11px; color:var(--dim); transition:opacity .9s ease;
+  }
+  #veil.gone{ opacity:0; pointer-events:none; }
+  #veil .bar{ width:130px; height:1px; background:rgba(255,220,160,.15); overflow:hidden; }
+  #veil .bar i{ display:block; height:100%; width:40%; background:var(--accent); box-shadow:0 0 12px var(--accent); animation:slide 1.4s ease-in-out infinite; }
+  @keyframes slide{ 0%{transform:translateX(-100%)} 100%{transform:translateX(300%)} }
+
+  #title{
+    position:fixed; top:clamp(14px,3vh,32px); left:0; right:0; text-align:center;
+    z-index:10; pointer-events:none;
+  }
+  /* NUMEX-DÜZELTME (2026-10-27): başlık, üstten süzülen kumun içinde kayboluyordu; okunurluk için
+     arkasına yumuşak karartma perdesi + daha güçlü gölge eklendi. */
+  #title::before{
+    content:''; position:absolute; left:0; right:0; top:-30px; height:150px; z-index:-1;
+    background:radial-gradient(ellipse 60% 100% at 50% 0%, rgba(10,8,6,.85) 0%, rgba(10,8,6,.55) 45%, rgba(10,8,6,0) 100%);
+    pointer-events:none;
+  }
+  #title h1{
+    font-family:'Cormorant Garamond', serif; font-weight:400; margin:0;
+    font-size:clamp(20px,3.4vw,42px); letter-spacing:.22em; white-space:nowrap;
+    color:#fff8ec;
+    text-shadow:0 0 26px rgba(255,190,110,.55), 0 0 60px rgba(255,140,60,.30),
+                0 2px 10px rgba(0,0,0,.95), 0 0 4px rgba(0,0,0,1);
+  }
+  #title p{
+    margin:clamp(4px,.8vh,8px) 0 0; padding:0 16px; line-height:1.6;
+    font-size:clamp(8.5px,1.1vw,11px); letter-spacing:.32em; text-transform:uppercase;
+    color:var(--dim); font-weight:300;
+  }
+
+  #hint{
+    position:fixed; left:50%; transform:translateX(-50%);
+    top:clamp(80px,14vh,134px); z-index:9; padding:0 18px;
+    font-size:10.5px; letter-spacing:.13em; text-align:center; line-height:1.7;
+    color:rgba(245,232,210,.45); pointer-events:none; transition:opacity 1.3s ease;
+  }
+  #hint.gone{ opacity:0; }
+
+  #panel{
+    position:fixed; z-index:20; left:50%; transform:translateX(-50%);
+    bottom:clamp(12px,2.4vh,24px);
+    width:min(700px, calc(100vw - 22px));
+    display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:6px 8px;
+    padding:10px clamp(10px,1.5vw,16px);
+    background:var(--panel); border:1px solid var(--brd); border-radius:18px;
+    backdrop-filter:blur(18px) saturate(1.2); -webkit-backdrop-filter:blur(18px) saturate(1.2);
+    box-shadow:0 18px 50px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,225,170,.09);
+    transition:opacity .45s ease, transform .45s ease;
+  }
+  #panel.hidden{ opacity:0; pointer-events:none; transform:translate(-50%,130%); }
+  .grp{ display:flex; align-items:center; gap:5px; padding:0 6px; }
+  .grp + .grp{ border-left:1px solid rgba(255,225,170,.14); }
+  .lbl{ font-size:9px; letter-spacing:.17em; text-transform:uppercase; color:var(--dim); margin-right:2px; white-space:nowrap; }
+  button{
+    font-family:inherit; font-size:11px; font-weight:500; color:var(--ink);
+    background:rgba(255,220,170,.08); border:1px solid rgba(255,220,170,.18);
+    border-radius:11px; padding:0 11px; height:36px; min-height:36px; min-width:36px;
+    cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:5px;
+    transition:background .2s, border-color .2s, transform .1s; white-space:nowrap;
+  }
+  button:hover{ background:rgba(255,220,170,.18); border-color:rgba(255,225,180,.38); }
+  button:active{ transform:scale(.96); }
+  button.on{ background:rgba(255,196,107,.26); border-color:rgba(255,196,107,.68); color:#fff8ec; box-shadow:0 0 18px rgba(255,196,107,.35); }
+  button svg{ width:14px; height:14px; }
+  input[type=range]{
+    -webkit-appearance:none; appearance:none; width:clamp(54px,8vw,86px); height:28px;
+    background:transparent; cursor:pointer;
+  }
+  input[type=range]::-webkit-slider-runnable-track{ height:3px; border-radius:3px; background:rgba(255,225,180,.24); }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none; width:14px; height:14px; border-radius:50%; background:var(--accent);
+    margin-top:-5.5px; border:none; box-shadow:0 0 12px rgba(255,196,107,.85);
+  }
+  input[type=range]::-moz-range-track{ height:3px; border-radius:3px; background:rgba(255,225,180,.24); }
+  input[type=range]::-moz-range-thumb{ width:14px; height:14px; border:none; border-radius:50%; background:var(--accent); }
+
+  #toggle{
+    position:fixed; z-index:25; right:clamp(10px,1.8vw,20px); bottom:clamp(12px,2.4vh,24px);
+    width:44px; height:44px; min-width:44px; min-height:44px; border-radius:50%; padding:0;
+    background:rgba(20,16,12,.55); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  }
+
+  @media (max-width:660px){
+    .lbl{ display:none; }
+    .grp{ padding:0 3px; gap:4px; flex:0 0 auto; }
+    .grp + .grp{ border-left:none; }
+    button{ font-size:10px; padding:0 9px; height:38px; min-height:38px; }
+    #panel{ gap:5px 4px; padding:8px; border-radius:16px; }
+    #title h1{ letter-spacing:.13em; font-size:clamp(17px,5.2vw,26px); }
+    #title p{ letter-spacing:.20em; font-size:8px; padding:0 22px; }
+    #hint{ font-size:9px; top:clamp(68px,11vh,104px); line-height:1.8; }
+  }
+  @media (prefers-reduced-motion: reduce){ #veil .bar i{ animation:none; width:100%; } }
+</style>
+</head>
+<body>
+
+<canvas id="sand"></canvas>
+
+<div id="veil"><span>NUMEX MAGIC SAND</span><div class="bar"><i></i></div></div>
+
+<div id="title">
+  <h1>BÜYÜLÜ KUM</h1>
+  <p>Numex Magic Sand — dokunduğun yerde hayat başlar</p>
+</div>
+
+<div id="hint">sürükle: kum dök &nbsp;·&nbsp; mod seç &nbsp;·&nbsp; boşluk: temizle</div>
+
+<div id="panel">
+  <div class="grp">
+    <span class="lbl">Madde</span>
+    <button id="mSand" class="on" title="Kum">Kum</button>
+    <button id="mWater" title="Su">Su</button>
+    <button id="mFire" title="Ateş">Ateş</button>
+  </div>
+  <div class="grp">
+    <span class="lbl">Renk</span>
+    <button id="cCycle" title="Renk değiştir">
+      <span id="swatch" style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#ffc46b;box-shadow:0 0 10px #ffc46b"></span>
+      Renk
+    </button>
+  </div>
+  <div class="grp">
+    <span class="lbl">Fırça</span>
+    <input id="brush" type="range" min="2" max="26" value="7" aria-label="Fırça boyutu" />
+  </div>
+  <div class="grp">
+    <button id="clearBtn" title="Temizle">Temizle</button>
+    <button id="toggleSand" title="Paneli gizle / göster">Gizle</button>
+  </div>
+</div>
+
+<button id="toggle" title="Paneli gizle" aria-label="Paneli gizle">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" width="17" height="17"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+</button>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   NUMEX MAGIC SAND — Büyülü Kum
+   Hücre-tabanlı kum simülasyonu (falling-sand automaton).
+   WebGL kullanmaz: her karede bir ImageData üzerine piksel
+   yazılır ve canvas'a basılır. Bu sayede kum, su ve ateş
+   tek bir fizik motorunda, birbirleriyle etkileşerek akar.
+   ═══════════════════════════════════════════════════════════ */
+
+const canvas = document.getElementById('sand');
+const ctx = canvas.getContext('2d', { alpha: false });
+
+// ── ızgara boyutu (hücre = birkaç ekran pikseli) ──
+let COLS = 0, ROWS = 0, CELL = 4;
+let grid = null;      // Uint8Array: malzeme türü
+let life = null;      // Uint8Array: ateş ömrü / su dağılımı
+let tint = null;      // Uint8Array: renk varyasyonu (tane tane doku)
+let imageData = null;
+let pixels = null;
+
+// malzeme türleri
+const EMPTY = 0, SAND = 1, WATER = 2, FIRE = 3, STEAM = 4, SMOKE = 5, EMBER = 6;
+
+// renk paleti (RGB)
+const HUES = [
+  { name:'altın',  r:255, g:196, b:107 },
+  { name:'mercan', r:255, g:124, b:96  },
+  { name:'turkuaz',r:96,  g:214, b:214 },
+  { name:'eflatun',r:186, g:132, b:255 },
+  { name:'gül',    r:255, g:150, b:190 },
+  { name:'mint',   r:140, g:240, b:170 },
+  { name:'bakır',  r:220, g:150, b:90  },
+  { name:'buz',    r:170, g:220, b:255 }
+];
+let hueIdx = 0;
+
+let mode = 'sand';       // sand | water | fire
+let brushSize = 7;
+let showGrid = false;
+
+// ── boyutlandırma ──
+function resize(){
+  const w = innerWidth, h = innerHeight;
+  const dpr = Math.min(devicePixelRatio, 2);
+  canvas.width  = Math.floor(w * dpr);
+  canvas.height = Math.floor(h * dpr);
+  canvas.style.width = w + 'px';
+  canvas.style.height = h + 'px';
+
+  // hücre boyutu ekran boyutuna göre: telefonda daha iri (performans)
+  CELL = Math.max(3, Math.round(Math.min(w, h) / 190));
+  COLS = Math.floor(w / CELL);
+  ROWS = Math.floor(h / CELL);
+
+  grid  = new Uint8Array(COLS * ROWS);
+  life  = new Uint8Array(COLS * ROWS);
+  tint  = new Uint8Array(COLS * ROWS);
+  for (let i=0;i<tint.length;i++) tint[i] = (Math.random()*40-20)|0;
+
+  imageData = ctx.createImageData(COLS, ROWS);
+  pixels = imageData.data;
+
+  // tuvali ızgara çözünürlüğüne sabitle, sonra CSS ile geri büyüt
+  canvas.width  = COLS;
+  canvas.height = ROWS;
+  canvas.style.width = w + 'px';
+  canvas.style.height = h + 'px';
+  ctx.imageSmoothingEnabled = false;
+}
+
+// ── tek tane yerleştir ──
+function put(x, y, type, lf){
+  if (x < 0 || y < 0 || x >= COLS || y >= ROWS) return false;
+  const i = y * COLS + x;
+  if (grid[i] !== EMPTY && grid[i] !== STEAM && grid[i] !== SMOKE) return false;
+  grid[i] = type;
+  life[i] = lf !== undefined ? lf : 0;
+  return true;
+}
+
+// ── fırça: daire alanına tane serp ──
+function paint(cx, cy, type){
+  const r = brushSize;
+  const r2 = r * r;
+  for (let dy = -r; dy <= r; dy++){
+    for (let dx = -r; dx <= r; dx++){
+      if (dx*dx + dy*dy > r2) continue;
+      // kenarlara doğru seyrekleş — yumuşak fırça ucu
+      const d = Math.sqrt(dx*dx + dy*dy) / r;
+      if (d > 0.72 && Math.random() < (d - 0.72) * 2.6) continue;
+      const x = cx + dx, y = cy + dy;
+      if (type === FIRE){
+        if (Math.random() < 0.55) put(x, y, FIRE, 120 + (Math.random()*90|0));
+      } else if (type === WATER){
+        if (Math.random() < 0.75) put(x, y, WATER, 0);
+      } else {
+        if (Math.random() < 0.85) put(x, y, SAND, 0);
+      }
+    }
+  }
+}
+
+// ── piksel rengi ──
+function shade(idx, type, lf, tn){
+  let r=0, g=0, b=0;
+  const h = HUES[hueIdx];
+  switch(type){
+    case SAND: {
+      // NUMEX-DÜZELTME (2026-10-27): tint -20..+20 aralığındaydı ve (tn<0 ? 0.10) ifadesi
+      // negatiflerde rengi karartıp siyah noktalar oluşturuyordu. Artık taban parlaklık sabit,
+      // tint yalnızca ±%12 yumuşak bir doku farkı veriyor.
+      const v = 1.0 + (tn / 20) * 0.12;
+      r = h.r * 0.75 * v; g = h.g * 0.68 * v; b = h.b * 0.62 * v;
+      const spark = (tn > 14) ? 26 : 0;   // yalnızca parlak taneler ışıldasın
+      r += spark; g += spark * 0.85; b += spark * 0.6;
+      break;
+    }
+    case WATER: {
+      r = 42; g = 118; b = 168;
+      // su içinde hafif parıltı dalgası
+      const w = Math.sin(idx * 0.07 + performance.now() * 0.0016) * 12;
+      r += w * 0.35; g += w * 0.7; b += w;
+      break;
+    }
+    case FIRE: {
+      const t = lf / 210;                     // kalan ömür
+      const hot = Math.pow(t, 0.7);
+      r = 255;
+      g = 90 + hot * 150;
+      b = 20 + hot * 90;
+      break;
+    }
+    case EMBER: {
+      r = 170 + Math.random()*50; g = 60; b = 22;
+      break;
+    }
+    case STEAM: {
+      r = 150; g = 178; b = 190;
+      break;
+    }
+    case SMOKE: {
+      r = 62; g = 52; b = 46;
+      break;
+    }
+    default:
+      r = 10; g = 8; b = 6;
+  }
+  return [r, g, b];
+}
+
+// ── simülasyon adımı ──
+function step(){
+  const now = performance.now();
+  // aşağıdan yukarıya tara (kum aşağı akar), yatay yön her karede değişsin
+  const dir = (Math.random() < 0.5) ? 1 : -1;
+
+  for (let y = ROWS - 1; y >= 0; y--){
+    const row = y * COLS;
+    if (dir === 1){
+      for (let x = COLS - 1; x >= 0; x--){ simulate(row + x, x, y, now); }
+    } else {
+      for (let x = 0; x < COLS; x++){ simulate(row + x, x, y, now); }
+    }
+  }
+}
+
+function swap(a, b){
+  const t = grid[a]; grid[a] = grid[b]; grid[b] = t;
+  const l = life[a]; life[a] = life[b]; life[b] = l;
+  const ti = tint[a]; tint[a] = tint[b]; tint[b] = ti;
+}
+
+function simulate(i, x, y, now){
+  const t = grid[i];
+  if (t === EMPTY) return;
+
+  const below = (y + 1 < ROWS) ? i + COLS : -1;
+
+  /* ── KUM ── */
+  if (t === SAND){
+    if (below >= 0 && grid[below] === EMPTY){ swap(i, below); return; }
+    // sıvıya batar (kum suda dibe gider)
+    if (below >= 0 && (grid[below] === WATER || grid[below] === FIRE)){ swap(i, below); return; }
+    // çapraz kayma
+    const dl = (x > 0 && y + 1 < ROWS) ? below - 1 : -1;
+    const dr = (x < COLS - 1 && y + 1 < ROWS) ? below + 1 : -1;
+    const order = Math.random() < 0.5 ? [dl, dr] : [dr, dl];
+    for (const d of order){
+      if (d >= 0 && (grid[d] === EMPTY || grid[d] === WATER || grid[d] === FIRE)){ swap(i, d); return; }
+    }
+    return;
+  }
+
+  /* ── SU ── */
+  if (t === WATER){
+    // ateşle temas → buhar
+    if (below >= 0 && grid[below] === FIRE){
+      grid[i] = STEAM; life[i] = 90; grid[below] = EMPTY;
+      return;
+    }
+    if (below >= 0 && grid[below] === EMPTY){ swap(i, below); return; }
+    const dl = (x > 0 && y + 1 < ROWS) ? below - 1 : -1;
+    const dr = (x < COLS - 1 && y + 1 < ROWS) ? below + 1 : -1;
+    const order = Math.random() < 0.5 ? [dl, dr] : [dr, dl];
+    for (const d of order){
+      if (d >= 0 && grid[d] === EMPTY){ swap(i, d); return; }
+    }
+    // yatay yayılma — su seviye arar
+    const l = (x > 0) ? i - 1 : -1;
+    const rr = (x < COLS - 1) ? i + 1 : -1;
+    const hord = Math.random() < 0.5 ? [l, rr] : [rr, l];
+    for (const d of hord){
+      if (d >= 0 && grid[d] === EMPTY && Math.random() < 0.55){ swap(i, d); return; }
+    }
+    return;
+  }
+
+  /* ── ATEŞ ── */
+  if (t === FIRE){
+    life[i] = life[i] > 0 ? life[i] - 2 - (Math.random()*3|0) : 0;
+
+    // komşuya sıçra (yanma yayılsın)
+    const nb = [];
+    if (x > 0) nb.push(i - 1);
+    if (x < COLS - 1) nb.push(i + 1);
+    if (y > 0) nb.push(i - COLS);
+    if (below >= 0) nb.push(below);
+    for (const d of nb){
+      if (grid[d] === EMPTY && Math.random() < 0.06){
+        grid[d] = FIRE; life[d] = 90 + (Math.random()*70|0);
+      }
+      // su ateşi söndürür → buhar
+      if (grid[d] === WATER){ grid[d] = STEAM; life[d] = 80; grid[i] = EMPTY; return; }
+    }
+
+    if (life[i] <= 0){
+      // sönüş: duman ya da kor
+      if (Math.random() < 0.34){ grid[i] = SMOKE; life[i] = 60 + (Math.random()*50|0); }
+      else if (Math.random() < 0.22){ grid[i] = EMBER; life[i] = 40 + (Math.random()*30|0); }
+      else grid[i] = EMPTY;
+      return;
+    }
+
+    // alev yukarı yükselir
+    if (y > 0 && grid[i - COLS] === EMPTY && Math.random() < 0.62){
+      swap(i, i - COLS);
+      return;
+    }
+    // hafif yatay salınım
+    const s = Math.random() < 0.5 ? -1 : 1;
+    const nx = x + s;
+    if (nx >= 0 && nx < COLS && grid[i + s] === EMPTY && Math.random() < 0.2){
+      swap(i, i + s);
+    }
+    return;
+  }
+
+  /* ── KOR: yavaşça soğur ── */
+  if (t === EMBER){
+    life[i] = life[i] > 0 ? life[i] - 1 : 0;
+    if (life[i] <= 0){ grid[i] = EMPTY; }
+    return;
+  }
+
+  /* ── BUHAR / DUMAN: yukarı süzülür, sonra dağılır ── */
+  if (t === STEAM || t === SMOKE){
+    life[i] = life[i] > 0 ? life[i] - 1 : 0;
+    if (life[i] <= 0){ grid[i] = EMPTY; return; }
+    if (y > 0 && grid[i - COLS] === EMPTY && Math.random() < 0.78){
+      swap(i, i - COLS);
+      return;
+    }
+    const s = Math.random() < 0.5 ? -1 : 1;
+    const nx = x + s;
+    if (nx >= 0 && nx < COLS && grid[i + s] === EMPTY && Math.random() < 0.3){
+      swap(i, i + s);
+    }
+    return;
+  }
+}
+
+// ── çizim ──
+function draw(){
+  const n = COLS * ROWS;
+  const px = pixels;
+  const now = performance.now();
+
+  for (let i=0; i<n; i++){
+    const t = grid[i];
+    const o = i * 4;
+    let r, g, b;
+
+    if (t === EMPTY){
+      // arka plan: koyu, hafif vinyet dokusu
+      const y = (i / COLS) | 0;
+      const v = 8 + (y / ROWS) * 5;
+      r = v; g = v * 0.92; b = v * 0.82;
+    } else {
+      const c = shade(i, t, life[i], tint[i]);
+      r = c[0]; g = c[1]; b = c[2];
+    }
+    px[o]     = r;
+    px[o + 1] = g;
+    px[o + 2] = b;
+    px[o + 3] = 255;
+  }
+  ctx.putImageData(imageData, 0, 0);
+}
+
+// ── ana döngü ──
+let acc = 0, last = performance.now();
+function loop(){
+  requestAnimationFrame(loop);
+  const now = performance.now();
+  const dt = Math.min(now - last, 60);
+  last = now;
+
+  // sabit adım: ~60 Hz simülasyon (yavaş cihazda boğulmasın)
+  acc += dt;
+  let steps = 0;
+  while (acc >= 16 && steps < 2){ step(); acc -= 16; steps++; }
+  if (acc > 120) acc = 0;
+
+  draw();
+}
+
+// ═════════ ETKİLEŞİM ═════════
+let pointerDown = false;
+let lastCell = null;
+
+function toCell(e){
+  const rect = canvas.getBoundingClientRect();
+  const x = Math.floor(((e.clientX - rect.left) / rect.width) * COLS);
+  const y = Math.floor(((e.clientY - rect.top) / rect.height) * ROWS);
+  return { x, y };
+}
+
+function currentType(){
+  return mode === 'water' ? WATER : mode === 'fire' ? FIRE : SAND;
+}
+
+function stroke(x, y){
+  if (lastCell){
+    // farenin iki örneklemi arasını doldur — hızlı sürüklemede boşluk kalmasın
+    const dx = x - lastCell.x, dy = y - lastCell.y;
+    const dist = Math.hypot(dx, dy);
+    const n = Math.max(1, Math.ceil(dist / (brushSize * 0.6)));
+    for (let i=1; i<=n; i++){
+      paint(Math.round(lastCell.x + dx * i / n), Math.round(lastCell.y + dy * i / n), currentType());
+    }
+  } else {
+    paint(x, y, currentType());
+  }
+  lastCell = { x, y };
+}
+
+canvas.addEventListener('pointerdown', e => {
+  pointerDown = true;
+  lastCell = null;
+  canvas.setPointerCapture(e.pointerId);
+  const c = toCell(e);
+  stroke(c.x, c.y);
+  document.getElementById('hint').classList.add('gone');
+});
+
+canvas.addEventListener('pointermove', e => {
+  if (!pointerDown) return;
+  const c = toCell(e);
+  stroke(c.x, c.y);
+});
+
+canvas.addEventListener('pointerup', e => {
+  pointerDown = false;
+  lastCell = null;
+});
+canvas.addEventListener('pointercancel', () => { pointerDown = false; lastCell = null; });
+
+// ── panel ──
+const $ = s => document.querySelector(s);
+
+function setMode(m){
+  mode = m;
+  ['mSand','mWater','mFire'].forEach(id => $('#' + id).classList.remove('on'));
+  $('#' + (m === 'sand' ? 'mSand' : m === 'water' ? 'mWater' : 'mFire')).classList.add('on');
+}
+$('#mSand').addEventListener('click', () => setMode('sand'));
+$('#mWater').addEventListener('click', () => setMode('water'));
+$('#mFire').addEventListener('click', () => setMode('fire'));
+
+function applySwatch(){
+  const h = HUES[hueIdx];
+  const c = `rgb(${h.r},${h.g},${h.b})`;
+  const sw = $('#swatch');
+  sw.style.background = c;
+  sw.style.boxShadow = `0 0 10px ${c}`;
+  document.documentElement.style.setProperty('--accent', c);
+}
+$('#cCycle').addEventListener('click', () => { hueIdx = (hueIdx + 1) % HUES.length; applySwatch(); });
+
+$('#brush').addEventListener('input', e => { brushSize = parseInt(e.target.value, 10); });
+
+function clearAll(){
+  grid.fill(EMPTY); life.fill(0);
+}
+$('#clearBtn').addEventListener('click', clearAll);
+
+$('#toggle').addEventListener('click', () => $('#panel').classList.toggle('hidden'));
+
+// boşluk tuşu: temizle
+addEventListener('keydown', e => {
+  if (e.code === 'Space'){ e.preventDefault(); clearAll(); }
+});
+
+// ═════════ AÇILIŞ ═════════
+function boot(){
+  resize();
+  applySwatch();
+
+  // NUMEX-DÜZELTME (2026-10-27): Açılış kumunu döken 46 rastgele sütun bloğu, yerçekimiyle dibe inmeden
+  // üst köşelerde "asılı kum adası" bırakıyordu. O blok tamamen kaldırıldı; açılış sahnesi artık tek
+  // kaynaktan kurulur: aşağıdaki dalgalı tepe döngüsü.
+  setTimeout(() => {
+    // NUMEX-DÜZELTME (2026-10-27): ortadaki kum kümeleri yerçekimiyle dibe indiği için ekranın ortası
+    // tamamen boş kalıyordu. Artık üst yarıdan GENİŞ bir kum perdesi dökülüyor: akarken yolu doldurur,
+    // dibe inince de doğal bir tepe bırakır.
+    // NUMEX-DÜZELTME (2026-10-27): önceki sürüm tek sütuna üst üste yazdığı için kum blokları oluşup
+    // topluca dibe düşüyor, ekranın ortası boş kalıyordu. Artık ızgaranın TAMAMINA seyrek dağıtılıyor:
+    // taneler havada asılı kalır, kullanıcı sürükleyene kadar bekler — ilk karede sahne dolu ve canlı.
+    // NUMEX-DÜZELTME (2026-10-27): Açılış kumları nereye konursa konsun yerçekimi onları dibe indiriyor;
+    // ekran bu yüzden ya boş ya da tümüyle kumla kaplı görünüyordu. Artık yalnız DİBE YAKIN, değişken
+    // yükseklikte tepeler kurulur — kum zaten orada kalır, üst yarı nefes alacak şekilde boş kalır.
+    // NUMEX-DÜZELTME (2026-10-27): tek düz kum şeridi hem sıkıcı hem boş görünüyordu. Açılış artık
+    // üç katmanlı bir manzara kurar: (1) alçak bir taban, (2) iki yandan yükselen yamaçlar,
+    // (3) ortada yüksek bir kum tepesi. Aralarında karanlık boşluklar kalır — derinlik hissi.
+    // NUMEX-DÜZELTME (2026-10-27): yamaç/tepe formülleri dik sivri piramitler üretiyordu (kum tepesi değil).
+    // Sadeleştirildi: yumuşak, alçak, hafif dalgalı TEK bir kum tabanı.
+    // NUMEX-DÜZELTME (2026-10-27): dikey telefonda kum tabanı ekranın ~%40'ını kaplıyordu (ROWS çok büyük).
+    // Mobilde taban daha ince tutulur; masaüstünde 0.74, mobilde 0.86.
+    const isNarrow = innerHeight > innerWidth;
+    const baseTop = Math.floor(ROWS * (isNarrow ? 0.86 : 0.74));
+    for (let x=0; x<COLS; x++){
+      const wobble = Math.sin(x * 0.014) * 0.022 + Math.sin(x * 0.037 + 1.3) * 0.010;
+      const topY = Math.max(0, Math.min(ROWS - 2, Math.floor(baseTop + wobble * ROWS)));
+      for (let y=topY; y<ROWS; y++){
+        if (Math.random() < 0.97) put(x, y, SAND, 0);
+      }
+    }
+
+    // NUMEX-DÜZELTME (2026-10-27): havada dağınık kor/serpinti, yerçekimiyle ekranı baştan sona kumla
+    // kaplıyordu. Açılış artık SADECE alttaki kum tabanından ibaret — üst alan kullanıcıya kalır.
+    // (Korlar tabanın hemen üstünde, dibe yakın durur.)
+  }, 260);
+
+  setTimeout(() => $('#veil').classList.add('gone'), 380);
+  setTimeout(() => $('#hint').classList.add('gone'), 9000);
+  loop();
+}
+
+addEventListener('resize', () => {
+  // yeniden boyutlandırmada mevcut kumu korumaya çalış
+  const oldGrid = grid, oldCols = COLS, oldRows = ROWS;
+  resize();
+  if (oldGrid){
+    const copy = Math.min(oldRows, ROWS);
+    for (let y=0; y<copy; y++){
+      for (let x=0; x<Math.min(oldCols, COLS); x++){
+        grid[y*COLS + x] = oldGrid[y*oldCols + x];
+      }
+    }
+  }
+});
+
+boot();
+</script>
+</body>
+</html>

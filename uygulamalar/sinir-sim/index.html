@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Numex — Canlı Sinir Ağı</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='none' stroke='%2300ffd2' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='5' fill='%2300ffd2'/%3E%3C/svg%3E">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    height: 100%;
+    overflow-y: auto;   /* responsive: içerik taşarsa scroll gelsin */
+    overflow-x: hidden;
+    background: #030014;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    color: #fff;
+  }
+  /* Yıldız zemini */
+  #stars { position: fixed; inset: 0; z-index: 0; }
+  /* Ana canvas: sinir ağı (arka plan katmanı) */
+  #net {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  /* Işık topçukları katmanı: logonun ÖNÜNDEN geçsin */
+  #sparks {
+    position: fixed;
+    inset: 0;
+    z-index: 3;
+    display: block;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  /* Merkezdeki NUMEX logosu (CSS glow) — net'in üstünde, sparks'ın altında */
+  #logo {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    width: 100%;
+    max-width: 95vw;   /* container: dar ekranda taşmasın */
+    padding: 0 8px;
+    box-sizing: border-box;
+    text-align: center;
+    user-select: none;
+    pointer-events: none;
+    letter-spacing: 0.06em;
+    text-shadow:
+      0 0 8px rgba(0, 255, 210, 0.9),
+      0 0 22px rgba(0, 255, 210, 0.6),
+      0 0 60px rgba(0, 210, 255, 0.45),
+      0 0 120px rgba(124, 58, 237, 0.4);
+    animation: logoPulse 3.2s ease-in-out infinite;
+  }
+  @keyframes logoPulse {
+    0%, 100% { text-shadow:
+      0 0 8px rgba(0, 255, 210, 0.9),
+      0 0 22px rgba(0, 255, 210, 0.6),
+      0 0 60px rgba(0, 210, 255, 0.45),
+      0 0 120px rgba(124, 58, 237, 0.4); }
+    50% { text-shadow:
+      0 0 14px rgba(0, 255, 210, 1),
+      0 0 34px rgba(0, 255, 210, 0.85),
+      0 0 90px rgba(0, 210, 255, 0.7),
+      0 0 160px rgba(124, 58, 237, 0.7); }
+  }
+  #logo .title {
+    font-size: clamp(28px, 12vw, 170px);
+    line-height: 1;
+    white-space: nowrap;
+    font-weight: 900;
+    background: linear-gradient(90deg, #00ffd2, #00d6ff, #7c3aed, #00ffd2);
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gradMove 6s linear infinite;
+    line-height: 0.95;
+  }
+  @keyframes gradMove {
+    0% { background-position: 0% 0; }
+    100% { background-position: 300% 0; }
+  }
+  #logo .sub {
+    margin-top: 6px;
+    font-size: clamp(8px, 2.4vw, 15px);
+    letter-spacing: 0.4em;
+    text-indent: 0.4em;
+    white-space: nowrap;
+    max-width: 100%;
+    overflow: hidden;
+    color: rgba(180, 255, 245, 0.85);
+    font-weight: 600;
+    text-shadow: 0 0 14px rgba(0, 255, 210, 0.8);
+    animation: subGlow 3s ease-in-out infinite;
+  }
+  @keyframes subGlow {
+    0%,100% { opacity: 0.75; }
+    50% { opacity: 1; }
+  }
+  /* Alt bilgi */
+  #info {
+    position: fixed;
+    left: 0; right: 0; bottom: 16px;
+    z-index: 3;
+    margin: 0 auto;
+    max-width: 95vw;
+    padding: 0 12px;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: clamp(10px, 3vw, 13px);
+    letter-spacing: 0.08em;
+    color: rgba(200, 230, 255, 0.55);
+    pointer-events: none;
+  }
+  @media (max-width: 480px) {
+    #info { bottom: 8px; }
+  }
+  #info span { color: #5ef0ff; text-shadow: 0 0 10px #00d6ff; }
+</style>
+</head>
+<body>
+  <canvas id="stars"></canvas>
+
+  <!-- Atan kalp: vasküler sistemin merkezi (DOM, beat animasyonlu) -->
+  <svg id="heart" viewBox="0 0 32 29" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+      <linearGradient id="heartGrad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#ff2d55"/>
+        <stop offset="0.5" stop-color="#b428ff"/>
+        <stop offset="1" stop-color="#00d6ff"/>
+      </linearGradient>
+    </defs>
+    <path class="halo" d="M32 9c0 5-3 8.5-8 13l-8 6-1.5-1.2C6 20 0 15 0 9 0 4 3.7 0 8 0c6 0 8 4 8 4s2-4 8-4c4.3 0 8 4 8 9z"/>
+    <path class="core" d="M32 9c0 5-3 8.5-8 13l-8 6-1.5-1.2C6 20 0 15 0 9 0 4 3.7 0 8 0c6 0 8 4 8 4s2-4 8-4c4.3 0 8 4 8 9z"/>
+  </svg>
+
+  <canvas id="net"></canvas>
+  <canvas id="sparks"></canvas>
+
+  <div id="logo">
+    <div class="title">NUMEX</div>
+    <div class="sub">✦ YAPAY ZİHİN · SINİR AĞI ✦</div>
+  </div>
+
+  <div id="info">CANLI NEON AĞ · <span>NUMEX AI</span></div>
+
+<script>
+(() => {
+  // ============ YILDIZ ZEMİNİ ============
+  const starsCanvas = document.getElementById('stars');
+  const starsCtx = starsCanvas.getContext('2d');
+  let starPts = [];
+
+  function resizeStars() {
+    starsCanvas.width = innerWidth;
+    starsCanvas.height = innerHeight;
+    const count = Math.min(300, Math.floor(innerWidth * innerHeight / 5000));
+    starPts = Array.from({ length: count }, () => ({
+      x: Math.random() * starsCanvas.width,
+      y: Math.random() * starsCanvas.height,
+      r: Math.random() * 1.3 + 0.2,
+      s: Math.random() * 0.4 + 0.1,
+      tw: Math.random() * Math.PI * 2
+    }));
+  }
+
+  function drawStars(t) {
+    const c = starsCtx;
+    c.clearRect(0, 0, starsCanvas.width, starsCanvas.height);
+    for (const s of starPts) {
+      const a = 0.35 + 0.35 * Math.sin(t * 0.002 + s.tw);
+      c.beginPath();
+      c.arc(s.x, s.y, s.r, 0, 7);
+      c.fillStyle = `rgba(160,220,255,${a})`;
+      c.fill();
+    }
+  }
+  window.addEventListener('resize', resizeStars);
+  resizeStars();
+
+  // ============ SİNİR AĞI ============
+  const netCanvas = document.getElementById('net');
+  const ctx = netCanvas.getContext('2d');
+  // Sparks: logonun ÖNÜNDE gösterilecek ışık topçukları katmanı
+  const sparksCanvas = document.getElementById('sparks');
+  const sctx = sparksCanvas.getContext('2d');
+  let W = 0, H = 0;
+  let layers = [];       // her katman: nöron listesi {x, y, base, c(uyarım), phase, wt(engel), r}
+  let links = [];        // {a, b, w, c, phase}
+  let pulses = [];       // sinyal topçukları
+  const LAYER_COLORS = ['#00ffd2', '#00d6ff', '#7c3aed', '#ff3df5', '#00ffd2'];
+
+  function buildTopology() {
+    const widths = [4, 9, 12, 10, 5];
+    layers = [];
+    const gw = Math.max(1, W - 60);
+    const gh = Math.max(1, H - 40);
+    widths.forEach((n, li) => {
+      const nodes = [];
+      const cx = 30 + (gw * li) / (widths.length - 1);
+      // Ortalama katman yüksekliği: logonun olduğu orta bölgeyi geniş tut
+      const topBand = (gh * (0.16 + 0.22 * (li / (widths.length - 1)))) ;
+      for (let i = 0; i < n; i++) {
+        const spread = gh * (li === 0 || li === widths.length - 1 ? 0.62 : 0.74);
+        const base = H / 2 - spread / 2 + (spread * i) / Math.max(1, n - 1);
+        nodes.push({
+          x: cx, base,
+          y: base + (Math.random() * 10 - 5),
+          s: 0,          // aktivasyon (ateşleme)
+          phase: Math.random() * 6.28,
+          wt: n % 2 === 0 ? 1 : -1,   // ağırlık işareti, renk seçimi için
+          r: Math.random() < 0.2 ? 0 : 0 // sabit yarıçap animasyonda
+        });
+      }
+      layers.push(nodes);
+    });
+    // Bağlantılar
+    links = [];
+    for (let li = 0; li < layers.length - 1; li++) {
+      const la = layers[li], lb = layers[li + 1];
+      for (const a of la) {
+        // her nöron bir sonraki katmandaki birkaç nörona bağlansın
+        const k = 2 + Math.floor(Math.random() * 2);
+        const pool = [...lb].sort(() => Math.random() - 0.5).slice(0, k);
+        for (const b of pool) {
+          links.push({ a, b, w: Math.random() * 2 - 1, c: 0, phase: Math.random() * 6.28 });
+        }
+      }
+    }
+  }
+
+  function resizeNet() {
+    W = netCanvas.width = innerWidth;
+    H = netCanvas.height = innerHeight;
+    sparksCanvas.width = innerWidth;
+    sparksCanvas.height = innerHeight;
+    buildTopology();
+  }
+  window.addEventListener('resize', resizeNet);
+  resizeNet();
+
+  // Nöron ateşleme oranı — logoyu çevreleyen katmanlar daha aktif olsun
+  function targetActivation(t) {
+    const wave = t * 0.001;
+    return (n) => {
+      const glowZone = Math.abs(n.y - H / 2) < H * 0.38; // ortadaki logoya yakın
+      const zig = Math.sin(wave * 2 + n.phase * 3) > 0.55;
+      const rnd = Math.random() < 0.03;
+      const base = glowZone ? 0.14 : 0.06;
+      return (zig || rnd) ? base + Math.random() * 0.5 : base;
+    };
+  }
+
+  function firePulse(a, b) {
+    pulses.push({
+      kind: 'link',
+      x1: a.x, y1: a.y, x2: b.x, y2: b.y,
+      p: 0, sp: 0.02 + Math.random() * 0.015,
+      color: a.wt >= 0 ? '#00ffd2' : '#ff3df5'
+    });
+  }
+
+  // Sintetik "logo ışığı": logonun ortasından/tam hizasından geçen ışık demeti.
+  // Soldan sağa, logonun kalbinden akar ve sparks katmanında (ön planda) görünür.
+  const logoPulseColors = ['#00ffd2', '#00d6ff', '#7c3aed', '#ff3df5', '#5ef0ff'];
+  const CENTER_Y = () => H / 2 + Math.sin(Date.now() * 0.0015) * 4; // hafif yanıp sönme
+
+  function fireLogoBeam() {
+    const y0 = CENTER_Y();
+    // logonun solundan başla, ortasından geç, sağına kadar git
+    const xStart = 8 + Math.random() * 40;                    // sol kenar civarı
+    const xEnd = W - 8 - Math.random() * 40;                  // sağ kenar civarı
+    const dy = (Math.random() * 2 - 1) * (H * 0.06);          // hafif açı sapması
+    const color = logoPulseColors[(Math.random() * logoPulseColors.length) | 0];
+    pulses.push({
+      kind: 'logo',
+      x1: xStart, y1: y0, x2: xEnd, y2: y0 + dy,
+      p: 0, sp: 0.055 + Math.random() * 0.04,
+      color, thick: true
+    });
+  }
+
+  // Merkez katmanlardan (logo bölgesine yakın nöron çiftleri) ara ışık fırlat
+  function fireCenterFlicker() {
+    const mid = (layers.length / 2) | 0;      // orta katman indeksi
+    const li = Math.max(0, Math.min(layers.length - 2, mid));
+    const layer = layers[li];
+    const neuronFast = layer[(Math.random() * layer.length) | 0];
+    const cands = links.filter(l => l.a === neuronFast);
+    if (cands.length) {
+      const ok = cands[(Math.random() * cands.length) | 0];
+      firePulse(ok.a, ok.b);
+      firePulse(ok.a, ok.b); // çift çekim: daha yoğun görünsün
+    }
+  }
+
+  function animate(t) {
+    // --- yıldızlar
+    drawStars(t);
+
+    // --- sinir ağı güncelle
+    const activ = targetActivation(t);
+    const fade = 0.92;
+
+    // nöronları etkinleştir
+    layers.forEach(layer => layer.forEach(n => {
+      n.phase += 0.012;
+      n.s = n.s * 0.9 + activ(n) * 0.1;
+      // ufak titreşim
+      n.y = n.base + Math.sin(t * 0.002 + n.phase * 5) * 6;
+    }));
+
+    // --- Ioşık üretimi (yoğun şov) ---
+    // Logo ışıkları: NUMEX yazısının tam kalbinden geçen demetler — sık fırlat
+    if (Math.random() < 0.22) fireLogoBeam();               // ~her 5 karede 1 yatay demet
+    if (Math.random() < 0.5) fireCenterFlicker();            // orta katman çıtırtıları
+    // Diğer katmanlardan normal nöron ışık atışları (daha sık)
+    for (let k = 0; k < 2; k++) {
+      if (Math.random() < 0.55) {
+        const src = layers[Math.floor(Math.random() * (layers.length - 1))];
+        const neuron = src[Math.floor(Math.random() * src.length)];
+        if (neuron.s > 0.18 && links.length) {
+          const cands = links.filter(l => l.a === neuron);
+          if (cands.length) {
+            const ok = cands[Math.floor(Math.random() * cands.length)];
+            firePulse(ok.a, ok.b);
+          }
+        }
+      }
+    }
+
+    // topçukları ilerlet
+    pulses = pulses.filter(p => p.p < 1 && p.p > -0.2);  // küçük negatifte bile yaşasın
+    for (const p of pulses) { if (p.p < 1) p.p += p.sp; }
+
+    // sparks (ön plan) canvas'ını temizle + çiz
+    sctx.clearRect(0, 0, W, H);
+
+    // bağlantılar (glow çizgiler)
+    ctx.lineWidth = 1;
+    for (const l of links) {
+      l.c = l.c * 0.9 + (l.a.s * l.b.s) * 0.2;
+      if (l.c < 0.004) continue;
+      const rg = l.w >= 0 ? '0,255,210' : '255,60,245';
+      ctx.beginPath();
+      ctx.moveTo(l.a.x, l.a.y);
+      ctx.lineTo(l.b.x, l.b.y);
+      ctx.strokeStyle = `rgba(${rg},${Math.min(l.c, 0.85)})`;
+      ctx.shadowColor = `rgba(${rg},0.9)`;
+      ctx.shadowBlur = l.c > 0.3 ? 12 : 4;
+      ctx.stroke();
+    }
+    ctx.shadowBlur = 0;
+
+    // sinyal topçukları + logo ışık demetleri → sparks (ÖN PLAN, logo üstü)
+    for (const p of pulses) {
+      const x = p.x1 + (p.x2 - p.x1) * p.p;
+      const y = p.y1 + (p.y2 - p.y1) * p.p;
+      // başta ve sonda sönme (kenar efekti) — logo ışıkları ortada tam parlak
+      const fadeIn = Math.min(1, p.p / 0.08);
+      const fadeOut = Math.min(1, (1 - p.p) / 0.06);
+      const glow = Math.min(fadeIn, fadeOut);
+      const a = glow * (p.thick ? 1 : 0.9);
+      sctx.globalAlpha = a;
+      if (p.thick) {
+        // kalın logo ışığı: çekirdek + geniş halo
+        sctx.beginPath();
+        const haloR = 14 - p.p * 6;
+        sctx.arc(x, y, haloR, 0, 7);
+        sctx.fillStyle = p.color;
+        sctx.shadowColor = p.color;
+        sctx.shadowBlur = 42;
+        sctx.fill();
+        sctx.beginPath();
+        sctx.arc(x, y, 3.6 + (1 - p.p) * 2.5, 0, 7);
+        sctx.fillStyle = '#ffffff';
+        sctx.shadowBlur = 26;
+        sctx.fill();
+      } else {
+        sctx.beginPath();
+        sctx.arc(x, y, 2 + (1 - p.p) * 2, 0, 7);
+        sctx.fillStyle = p.color;
+        sctx.shadowColor = p.color;
+        sctx.shadowBlur = 18;
+        sctx.fill();
+      }
+    }
+    sctx.globalAlpha = 1;
+    sctx.shadowBlur = 0;
+
+    // nöronlar
+    layers.forEach((layer, li) => {
+      layer.forEach(n => {
+        const on = n.s;
+        const baseR = 3.5;
+        const r = baseR * (0.6 + on * 6);
+        const color = n.wt >= 0 ? '0,255,210' : '255,60,245';
+        const grd = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, r * 2.4);
+        grd.addColorStop(0, `rgba(${color},0.95)`);
+        grd.addColorStop(0.4, `rgba(${color},${0.3 + on * 0.55})`);
+        grd.addColorStop(1, `rgba(${color},0)`);
+
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, r * 2.4, 0, 7);
+        ctx.fillStyle = grd;
+        ctx.shadowBlur = on > 0.3 ? 16 : 6;
+        ctx.shadowColor = `rgba(${color},0.9)`;
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, Math.max(1.2, r * 0.55), 0, 7);
+        ctx.fillStyle = `rgba(255,255,255,${0.7 + on * 0.3})`;
+        ctx.shadowBlur = 10;
+        ctx.fill();
+      });
+    });
+    ctx.shadowBlur = 0;
+
+    requestAnimationFrame(animate);
+  }
+
+  requestAnimationFrame(animate);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,197 @@
+/* ============================================================
+   İnsan Dolaşım & Sinir Sistemi Simülasyonu — Tema Stilleri
+   Koyu biyo-tema: kalp kırmızıları, damar renkleri, sinir sarısı.
+   ============================================================ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --zemin: #0b0d12;
+  --panel: rgba(15, 18, 26, 0.92);
+  --kenar: #2a3347;
+  --metin: #e6ecf5;
+  --soluk: #93a0b8;
+  --kan-kirmizi: #ff4757;
+  --ven-koyu: #8d4a5a;
+  --sinir-sari: #ffd32a;
+  --doga: #26de81;
+  --fokus: #54a0ff;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Segoe UI', 'Trebuchet MS', Verdana, sans-serif;
+  background: radial-gradient(circle at 50% 40%, #12161f 0%, var(--zemin) 75%);
+  color: var(--metin);
+}
+
+#uygulama {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#tuval {
+  display: block;
+  width: min(1100px, 96vw);
+  height: auto;
+  max-height: 94vh;
+  background: radial-gradient(circle at 50% 45%, #0e1118 0%, #07080c 100%);
+  border-radius: 16px;
+  box-shadow: 0 0 60px rgba(255, 71, 87, 0.08);
+}
+
+/* ---------- KONTROL PANELİ ---------- */
+#kontrolPanel {
+  position: absolute;
+  left: 18px;
+  top: 18px;
+  width: 235px;
+  background: var(--panel);
+  border: 1px solid var(--kenar);
+  border-radius: 14px;
+  padding: 16px;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+}
+
+.panelBaslik {
+  font-weight: 700;
+  font-size: 15px;
+  margin-bottom: 12px;
+  letter-spacing: 0.4px;
+  color: #fff;
+}
+
+.aktiviteBtn {
+  display: block;
+  width: 100%;
+  margin: 7px 0;
+  padding: 11px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--metin);
+  background: #161b26;
+  border: 1px solid var(--kenar);
+  border-radius: 9px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s, border-color 0.2s, transform 0.05s;
+}
+
+.aktiviteBtn:hover {
+  background: #1f2635;
+  border-color: var(--fokus);
+}
+
+.aktiviteBtn:active {
+  transform: scale(0.98);
+}
+
+.aktiviteBtn.aktif {
+  background: linear-gradient(135deg, #3a1017, #6b1d2a);
+  border-color: var(--kan-kirmizi);
+  color: #fff;
+  box-shadow: 0 0 14px rgba(255, 71, 87, 0.35);
+}
+
+.bilgiNotlar {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--kenar);
+  font-size: 12px;
+  color: var(--soluk);
+  line-height: 1.5;
+}
+
+/* ---------- HUD ---------- */
+#hud {
+  position: absolute;
+  right: 18px;
+  top: 18px;
+  width: 220px;
+  background: var(--panel);
+  border: 1px solid var(--kenar);
+  border-radius: 14px;
+  padding: 14px 16px;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  font-size: 13px;
+}
+
+.hudKayit {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 5px 0;
+}
+
+.hudEtiket {
+  color: var(--soluk);
+}
+
+.hudDeger {
+  font-weight: 700;
+  color: #fff;
+  text-align: right;
+}
+
+.hudDeger.normal {
+  color: var(--doga);
+}
+
+.hudDeger.hizli {
+  color: var(--kan-kirmizi);
+  text-shadow: 0 0 8px rgba(255, 71, 87, 0.6);
+}
+
+.hudDeger.kosar {
+  color: var(--sinir-sari);
+  text-shadow: 0 0 8px rgba(255, 211, 42, 0.4);
+}
+
+.hudBirim {
+  color: var(--soluk);
+  font-size: 11px;
+}
+
+/* ---------- LEJANT ---------- */
+#legende {
+  position: absolute;
+  left: 18px;
+  bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 14px;
+  background: var(--panel);
+  border: 1px solid var(--kenar);
+  border-radius: 10px;
+  font-size: 12px;
+  color: var(--metin);
+  flex-wrap: wrap;
+  backdrop-filter: blur(6px);
+}
+
+#legende span {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  margin-right: 5px;
+  vertical-align: middle;
+}
+
+.renkOksijenli { background: var(--kan-kirmizi); }
+.renkOksijensiz { background: var(--ven-koyu); }
+.renkSinir { background: var(--sinir-sari); }
+.renkAkciger { background: var(--doga); }

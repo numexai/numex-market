@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Randevu Sistemi</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <header class="site-header">
+      <h1>Randevu Sistemi</h1>
+      <p class="subtitle">Kuafor & Doktor randevularınızı kolayca planlayın</p>
+      <nav class="tabs">
+        <a href="index.html" class="tab active">Yeni Randevu</a>
+        <a href="admin.html" class="tab">Admin Paneli</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="card form-card">
+        <h2>Yeni Randevu Oluştur</h2>
+
+        <form id="appointmentForm">
+          <div class="form-row">
+            <label for="name">Ad Soyad *</label>
+            <input type="text" id="name" name="name" placeholder="Adınız ve soyadınız" required>
+          </div>
+
+          <div class="form-row">
+            <label for="phone">Telefon *</label>
+            <input type="tel" id="phone" name="phone" placeholder="05xx xxx xx xx" required>
+          </div>
+
+          <div class="form-row">
+            <label for="date">Randevu Günü *</label>
+            <input type="date" id="date" name="date" required>
+          </div>
+
+          <div class="form-row">
+            <label for="time">Saat *</label>
+            <select id="time" name="time" required>
+              <option value="">Yükleniyor...</option>
+            </select>
+            <small id="slotHint"></small>
+          </div>
+
+          <div class="form-row">
+            <label for="service">Hizmet</label>
+            <select id="service" name="service">
+              <option value="Genel Muayene">Genel Muayene</option>
+              <option value="Saç Kesimi">Saç Kesimi</option>
+              <option value="Cilt Bakımı">Cilt Bakımı</option>
+              <option value="Diş Muayenesi">Diş Muayenesi</option>
+              <option value="Fizik Tedavi">Fizik Tedavi</option>
+              <option value="Diğer">Diğer</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <label for="notes">Notlar</label>
+            <textarea id="notes" name="notes" rows="3" placeholder="İsteğe bağlı notlarınız..."></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="submitBtn">Randevu Al</button>
+        </form>
+
+        <div id="result" class="result" hidden></div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>Numex Randevu Sistemi — çakışmasız planlama</p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

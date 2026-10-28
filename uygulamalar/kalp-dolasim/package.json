@@ -1,0 +1,23 @@
+{
+  "name": "kalp-dolasim-simulasyonu",
+  "version": "1.0.0",
+  "description": "İnsan kalbi, damar (dolaşım) ve sinir sistemi canlı simülasyonu. Kalp atış hızı aktiviteye (otur/hafif koşu/hızlı koşu) göre değişir.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "kalp",
+    "dolasim",
+    "sinir-sistemi",
+    "simulasyon",
+    "canvas",
+    "animasyon"
+  ],
+  "author": "Numex AI",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

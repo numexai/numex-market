@@ -1,0 +1,19 @@
+{
+  "name": "nexus-command-center",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Nexus Command Center — gerçek çalışan proje yönetim ve operasyon paneli",
+  "main": "server/index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node server/index.js",
+    "reset": "node server/reset-data.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.22.2"
+  }
+}

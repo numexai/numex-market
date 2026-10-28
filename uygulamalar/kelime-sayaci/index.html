@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kelime ve Karakter Sayacı</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+  .kart {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    padding: 28px;
+    width: 100%;
+    max-width: 560px;
+  }
+  h1 {
+    font-size: 1.5rem;
+    text-align: center;
+    color: #333;
+    margin-bottom: 6px;
+  }
+  p.alt {
+    text-align: center;
+    color: #888;
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+  }
+  textarea {
+    width: 100%;
+    height: 140px;
+    border: 2px solid #e4e4e4;
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 1rem;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s;
+    font-family: inherit;
+  }
+  textarea:focus { border-color: #667eea; }
+  .istatistik {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+  }
+  .kutu {
+    background: #f7f7fb;
+    border-radius: 12px;
+    padding: 16px 10px;
+    text-align: center;
+    border: 1px solid #eee;
+  }
+  .kutu .deger {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #667eea;
+    transition: transform 0.1s ease;
+  }
+  .kutu.pop .deger { transform: scale(1.15); }
+  .kutu .etiket {
+    font-size: 0.78rem;
+    color: #777;
+    margin-top: 4px;
+  }
+  .bos-uyari {
+    display: none;
+    text-align: center;
+    color: #aaa;
+    font-size: 0.9rem;
+    margin-top: 10px;
+  }
+  @media (max-width: 420px) {
+    .istatistik { grid-template-columns: 1fr; }
+    .kutu .deger { font-size: 1.6rem; }
+  }
+</style>
+</head>
+<body>
+  <div class="kart">
+    <h1>✍️ Kelime Sayacı</h1>
+    <p class="alt">Yazmaya başla, istatistik anında güncellensin</p>
+
+    <textarea id="metin" placeholder="Metnini buraya yaz..."></textarea>
+
+    <div class="istatistik">
+      <div class="kutu" id="kutu-karakter">
+        <div class="deger" id="karakter">0</div>
+        <div class="etiket">Karakter</div>
+      </div>
+      <div class="kutu" id="kutu-kelime">
+        <div class="deger" id="kelime">0</div>
+        <div class="etiket">Kelime</div>
+      </div>
+      <div class="kutu" id="kutu-cumle">
+        <div class="deger" id="cumle">0</div>
+        <div class="etiket">Cümle</div>
+      </div>
+    </div>
+
+    <div class="bos-uyari" id="bosUyari">Henüz bir şey yazılmadı — boş alan.</div>
+  </div>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+  const metin = $('metin');
+  const karakterEl = $('karakter');
+  const kelimeEl = $('kelime');
+  const cumleEl = $('cumle');
+  const bosUyari = $('bosUyari');
+  const kutular = {
+    karakter: $('kutu-karakter'),
+    kelime: $('kutu-kelime'),
+    cumle: $('kutu-cumle')
+  };
+
+  // Pop animasyonu için debounce
+  let zamanlayici = {};
+  function pop(cocuk) {
+    cocuk.classList.add('pop');
+    clearTimeout(zamanlayici[cocuk.id]);
+    zamanlayici[cocuk.id] = setTimeout(() => cocuk.classList.remove('pop'), 120);
+  }
+
+  function guncelle() {
+    const metinAll = metin.value;
+
+    // Karakter: tüm karakterler
+    const karakter = metinAll.length;
+
+    // Kelime: boşluklara göre böl, boş olanları at
+    const kelimeler = metinAll.trim().split(/\s+/).filter(Boolean);
+    const kelime = kelimeSayisi = metinAll.trim() === '' ? 0 : kelimeler.length;
+
+    // Cümle: . ! ? … gibi ayraçlara göre böl
+    const cumleSay = (metinAll.match(/[.!?…]+(\s|$)/g) || []).length;
+    // Metin ayraçla bitmiyorsa ve boş değilse son cümle olarak say
+    const cumle = metinAll.trim() !== '' && !/[.!?…]\s*$/.test(metinAll) ? cumleSay + 1 : cumleSay;
+
+    karakterEl.textContent = karakter;
+    kelimeEl.textContent = kelime;
+    cumleEl.textContent = cumle;
+
+    bosUyari.style.display = metinAll.trim() === '' ? 'block' : 'none';
+
+    if (karakter > 0) pop(kutular.karakter);
+    if (kelime > 0) pop(kutular.kelime);
+    if (cumle > 0) pop(kutular.cumle);
+  }
+
+  metin.addEventListener('input', guncelle);
+  guncelle();
+</script>
+</body>
+</html>

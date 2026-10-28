@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="tr" data-tema="acik">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Elif Demirsoy — Grafik Tasarımcı &amp; Sanat Yönetmeni</title>
+  <meta name="description" content="Elif Demirsoy — marka kimliği, editoryal tasarım ve ambalaj üzerine çalışan grafik tasarımcı. İstanbul." />
+  <meta name="theme-color" content="#f4efe6" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Tema, sayfa BOYANMADAN önce uygulanır: yenilemede açık→karanlık sıçraması olmaz -->
+  <script>
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("ed-tema"); } catch (e) {}
+      if (t !== "karanlik" && t !== "acik") {
+        t = (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches)
+          ? "karanlik" : "acik";
+      }
+      document.documentElement.setAttribute("data-tema", t);
+    })();
+  </script>
+</head>
+<body>
+  <a class="atla" href="#ana">İçeriğe geç</a>
+
+  <!-- ================= ÜST BAR ================= -->
+  <header class="ust-bar" id="ustBar">
+    <div class="sarmal ust-bar__ic">
+      <a class="imza" href="#ana" aria-label="Ana sayfa, Elif Demirsoy">
+        <span class="imza__isaret" aria-hidden="true">ED</span>
+        <span class="imza__metin">elif demirsoy<span class="imza__nokta">.</span></span>
+      </a>
+
+      <nav class="menu" id="menu" aria-label="Ana menü">
+        <a href="#projeler">Projeler</a>
+        <a href="#hakkimda">Hakkımda</a>
+        <a href="#iletisim">İletişim</a>
+      </nav>
+
+      <div class="ust-bar__eylem">
+        <button class="tema-dugme" id="temaDugme" type="button" aria-pressed="false" title="Karanlık moda geç">
+          <svg class="tema-dugme__ikon tema-dugme__ikon--gunes" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="4.2" />
+            <path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1" />
+          </svg>
+          <svg class="tema-dugme__ikon tema-dugme__ikon--ay" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20.5 14.6A8.6 8.6 0 1 1 9.4 3.5a7 7 0 0 0 11.1 11.1Z" />
+          </svg>
+          <span class="tema-dugme__etiket">Karanlık mod</span>
+        </button>
+
+        <button class="menu-dugme" id="menuDugme" type="button" aria-expanded="false" aria-controls="menu" aria-label="Menüyü aç">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ================= ANA SAYFA ================= -->
+    <section class="kahraman" id="ana">
+      <div class="sarmal kahraman__ic">
+        <div class="kahraman__metin">
+          <p class="ust-yazi"><span class="nokta-parlak" aria-hidden="true"></span> Yeni işlere açık · İstanbul</p>
+
+          <h1 class="baslik-buyuk">
+            <span class="satir">Elif</span>
+            <span class="satir satir--vurgu">Demirsoy<i aria-hidden="true">*</i></span>
+          </h1>
+
+          <p class="tanitim">
+            <strong>Grafik tasarımcı ve sanat yönetmeni.</strong>
+            Marka kimliği, editoryal tasarım ve ambalaj üzerine çalışıyorum. İşin
+            okunması kolay, akılda kalması zor olsun diye uğraşıyorum — 11 yıldır
+            aynı cümleyi kuruyorum: sade olan, güçlüdür.
+          </p>
+
+          <div class="kahraman__eylem">
+            <a class="dugme dugme--dolu" href="#projeler">İşlere bak <span aria-hidden="true">↓</span></a>
+            <a class="dugme dugme--bos" href="#iletisim">Birlikte çalışalım</a>
+          </div>
+        </div>
+
+        <aside class="kart-vizit" aria-label="Kısa bilgiler">
+          <div class="kart-vizit__kutu">
+            <span class="etiket">Uzmanlık</span>
+            <p>Marka kimliği · Ambalaj · Editoryal · Tipografi</p>
+          </div>
+          <div class="kart-vizit__kutu">
+            <span class="etiket">Deneyim</span>
+            <p>11 yıl — stüdyo &amp; serbest</p>
+          </div>
+          <div class="kart-vizit__kutu">
+            <span class="etiket">Araçlar</span>
+            <p>Illustrator · InDesign · Photoshop · Figma · Blender</p>
+          </div>
+          <div class="kart-vizit__kutu kart-vizit__kutu--vurgu">
+            <span class="etiket">Bugün</span>
+            <p>2 marka kimliği, 1 kitap kapağı serisi ve bir sergi afişi masamda.</p>
+          </div>
+        </aside>
+      </div>
+
+      <div class="sarmal">
+        <div class="serit" aria-hidden="true">
+          <div class="serit__ic">
+            <span>Marka Kimliği</span><span aria-hidden="true">✳</span>
+            <span>Ambalaj</span><span aria-hidden="true">✳</span>
+            <span>Editoryal</span><span aria-hidden="true">✳</span>
+            <span>Tipografi</span><span aria-hidden="true">✳</span>
+            <span>Marka Kimliği</span><span aria-hidden="true">✳</span>
+            <span>Ambalaj</span><span aria-hidden="true">✳</span>
+            <span>Editoryal</span><span aria-hidden="true">✳</span>
+            <span>Tipografi</span><span aria-hidden="true">✳</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PROJELER ================= -->
+    <section class="bolum" id="projeler">
+      <div class="sarmal">
+        <div class="bolum-basi">
+          <div>
+            <p class="ust-yazi">01 — Seçili işler</p>
+            <h2 class="baslik-orta">Son dönemde<br />ne yaptım?</h2>
+          </div>
+          <p class="bolum-basi__not">
+            Altı iş; ikisi hâlâ devam ediyor. Karta tıklayınca kısa bir özet açılır.
+          </p>
+        </div>
+
+        <div class="projeler" id="projelerIzgara">
+
+          <article class="kart" data-proje="kavurma">
+            <button class="kart__tikla" type="button" aria-expanded="false" aria-controls="detay-kavurma">
+              <span class="kart__kapak">
+                <img src="gorseller/kavurma.svg" alt="Kavurma Kahve Roastery ambalaj tasarımı, krem ve vişne rengi etiket" width="640" height="480" loading="lazy" />
+                <span class="kart__rozet">Ambalaj</span>
+              </span>
+              <span class="kart__alt">
+                <span class="kart__ad">Kavurma Kahve Roastery</span>
+                <span class="kart__meta">Ambalaj &amp; etiket · 2025</span>
+                <span class="kart__ok" aria-hidden="true">+</span>
+              </span>
+            </button>
+            <div class="kart__detay" id="detay-kavurma" hidden>
+              <p>Tek menşeli çekirdekler için 4'lü seri. Etiketlerde mikro tipografiyle
+              kavurma profili ve rakım bilgisi taşınıyor; rafta tek renkten okunan bir blok
+              oluşturacak şekilde hizalandı.</p>
+              <ul class="etiket-liste">
+                <li>Etiket sistemi</li><li>Illustrator</li><li>4 SKU</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="kart" data-proje="atlas">
+            <button class="kart__tikla" type="button" aria-expanded="false" aria-controls="detay-atlas">
+              <span class="kart__kapak">
+                <img src="gorseller/atlas.svg" alt="Atlas Dergi kapağı, siyah zemin üzerine dev harf kompozisyonu" width="640" height="480" loading="lazy" />
+                <span class="kart__rozet">Editoryal</span>
+              </span>
+              <span class="kart__alt">
+                <span class="kart__ad">Atlas Dergi — Sayı 42</span>
+                <span class="kart__meta">Sanat yönetimi · 2025</span>
+                <span class="kart__ok" aria-hidden="true">+</span>
+              </span>
+            </button>
+            <div class="kart__detay" id="detay-atlas" hidden>
+              <p>"Kent ve Hafıza" dosyası için 96 sayfalık sayı tasarımı. Izgara sistemi
+              12 kolon; fotoğrafı kırpmak yerine metnin içine akan bir katman olarak
+              kullandım.</p>
+              <ul class="etiket-liste">
+                <li>96 sayfa</li><li>InDesign</li><li>Tipografi</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="kart" data-proje="firin">
+            <button class="kart__tikla" type="button" aria-expanded="false" aria-controls="detay-firin">
+              <span class="kart__kapak">
+                <img src="gorseller/firin.svg" alt="Ekşi Maya Fırın marka kimliği, hardal sarısı logo çalışması" width="640" height="480" loading="lazy" />
+                <span class="kart__rozet">Marka Kimliği</span>
+              </span>
+              <span class="kart__alt">
+                <span class="kart__ad">Ekşi Maya Fırın</span>
+                <span class="kart__meta">Kimlik &amp; tabela · 2024</span>
+                <span class="kart__ok" aria-hidden="true">+</span>
+              </span>
+            </button>
+            <div class="kart__detay" id="detay-firin" hidden>
+              <p>Üç şubeli mahalle fırını için logo, kâğıt ürünler ve el çizimi tabela.
+              Logoda buğday yerine hamur kesiği kullandım — daha çok işe yarıyor.</p>
+              <ul class="etiket-liste">
+                <li>Logo</li><li>Kâğıt ürünler</li><li>Tabela</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="kart" data-proje="kuzey">
+            <button class="kart__tikla" type="button" aria-expanded="false" aria-controls="detay-kuzey">
+              <span class="kart__kapak">
+                <img src="gorseller/kuzey.svg" alt="Kuzey Rüzgar isimli plak kapağı, geometrik dalga formu" width="640" height="480" loading="lazy" />
+                <span class="kart__rozet">Müzik</span>
+              </span>
+              <span class="kart__alt">
+                <span class="kart__ad">Kuzey Rüzgar — LP</span>
+                <span class="kart__meta">Plak kapağı · 2024</span>
+                <span class="kart__ok" aria-hidden="true">+</span>
+              </span>
+            </button>
+            <div class="kart__detay" id="detay-kuzey" hidden>
+              <p>Yedi parçalık albümün kapağı ve iç zarfı. Kapakta ses dalgasını
+              geometriye çeviren bir form; plak dönerken kapağın iki yarısı
+              birleşiyor.</p>
+              <ul class="etiket-liste">
+                <li>Kapak</li><li>İç zarf</li><li>Baskı danışmanlığı</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="kart" data-proje="sera">
+            <button class="kart__tikla" type="button" aria-expanded="false" aria-controls="detay-sera">
+              <span class="kart__kapak">
+                <img src="gorseller/sera.svg" alt="Sera Botanik ürün etiketleri, yeşil tonlarda botanik çizimler" width="640" height="480" loading="lazy" />
+                <span class="kart__rozet">Ambalaj</span>
+              </span>
+              <span class="kart__alt">
+                <span class="kart__ad">Sera Botanik</span>
+                <span class="kart__meta">Ürün serisi · 2023</span>
+                <span class="kart__ok" aria-hidden="true">+</span>
+              </span>
+            </button>
+            <div class="kart__detay" id="detay-sera" hidden>
+              <p>12 bitki bakım ürünü için etiket serisi. Her ürünün botanik çizimi
+              kurşun kalemle yeniden çizildi, tek renk baskıda okunacak şekilde
+              sadeleştirildi.</p>
+              <ul class="etiket-liste">
+                <li>12 etiket</li><li>İllüstrasyon</li><li>Tek renk baskı</li>
+              </ul>
+            </div>
+          </article>
+
+          <article class="kart" data-proje="sergi">
+            <button class="kart__tikla" type="button" aria-expanded="false" aria-controls="detay-sergi">
+              <span class="kart__kapak">
+                <img src="gorseller/sergi.svg" alt="Boşlukta Form sergi afişi, katmanlı geometrik formlar" width="640" height="480" loading="lazy" />
+                <span class="kart__rozet">Sergi</span>
+              </span>
+              <span class="kart__alt">
+                <span class="kart__ad">Boşlukta Form</span>
+                <span class="kart__meta">Afiş &amp; katalog · 2023</span>
+                <span class="kart__ok" aria-hidden="true">+</span>
+              </span>
+            </button>
+            <div class="kart__detay" id="detay-sergi" hidden>
+              <p>Heykel sergisi için afiş, davetiye ve 48 sayfalık katalog. Afiş
+              şehirdeki 40 noktada aynı hizada asılabilsin diye tek ölçüye
+              oturtuldu.</p>
+              <ul class="etiket-liste">
+                <li>Afiş</li><li>Katalog</li><li>Sergi yönlendirmesi</li>
+              </ul>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= HAKKIMDA ================= -->
+    <section class="bolum bolum--koyu" id="hakkimda">
+      <div class="sarmal hakkinda">
+        <div class="hakkinda__sol">
+          <p class="ust-yazi">02 — Hakkımda</p>
+          <h2 class="baslik-orta">Tasarım,<br />sessizce<br />ikna etmektir.</h2>
+        </div>
+        <div class="hakkinda__sag">
+          <p>
+            Mimar Sinan Güzel Sanatlar Üniversitesi Grafik Tasarım mezunuyum. Sekiz yıl
+            ajanslarda sanat yönetmenliği yaptım; son üç yıldır serbest çalışıyorum.
+            Kahve ambalajından dergi kapağına, işin ölçeği değişse de yöntemim aynı:
+            önce kime konuştuğunu anla, sonra tek bir cümleye indir.
+          </p>
+          <p>
+            Baskı işini seven bir tasarımcıyım — kâğıt seçimi, mürekkep, ütü izi.
+            Ekranda güzel görünen her şey matbaada aynı sonucu vermiyor; bu yüzden
+            işin prova aşamasına kadar yanında oluyorum.
+          </p>
+          <dl class="rakamlar">
+            <div><dt>Tamamlanan proje</dt><dd>60+</dd></div>
+            <div><dt>Çalıştığı sektör</dt><dd>9</dd></div>
+            <div><dt>Ödül / seçki</dt><dd>3</dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= İLETİŞİM ================= -->
+    <section class="bolum" id="iletisim">
+      <div class="sarmal iletisim">
+        <div class="iletisim__sol">
+          <p class="ust-yazi">03 — İletişim</p>
+          <h2 class="baslik-orta">Bir işiniz<br />mi var?</h2>
+          <p class="iletisim__metin">
+            Yeni bir marka kimliği, ambalaj serisi ya da dergi/sergi işi için yazabilirsiniz.
+            Genelde bir iş günü içinde dönüyorum.
+          </p>
+          <ul class="iletisim__bilgi">
+            <li><span class="etiket">E-posta</span><a href="mailto:merhaba@ornek.com">merhaba@ornek.com</a></li>
+            <li><span class="etiket">Telefon</span><a href="tel:+905000000000">0500 000 00 00</a></li>
+            <li><span class="etiket">Stüdyo</span><span>Kadıköy, İstanbul</span></li>
+          </ul>
+        </div>
+
+        <div class="form-kap" id="formKap">
+          <form class="form" id="iletisimForm" novalidate>
+            <div class="alan">
+              <label for="ad">Adınız</label>
+              <input type="text" id="ad" name="ad" autocomplete="name" placeholder="Ad Soyad" required />
+              <small class="alan__hata" data-hata="ad" role="alert"></small>
+            </div>
+
+            <div class="alan">
+              <label for="eposta">E-posta</label>
+              <input type="email" id="eposta" name="eposta" autocomplete="email" placeholder="ornek@eposta.com" required />
+              <small class="alan__hata" data-hata="eposta" role="alert"></small>
+            </div>
+
+            <div class="alan">
+              <label for="konu">Konu</label>
+              <select id="konu" name="konu" required>
+                <option value="">Seçiniz</option>
+                <option>Marka kimliği</option>
+                <option>Ambalaj / etiket</option>
+                <option>Editoryal tasarım</option>
+                <option>Diğer</option>
+              </select>
+              <small class="alan__hata" data-hata="konu" role="alert"></small>
+            </div>
+
+            <div class="alan">
+              <label for="mesaj">Mesajınız</label>
+              <textarea id="mesaj" name="mesaj" rows="5" placeholder="Projeden kısaca bahsedin, bütçe ve takvim beklentiniz varsa ekleyin." required></textarea>
+              <small class="alan__hata" data-hata="mesaj" role="alert"></small>
+            </div>
+
+            <button class="dugme dugme--dolu dugme--tam" type="submit" id="gonderDugme">Mesajı gönder</button>
+            <p class="form__dipnot">Bilgileriniz yalnızca size dönüş yapmak için kullanılır.</p>
+          </form>
+
+          <div class="tesekkur" id="tesekkur" hidden tabindex="-1">
+            <span class="tesekkur__isaret" aria-hidden="true">✓</span>
+            <h3>Teşekkürler, mesajınız ulaştı!</h3>
+            <p id="tesekkurMetin">En kısa sürede size dönüş yapacağım.</p>
+            <button class="dugme dugme--bos" type="button" id="yeniMesaj">Yeni bir mesaj yaz</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="alt-bilgi">
+    <div class="sarmal alt-bilgi__ic">
+      <p>© <span id="yil">2026</span> Elif Demirsoy — Tüm işler kendisine aittir.</p>
+      <nav aria-label="Sosyal bağlantılar">
+        <a href="#" rel="noopener">Behance</a>
+        <a href="#" rel="noopener">Instagram</a>
+        <a href="#" rel="noopener">LinkedIn</a>
+      </nav>
+    </div>
+  </footer>
+
+  <!-- Proje büyük görünüm (lightbox) -->
+  <div class="buyuk" id="buyuk" hidden role="dialog" aria-modal="true" aria-labelledby="buyukAd">
+    <div class="buyuk__perde" data-kapat></div>
+    <div class="buyuk__govde" role="document">
+      <button class="buyuk__kapat" type="button" data-kapat aria-label="Büyük görünümü kapat">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+      </button>
+      <div class="buyuk__medya">
+        <img id="buyukGorsel" src="" alt="" />
+      </div>
+      <div class="buyuk__bilgi">
+        <span class="buyuk__rozet" id="buyukRozet"></span>
+        <h2 class="buyuk__ad" id="buyukAd"></h2>
+        <p class="buyuk__meta" id="buyukMeta"></p>
+        <p class="buyuk__aciklama" id="buyukAciklama"></p>
+        <ul class="etiket-liste" id="buyukEtiketler"></ul>
+      </div>
+      <div class="buyuk__gezinme">
+        <button type="button" class="buyuk__ok" id="oncekiProje" aria-label="Önceki proje">←</button>
+        <span class="buyuk__sayac" id="buyukSayac"></span>
+        <button type="button" class="buyuk__ok" id="sonrakiProje" aria-label="Sonraki proje">→</button>
+      </div>
+    </div>
+  </div>
+
+  <button class="yukari" id="yukari" type="button" aria-label="Sayfa başına dön" hidden>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7" /></svg>
+  </button>
+
+  <script src="script.js"></script>
+</body>
+</html>

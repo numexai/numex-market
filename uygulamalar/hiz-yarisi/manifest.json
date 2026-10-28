@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "Süper Racing - Araba Yarışı Oyunu",
+  "version": "2.0.0",
+  "description": "Çok bölümlü, garaj yükseltme mağazalı ve aksiyon dolu süper otoban araba yarışı oyunu.",
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "Süper Racing Oyna"
+  },
+  "permissions": [
+    "storage"
+  ]
+}

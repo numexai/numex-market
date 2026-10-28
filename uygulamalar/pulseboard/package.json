@@ -1,0 +1,14 @@
+{
+  "name": "pulseboard",
+  "version": "1.0.0",
+  "private": true,
+  "description": "PulseBoard — günlük görev ve alışkanlık takibi için premium kişisel çalışma paneli. Sıfır bağımlılık, veriler localStorage'da.",
+  "type": "module",
+  "scripts": {
+    "start": "npx --yes serve . -l 4173",
+    "dev": "npx --yes serve . -l 4173"
+  },
+  "keywords": ["pulseboard", "gorev", "aliskanlik", "panel", "localstorage"],
+  "author": "PulseBoard",
+  "license": "MIT"
+}
