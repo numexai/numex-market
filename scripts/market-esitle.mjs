@@ -97,6 +97,14 @@ if (process.argv[1]?.endsWith('market-esitle.mjs')) {
   if (!Array.isArray(liste)) throw new Error('Kaynak beklenmedik biçimde (dizi değil) — hiçbir şey değiştirilmedi');
   const yeni = say(liste);
   if (yeni.toplam < 1 || yeni.toplam < eski.toplam * 0.8) {
+    // Teşhis — günlükler herkese açık: kimlik yazılmaz, yalnız sayılar
+    const sahipler = {};
+    for (const u of liste) if (u.owner) sahipler[String(u.owner)] = (sahipler[String(u.owner)] || 0) + 1;
+    const kategoriler = {};
+    for (const u of liste) kategoriler[u.category] = (kategoriler[u.category] || 0) + 1;
+    console.log(`Teşhis: kaynakta ${liste.length} kayıt; sahipsiz ${liste.filter((u) => !u.owner).length}, özel ${liste.filter((u) => u.is_private).length}, ` +
+      `farklı sahip ${Object.keys(sahipler).length} (en büyük sahip: ${Math.max(0, ...Object.values(sahipler))} kayıt)`);
+    console.log(`Teşhis: alanlar ${Object.keys(liste[0] || {}).join(', ')}; kategoriler ${JSON.stringify(kategoriler)}`);
     throw new Error(`Kaynakta ${yeni.toplam} uygulama var, önceki ${eski.toplam} — beklenmedik düşüş, hiçbir şey değiştirilmedi`);
   }
   if (JSON.stringify(yeni) === JSON.stringify(eski)) { console.log(`Market — değişiklik yok (${yeni.toplam} uygulama)`); process.exit(0); }
