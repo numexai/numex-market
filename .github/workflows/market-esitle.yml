@@ -1,0 +1,57 @@
+name: Market eşitle
+# numexai.com.tr vitrinindeki uygulama sayılarını README'ye ve karta (gorseller/banner.png), uygulamaların kaynak kodunu
+# uygulamalar/ klasörüne her gün işler; geride kalmasın.
+on:
+  schedule:
+    - cron: '37 3 * * *'   # her gün 06:37 (TSİ) — numex_nedir ve .github bundan sonra çalışır
+  workflow_dispatch: {}
+permissions:
+  contents: write
+jobs:
+  esitle:
+    runs-on: ubuntu-latest
+    env:
+      # Hugging Face Space'e yayım için: Settings → Secrets → HF_TOKEN (write yetkili). Yoksa bu adım atlanır.
+      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      HF_SPACE: ${{ vars.HF_SPACE || 'numexai/numex-market' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Sayıları yenile
+        run: node scripts/market-esitle.mjs
+        env:
+          MARKET_SAYAC: gorseller/kaynak/veri.json
+      - name: Sayı değiştiyse kartı yeniden çiz
+        run: |
+          if git diff --quiet -- gorseller/kaynak/veri.json; then echo "sayılar aynı"; exit 0; fi
+          npm install --no-save playwright@1.48.2
+          npx playwright install --with-deps chromium
+          node scripts/market-esitle.mjs --yerel
+        env:
+          MARKET_SAYAC: gorseller/kaynak/veri.json
+      - name: Uygulama kodlarını eşitle
+        run: node scripts/uygulama-esitle.mjs
+      - name: Değiştiyse kaydet
+        run: |
+          if [ -z "$(git status --porcelain -- README.md gorseller uygulamalar)" ]; then echo "değişiklik yok"; exit 0; fi
+          git config user.name "Numex AI"
+          git config user.email "destek@numexai.com.tr"
+          git add README.md gorseller uygulamalar
+          git commit -m "Market güncellendi (numexai.com.tr vitrininden)"
+          git push
+      - name: Hugging Face Space'e yayımla
+        if: env.HF_TOKEN != ''
+        run: |
+          git clone --depth 1 "https://user:${HF_TOKEN}@huggingface.co/spaces/${HF_SPACE}" /tmp/space
+          cd /tmp/space
+          git lfs install --local
+          git lfs track "*.png" "*.jpg" "*.jpeg" "*.gif" "*.webp" "*.ico" "*.mp3" "*.wav" "*.ogg" "*.mp4" "*.webm" "*.woff" "*.woff2" "*.ttf" "*.otf" "*.glb" "*.zip" "*.pdf"
+          find . -mindepth 1 -maxdepth 1 ! -name .git ! -name .gitattributes -exec rm -rf {} +
+          cp -a "$GITHUB_WORKSPACE/uygulamalar/." ./
+          { cat "$GITHUB_WORKSPACE/scripts/hf-space.md"; echo; tail -n +2 "$GITHUB_WORKSPACE/uygulamalar/README.md"; } > README.md
+          git add -A
+          if git diff --cached --quiet; then echo "Space güncel"; exit 0; fi
+          git -c user.name="Numex AI" -c user.email="destek@numexai.com.tr" commit -qm "Numex Market eşitlendi"
+          git push

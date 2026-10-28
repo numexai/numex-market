@@ -11,6 +11,9 @@ Bu depoya gönderilen katkılar (pull request, issue, yorum), Numex AI Bilişim 
 süresiz ve ücretsiz olarak kullanabileceği, değiştirebileceği ve yayımlayabileceği kabul
 edilerek alınır.
 
+İstisna: uygulamalar/ klasöründeki Market uygulamalarının kaynak kodu MIT lisansıyla
+dağıtılır (bkz. uygulamalar/LICENSE).
+
 İzin ve sorular: destek@numexai.com.tr
 
 ---
@@ -26,5 +29,8 @@ Service; this grants no other rights to the content.
 
 By submitting a contribution (pull request, issue or comment), you agree that Numex AI Bilişim Teknolojileri may
 use, modify and publish it perpetually and free of charge.
+
+Exception: the source code of the Market apps in the uygulamalar/ folder is distributed
+under the MIT License (see uygulamalar/LICENSE).
 
 Permissions and questions: destek@numexai.com.tr

@@ -42,7 +42,7 @@ Bu yüzden Market aynı zamanda Numex'in ne üretebildiğinin **canlı kanıtıd
 |---|:---:|---|
 | 🎮 **Oyunlar** | 6 | Tarayıcıda ve masaüstünde çalışan otonom üretilmiş oyunlar |
 | 🧪 **Simülasyon** | 4 | Etkileşimli simülasyonlar ve görselleştirmeler |
-| 🤖 **Yapay Zeka** | 3 | AI demoları (ör. sinir ağı çekirdeği görselleştirmesi) |
+| 🤖 **Yapay Zekâ** | 3 | AI demoları (ör. sinir ağı çekirdeği görselleştirmesi) |
 | 🛠️ **Araçlar / Yardımcı** | 12 | Kelime sayacı, resim düzenleyici, Markdown defter gibi günlük araçlar |
 | ⚡ **Üretkenlik** | 8 | Randevu sistemi, depo/stok yönetimi, envanter gibi iş araçları |
 | 🖥️ **Web / OS** | 3 | Web tabanlı masaüstü/işletim sistemi deneyimleri |
@@ -74,6 +74,12 @@ uygulamanın her biri bu hattan geçti.
 3. **Dene** (dene.numexai.com.tr), **İndir** ya da **Forge'a Git** → kaynak kod.
 4. Beğendiysen **Hub**'da çatalla; **Codex**'te aç, *"bunu koyu temaya çevir"* de.
 
+## 📂 Kaynak kod — GitHub'da da
+
+Market'teki her uygulamanın kaynak kodu **[uygulamalar/](uygulamalar/)** klasöründe, kategorilere göre listeli.
+Her gün numexai.com.tr vitrininden kendiliğinden eşitlenir: Market'e gelen yeni uygulama ertesi gün burada olur.
+Uygulama kodları **[MIT lisanslı](uygulamalar/LICENSE)** — kullan, değiştir, çatalla. Beğendiysen ⭐ vermeyi unutma.
+
 ## Market ↔ ekosistem
 
 ```mermaid
@@ -94,7 +100,7 @@ Hub'ın menüsündeki **Uygulama Marketi** bağlantısı da buraya çıkar.
 
 <div align="center">
 
-**Numex Ailesi** · [Numex AI](https://numexai.com.tr) · [Codex](https://github.com/numexai/numex-codex) · [Okul](https://github.com/numexai/numex-okul) · [Market](https://market.numexai.com.tr) · [Numexpedia](https://github.com/numexai/numex-pedia) · [Hub](https://github.com/numexai/numex-hub) · [Forge](https://github.com/numexai/numex-forge) · [API](https://github.com/numexai/numex-api) · [SDK](https://github.com/numexai/numex-sdk) · [Pusulam](https://github.com/numexai/pusulamx) · [PC Doktoru](https://github.com/mobilcep/pcdoktoru)
+**Numex Ailesi** · [Numex AI](https://numexai.com.tr) · [Codex](https://github.com/numexai/numex-codex) · [Okul](https://github.com/numexai/numex-okul) · [Market](https://market.numexai.com.tr) · [Numexpedia](https://github.com/numexai/numex-pedia) · [Hub](https://github.com/numexai/numex-hub) · [Forge](https://github.com/numexai/numex-forge) · [API](https://github.com/numexai/numex-api) · [SDK](https://github.com/numexai/numex-sdk) · [Pusulam](https://github.com/numexai/pusulamx) · [PC Doktoru](https://github.com/numexai/pc-doktoru)
 
 *İnsanı önce koyan Türk yapay zekâsı* 🇹🇷 · [Tüm ekosistem →](https://github.com/numexai/numex_nedir)
 
