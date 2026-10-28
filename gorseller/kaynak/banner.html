@@ -1,22 +1,23 @@
 <!doctype html>
 <!-- Numex Market tanıtım kartı (gorseller/banner.png ve numex_nedir/gorseller/kart-market.png).
-     PNG'yi yeniden üretmek için bu sayfayı 1280x640 görünümde açıp ekran görüntüsü alın. -->
+     Sayılar gorseller/kaynak/veri.json'dan gelir; scripts/market-esitle.mjs her gün yeniler ve PNG'yi bu sayfadan çizer.
+     Elle üretmek için: node scripts/market-esitle.mjs --yerel (veri.json'u değiştirmeden yalnızca kartı çizer). -->
 <html lang="tr">
 <head>
 <meta charset="utf-8">
 <title>Numex Market kartı</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root { --teal:#00C9A7; --bg:#0d1117; --surface:#161b22; --text:#e6edf3; --muted:#8b98a9; --line:rgba(0,201,167,.18); }
+  :root { --teal:#00C9A7; --text:#e6edf3; --muted:#8b98a9; }
   * { box-sizing:border-box; margin:0; padding:0; }
   html, body { width:1280px; height:640px; overflow:hidden; }
   body {
     font-family:'Outfit',system-ui,sans-serif; color:var(--text);
     background:
-      radial-gradient(ellipse 520px 360px at 1120px 60px, rgba(0,201,167,.13), transparent 70%),
-      radial-gradient(ellipse 520px 300px at 0 640px, rgba(34,68,204,.22), transparent 70%),
+      radial-gradient(ellipse 620px 360px at 1180px 40px, rgba(0,200,170,.24), transparent 70%),
+      radial-gradient(ellipse 560px 300px at 0 660px, rgba(30,60,210,.25), transparent 72%),
       radial-gradient(rgba(255,255,255,.06) 1px, transparent 1.2px) 0 0/28px 28px,
-      #080d16;
+      linear-gradient(135deg, #0a1628 0%, #08121f 35%, #070e1c 60%, #060d1a 100%);
     display:flex; align-items:center; justify-content:space-between; padding:0 64px;
   }
   .sol { width:560px; }
@@ -24,18 +25,20 @@
   .logo svg { width:38px; height:38px; }
   .logo b { color:var(--teal); font-weight:800; }
   .adres { font-family:ui-monospace,'DejaVu Sans Mono',monospace; color:var(--teal); font-size:16px; letter-spacing:1px; margin:26px 0 8px; }
-  h1 { font-family:'Syne',sans-serif; font-weight:800; font-size:45px; line-height:1.04; letter-spacing:0; }
+  h1 { font-family:'Syne',sans-serif; font-weight:800; font-size:45px; line-height:1.04; }
   h1 span { color:var(--teal); }
   p { color:#a9b4c2; font-size:19px; line-height:1.55; margin-top:18px; }
   p strong { color:var(--text); font-weight:600; }
-  .rakam { display:flex; gap:34px; margin-top:28px; }
-  .rakam div { font-family:'Syne',sans-serif; font-weight:800; font-size:30px; }
-  .rakam small { display:block; font-family:'Outfit',sans-serif; font-weight:500; font-size:12px; letter-spacing:2.5px; color:var(--muted); margin-top:4px; }
-  .pano { width:568px; background:rgba(13,17,23,.92); border:1px solid var(--line); border-radius:18px; padding:22px; box-shadow:0 30px 80px rgba(0,0,0,.45); }
+  .rakam { display:flex; gap:44px; margin-top:28px; }
+  .rakam div { font-family:'Syne',sans-serif; font-weight:700; font-size:30px; }
+  .rakam small { display:block; font-family:'Outfit',sans-serif; font-weight:500; font-size:12px; letter-spacing:2.5px; color:var(--muted); margin-top:2px; }
+  .pano { width:568px; background:#0b1220; border:1px solid rgba(0,201,167,.16); border-radius:18px; padding:22px; box-shadow:0 30px 80px rgba(0,0,0,.45); }
   .pano h6 { font-size:12.5px; font-weight:500; letter-spacing:2.5px; color:var(--muted); margin-bottom:14px; }
   .izgara { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-  .kat { display:flex; align-items:center; justify-content:space-between; background:var(--surface); border:1px solid rgba(255,255,255,.06); border-radius:12px; height:48px; padding:0 18px; font-size:17px; font-weight:500; }
-  .kat b { color:var(--teal); font-weight:700; font-size:18px; }
+  .kat { display:flex; align-items:center; justify-content:space-between; background:#121927; border:1px solid #222935; border-radius:12px; height:54px; padding:0 18px; font-size:17px; font-weight:500; }
+  .kat.genis { grid-column:1 / -1; }
+  .kat em { font-style:normal; color:var(--muted); font-size:14px; flex:1; margin-left:10px; }
+  .kat b { color:var(--teal); font-family:'Syne',sans-serif; font-weight:700; font-size:20px; }
   .ornek { margin-top:12px; border:1px solid rgba(233,72,120,.45); border-radius:12px; padding:14px 16px; background:linear-gradient(90deg,rgba(233,72,120,.12),rgba(143,107,255,.10)); }
   .ornek div:first-child { font-size:14.5px; color:#c9d3df; }
   .ornek strong { color:var(--text); }
@@ -51,29 +54,42 @@
       <div>numex <b>market</b></div>
     </div>
     <div class="adres">market.numexai.com.tr</div>
-    <h1>Numex’in<br>yazdığı<br><span>44 uygulama.</span></h1>
+    <h1>Numex’in<br>yazdığı<br><span><span id="toplam-baslik">44</span> uygulama.</span></h1>
     <p>Hepsi <strong>ücretsiz ve açık kaynak</strong>. Çalışan halini dene, kodunu incele, çatalla, kendine göre değiştir.</p>
     <div class="rakam">
-      <div>44<small>UYGULAMA</small></div>
-      <div>7<small>KATEGORİ</small></div>
+      <div><span id="toplam">44</span><small>UYGULAMA</small></div>
+      <div><span id="kategori">7</span><small>KATEGORİ</small></div>
       <div>₺0<small>HER ZAMAN</small></div>
     </div>
   </div>
   <div class="pano">
     <h6>AÇIK KAYNAK · ÜCRETSİZ · OTONOM ÜRETİM</h6>
-    <div class="izgara">
-      <div class="kat">🎮 Oyunlar <b>6</b></div>
-      <div class="kat">🧪 Simülasyon <b>4</b></div>
-      <div class="kat">🤖 Yapay Zekâ <b>3</b></div>
-      <div class="kat">🛠️ Araçlar <b>12</b></div>
-      <div class="kat">⚡ Üretkenlik <b>8</b></div>
-      <div class="kat">🖥️ Web / OS <b>3</b></div>
-      <div class="kat" style="grid-column:1 / -1">📦 Diğer <span style="color:var(--muted);font-size:14px;flex:1;margin-left:10px">tanıtım sayfaları, ilan platformu ve daha fazlası</span><b>8</b></div>
-    </div>
+    <div class="izgara" id="izgara"></div>
     <div class="ornek">
       <div>🎧 <strong>Cyber Beats</strong> — saf Web Audio API ile 16 adımlı ritim makinesi</div>
       <div class="adim"><i class="p"></i><i></i><i class="t"></i><i></i><i class="p"></i><i class="m"></i><i class="t"></i><i></i><i class="p"></i><i></i><i class="t"></i><i class="m"></i></div>
     </div>
   </div>
+<script>
+  // Varsayılan veri; market-esitle.mjs çizmeden önce window.MARKET'i veri.json ile doldurur.
+  const veri = window.MARKET || { toplam: 44, kategoriler: [
+    { ad: 'Oyunlar', simge: '🎮', sayi: 6 }, { ad: 'Simülasyon', simge: '🧪', sayi: 4 },
+    { ad: 'Yapay Zekâ', simge: '🤖', sayi: 3 }, { ad: 'Araçlar', simge: '🛠️', sayi: 12 },
+    { ad: 'Üretkenlik', simge: '⚡', sayi: 8 }, { ad: 'Web / OS', simge: '🖥️', sayi: 3 },
+    { ad: 'Diğer', simge: '📦', sayi: 8, aciklama: 'tanıtım sayfaları, ilan platformu ve daha fazlası' } ] };
+  const dolu = veri.kategoriler.filter((k) => k.sayi > 0);
+  for (const id of ['toplam', 'toplam-baslik']) document.getElementById(id).textContent = veri.toplam;
+  document.getElementById('kategori').textContent = dolu.length;
+  const izgara = document.getElementById('izgara');
+  dolu.forEach((k, i) => {
+    const d = document.createElement('div');
+    const tekKalan = dolu.length % 2 === 1 && i === dolu.length - 1;
+    d.className = 'kat' + (tekKalan ? ' genis' : '');
+    d.append(`${k.simge} ${k.ad}`);
+    if (tekKalan && k.aciklama) { const e = document.createElement('em'); e.textContent = k.aciklama; d.append(e); }
+    const b = document.createElement('b'); b.textContent = k.sayi; d.append(b);
+    izgara.append(d);
+  });
+</script>
 </body>
 </html>
