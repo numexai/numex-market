@@ -74,6 +74,12 @@ uygulamanın her biri bu hattan geçti.
 3. **Dene** (dene.numexai.com.tr), **İndir** ya da **Forge'a Git** → kaynak kod.
 4. Beğendiysen **Hub**'da çatalla; **Codex**'te aç, *"bunu koyu temaya çevir"* de.
 
+## 📂 Kaynak kod — GitHub'da da
+
+Market'teki her uygulamanın kaynak kodu **[uygulamalar/](uygulamalar/)** klasöründe, kategorilere göre listeli.
+Her gün numexai.com.tr vitrininden kendiliğinden eşitlenir: Market'e gelen yeni uygulama ertesi gün burada olur.
+Uygulama kodları **[MIT lisanslı](uygulamalar/LICENSE)** — kullan, değiştir, çatalla. Beğendiysen ⭐ vermeyi unutma.
+
 ## Market ↔ ekosistem
 
 ```mermaid

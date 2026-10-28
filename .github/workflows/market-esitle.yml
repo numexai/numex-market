@@ -1,5 +1,6 @@
 name: Market eşitle
-# numexai.com.tr vitrinindeki uygulama sayılarını README'ye ve karta (gorseller/banner.png) her gün işler; geride kalmasın.
+# numexai.com.tr vitrinindeki uygulama sayılarını README'ye ve karta (gorseller/banner.png), uygulamaların kaynak kodunu
+# uygulamalar/ klasörüne her gün işler; geride kalmasın.
 on:
   schedule:
     - cron: '37 3 * * *'   # her gün 06:37 (TSİ) — numex_nedir ve .github bundan sonra çalışır
@@ -20,17 +21,19 @@ jobs:
           MARKET_SAYAC: gorseller/kaynak/veri.json
       - name: Sayı değiştiyse kartı yeniden çiz
         run: |
-          if git diff --quiet; then echo "değişiklik yok"; exit 0; fi
+          if git diff --quiet -- gorseller/kaynak/veri.json; then echo "sayılar aynı"; exit 0; fi
           npm install --no-save playwright@1.48.2
           npx playwright install --with-deps chromium
           node scripts/market-esitle.mjs --yerel
         env:
           MARKET_SAYAC: gorseller/kaynak/veri.json
+      - name: Uygulama kodlarını eşitle
+        run: node scripts/uygulama-esitle.mjs
       - name: Değiştiyse kaydet
         run: |
-          if git diff --quiet; then echo "değişiklik yok"; exit 0; fi
+          if [ -z "$(git status --porcelain -- README.md gorseller uygulamalar)" ]; then echo "değişiklik yok"; exit 0; fi
           git config user.name "Numex AI"
           git config user.email "destek@numexai.com.tr"
-          git add README.md gorseller
+          git add README.md gorseller uygulamalar
           git commit -m "Market güncellendi (numexai.com.tr vitrininden)"
           git push
