@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" role="img" aria-label="Atlas Dergi 42. sayı kapağı">
+  <rect width="640" height="480" fill="#211a1f"/>
+  <!-- dev harf kompozisyonu -->
+  <text x="30" y="360" font-family="Georgia, serif" font-size="330" font-weight="bold" fill="#f4efe6" letter-spacing="-18">A</text>
+  <text x="248" y="360" font-family="Georgia, serif" font-size="330" font-weight="bold" fill="#7d2b4e" letter-spacing="-18">T</text>
+  <circle cx="470" cy="230" r="96" fill="none" stroke="#d9a441" stroke-width="3"/>
+  <circle cx="470" cy="230" r="66" fill="none" stroke="#f4efe6" stroke-width="1" opacity=".55"/>
+  <path d="M470 134 L470 326" stroke="#f4efe6" stroke-width="1" opacity=".4"/>
+  <path d="M374 230 L566 230" stroke="#f4efe6" stroke-width="1" opacity=".4"/>
+  <!-- künye -->
+  <rect x="30" y="34" width="88" height="4" fill="#d9a441"/>
+  <text x="30" y="72" font-family="Helvetica, Arial, sans-serif" font-size="15" letter-spacing="5" fill="#f4efe6">ATLAS</text>
+  <text x="30" y="96" font-family="Helvetica, Arial, sans-serif" font-size="10" letter-spacing="3" fill="#f4efe6" opacity=".6">SAYI 42 · KENT VE HAFIZA</text>
+  <text x="610" y="452" text-anchor="end" font-family="Helvetica, Arial, sans-serif" font-size="10" letter-spacing="3" fill="#f4efe6" opacity=".55">KIŞ 2025</text>
+  <!-- bant -->
+  <rect x="0" y="404" width="640" height="34" fill="#7d2b4e"/>
+  <text x="30" y="426" font-family="Helvetica, Arial, sans-serif" font-size="11" letter-spacing="4" fill="#f4efe6">96 SAYFA · BAĞIMSIZ KÜLTÜR DERGİSİ</text>
+</svg>

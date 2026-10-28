@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cyber Beats — Neon Step Sequencer</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='4' y='4' width='10' height='10' rx='2' fill='%2300f0ff'/%3E%3Crect x='18' y='4' width='10' height='10' rx='2' fill='%23ff2bd6'/%3E%3Crect x='4' y='18' width='10' height='10' rx='2' fill='%2339ff88'/%3E%3Crect x='18' y='18' width='10' height='10' rx='2' fill='%23ffe14d'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="stage">
+    <!-- Üst bar -->
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-icon">▣</span>
+        <h1>CYBER <span class="accent">BEATS</span></h1>
+        <div class="led-grid" id="ledGrid" aria-hidden="true"></div>
+      </div>
+      <div class="status">
+        <span id="playIndicator" class="play-indicator off">◉</span>
+        <span id="statusText" class="status-text">DURDU</span>
+      </div>
+    </header>
+
+    <!-- Kontrol çubuğu -->
+    <section class="controls" id="controls">
+      <div class="transport">
+        <button id="playBtn" class="btn btn-play" type="button" title="Oynat / Duraklat (Space)">▶</button>
+        <button id="stopBtn" class="btn btn-stop" type="button" title="Durdur ve başa dön">■</button>
+        <button id="clearBtn" class="btn btn-clear" type="button" title="Tüm deseni temizle">✕ CLEAR</button>
+      </div>
+      <div class="bpm-box">
+        <label class="bpm-label" for="bpmSlider">TEMP</label>
+        <input type="range" id="bpmSlider" min="80" max="180" step="1" value="120" aria-label="Tempo (BPM)">
+        <span id="bpmValue" class="bpm-value">120</span>
+        <span class="bpm-unit">BPM</span>
+      </div>
+    </section>
+
+    <!-- Matris adım başlıkları -->
+    <div class="step-labels" id="stepLabels"></div>
+
+    <!-- Enstrüman adları sütunu + 4x16 ana matris -->
+    <div class="matrix-wrap">
+      <div class="row-labels" id="rowLabels">
+        <span data-idx="0" class="row-name kick">KICK</span>
+        <span data-idx="1" class="row-name snare">SNARE</span>
+        <span data-idx="2" class="row-name hat">HAT</span>
+        <span data-idx="3" class="row-name synth">SYNTH</span>
+      </div>
+      <section class="matrix" id="matrix" aria-label="Step Sequencer Matrisi"></section>
+    </div>
+
+    <!-- Alt bilgi -->
+    <footer class="footbar">
+      <span class="hint">Space = Oynat/Duraklat</span>
+      <span class="hint">Hücreye tıkla → nota ekle/çıkar</span>
+      <span class="hint">Tüm sesler saf Web Audio API ile sentezlenir</span>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

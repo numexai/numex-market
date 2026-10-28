@@ -1,0 +1,153 @@
+/* =====================================================================
+ * style.css — retro arayüz (RAYCASTER-3D)
+ * ===================================================================== */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0b0c10;
+  --panel: #11141b;
+  --line: #2a303c;
+  --accent: #e7ff3c;     /* retro sarı-yeşil */
+  --cyan: #2fd4ff;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  background:
+    radial-gradient(ellipse at 50% 0%, #151927 0%, var(--bg) 70%);
+  color: #cfd6e4;
+  font-family: 'Courier New', Courier, monospace;
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+}
+
+/* ---------- Üst bar ---------- */
+.topbar {
+  display: flex;
+  align-items: baseline;
+  gap: 18px;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--line);
+  background: linear-gradient(180deg, #151a24, #10131a);
+  flex-wrap: wrap;
+}
+.topbar .logo {
+  font-weight: 700;
+  font-size: 17px;
+  letter-spacing: 2px;
+  color: var(--accent);
+  text-shadow: 0 0 8px rgba(231,255,60,.35);
+}
+.topbar .logo .dim { color: #7f8aa0; font-weight: 400; }
+.topbar .tag, .topbar .hint {
+  font-size: 11px;
+  color: #6f7a90;
+}
+.topbar .hint { margin-left: auto; color: #9aa6bc; }
+
+/* ---------- Sahne ------------- */
+.stage { flex: 1; display: flex; flex-direction: column; padding: 14px 18px; }
+
+.viewport {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.viewport canvas#game {
+  border: 3px solid #262c38;
+  box-shadow: 0 0 0 1px #0c0f14, 0 12px 40px rgba(0,0,0,.7);
+  background: #000;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  max-width: 100%;
+}
+
+/* ---------- Çapraz nişangâh (retro hedef) ---------- */
+.crosshair {
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 0; height: 0;
+  pointer-events: none;
+  z-index: 5;
+}
+.crosshair .y {
+  position: absolute;
+  width: 22px; height: 2px;
+  margin: -1px -11px;
+  background: rgba(255,255,255,.9);
+  box-shadow: 0 0 3px #000;
+}
+.crosshair .x {
+  position: absolute;
+  width: 2px; height: 22px;
+  margin: -11px -1px;
+  background: rgba(255,255,255,.9);
+  box-shadow: 0 0 3px #000;
+}
+
+/* ---------- Minimap / radar ---------- */
+.minimap-wrap {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  padding: 4px;
+  background: rgba(8,11,16,.88);
+  border: 1px solid #39424f;
+  box-shadow: 0 4px 16px rgba(0,0,0,.6);
+  z-index: 6;
+}
+.minimap-wrap canvas {
+  display: block;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+.mm-label {
+  position: absolute;
+  bottom: 6px;
+  right: 8px;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: #ffe14d;
+  text-shadow: 0 0 4px #000;
+}
+
+/* ---------- HUD barı ---------- */
+.hudbar {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  border-top: 2px solid #2a303c;
+  background: linear-gradient(180deg, #171b25, #0d0f15);
+  padding: 10px 14px 12px;
+}
+.hud-block {
+  display: flex;
+  flex-direction: column;
+  min-width: 84px;
+  border-right: 1px solid #262c38;
+  padding: 0 16px 0 4px;
+}
+.hud-block label {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: #6f7a90;
+}
+.hud-block strong {
+  font-size: 20px;
+  letter-spacing: 1px;
+  color: var(--accent);
+  text-shadow: 0 0 6px rgba(231,255,60,.28);
+}
+.hud-fill { flex: 1; }
+.hud-copy {
+  align-self: flex-end;
+  font-size: 10px;
+  color: #49536a;
+  letter-spacing: 1px;
+}

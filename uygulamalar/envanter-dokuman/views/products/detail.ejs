@@ -1,0 +1,87 @@
+<div class="page-head">
+  <h1><%= product.name %></h1>
+  <p class="muted">Kayıt #<%= product.id %> · <%= product.categoryName %></p>
+  <div class="page-actions">
+    <a href="/api/products/<%= product.id %>/edit" class="btn">✏️ Düzenle</a>
+    <a href="/api/products" class="btn btn-ghost">← Listeye dön</a>
+  </div>
+</div>
+
+<% if (lowStock) { %>
+  <div class="low-stock-banner">⚠️ Bu ürün düşük stok seviyesinde! Stok: <strong><%= product.stock %></strong> (eşik: <%= product.minimumStock %>)</div>
+<% } %>
+
+<div class="grid-3">
+  <div class="card">
+    <h3>Mevcut Stok</h3>
+    <div class="detail-value"><%= product.stock %></div>
+  </div>
+  <div class="card">
+    <h3>Birim Fiyat</h3>
+    <div class="detail-value"><%= product.unitPrice.toLocaleString('tr-TR') %> ₺</div>
+  </div>
+  <div class="card">
+    <h3>Stok Değeri</h3>
+    <div class="detail-value"><%= (product.stock * product.unitPrice).toLocaleString('tr-TR') %> ₺</div>
+  </div>
+</div>
+
+<div class="card stock-ops">
+  <h2>Stok İşlemleri</h2>
+  <div class="stock-op-buttons">
+    <button class="btn btn-primary stock-action" data-mode="in">+ Stok Girişi</button>
+    <button class="btn btn-warn stock-action" data-mode="out">− Stok Çıkışı</button>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Hareket Geçmişi</h2>
+  <% if (movements.length === 0) { %>
+    <p class="muted">Bu ürün için henüz hareket kaydı yok.</p>
+  <% } else { %>
+    <table class="table">
+      <thead>
+        <tr><th>#</th><th>Tip</th><th>Miktar</th><th>Kalan Stok</th><th>Not</th><th>Tarih</th></tr>
+      </thead>
+      <tbody>
+        <% movements.forEach(m => { %>
+          <tr>
+            <td><%= m.id %></td>
+            <td><span class="tag <%= m.type === 'in' ? 'tag-in' : 'tag-out' %>">
+              <%= m.type === 'in' ? 'Giriş' : 'Çıkış' %></span></td>
+            <td><%= m.quantity %></td>
+            <td><%= m.remainingStock %></td>
+            <td class="muted"><%= m.note || '—' %></td>
+            <td class="muted"><%= new Date(m.date).toLocaleString('tr-TR') %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+</div>
+
+<!-- Stok işlem modalı -->
+<div id="stockModal" class="modal-overlay" style="display:none;">
+  <div class="modal">
+    <h2 id="modalTitle">Stok İşlemi</h2>
+    <form id="stockForm">
+      <input type="hidden" name="productId" value="<%= product.id %>">
+      <input type="hidden" name="mode">
+      <div class="form-group">
+        <label for="stockQty">Miktar</label>
+        <input type="number" id="stockQty" name="quantity" min="1" required placeholder="1">
+      </div>
+      <div class="form-group">
+        <label for="stockNote">Not (opsiyonel)</label>
+        <input type="text" id="stockNote" name="note" placeholder="Örn: Tedarikçi sevkiyatı">
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary" id="stockSubmit">Onayla</button>
+        <button type="button" class="btn btn-ghost" id="modalClose">Kapat</button>
+      </div>
+    </form>
+    <div id="stockError" class="alert alert-danger" style="display:none;"></div>
+  </div>
+</div>
+
+<script src="/js/products.js"></script>

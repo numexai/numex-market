@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Süper Racing - Araba Yarışı & Garaj Mağazası</title>
+
+  <!-- External & Embedded Styles (Bulletproof across all PCs) -->
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Süper Racing - Self-Contained Bulletproof Stylesheet */
+    :root {
+      --racing-red: #ef4444;
+      --racing-gold: #f59e0b;
+      --racing-blue: #0284c7;
+      --racing-green: #10b981;
+      --bg-gradient: linear-gradient(135deg, #090d16 0%, #1e1b4b 50%, #0284c7 100%);
+      --panel-bg: rgba(15, 23, 42, 0.9);
+      --glass-border: rgba(255, 255, 255, 0.15);
+      --neon-cyan: #38bdf8;
+      --font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+
+    body {
+      font-family: var(--font-family);
+      background: var(--bg-gradient);
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .app-container {
+      width: 820px;
+      max-width: 100vw;
+      height: 690px;
+      max-height: 100vh;
+      background: rgba(15, 23, 42, 0.95);
+      border: 2px solid var(--glass-border);
+      border-radius: 12px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 30px rgba(0, 162, 237, 0.2);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .app-header {
+      height: 42px;
+      background: linear-gradient(90deg, #dc2626 0%, #0284c7 50%, #090d16 100%);
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .app-branding { display: flex; align-items: center; gap: 8px; }
+    .status-dot { width: 10px; height: 10px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 8px #22c55e; }
+    .app-title { font-weight: 800; font-size: 15px; letter-spacing: 0.5px; }
+    .app-title small { font-weight: 400; opacity: 0.8; font-size: 11px; margin-left: 4px; }
+    .app-header-actions { display: flex; gap: 6px; }
+
+    .header-btn {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .header-btn:hover { background: rgba(255, 255, 255, 0.3); transform: translateY(-1px); }
+
+    .game-workspace {
+      flex: 1;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #000;
+    }
+
+    .canvas-wrapper { position: relative; width: 800px; height: 600px; }
+    canvas#gameCanvas { width: 100%; height: 100%; display: block; background: #1e293b; }
+
+    .hud-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      padding: 10px 14px;
+      z-index: 20;
+    }
+
+    .hud-top { display: flex; gap: 8px; align-items: center; }
+
+    .hud-box {
+      background: rgba(15, 23, 42, 0.9);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--glass-border);
+      padding: 6px 10px;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .progress-box { flex: 1.2; }
+    .nitro-box-top { width: 140px; }
+
+    .hud-label { font-size: 9px; font-weight: 700; color: var(--neon-cyan); letter-spacing: 0.5px; }
+    .hud-value { font-size: 14px; font-weight: 800; color: #ffffff; }
+
+    .hud-label-group { display: flex; justify-content: space-between; font-size: 10px; font-weight: 700; margin-bottom: 3px; }
+
+    .progress-bar-bg { width: 100%; height: 6px; background: rgba(255, 255, 255, 0.15); border-radius: 3px; overflow: hidden; }
+    .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #38bdf8, #22c55e); transition: width 0.2s ease; }
+    .nitro-bar-bg { height: 6px; background: rgba(255, 255, 255, 0.15); border-radius: 3px; overflow: hidden; margin-top: 3px; }
+    .nitro-bar-fill { height: 100%; background: linear-gradient(90deg, #f59e0b, #ef4444, #ec4899); transition: width 0.1s linear; }
+
+    .speedometer-box { border: 2px solid var(--neon-cyan); padding: 4px 12px; display: flex; align-items: baseline; gap: 2px; box-shadow: 0 0 10px rgba(56, 189, 248, 0.4); }
+    .speed-number { font-size: 20px; font-weight: 900; color: #ffffff; font-family: monospace; }
+    .speed-unit { font-size: 9px; font-weight: 700; color: var(--neon-cyan); }
+
+    .controls-hint-bar {
+      align-self: center;
+      margin-top: 6px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 4px 16px;
+      display: flex;
+      gap: 12px;
+      font-size: 11px;
+      font-weight: bold;
+      color: var(--neon-cyan);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+
+    .near-miss-banner {
+      align-self: center;
+      margin-top: 40px;
+      background: linear-gradient(90deg, #ef4444, #f59e0b);
+      color: #fff;
+      font-weight: 900;
+      font-size: 20px;
+      padding: 8px 24px;
+      border-radius: 30px;
+      box-shadow: 0 0 20px rgba(239, 68, 68, 0.8);
+      animation: pulseZoom 0.3s ease infinite alternate;
+    }
+
+    @keyframes pulseZoom { from { transform: scale(1); } to { transform: scale(1.08); } }
+
+    .touch-controls {
+      position: absolute;
+      bottom: 12px; left: 12px; right: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      pointer-events: auto;
+      z-index: 30;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(8px);
+      padding: 8px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+    }
+
+    .touch-btn {
+      background: rgba(30, 41, 59, 0.9);
+      border: 2px solid var(--neon-cyan);
+      color: #fff;
+      font-size: 14px;
+      font-weight: bold;
+      padding: 10px 18px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .touch-btn:active { background: var(--neon-cyan); color: #000; }
+    .touch-center { display: flex; gap: 10px; }
+    .brake-btn { border-color: #ef4444; }
+    .nitro-btn { border-color: #f59e0b; }
+
+    .modal-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(2, 6, 23, 0.88);
+      backdrop-filter: blur(10px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 200;
+    }
+
+    .game-card {
+      background: linear-gradient(145deg, rgba(30, 41, 59, 0.96), rgba(15, 23, 42, 0.98));
+      border: 2px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 22px;
+      width: 560px;
+      max-width: 94%;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.8), 0 0 25px rgba(56, 189, 248, 0.25);
+      position: relative;
+    }
+
+    .game-cover-banner {
+      background: linear-gradient(135deg, #b91c1c 0%, #1e1b4b 60%, #0284c7 100%);
+      border-radius: 12px;
+      padding: 18px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 14px;
+      box-shadow: 0 8px 25px rgba(185, 28, 28, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .cover-racing-stripes {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: repeating-linear-gradient(45deg, transparent, transparent 15px, rgba(255,255,255,0.05) 15px, rgba(255,255,255,0.05) 30px);
+    }
+
+    .cover-badge {
+      display: inline-block;
+      background: #f59e0b;
+      color: #000;
+      font-weight: 900;
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .cover-title {
+      font-size: 30px;
+      font-weight: 900;
+      color: #ffffff;
+      letter-spacing: 2px;
+      text-shadow: 0 0 15px rgba(255, 255, 255, 0.6), 2px 2px 0 #000;
+    }
+
+    .cover-subtitle { color: #cbd5e1; font-size: 12px; font-weight: 600; }
+
+    .user-stats-strip {
+      display: flex;
+      justify-content: space-around;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--glass-border);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-bottom: 14px;
+    }
+
+    .menu-actions { display: flex; flex-direction: column; gap: 10px; }
+
+    .btn {
+      width: 100%;
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg, #dc2626, #2563eb);
+      color: #ffffff;
+      box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
+    }
+
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(220, 38, 38, 0.6); }
+
+    .btn-lg { padding: 14px 20px; font-size: 16px; }
+
+    .btn-secondary {
+      background: rgba(51, 65, 85, 0.8);
+      color: #e2e8f0;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-secondary:hover { background: rgba(71, 85, 105, 1); color: #ffffff; }
+
+    .btn-ghost {
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--neon-cyan);
+      border: 1px solid var(--neon-cyan);
+    }
+
+    .btn-ghost:hover { background: var(--neon-cyan); color: #000; }
+
+    .card-title-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--glass-border);
+      padding-bottom: 8px;
+    }
+
+    .close-btn { background: transparent; border: none; color: #94a3b8; font-size: 24px; cursor: pointer; }
+    .close-btn:hover { color: #fff; }
+
+    .levels-grid { display: flex; flex-direction: column; gap: 10px; }
+
+    .level-item {
+      background: rgba(30, 41, 59, 0.9);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .level-item:hover:not(.locked) { background: rgba(51, 65, 85, 0.95); border-color: var(--neon-cyan); transform: translateX(4px); }
+    .level-item.locked { opacity: 0.5; cursor: not-allowed; }
+    .level-info h5 { font-size: 15px; color: #fff; }
+    .level-info p { font-size: 12px; color: #94a3b8; }
+    .level-stars { font-size: 15px; }
+
+    .install-steps {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      background: rgba(15, 23, 42, 0.8);
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid var(--glass-border);
+      font-size: 12px;
+    }
+
+    .install-steps code { background: rgba(56, 189, 248, 0.2); color: var(--neon-cyan); padding: 2px 6px; border-radius: 4px; font-family: monospace; }
+
+    .key-guide { display: flex; flex-direction: column; gap: 5px; font-size: 12px; }
+    .key-item kbd { background: #334155; color: #fff; padding: 2px 7px; border-radius: 4px; border: 1px solid #64748b; font-weight: bold; }
+
+    .garage-content { display: flex; gap: 14px; margin-bottom: 14px; }
+
+    .car-preview-stage {
+      flex: 1;
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 12px;
+      padding: 10px;
+      text-align: center;
+      border: 1px solid var(--glass-border);
+    }
+
+    #garageCarCanvas { width: 100%; height: 100px; }
+
+    .car-specs { flex: 1.2; display: flex; flex-direction: column; gap: 6px; }
+
+    .shop-item {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+      padding: 6px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .shop-info { display: flex; flex-direction: column; font-size: 11px; }
+    .shop-info span { font-weight: bold; color: #fff; }
+    .shop-info small { color: var(--neon-cyan); }
+
+    .shop-buy-btn {
+      background: linear-gradient(90deg, #10b981, #059669);
+      color: #fff;
+      border: none;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .shop-buy-btn:hover { transform: scale(1.04); }
+
+    .spec-row { display: flex; flex-direction: column; gap: 2px; font-size: 11px; color: #cbd5e1; }
+    .spec-bar { height: 6px; background: rgba(255, 255, 255, 0.1); border-radius: 3px; overflow: hidden; }
+    .spec-fill { height: 100%; background: linear-gradient(90deg, #38bdf8, #f59e0b); }
+
+    .car-selector-strip { display: flex; gap: 8px; margin-bottom: 14px; }
+    .car-thumb { flex: 1; background: rgba(30, 41, 59, 0.8); border: 2px solid transparent; border-radius: 8px; padding: 6px; text-align: center; cursor: pointer; font-size: 11px; }
+    .car-thumb.active { border-color: var(--neon-cyan); background: rgba(56, 189, 248, 0.15); }
+
+    .garage-footer { display: flex; justify-content: space-between; align-items: center; }
+
+    .popup-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .popup-header.error-header h3 { color: #ef4444; }
+    .popup-header.success-header h3 { color: #10b981; }
+
+    .stat-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed rgba(255,255,255,0.1); font-size: 13px; }
+    .stat-item .val { font-weight: bold; color: var(--neon-cyan); }
+    .stars-earned { font-size: 30px; text-align: center; margin: 8px 0; }
+
+    .hidden { display: none !important; }
+
+    .animate-pop { animation: popIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+
+    @keyframes popIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+
+    .nudge-shake { animation: nudge 0.4s ease-in-out; }
+
+    @keyframes nudge {
+      0% { transform: translate(0, 0); }
+      20% { transform: translate(-10px, 8px); }
+      40% { transform: translate(10px, -8px); }
+      60% { transform: translate(-8px, 6px); }
+      80% { transform: translate(8px, -4px); }
+      100% { transform: translate(0, 0); }
+    }
+
+    .app-footer {
+      height: 28px;
+      background: #090d16;
+      border-top: 1px solid var(--glass-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Window Header -->
+    <header class="app-header">
+      <div class="app-branding">
+        <div class="status-dot online"></div>
+        <span class="app-title">🏎️ SÜPER RACING <small>v2.0 Turbo Edition</small></span>
+      </div>
+      <div class="app-header-actions">
+        <button id="btnNudge" class="header-btn" title="Nitro Titreşim Gönder!">⚡ Titreşim</button>
+        <button id="btnSound" class="header-btn" title="Ses Aç/Kapat">🔊 Ses</button>
+        <button id="btnFullscreen" class="header-btn" title="Tam Ekran Yap">⛶ Tam Ekran</button>
+      </div>
+    </header>
+
+    <!-- Main Game Workspace -->
+    <main class="game-workspace">
+      <div class="canvas-wrapper" id="canvasWrapper">
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+
+        <!-- IN-GAME HUD OVERLAY -->
+        <div id="hudOverlay" class="hud-overlay hidden">
+          <div class="hud-top">
+            <div class="hud-box">
+              <span class="hud-label">BÖLÜM</span>
+              <span id="hudLevelName" class="hud-value">1: Sahil Yolu</span>
+            </div>
+
+            <div class="hud-box progress-box">
+              <div class="hud-label-group">
+                <span>HEDEF MESAFE</span>
+                <span id="hudProgressText">0 / 800m</span>
+              </div>
+              <div class="progress-bar-bg">
+                <div id="hudProgressBar" class="progress-bar-fill" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <div class="hud-box nitro-box-top">
+              <span class="hud-label">NİTRO (SPACE)</span>
+              <div class="nitro-bar-bg">
+                <div id="hudNitroBar" class="nitro-bar-fill" style="width: 100%;"></div>
+              </div>
+            </div>
+
+            <div class="hud-box">
+              <span class="hud-label">SKOR & ALTIN</span>
+              <span class="hud-value"><span id="hudScore">0</span> | <span id="hudCoins">🪙 0</span></span>
+            </div>
+
+            <div class="hud-box speedometer-box">
+              <span id="hudSpeed" class="speed-number">0</span>
+              <span class="speed-unit">KM/H</span>
+            </div>
+          </div>
+
+          <div class="controls-hint-bar">
+            <span>◄ ► / A D: Şerit</span>
+            <span>W: Gaz</span>
+            <span>S: Fren</span>
+            <span>SPACE: Nitro⚡</span>
+          </div>
+
+          <!-- Near Miss Banner -->
+          <div id="hudNearMiss" class="near-miss-banner hidden">⚡ YAKIN GEÇİŞ! +150</div>
+        </div>
+
+        <!-- DOCKED BOTTOM TOUCH CONTROLS -->
+        <div id="touchControls" class="touch-controls hidden">
+          <button id="btnTouchLeft" class="touch-btn">◄ SOL</button>
+          <div class="touch-center">
+            <button id="btnTouchBrake" class="touch-btn brake-btn">FREN</button>
+            <button id="btnTouchNitro" class="touch-btn nitro-btn">NİTRO ⚡</button>
+          </div>
+          <button id="btnTouchRight" class="touch-btn">SAĞ ►</button>
+        </div>
+
+        <!-- MODAL OVERLAYS -->
+
+        <!-- 1. MAIN MENU MODAL -->
+        <div id="menuModal" class="modal-overlay">
+          <div class="game-card menu-card animate-pop">
+            <div class="game-cover-banner">
+              <div class="cover-racing-stripes"></div>
+              <div class="cover-badge">🏁 TURBO</div>
+              <h1 class="cover-title">SÜPER RACING</h1>
+              <p class="cover-subtitle">Aksiyon Dolu Otoban Trafik Yarışı</p>
+            </div>
+
+            <div class="user-stats-strip">
+              <span>Toplam Yıldız: <strong id="totalStarsText">⭐ 0/9</strong></span>
+              <span>Toplam Altın: <strong id="totalCoinsText">🪙 0</strong></span>
+            </div>
+
+            <div class="menu-actions">
+              <button id="btnQuickPlay" class="btn btn-primary btn-lg">▶ HEMEN OYNA (Bölüm 1)</button>
+              <button id="btnSelectLevel" class="btn btn-secondary">🗺️ BÖLÜM SEÇİMİ (3 Bölüm)</button>
+              <button id="btnGarage" class="btn btn-secondary">🛒 GARAJ & YÜKSELTME MAĞAZASI</button>
+              <button id="btnHowToPlay" class="btn btn-ghost">💡 YÜKLEME VE KULLANIM REHBERİ</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. LEVEL SELECT MODAL -->
+        <div id="levelModal" class="modal-overlay hidden">
+          <div class="game-card level-card animate-pop">
+            <div class="card-title-bar">
+              <h3>🗺️ Bölüm Seçimi</h3>
+              <button id="btnCloseLevel" class="close-btn">&times;</button>
+            </div>
+            <div class="levels-grid" id="levelsGrid"></div>
+          </div>
+        </div>
+
+        <!-- 3. GARAGE & UPGRADE SHOP MODAL -->
+        <div id="garageModal" class="modal-overlay hidden">
+          <div class="game-card garage-card animate-pop">
+            <div class="card-title-bar">
+              <h3>🛒 Garaj & Yükseltme Mağazası</h3>
+              <button id="btnCloseGarage" class="close-btn">&times;</button>
+            </div>
+            <div class="garage-content">
+              <div class="car-preview-stage">
+                <canvas id="garageCarCanvas" width="240" height="130"></canvas>
+                <h4 id="garageCarName">Süper Kırmızı Spor</h4>
+                <p id="garageCarDesc">Standart başlangıç aracı.</p>
+              </div>
+
+              <div class="car-specs">
+                <div class="shop-item">
+                  <div class="shop-info">
+                    <span>🚀 Motor Gücü (Maks Hız)</span>
+                    <small id="lblEngineLvl">Lvl 1/5</small>
+                  </div>
+                  <button id="btnUpgradeEngine" class="shop-buy-btn">Yükselt (🪙 60)</button>
+                </div>
+
+                <div class="shop-item">
+                  <div class="shop-info">
+                    <span>⚡ Nitro Kapasitesi & Yenilenme</span>
+                    <small id="lblNitroLvl">Lvl 1/5</small>
+                  </div>
+                  <button id="btnUpgradeNitro" class="shop-buy-btn">Yükselt (🪙 50)</button>
+                </div>
+
+                <div class="shop-item">
+                  <div class="shop-info">
+                    <span>🛡️ Darbe Kalkanı (Kaza Koruma)</span>
+                    <small id="lblArmorLvl">Devre Dışı</small>
+                  </div>
+                  <button id="btnUpgradeArmor" class="shop-buy-btn">Kalkan Al (🪙 100)</button>
+                </div>
+
+                <div class="spec-row" style="margin-top: 6px;">
+                  <span>Maks Hız:</span>
+                  <div class="spec-bar"><div id="specSpeed" class="spec-fill" style="width: 50%;"></div></div>
+                </div>
+                <div class="spec-row">
+                  <span>İvmelenme:</span>
+                  <div class="spec-bar"><div id="specAccel" class="spec-fill" style="width: 50%;"></div></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="car-selector-strip" id="carSelectorStrip"></div>
+
+            <div class="garage-footer">
+              <span id="garageCoinDisplay">Altınınız: 🪙 0</span>
+              <button id="btnSelectOrBuyCar" class="btn btn-primary">SEÇİLDİ</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. GAME OVER MODAL -->
+        <div id="gameOverModal" class="modal-overlay hidden">
+          <div class="game-card gameover-card animate-pop">
+            <div class="popup-header error-header">
+              <span class="icon">💥</span>
+              <h3>KAZA YAPILDID!</h3>
+            </div>
+            <div class="popup-body">
+              <p>Trafikteki diğer araca çarptınız!</p>
+              <div class="score-summary">
+                <div class="stat-item">
+                  <span class="label">Katedilen Mesafe:</span>
+                  <span id="goDistance" class="val">0m</span>
+                </div>
+                <div class="stat-item">
+                  <span class="label">Kazanılan Altın:</span>
+                  <span id="goCoins" class="val">🪙 0</span>
+                </div>
+                <div class="stat-item">
+                  <span class="label">Toplam Skor:</span>
+                  <span id="goScore" class="val">0</span>
+                </div>
+              </div>
+            </div>
+            <div class="popup-actions">
+              <button id="btnRetryLevel" class="btn btn-primary">🔄 TEKRAR DENE</button>
+              <button id="btnBackToMenuFromGO" class="btn btn-secondary">🏠 ANA MENÜ</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. LEVEL COMPLETE MODAL -->
+        <div id="levelWinModal" class="modal-overlay hidden">
+          <div class="game-card win-card animate-pop">
+            <div class="popup-header success-header">
+              <span class="icon">🎉</span>
+              <h3>BÖLÜM TAMAMLANDI!</h3>
+            </div>
+            <div class="popup-body">
+              <div class="stars-earned" id="winStarsDisplay">⭐ ⭐ ⭐</div>
+              <p>Tebrikler! Hedef mesafeye başarıyla ulaştınız.</p>
+              <div class="score-summary">
+                <div class="stat-item">
+                  <span class="label">Bölüm Ödülü:</span>
+                  <span id="winRewardCoins" class="val">🪙 +150</span>
+                </div>
+                <div class="stat-item">
+                  <span class="label">Toplam Skor:</span>
+                  <span id="winScore" class="val">0</span>
+                </div>
+              </div>
+            </div>
+            <div class="popup-actions">
+              <button id="btnNextLevel" class="btn btn-primary">▶ SONRAKİ BÖLÜM</button>
+              <button id="btnBackToMenuFromWin" class="btn btn-secondary">🏠 ANA MENÜ</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. HOW TO INSTALL & PLAY MODAL -->
+        <div id="howToModal" class="modal-overlay hidden">
+          <div class="game-card howto-card animate-pop">
+            <div class="card-title-bar">
+              <h3>💡 Eklenti Kurulum ve Kullanım Rehberi</h3>
+              <button id="btnCloseHowTo" class="close-btn">&times;</button>
+            </div>
+            <div class="howto-content">
+              <h4 style="color: var(--neon-cyan); margin-bottom: 8px;">🚀 Tarayıcıya Eklenti Olarak Yükleme:</h4>
+              <ol class="install-steps">
+                <li>1. Tarayıcı adres çubuğunuza <code>chrome://extensions</code> yazıp girin.</li>
+                <li>2. Sağ üst köşedeki <strong>Geliştirici modu</strong> butonunu aktifleştirin.</li>
+                <li>3. <strong>Paketlenmemiş öğe yükle</strong> butonuna tıklayın.</li>
+                <li>4. Masaüstünüzdeki <code>yarış</code> klasörünü seçin.</li>
+              </ol>
+
+              <h4 style="color: var(--neon-cyan); margin-top: 14px; margin-bottom: 8px;">🎮 Oyun Kontrolleri:</h4>
+              <div class="key-guide">
+                <div class="key-item"><kbd>◄</kbd> <kbd>►</kbd> / <kbd>A</kbd> <kbd>D</kbd> <span>Şerit Değiştir</span></div>
+                <div class="key-item"><kbd>▲</kbd> / <kbd>W</kbd> <span>Hızlan</span></div>
+                <div class="key-item"><kbd>▼</kbd> / <kbd>S</kbd> <span>Fren Yap</span></div>
+                <div class="key-item"><kbd>SPACE</kbd> <span>NİTRO Alevi!⚡</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+    <footer class="app-footer">
+      <span>Süper Racing • v2.0 Turbo Edition • Yükseltme Mağazalı Otoban Yarışı</span>
+    </footer>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>

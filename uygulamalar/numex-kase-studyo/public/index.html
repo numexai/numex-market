@@ -1,0 +1,1913 @@
+<!DOCTYPE html>
+<html lang="tr" data-tema="koyu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Numex Kaşe Stüdyo — Lazer Markalama</title>
+<style>
+/* ============================================================
+   NUMEX KAŞE STÜDYO
+   Profesyonel lazer markalama arayüzü.
+   Tema: koyu (dar) + beyaz (açık) — tek tuşla geçiş.
+   Tabla: 400 × 400 mm  (40 × 40 cm)
+   ============================================================ */
+
+/* ---------- KOYU TEMA (varsayılan) ---------- */
+html[data-tema="koyu"]{
+  --bg:#12151a;
+  --bg2:#0d1014;
+  --panel:#191d24;
+  --panel2:#212631;
+  --panel3:#2a303c;
+  --line:#2e3542;
+  --line2:#3a4252;
+  --txt:#e8ebf0;
+  --txt2:#a8b0bd;
+  --dim:#79828f;
+  --accent:#ff7a18;
+  --accent-d:#e06400;
+  --accent-soft:rgba(255,122,24,.14);
+  --ok:#34d399;
+  --ok-soft:rgba(52,211,153,.14);
+  --red:#ff5252;
+  --red-soft:rgba(255,82,82,.15);
+  --blue:#4d9dff;
+  --shadow:0 8px 28px rgba(0,0,0,.5);
+  --grid:#242a34;
+  --grid2:#1c222c;
+  --mat:#171b22;
+  --mat-edge:#39424f;
+}
+
+/* ---------- BEYAZ TEMA ---------- */
+html[data-tema="beyaz"]{
+  --bg:#eef1f5;
+  --bg2:#e4e8ee;
+  --panel:#ffffff;
+  --panel2:#f6f8fa;
+  --panel3:#eceff4;
+  --line:#d8dee6;
+  --line2:#c3ccd8;
+  --txt:#1a1f27;
+  --txt2:#4d5866;
+  --dim:#7b8695;
+  --accent:#e86a00;
+  --accent-d:#c95a00;
+  --accent-soft:rgba(232,106,0,.12);
+  --ok:#0f9d63;
+  --ok-soft:rgba(15,157,99,.12);
+  --red:#dc2626;
+  --red-soft:rgba(220,38,38,.11);
+  --blue:#2563eb;
+  --shadow:0 6px 22px rgba(20,30,45,.13);
+  --grid:#dee4ec;
+  --grid2:#e9edf2;
+  --mat:#fbfcfd;
+  --mat-edge:#b8c2d0;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+
+body{
+  background:var(--bg);
+  color:var(--txt);
+  font-family:"Segoe UI",Roboto,-apple-system,system-ui,sans-serif;
+  font-size:13px;
+  line-height:1.45;
+  overflow:hidden;
+  -webkit-font-smoothing:antialiased;
+  transition:background .22s ease,color .22s ease;
+}
+
+/* ---------- ÜST BAR ---------- */
+header{
+  height:52px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:0 14px;
+  background:var(--panel);
+  border-bottom:1px solid var(--line);
+  flex-shrink:0;
+  user-select:none;
+}
+.brand{display:flex;align-items:center;gap:9px;padding-right:14px;border-right:1px solid var(--line)}
+.brand-mark{
+  width:30px;height:30px;border-radius:8px;
+  background:linear-gradient(135deg,var(--accent),var(--accent-d));
+  display:grid;place-items:center;
+  box-shadow:0 3px 10px var(--accent-soft);
+}
+.brand-mark svg{width:17px;height:17px}
+.brand-txt strong{display:block;font-size:13.5px;font-weight:700;letter-spacing:.2px}
+.brand-txt span{display:block;font-size:10px;color:var(--dim);letter-spacing:.4px;text-transform:uppercase}
+header .grow{flex:1}
+
+/* Bayatlayan makine durumu — sağ üst */
+.durum-pil{
+  display:flex;align-items:center;gap:7px;
+  padding:5px 11px;border-radius:20px;
+  background:var(--panel2);border:1px solid var(--line);
+  font-size:11.5px;color:var(--txt2);font-weight:600;
+}
+.durum-pil i{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--dim);display:block;flex-shrink:0;
+}
+.durum-pil.hazir i{background:var(--ok);box-shadow:0 0 8px var(--ok)}
+.durum-pil.calisiyor i{background:var(--accent);animation:nabiz .9s infinite}
+@keyframes nabiz{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.45;transform:scale(.8)}}
+
+/* ---------- BUTONLAR ---------- */
+button{
+  font-family:inherit;font-size:12.5px;font-weight:600;
+  color:var(--txt);background:var(--panel2);
+  border:1px solid var(--line);border-radius:7px;
+  padding:7px 13px;cursor:pointer;
+  transition:background .13s,border-color .13s,transform .07s,color .13s;
+  white-space:nowrap;
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+}
+button:hover{background:var(--panel3);border-color:var(--line2)}
+button:active{transform:translateY(1px)}
+button:disabled{opacity:.42;cursor:not-allowed;transform:none}
+button svg{width:14px;height:14px;flex-shrink:0}
+
+button.birincil{
+  background:var(--accent);border-color:var(--accent);color:#fff;
+  box-shadow:0 2px 10px var(--accent-soft);
+}
+button.birincil:hover{background:var(--accent-d);border-color:var(--accent-d)}
+button.hayalet{background:transparent;border-color:var(--line)}
+button.hayalet:hover{background:var(--panel2)}
+button.ikon{padding:7px;width:34px}
+button.tehlike{color:var(--red)}
+button.tehlike:hover{background:var(--red-soft);border-color:var(--red)}
+button.buyuk{padding:11px 18px;font-size:13.5px;border-radius:9px}
+button.mini{padding:4px 9px;font-size:11.5px;border-radius:6px}
+
+/* ---------- LAZER BAĞLANTI GÖSTERGESİ ----------
+   Kapalı: gri nokta · Bağlı: yeşil yanıp sönen nokta.
+   Kullanıcı bir bakışta "makinaya bağlı mıyım?" sorusunu yanıtlar. */
+.lazer-nokta{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--line);display:inline-block;margin-left:2px;
+  transition:background .25s;
+}
+.lazer-nokta.bagli{
+  background:#2ecc71;
+  box-shadow:0 0 0 0 rgba(46,204,113,.7);
+  animation:lazerNabiz 1.8s infinite;
+}
+@keyframes lazerNabiz{
+  0%{box-shadow:0 0 0 0 rgba(46,204,113,.7)}
+  70%{box-shadow:0 0 0 7px rgba(46,204,113,0)}
+  100%{box-shadow:0 0 0 0 rgba(46,204,113,0)}
+}
+#btnLazer.bagli{border-color:#2ecc71;color:#2ecc71}
+
+/* ---------- ANA YERLEŞİM ---------- */
+.app{display:flex;height:calc(100% - 52px);overflow:hidden}
+
+.yancol{
+  background:var(--panel);
+  display:flex;flex-direction:column;
+  overflow-y:auto;overflow-x:hidden;
+  flex-shrink:0;
+}
+.yancol.sol{width:264px;border-right:1px solid var(--line)}
+.yancol.sag{width:288px;border-left:1px solid var(--line)}
+
+.yancol::-webkit-scrollbar{width:9px}
+.yancol::-webkit-scrollbar-track{background:transparent}
+.yancol::-webkit-scrollbar-thumb{background:var(--line2);border-radius:5px;border:2px solid var(--panel)}
+.yancol::-webkit-scrollbar-thumb:hover{background:var(--dim)}
+
+/* ---------- BÖLÜM ---------- */
+.bolum{border-bottom:1px solid var(--line);padding:13px 14px}
+.bolum:last-child{border-bottom:none}
+.bolum-baslik{
+  display:flex;align-items:center;gap:7px;
+  font-size:10.5px;font-weight:700;letter-spacing:.9px;
+  text-transform:uppercase;color:var(--dim);
+  margin-bottom:11px;
+}
+.bolum-baslik::after{content:"";flex:1;height:1px;background:var(--line)}
+
+/* ---------- FORM ELEMANLARI ---------- */
+label{display:block;font-size:11px;color:var(--txt2);margin-bottom:4px;font-weight:600}
+input[type=text],input[type=number],select,textarea{
+  width:100%;font-family:inherit;font-size:12.5px;
+  color:var(--txt);background:var(--panel2);
+  border:1px solid var(--line);border-radius:7px;
+  padding:7px 9px;outline:none;
+  transition:border-color .13s,box-shadow .13s;
+}
+input:focus,select:focus,textarea:focus{
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px var(--accent-soft);
+}
+input[type=number]{-moz-appearance:textfield}
+textarea{resize:vertical;min-height:62px;line-height:1.5}
+
+select{
+  appearance:none;
+  background-image:url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2379838f' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 8px center;background-size:13px;
+  padding-right:28px;cursor:pointer;
+}
+
+/* Kaydırıcı */
+input[type=range]{
+  -webkit-appearance:none;appearance:none;
+  width:100%;height:5px;border-radius:3px;
+  background:var(--panel3);outline:none;cursor:pointer;margin:7px 0;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;
+  width:16px;height:16px;border-radius:50%;
+  background:var(--accent);border:2px solid var(--panel);
+  cursor:pointer;box-shadow:0 1px 6px rgba(0,0,0,.35);
+}
+input[type=range]::-moz-range-thumb{
+  width:14px;height:14px;border-radius:50%;
+  background:var(--accent);border:2px solid var(--panel);cursor:pointer;
+}
+
+/* Satır / ızgara */
+.satir{display:grid;gap:9px;margin-bottom:9px}
+.satir.iki{grid-template-columns:1fr 1fr}
+.satir.uc{grid-template-columns:1fr 1fr 1fr}
+.satir:last-child{margin-bottom:0}
+
+/* Onay kutusu */
+.onay{display:flex;align-items:center;gap:8px;padding:5px 0;cursor:pointer;font-size:12px}
+/* Konum göstergesi — okunur, girilmez (LightBurn mantığı) */
+.konum-gosterge{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:6px;padding:7px 9px;margin:6px 0;font-family:ui-monospace,Consolas,monospace;font-size:11px}
+.kg-satir{display:flex;justify-content:space-between;align-items:center;line-height:1.8}
+.kg-etiket{color:var(--dim);font-size:10px;text-transform:uppercase;letter-spacing:.4px}
+.kg-deger{color:var(--accent);font-weight:600}
+.onay input{display:none}
+.onay .kutu{
+  width:16px;height:16px;border-radius:5px;flex-shrink:0;
+  border:1.5px solid var(--line2);background:var(--panel2);
+  display:grid;place-items:center;transition:all .14s;
+}
+.onay .kutu svg{width:10px;height:10px;stroke:#fff;stroke-width:3.2;fill:none;opacity:0;transition:opacity .14s}
+.onay input:checked + .kutu{background:var(--accent);border-color:var(--accent)}
+.onay input:checked + .kutu svg{opacity:1}
+.onay span{color:var(--txt2);user-select:none}
+.onay:hover .kutu{border-color:var(--accent)}
+
+/* ---------- ORTA: TABLA ---------- */
+.orta{
+  flex:1;display:flex;flex-direction:column;
+  background:var(--bg2);overflow:hidden;min-width:0;
+}
+
+.arac-seridi{
+  height:42px;display:flex;align-items:center;gap:6px;
+  padding:0 12px;background:var(--panel);
+  border-bottom:1px solid var(--line);flex-shrink:0;
+}
+.arac-seridi .ayrac{width:1px;height:20px;background:var(--line);margin:0 4px}
+.arac-seridi .grow{flex:1}
+.zoom-etiket{
+  font-size:11px;color:var(--dim);font-weight:600;
+  min-width:44px;text-align:center;
+}
+
+/* Tabla sarmalayıcı */
+.tabla-alan{
+  flex:1;position:relative;overflow:hidden;
+  display:grid;place-items:center;padding:20px;
+}
+.tabla-kap{
+  position:relative;
+  box-shadow:var(--shadow);
+  border-radius:4px;
+  background:var(--mat);
+  border:1px solid var(--mat-edge);
+  transform-origin:center center;
+  transition:transform .12s ease-out;
+}
+#tabla{display:block;border-radius:3px;cursor:crosshair}
+
+/* Tabla üstü cetvel köşesi */
+.tabla-rozet{
+  position:absolute;top:-1px;left:-1px;
+  display:flex;gap:1px;z-index:5;
+  pointer-events:none;
+}
+.tabla-rozet b{
+  background:var(--panel2);border:1px solid var(--line);
+  color:var(--txt2);font-size:9.5px;font-weight:700;
+  padding:2px 6px;border-radius:0 0 5px 0;letter-spacing:.3px;
+}
+
+/* Alt durum çubuğu */
+.durum-cubugu{
+  height:30px;display:flex;align-items:center;gap:14px;
+  padding:0 14px;background:var(--panel);
+  border-top:1px solid var(--line);flex-shrink:0;
+  font-size:11px;color:var(--dim);font-weight:600;
+}
+.durum-cubugu .nokta{color:var(--accent)}
+.durum-cubugu .grow{flex:1}
+.durum-cubugu kbd{
+  font-family:inherit;background:var(--panel2);border:1px solid var(--line);
+  border-radius:4px;padding:1px 5px;font-size:10px;color:var(--txt2);
+}
+
+/* ============================================================
+   İŞ ONAY PANELİ (modal)
+   confirm() yerine sayfa içi panel: async güvenli, üç net seçenek.
+   ============================================================ */
+.is-modal{
+  position:fixed;inset:0;z-index:200;
+  background:rgba(8,10,14,.62);
+  backdrop-filter:blur(3px);
+  display:flex;align-items:center;justify-content:center;
+  padding:20px;
+}
+.is-modal[hidden]{display:none}
+
+.is-modal-kutu{
+  width:min(520px,96vw);max-height:88vh;overflow:auto;
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:12px;box-shadow:0 18px 60px rgba(0,0,0,.45);
+  display:flex;flex-direction:column;
+}
+
+.is-modal-baslik{
+  padding:13px 18px;border-bottom:1px solid var(--line);
+  font-size:12px;font-weight:800;letter-spacing:1.2px;
+  color:var(--accent);
+}
+
+.is-modal-govde{
+  padding:15px 18px;font-size:12px;line-height:1.75;
+  color:var(--txt2);white-space:pre-wrap;font-family:inherit;
+  flex:1;
+}
+.is-modal-govde b{color:var(--txt)}
+
+.is-modal-eylem{
+  display:flex;flex-direction:column;gap:8px;
+  padding:0 18px 16px;
+}
+.is-btn{
+  width:100%;padding:11px 14px;border-radius:8px;cursor:pointer;
+  font-family:inherit;font-size:12.5px;font-weight:700;
+  border:1px solid var(--line);background:var(--panel2);color:var(--txt);
+  transition:filter .12s,transform .06s;
+}
+.is-btn:hover:not(:disabled){filter:brightness(1.12)}
+.is-btn:active:not(:disabled){transform:translateY(1px)}
+.is-btn:disabled{opacity:.42;cursor:not-allowed}
+
+.is-gonder{
+  background:var(--accent);color:#06131f;border-color:transparent;
+  font-size:13.5px;padding:13px 14px;
+}
+.is-indir{background:var(--panel2)}
+.is-iptal{background:transparent;color:var(--dim)}
+
+.is-modal-not{
+  padding:0 18px 16px;font-size:10.5px;line-height:1.6;color:var(--dim);
+}
+
+/* Dokunma hedefi WCAG 2.5.5: butonlar >=44px */
+.is-btn{min-height:44px}
+.is-modal-eylem{padding-bottom:18px}
+
+/* Küçük ekranda modal tam genişlik ve kaydırılabilir */
+@media (max-width:560px){
+  .is-modal{padding:10px;align-items:flex-end}
+  .is-modal-kutu{
+    width:100%;max-height:92vh;border-radius:12px 12px 0 0;
+  }
+  .is-modal-govde{font-size:11.5px;line-height:1.65;padding:13px 15px}
+  .is-modal-baslik{padding:12px 15px;font-size:11px}
+  .is-modal-eylem{padding:0 15px 15px}
+  .is-modal-not{padding:0 15px 15px}
+}
+</style>
+</head>
+<body>
+
+<!-- ================= ÜST BAR ================= -->
+<header>
+  <div class="brand">
+    <div class="brand-mark">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2v6"/><path d="M9 8h6"/><rect x="7" y="11" width="10" height="9" rx="2"/>
+        <path d="M12 20v2"/><path d="M4 22h16"/>
+      </svg>
+    </div>
+    <div class="brand-txt">
+      <strong>Numex Kaşe</strong>
+      <span>Lazer Markalama Stüdyosu</span>
+    </div>
+  </div>
+
+  <div class="durum-pil" id="durumPil" title="Lazer bağlantı durumu">
+    <i></i><span id="durumYazi">Makine hazır</span>
+  </div>
+
+  <div class="grow"></div>
+
+  <button class="hayalet" id="btnTema" title="Koyu / Beyaz tema geçişi">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>
+    </svg>
+    <span id="temaEtiket">Beyaz Tema</span>
+  </button>
+
+  <button class="hayalet" id="btnTemizle">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/>
+    </svg>
+    Temizle
+  </button>
+
+  <button class="hayalet" id="btnGcode">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+      <path d="M14 2v6h6"/><path d="M12 18v-6"/><path d="M9 15l3 3 3-3"/>
+    </svg>
+    G-code
+  </button>
+
+  <!-- ACİL DURDURMA — her an erişilebilir olmalı, kesim sırasında
+       menü aramaya vakit yoktur. Ctrl-X (0x18) gönderir. -->
+  <button class="hayalet tehlike" id="btnAcilDurdur" title="Lazeri ANINDA durdur">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+      <rect x="6" y="6" width="12" height="12" rx="1.5"/>
+    </svg>
+    Durdur
+  </button>
+
+  <!-- LAZER BAĞLANTISI — gerçek makineye seri port köprüsü.
+       Yeşil yanınca USB/COM portu açık demektir; G-code doğrudan
+       makineye gider (indirilen dosya değil, canlı gönderim). -->
+  <button class="hayalet" id="btnLazer">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 12h14"/><path d="M12 5v14"/>
+      <circle cx="12" cy="12" r="9"/>
+    </svg>
+    <span id="lazerEtiket">Lazere Bağlan</span>
+    <i class="lazer-nokta" id="lazerNokta"></i>
+  </button>
+</header>
+
+<!-- ================= ANA YERLEŞİM ================= -->
+<div class="app">
+
+  <!-- ---------- SOL PANEL ---------- -->
+  <aside class="yancol sol">
+
+    <!-- ===== MAKİNE BAĞLANTISI — GERÇEK LAZER =====
+         Bu bölüm tarayıcıyı lazere bağlar. Port OTOMATİK bulunur;
+         kullanıcıdan port/COM bilgisi istenmez. Tarayıcı yalnızca
+         ilk seferde izin listesi gösterebilir, tek tıkla geçilir.
+         Bağlanmadan "Lazere Gönder" pasif kalır. -->
+    <div class="bolum" id="makineBolumu">
+      <div class="bolum-baslik">
+        Makine
+        <span id="makineDurumEtiket" style="font-size:10.5px;font-weight:600;color:var(--dim);margin-left:auto">Bağlı değil</span>
+      </div>
+
+      <div class="satir">
+        <button class="birincil" id="btnLazereGonder" disabled
+                title="Önce lazere bağlanın">
+          Lazere Gönder
+        </button>
+      </div>
+
+      <div class="satir iki">
+        <button class="hayalet mini" id="btnMakineSifirla" title="$H — eksenleri sıfırla">Sıfırla</button>
+        <button class="hayalet mini" id="btnMakineBasa" title="G0 X0 Y0 — başlangıç noktası">Başa Git</button>
+      </div>
+
+      <!-- Canlı makine günlüğü: GRBL yanıtları (ok/error/durum) -->
+      <div id="lazerLog" style="max-height:110px;overflow-y:auto;font-family:ui-monospace,monospace;
+           font-size:10.5px;line-height:1.5;background:var(--panel2);border:1px solid var(--line);
+           border-radius:6px;padding:6px 7px;margin-top:7px;color:var(--dim)">
+        <div style="color:var(--dim)">Makine günlüğü bekleniyor…</div>
+      </div>
+    </div>
+
+    <!-- İçerik türü -->
+    <div class="bolum">
+      <div class="bolum-baslik">İçerik</div>
+      <div class="satir iki">
+        <button class="birincil" id="btnMetinEkle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M4 7V4h16v3"/><path d="M9 20h6"/><path d="M12 4v16"/>
+          </svg>
+          Yazı Ekle
+        </button>
+        <button id="btnCizgiEkle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M5 19L19 5"/><circle cx="5" cy="19" r="1.6"/><circle cx="19" cy="5" r="1.6"/>
+          </svg>
+          Çizgi
+        </button>
+      </div>
+      <div class="satir iki" style="margin-top:9px">
+        <button id="btnDikdortgen">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="4" y="5" width="16" height="14" rx="1.6"/>
+          </svg>
+          Çerçeve
+        </button>
+        <button id="btnLogo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <circle cx="12" cy="12" r="8"/><path d="M12 4v4M12 16v4M4 12h4M16 12h4"/>
+          </svg>
+          Logo
+        </button>
+      </div>
+    </div>
+
+    <!-- Seçili öğe -->
+    <div class="bolum" id="bolumSecili">
+      <div class="bolum-baslik">Seçili Öğe</div>
+      <div id="bosSecim" style="font-size:11.5px;color:var(--dim);padding:8px 0;text-align:center">
+        Tablada bir öğe seç
+      </div>
+
+      <div id="secimFormu" style="display:none">
+        <div class="satir">
+          <label for="oIcerik">Metin</label>
+          <input type="text" id="oIcerik" placeholder="KASE 1">
+        </div>
+        <div class="satir iki">
+          <div><label for="oFont">Yazı tipi</label>
+            <select id="oFont">
+              <option value="'Segoe UI',sans-serif">Segoe UI</option>
+              <option value="Georgia,serif">Georgia</option>
+              <option value="'Courier New',monospace">Courier</option>
+              <option value="Impact,sans-serif">Impact</option>
+              <option value="Tahoma,sans-serif">Tahoma</option>
+            </select>
+          </div>
+          <div><label for="oBoy">Boy (mm)</label>
+            <input type="number" id="oBoy" value="10" min="2" max="80" step="0.5">
+          </div>
+        </div>
+        <!-- KONUM: LightBurn/RDWorks mantığı — tablada sürüklenir, burada
+             yalnızca okunur gösterge. Kutuya değer yazmak YOK (profesyonel
+             programda konum fareyle belirlenir, formla değil). -->
+        <div class="konum-gosterge">
+          <div class="kg-satir"><span class="kg-etiket">Konum</span>
+            <span class="kg-deger" id="kgKonum">X 0.0 · Y 0.0 mm</span>
+          </div>
+          <div class="kg-satir"><span class="kg-etiket">Döndürme</span>
+            <span class="kg-deger" id="kgAci">0°</span>
+          </div>
+        </div>
+        <div class="satir iki">
+          <div><label for="oAci">Döndürme (°)</label>
+            <input type="number" id="oAci" value="0" step="1" min="-180" max="180">
+          </div>
+          <div><label for="oGuc">Güç (%)</label>
+            <input type="number" id="oGuc" value="60" step="1" min="1" max="100">
+          </div>
+        </div>
+        <!-- Gerçek ölçü (yazılan/yakılacak alan) — girilmez, gösterilir -->
+        <div id="olcuBilgi" style="font:11px/1.6 monospace;color:var(--dim);padding:7px 2px;margin-top:2px;border-top:1px dashed var(--line)"></div>
+        <div class="onay" id="onayKalınSatir">
+          <input type="checkbox" id="oKalin" checked>
+          <label class="kutu" for="oKalin"><svg viewBox="0 0 12 12"><path d="M2 6.5L4.6 9 10 3.2"/></svg></label>
+          <span>Kalın (dolgulu)</span>
+        </div>
+        <div class="onay" id="onayAynaSatir">
+          <input type="checkbox" id="oAyna">
+          <label class="kutu" for="oAyna"><svg viewBox="0 0 12 12"><path d="M2 6.5L4.6 9 10 3.2"/></svg></label>
+          <span>Yatay ayna (kaşe için)</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- İş listesi -->
+    <div class="bolum">
+      <div class="bolum-baslik">İş Listesi</div>
+      <div id="isListesi" style="max-height:190px;overflow-y:auto"></div>
+    </div>
+
+
+  </aside>
+
+  <!-- ---------- ORTA: TABLA ---------- -->
+  <main class="orta">
+
+    <div class="arac-seridi">
+      <button class="mini hayalet" id="btnZoomEksi" title="Uzaklaştır">−</button>
+      <span class="zoom-etiket" id="zoomEtiket">%100</span>
+      <button class="mini hayalet" id="btnZoomArti" title="Yakınlaştır">+</button>
+      <button class="mini hayalet" id="btnZoomSifir" title="Sığdır">Sığdır</button>
+
+      <div class="ayrac"></div>
+
+      <div class="onay" style="margin:0">
+        <input type="checkbox" id="izgaraOn" checked>
+        <label class="kutu" for="izgaraOn"><svg viewBox="0 0 12 12"><path d="M2 6.5L4.6 9 10 3.2"/></svg></label>
+        <span>Izgara</span>
+      </div>
+      <div class="onay" style="margin:0">
+        <input type="checkbox" id="olcuOn" checked>
+        <label class="kutu" for="olcuOn"><svg viewBox="0 0 12 12"><path d="M2 6.5L4.6 9 10 3.2"/></svg></label>
+        <span>Cetvel</span>
+      </div>
+
+      <div class="grow"></div>
+
+      <span style="font-size:11px;color:var(--dim);font-weight:700">
+        Tabla <span style="color:var(--accent)">400 × 400 mm</span>
+      </span>
+    </div>
+
+    <div class="tabla-alan">
+      <div class="tabla-kap" id="tablaKap">
+        <div class="tabla-rozet"><b>40 × 40 cm</b></div>
+        <canvas id="tabla"></canvas>
+      </div>
+    </div>
+
+    <div class="durum-cubugu">
+      <span>İmleç: <span class="nokta" id="imlecPos">0, 0 mm</span></span>
+      <span>Seçili: <span class="nokta" id="durumSecili">yok</span></span>
+      <div class="grow"></div>
+      <span id="durumUyari"></span>
+      <span><kbd>Del</kbd> sil · <kbd>Ctrl</kbd>+<kbd>T</kbd> tema</span>
+    </div>
+  </main>
+
+  <!-- ============================================================
+       İŞ ONAY PANELİ (modal)
+       ------------------------------------------------------------
+       NEDEN confirm() DEĞİL?
+       Tarayıcının confirm() penceresi:
+         1) Sayfayı KİLİTLER → altındaki async işler (lazere gönderim)
+            askıda kalır, gönderim yarıda kesilir.
+         2) Şık değil, iş özetini düzgün gösteremez.
+         3) "Tamam" hangi işi yapacağını söylemez → kullanıcı yanlışlıkla
+            dosya indirir.
+       Bu panel sayfa içinde çalışır: async güvenli, üç net seçenek sunar.
+       ============================================================ -->
+  <div class="is-modal" id="isModal" hidden>
+    <div class="is-modal-kutu" role="dialog" aria-modal="true" aria-labelledby="isBaslik">
+      <div class="is-modal-baslik" id="isBaslik">İŞ ÖZETİ</div>
+
+      <div class="is-modal-govde" id="isOzet"></div>
+
+      <div class="is-modal-eylem">
+        <button class="is-btn is-gonder" id="isBtnGonder" type="button">
+          🚀 LAZERE GÖNDER
+        </button>
+        <button class="is-btn is-indir" id="isBtnIndir" type="button">
+          💾 Dosya indir (.nc)
+        </button>
+        <button class="is-btn is-iptal" id="isBtnIptal" type="button">
+          ✕ İptal
+        </button>
+      </div>
+
+      <div class="is-modal-not" id="isNot"></div>
+    </div>
+  </div>
+
+  <!-- ---------- SAĞ PANEL ---------- -->
+  <aside class="yancol sag">
+
+    <!-- ★ TEST / YAZ — ana eylem -->
+    <div class="bolum">
+      <div class="bolum-baslik">İşlem</div>
+      <div class="satir iki">
+        <button class="buyuk" id="btnTest" style="width:100%">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.4" fill="currentColor"/>
+          </svg>
+          TEST
+        </button>
+        <button class="buyuk birincil" id="btnYaz" style="width:100%">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2v6"/><path d="M9 8h6"/><rect x="7" y="11" width="10" height="9" rx="2"/><path d="M4 22h16"/>
+          </svg>
+          YAZ
+        </button>
+      </div>
+      <div style="font-size:10.5px;color:var(--dim);margin-top:8px;line-height:1.5">
+        <b style="color:var(--red)">TEST</b> → lazeri düşük güçle yakıp
+        <b>kırmızı işaret</b> bırakır, konumu gözle doğrularsın.<br>
+        <b style="color:var(--accent)">YAZ</b> → her öğeyi <b>kendi gücüyle</b> markalar.
+      </div>
+      <div class="satir iki" style="margin-top:9px">
+        <button class="mini" id="btnTestTemizle">Test sil</button>
+        <button class="mini" id="btnTestSecili">Seçiliye test</button>
+      </div>
+    </div>
+
+    <!-- ★ GÜÇ / BASINÇ -->
+    <div class="bolum">
+      <div class="bolum-baslik">Lazer Gücü (Basınç)</div>
+
+      <div class="satir">
+        <label for="gMalzeme">Malzeme</label>
+        <select id="gMalzeme">
+          <option value="kauçuk">Kauçuk kaşe — %78 · 900 mm/dk</option>
+          <option value="lastik">Lastik — %85 · 600 mm/dk</option>
+          <option value="ahşap">Ahşap — %55 · 1800 mm/dk</option>
+          <option value="pleksi">Pleksi — %65 · 1200 mm/dk</option>
+          <option value="mdf">MDF — %60 · 1500 mm/dk</option>
+          <option value="deri">Deri — %45 · 2200 mm/dk</option>
+          <option value="metal">Boyalı metal — %90 · 500 mm/dk</option>
+          <option value="ozel">Özel — elle ayarla</option>
+        </select>
+      </div>
+      <div id="gMalzemeNot" style="font-size:10px;color:var(--dim);margin-bottom:11px;font-style:italic">
+        Malzeme seçilince önerilen değerler yüklenir
+      </div>
+
+      <div class="satir">
+        <label style="display:flex;justify-content:space-between">
+          <span>Güç</span><span id="gGucDeger" style="color:var(--accent);font-weight:700">%78</span>
+        </label>
+        <input type="range" id="gGuc" min="1" max="100" value="78" step="1">
+      </div>
+      <div class="satir">
+        <label style="display:flex;justify-content:space-between">
+          <span>Hız</span><span id="gHizDeger" style="color:var(--accent);font-weight:700">900 mm/dk</span>
+        </label>
+        <input type="range" id="gHiz" min="100" max="6000" value="900" step="50">
+      </div>
+      <div class="satir iki">
+        <div>
+          <label style="display:flex;justify-content:space-between">
+            <span>Pas</span><span id="gPasDeger" style="color:var(--accent);font-weight:700">1 pas</span>
+          </label>
+          <input type="range" id="gPas" min="1" max="10" value="1" step="1">
+        </div>
+        <div>
+          <label style="display:flex;justify-content:space-between">
+            <span>Aralık</span><span id="gAralikDeger" style="color:var(--accent);font-weight:700">0.10 mm</span>
+          </label>
+          <input type="range" id="gAralik" min="0.04" max="0.30" value="0.10" step="0.01">
+        </div>
+      </div>
+      <button class="mini" id="btnGucUygula" style="width:100%;margin-top:9px">
+        Ayarları tüm öğelere uygula
+      </button>
+    </div>
+
+    <!-- ★ KONTROL LİSTESİ — her madde bağımsız onay -->
+    <div class="bolum">
+      <div class="bolum-baslik">
+        Kontrol Listesi
+        <span id="onayOzet" style="margin-left:auto;font-size:10px;letter-spacing:0;text-transform:none"></span>
+      </div>
+      <div id="onayListesi"></div>
+      <div class="satir iki" style="margin-top:10px">
+        <button class="mini" id="btnOnayTum">Tümünü işaretle</button>
+        <button class="mini" id="btnOnaySifir">Onayları sil</button>
+      </div>
+      <div style="font-size:10px;color:var(--dim);margin-top:8px;font-style:italic">
+        Her maddeyi ayrı ayrı işaretle — birini onaylamak diğerini etkilemez.
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- Modüller: editör + simülasyon (çekirdekten önce yüklenir) -->
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<script src="js/api.js"></script>
+<script src="js/engrave.js"></script>
+<!-- LAZER KÖPRÜSÜ: api.js sunucuya (HTTP), lazer.js MAKİNEYE (seri port) bağlanır.
+     İkisi ayrı kanaldır — G-code üretmek ile göndermek farklı işlerdir. -->
+<script src="js/lazer.js"></script>
+<script src="js/editor.js"></script>
+<script src="js/simulasyon.js"></script>
+
+<script>
+/* ============================================================
+   NUMEX KAŞE STÜDYO — Çekirdek Mantık
+   ============================================================ */
+'use strict';
+
+/* ---------- SABİTLER ---------- */
+const TABLA_MM   = 400;        // 40 cm = 400 mm çalışma alanı
+const MIN_ZOOM   = 0.35;
+const MAX_ZOOM   = 3.2;
+/* mmPx ERKEN tanımlanır (TDZ fix, 2026-09-12): kayıtlı tema açılışta
+   temaUygula→ciz() çağırıyor ve ciz mmPx'i okuyor; eski kodda `let mmPx`
+   çok aşağıdaydı → "Cannot access 'mmPx' before initialization" → tüm
+   script çöküyordu (app ölü: yazı eklenmiyor, bağlanmıyor). */
+let mmPx = 1;                  // 1 mm kaç piksel
+
+/* Lazer güç (basınç) ön ayarları — malzemeye göre araştırılmış değerler.
+   Diyot 40W sınıfı, kauçuk kaşe/lastik markalama referans alındı. */
+const GUC_PRESET = {
+  'kauçuk'  : { ad:'Kauçuk kaşe',  guc:78, hiz:900,  pas:1, aralik:0.10 },
+  'lastik'  : { ad:'Lastik',      guc:85, hiz:600,  pas:1, aralik:0.09 },
+  'ahşap'   : { ad:'Ahşap',       guc:55, hiz:1800, pas:2, aralik:0.12 },
+  'pleksi'  : { ad:'Pleksi',      guc:65, hiz:1200, pas:1, aralik:0.10 },
+  'mdf'     : { ad:'MDF',         guc:60, hiz:1500, pas:2, aralik:0.11 },
+  'deri'    : { ad:'Deri',        guc:45, hiz:2200, pas:1, aralik:0.12 },
+  'metal'   : { ad:'Boyalı metal',guc:90, hiz:500,  pas:3, aralik:0.08 },
+  'ozel'    : { ad:'Özel',        guc:50, hiz:1000, pas:1, aralik:0.10 }
+};
+
+/* ---------- DURUM ---------- */
+const S = {
+  nesneler   : [],       // { id, tip, x, y, icerik, boy, font, kalin, ayna, guc, hiz, pas, aralik, malzeme, onay:[] }
+  seciliId   : null,
+  zoom       : 1,
+  tema       : 'koyu',
+  testNokta  : null,     // { x, y, t } — TEST ile bırakılan kırmızı işaret
+  testGecmis : [],       // birden fazla test noktası geçmişi
+  izgaraOn   : true,
+  olcuOn     : true,
+  imlec      : { x:0, y:0 },
+  yaziliyor  : false,
+  sayac      : 0
+};
+
+/* Malzeme başına onay maddeleri — HER MADDE BAĞIMSIZ onaylanır. */
+const ONAY_MADDELERI = [
+  { k:'olcum',  t:'Ölçü ve konum doğru (mm)' },
+  { k:'metin',  t:'Yazı içeriği doğru yazılmış' },
+  { k:'ayna',   t:'Kaşe için ayna/ters görünüm ayarlı' },
+  { k:'guc',    t:'Lazer gücü (basınç) malzemeye uygun' },
+  { k:'hiz',    t:'Hız ve pas sayısı ayarlı' },
+  { k:'kilit',  t:'İş parçası tablaya sabitlenmiş' }
+];
+
+/* ---------- DOM KISAYOLLARI ---------- */
+const $ = id => document.getElementById(id);
+const canvas = $('tabla');
+const ctx    = canvas.getContext('2d');
+
+/* ============================================================
+   TEMA
+   ============================================================ */
+function temaUygula(t){
+  S.tema = t;
+  document.documentElement.setAttribute('data-tema', t);
+  $('temaEtiket').textContent = (t === 'koyu') ? 'Beyaz Tema' : 'Dar Tema';
+  localStorage.setItem('numex-kase-tema', t);
+  ciz();
+}
+$('btnTema').onclick = () => temaUygula(S.tema === 'koyu' ? 'beyaz' : 'koyu');
+
+/* Kayıtlı tema açılışta DEĞİL, baslat() sonunda geri yüklenir (TDZ fix):
+   temaUygula→ciz() ciz'in bağımlılarını (mmPx/PX/MM…) okuyor; onlar bu
+   noktada henüz tanımlı değil → "Cannot access before initialization" → app ölürdü. */
+
+/* ============================================================
+   RENK OKUMA (CSS değişkenlerinden — tema ile uyumlu)
+   ============================================================ */
+function renk(ad){
+  return getComputedStyle(document.documentElement)
+    .getPropertyValue('--' + ad).trim() || '#888';
+}
+
+/* ============================================================
+   CANVAS / TABLA
+   ============================================================ */
+/* mmPx yukarıda (sabitlerin yanında) erken tanımlandı — TDZ fix. */
+
+function tablaBoyutlandir(){
+  // Tabla kapsayıcısının boyutuna göre mm→px ölçeği hesapla
+  const alan = canvas.parentElement.parentElement; // .tabla-alan
+  const pay = 70;
+  const kutu = Math.max(200, Math.min(alan.clientWidth - pay, alan.clientHeight - pay));
+  S.temelPx = kutu / TABLA_MM;
+  mmPx = S.temelPx * S.zoom;
+
+  const boyut = Math.round(TABLA_MM * mmPx);
+  const dpr = window.devicePixelRatio || 1;
+
+  canvas.width  = Math.round(boyut * dpr);
+  canvas.height = Math.round(boyut * dpr);
+  canvas.style.width  = boyut + 'px';
+  canvas.style.height = boyut + 'px';
+
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  canvas._css = boyut;
+  ciz();
+}
+
+/* mm → canvas px */
+const PX = mm => mm * mmPx;
+/* canvas px → mm */
+const MM = px => px / mmPx;
+
+/* ============================================================
+   ÇİZİM
+   ============================================================ */
+function ciz(){
+  if (!mmPx) return;
+  const B = canvas._css;
+  ctx.clearRect(0, 0, B, B);
+
+  // --- Tabla zemini ---
+  ctx.fillStyle = renk('mat');
+  ctx.fillRect(0, 0, B, B);
+
+  // --- Izgara ---
+  if (S.izgaraOn){
+    // İnce ızgara her 10 mm
+    ctx.strokeStyle = renk('grid2');
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    for (let mm = 10; mm < TABLA_MM; mm += 10){
+      const p = Math.round(PX(mm)) + .5;
+      ctx.moveTo(p, 0); ctx.lineTo(p, B);
+      ctx.moveTo(0, p); ctx.lineTo(B, p);
+    }
+    ctx.stroke();
+
+    // Kalın ızgara her 50 mm (5 cm)
+    ctx.strokeStyle = renk('grid');
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    for (let mm = 50; mm < TABLA_MM; mm += 50){
+      const p = Math.round(PX(mm)) + .5;
+      ctx.moveTo(p, 0); ctx.lineTo(p, B);
+      ctx.moveTo(0, p); ctx.lineTo(B, p);
+    }
+    ctx.stroke();
+  }
+
+  // --- Cetvel (üst + sol) ---
+  if (S.olcuOn){
+    ctx.fillStyle = renk('dim');
+    ctx.font = '9px "Segoe UI",sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
+    const adim = (mmPx > 1.6) ? 20 : (mmPx > 0.9 ? 50 : 100);
+    for (let mm = 0; mm <= TABLA_MM; mm += adim){
+      const p = PX(mm);
+      // üst
+      ctx.fillText(mm, Math.min(Math.max(p, 10), B - 10), 3);
+      // sol
+      ctx.save();
+      ctx.translate(3, Math.min(Math.max(p, 10), B - 10));
+      ctx.rotate(-Math.PI/2);
+      ctx.textAlign = 'center';
+      ctx.fillText(mm, 0, 0);
+      ctx.restore();
+    }
+    ctx.textAlign = 'left';
+  }
+
+  // --- SİMÜLASYON KATMANI: lazerin gezdiği yol canlı çizilir ---
+  if (typeof sim !== 'undefined' && sim && sim.aktifMi()){
+    const iz = sim.izlenenNoktalar();
+    // geçilen yol — turuncu/kırmızı parlayan iz
+    ctx.save();
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    for (const p of iz){
+      const gucOran = (p.nesne && p.nesne.guc != null) ? p.nesne.guc / 100 : .5;
+      ctx.beginPath();
+      ctx.arc(PX(p.x), PX(p.y), Math.max(1.1, gucOran * 2.2), 0, Math.PI * 2);
+      ctx.fillStyle = (p.nesne && p.nesne.guc <= 10)
+        ? 'rgba(255,82,82,.85)'                       // TEST izi kırmızı
+        : 'rgba(255,122,24,' + (0.35 + gucOran * .55) + ')';
+      ctx.fill();
+    }
+    // lazer kafası — son noktada
+    const son = sim.guncelNokta();
+    if (son){
+      const g = ctx.createRadialGradient(PX(son.x), PX(son.y), 0, PX(son.x), PX(son.y), 16);
+      g.addColorStop(0, 'rgba(255,255,255,.95)');
+      g.addColorStop(.35, 'rgba(255,122,24,.75)');
+      g.addColorStop(1, 'rgba(255,122,24,0)');
+      ctx.beginPath();
+      ctx.arc(PX(son.x), PX(son.y), 16, 0, Math.PI * 2);
+      ctx.fillStyle = g;
+      ctx.fill();
+      // artı hedef imleci
+      ctx.strokeStyle = 'rgba(255,255,255,.9)';
+      ctx.lineWidth = 1.4;
+      ctx.beginPath();
+      ctx.moveTo(PX(son.x) - 9, PX(son.y)); ctx.lineTo(PX(son.x) + 9, PX(son.y));
+      ctx.moveTo(PX(son.x), PX(son.y) - 9); ctx.lineTo(PX(son.x), PX(son.y) + 9);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  // --- Test noktaları (KIRMIZI işaretler) ---
+  S.testGecmis.forEach((n, i) => {
+    const soluk = i < S.testGecmis.length - 1;
+    const r = soluk ? 6 : 10;
+    ctx.globalAlpha = soluk ? .45 : 1;
+
+    // dış halka
+    ctx.beginPath();
+    ctx.arc(PX(n.x), PX(n.y), r + 4, 0, Math.PI * 2);
+    ctx.strokeStyle = renk('red');
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // iç nokta
+    ctx.beginPath();
+    ctx.arc(PX(n.x), PX(n.y), r * .42, 0, Math.PI * 2);
+    ctx.fillStyle = renk('red');
+    ctx.fill();
+
+    // artı işareti
+    ctx.strokeStyle = renk('red');
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.moveTo(PX(n.x) - r - 8, PX(n.y)); ctx.lineTo(PX(n.x) - r - 2, PX(n.y));
+    ctx.moveTo(PX(n.x) + r + 2, PX(n.y)); ctx.lineTo(PX(n.x) + r + 8, PX(n.y));
+    ctx.moveTo(PX(n.x), PX(n.y) - r - 8); ctx.lineTo(PX(n.x), PX(n.y) - r - 2);
+    ctx.moveTo(PX(n.x), PX(n.y) + r + 2); ctx.lineTo(PX(n.x), PX(n.y) + r + 8);
+    ctx.stroke();
+
+    if (!soluk){
+      ctx.fillStyle = renk('red');
+      ctx.font = 'bold 10px "Segoe UI",sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText('TEST ' + n.x.toFixed(0) + ',' + n.y.toFixed(0), PX(n.x) + r + 11, PX(n.y) - 4);
+    }
+    ctx.globalAlpha = 1;
+  });
+
+  // --- Nesneler ---
+  S.nesneler.forEach(o => cizNesne(o));
+
+  // --- Seçim çerçevesi + TUTAMAKLAR + DÖNDÜRME OKU ---
+  const sec = seciliNesne();
+  if (sec) {
+    const k = nesneKutu(sec);
+    const a = (sec.aci || 0) * Math.PI / 180;
+    const cxPx = PX(k.cx), cyPx = PX(k.cy);
+    const wPx = PX(k.w), hPx = PX(k.h);
+
+    ctx.save();
+    ctx.translate(cxPx, cyPx);
+    ctx.rotate(a);
+
+    // kesikli seçim çerçevesi
+    ctx.strokeStyle = renk('accent');
+    ctx.lineWidth = 1.4;
+    ctx.setLineDash([5, 4]);
+    ctx.strokeRect(-wPx / 2, -hPx / 2, wPx, hPx);
+    ctx.setLineDash([]);
+
+    // 4 köşe tutamağı — büyüt/küçült
+    const hR = 5.5;
+    ctx.fillStyle = renk('accent');
+    ctx.strokeStyle = renk('panel') || '#fff';
+    ctx.lineWidth = 2;
+    [[-wPx/2,-hPx/2],[wPx/2,-hPx/2],[wPx/2,hPx/2],[-wPx/2,hPx/2]].forEach(([hx,hy]) => {
+      ctx.beginPath();
+      ctx.rect(hx - hR, hy - hR, hR*2, hR*2);
+      ctx.fill();
+      ctx.stroke();
+    });
+    ctx.restore();
+
+    // DÖNDÜRME OKU — kutunun üstünde, döndürmeyle birlikte hareket eder
+    const dn = edit.donmeNoktasi(sec);
+    const ust = { x: k.cx, y: k.cy - k.h / 2 };
+    const ustPx = { x: PX(ust.x), y: PX(ust.y) };
+    const dnPx  = { x: PX(dn.x),  y: PX(dn.y)  };
+
+    ctx.save();
+    ctx.strokeStyle = renk('accent');
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.moveTo(ustPx.x, ustPx.y);
+    ctx.lineTo(dnPx.x, dnPx.y);
+    ctx.stroke();
+
+    // ok başı
+    ctx.beginPath();
+    ctx.arc(dnPx.x, dnPx.y, 5.5, 0, Math.PI * 2);
+    ctx.fillStyle = renk('accent');
+    ctx.fill();
+    ctx.strokeStyle = renk('panel') || '#fff';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    // dönme sembolü
+    ctx.beginPath();
+    ctx.arc(dnPx.x, dnPx.y, 2.2, 0.6, Math.PI * 1.7);
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 1.3;
+    ctx.stroke();
+    ctx.restore();
+
+    // AÇI etiketi
+    if (sec.aci){
+      ctx.save();
+      ctx.font = '600 10px "Segoe UI",sans-serif';
+      ctx.fillStyle = renk('accent');
+      ctx.textAlign = 'center';
+      ctx.fillText((Math.round(sec.aci * 10) / 10) + '°', dnPx.x, dnPx.y - 10);
+      ctx.restore();
+    }
+
+    // BOYUT etiketi (alt ortada, mm)
+    const boyYazi = (sec.tip === 'metin')
+      ? (Math.round((sec.boy || 0) * 10) / 10) + ' mm boy'
+      : (Math.round(k.w) + ' × ' + Math.round(k.h) + ' mm');
+    ctx.save();
+    ctx.font = '600 10px "Segoe UI",sans-serif';
+    ctx.fillStyle = renk('dim');
+    ctx.textAlign = 'center';
+    ctx.fillText(boyYazi, cxPx, cyPx + hPx / 2 + 16);
+    ctx.restore();
+  }
+
+  // --- YAZMA İMLECİ (canlı yazma modunda yanıp söner) ---
+  if (edit.yazimAktifMi()) {
+    const y = S.nesneler.find(n => n.id === S.seciliId);
+    if (y){
+      const k = nesneKutu(y);
+      const boyPx = (y.boy || 10) * (mmPx || 1);
+      const satirlar = String(y.icerik || '').split('\n');
+      const sonSatir = satirlar[satirlar.length - 1] || '';
+      ctx.save();
+      ctx.font = (y.kalin ? 'bold ' : '') + boyPx + 'px ' + (y.font || 'sans-serif');
+      const w = ctx.measureText(sonSatir).width;
+      const metinH = boyPx * 1.35;
+      const x = PX(k.x) + (y.kalin ? w * 0.5 : w) + 2;
+      const yy = PX(k.y) + (satirlar.length - 1) * metinH;
+      // imleç — yanıp sönme animasyonu editörde yönetilir
+      if (window._numexImlec !== false){
+        ctx.strokeStyle = renk('accent');
+        ctx.lineWidth = 1.6;
+        ctx.beginPath();
+        ctx.moveTo(x, yy);
+        ctx.lineTo(x, yy + boyPx);
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+  }
+
+  // --- Çalışma alanı kenarı ---
+  ctx.strokeStyle = renk('mat-edge');
+  ctx.lineWidth = 2;
+  ctx.strokeRect(1, 1, B - 2, B - 2);
+
+  // --- Test modunda artı imleci ---
+  if (S._testModu){
+    ctx.save();
+    ctx.strokeStyle = renk('red');
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3, 3]);
+    ctx.beginPath();
+    ctx.moveTo(PX(S.imlec.x), 0); ctx.lineTo(PX(S.imlec.x), B);
+    ctx.moveTo(0, PX(S.imlec.y)); ctx.lineTo(B, PX(S.imlec.y));
+    ctx.stroke();
+    ctx.restore();
+  }
+}
+
+/* ============================================================
+   NESNE MODELİ
+   ============================================================ */
+function nesneOlustur(tip, ekVeri){
+  S.sayac++;
+  const malz = 'kauçuk';
+  const o = Object.assign({
+    id       : 'n' + S.sayac,
+    tip      : tip,
+    x        : 40 + (S.nesneler.length % 4) * 12,
+    y        : 40 + (S.nesneler.length % 4) * 12,
+    icerik   : 'KASE ' + S.sayac,
+    boy      : 10,
+    font     : "'Segoe UI',sans-serif",
+    kalin    : true,
+    ayna     : false,
+    g        : 40,
+    h        : 40,
+    malzeme  : malz,
+    guc      : GUC_PRESET[malz].guc,
+    hiz      : GUC_PRESET[malz].hiz,
+    pas      : GUC_PRESET[malz].pas,
+    aralik   : GUC_PRESET[malz].aralik,
+    onay     : {}                      // her madde BAĞIMSIZ onaylanır
+  }, ekVeri || {});
+  S.nesneler.push(o);
+  S.seciliId = o.id;
+  // NOT: arayuzGuncelle/ciz burada ÇAĞRILMAZ — çağıran taraf (ekle() veya
+  // editör.bas()) tek seferde yapar. Aksi halde her tıklamada iki kez
+  // çizim + iki kez liste güncellemesi olur (görsel titreme).
+  return o;
+}
+
+function seciliNesne(){
+  return S.nesneler.find(o => o.id === S.seciliId) || null;
+}
+
+/* ---------- GERÇEK METİN ÖLÇÜMÜ ----------
+   Tahmin YOK. Tarayıcının kendi font ölçüm motoru kullanılır:
+   canvas.measureText() → piksel, sonra mm'ye çevrilir.
+   Bu sayede ekranda gördüğün genişlik = G-code'a giden genişlik. */
+let _olcTuval = null;
+function _olcumTuvani(){
+  if (!_olcTuval) _olcTuval = document.createElement('canvas');
+  return _olcTuval.getContext('2d');
+}
+
+/* Bir satırın mm cinsinden gerçek genişliği */
+function metinSatirGenislik(satir, boyMm, kalin, font){
+  const olc = _olcumTuvani();
+  // Fontu, çizimle AYNI biçimde kur (cizNesne ile birebir aynı olmalı)
+  olc.font = (kalin ? 'bold ' : '') + boyMm + 'px ' + (font || 'sans-serif');
+  return olc.measureText(String(satir)).width;   // px cinsinden döner
+}
+
+/* Not: çizimde ctx.font = '9px ...' kullanıldığında ve tuval ölçeği PX()
+   ile mm→px dönüşümü yapılıyorsa, measureText px değerini verir.
+   Boy zaten mm olarak verildiği için, ölçüm de mm ölçeğinde çıkar. */
+function metinGenislik(satirlar, boyMm, kalin, font){
+  let en = 0;
+  for (const s of String(satirlar).split('\n')){
+    en = Math.max(en, metinSatirGenislik(s, boyMm, kalin, font));
+  }
+  return en;
+}
+
+/* Nesnenin mm cinsinden kutusu.
+   NOT: editör modülü (js/editor.js) cx, cy, w, h alanlarını da bekler —
+   merkez ve boyut, döndürme/boyutlandırma matematiğinde kullanılır. */
+function nesneKutu(o){
+  let x, y, g, h;
+  if (o.tip === 'metin'){
+    const satirlar = String(o.icerik || '').split('\n');
+    const bosMu = !String(o.icerik || '').length;
+    /* ÖLÇÜ SÖZLEŞMESİ: o.boy = HARFİN GERÇEK YÜKSEKLİĞİ (mm).
+       Kullanıcı 9 yazarsa çıktı tam 9 mm olmalı.
+       Çok satırda satır aralığı payı SATIR SAYISINA eklenir, harfin
+       boyuna DEĞİL — aksi halde 9 mm yazınca 12 mm çıkıyordu. */
+    const SATIR_PAYI = 1.35;          // satır yüksekliği / harf boyu oranı
+    const nSatir = Math.max(1, satirlar.length);
+    h = o.boy * (1 + (nSatir - 1) * SATIR_PAYI);
+    // Boş yazıda imleç için küçük bir kutu; doluyken GERÇEK ölçüm
+    g = bosMu ? Math.max(3, o.boy * 0.55)
+              : Math.max(1, metinGenislik(o.icerik, o.boy, o.kalin, o.font));
+    // Ölçüm 0 dönerse (font yüklenmemiş) sayaca düş — sessizce 0 bırakma
+    if (!bosMu && g < 1) g = Math.max(3, String(o.icerik || '').length * o.boy * 0.6);
+    x = o.x; y = o.y;
+  } else {
+    x = o.x; y = o.y; g = o.g; h = o.h;
+  }
+  return {
+    x, y, g, h, y2: y + h,
+    w: g,                 // editör: genişlik
+    cx: x + g / 2,        // editör: merkez X
+    cy: y + h / 2         // editör: merkez Y
+  };
+}
+
+function cizNesne(o){
+  const secili = (o.id === S.seciliId);
+  const k = nesneKutu(o);
+  ctx.save();
+
+  // DÖNDÜRME — nesnenin merkezi etrafında (editörden ayarlanır)
+  if (o.aci){
+    ctx.translate(PX(k.cx), PX(k.cy));
+    ctx.rotate(o.aci * Math.PI / 180);
+    ctx.translate(-PX(k.cx), -PX(k.cy));
+  }
+
+  if (o.tip === 'metin'){
+    const px = PX(o.boy);
+    ctx.font = (o.kalin ? 'bold ' : '') + px + 'px ' + o.font;
+    ctx.textBaseline = 'top';
+    ctx.fillStyle = secili ? renk('accent') : renk('txt');
+
+    if (o.ayna){
+      // Kaşe için yatay ayna
+      ctx.translate(PX(o.x + k.g), PX(o.y));
+      ctx.scale(-1, 1);
+      ctx.fillText(o.icerik, 0, 0);
+    } else {
+      ctx.fillText(o.icerik, PX(o.x), PX(o.y));
+    }
+  }
+  else if (o.tip === 'cizgi'){
+    ctx.strokeStyle = secili ? renk('accent') : renk('txt');
+    ctx.lineWidth = Math.max(1.5, PX(o.boy * .25));
+    ctx.beginPath();
+    ctx.moveTo(PX(o.x), PX(o.y));
+    ctx.lineTo(PX(o.x + o.g), PX(o.y + o.h));
+    ctx.stroke();
+  }
+  else if (o.tip === 'dikdortgen'){
+    ctx.strokeStyle = secili ? renk('accent') : renk('txt');
+    ctx.lineWidth = Math.max(1.5, PX(o.boy * .18));
+    ctx.strokeRect(PX(o.x), PX(o.y), PX(o.g), PX(o.h));
+  }
+  else if (o.tip === 'logo'){
+    const cx = PX(o.x + o.g / 2), cy = PX(o.y + o.h / 2);
+    const r  = PX(Math.min(o.g, o.h) / 2);
+    ctx.strokeStyle = secili ? renk('accent') : renk('txt');
+    ctx.lineWidth = Math.max(1.5, PX(o.boy * .16));
+    ctx.beginPath(); ctx.arc(cx, cy, r * .8, 0, Math.PI * 2); ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(cx, cy - r); ctx.lineTo(cx, cy + r);
+    ctx.moveTo(cx - r, cy); ctx.lineTo(cx + r, cy);
+    ctx.stroke();
+    ctx.beginPath(); ctx.arc(cx, cy, r * .22, 0, Math.PI * 2); ctx.stroke();
+  }
+
+  ctx.restore();
+}
+
+/* ============================================================
+   İŞ LİSTESİ + SEÇİM FORMU
+   ============================================================ */
+function arayuzGuncelle(){
+  isListesiCiz();
+  secimFormuGuncelle();
+  durumGuncelle();
+  onayKartiCiz();
+  gucArayuzGuncelle();
+}
+
+function isListesiCiz(){
+  const kap = $('isListesi');
+  if (!S.nesneler.length){
+    kap.innerHTML = '<div style="font-size:11.5px;color:var(--dim);padding:10px 0;text-align:center">Henüz öğe yok</div>';
+    return;
+  }
+  kap.innerHTML = '';
+  S.nesneler.forEach((o, i) => {
+    const onaySayi = ONAY_MADDELERI.filter(m => o.onay[m.k]).length;
+    const hazir    = onaySayi === ONAY_MADDELERI.length;
+
+    const d = document.createElement('div');
+    d.style.cssText = 'display:flex;align-items:center;gap:8px;padding:7px 9px;margin-bottom:5px;' +
+      'border-radius:7px;cursor:pointer;border:1px solid ' +
+      (o.id === S.seciliId ? 'var(--accent)' : 'var(--line)') + ';' +
+      'background:' + (o.id === S.seciliId ? 'var(--accent-soft)' : 'var(--panel2)') + ';transition:all .13s';
+
+    const turAd = { metin:'Yazı', cizgi:'Çizgi', dikdortgen:'Çerçeve', logo:'Logo' }[o.tip] || o.tip;
+    const ad = (o.tip === 'metin') ? o.icerik : turAd;
+    const kisa = ad.length > 15 ? ad.slice(0, 15) + '…' : ad;
+
+    d.innerHTML =
+      '<span style="font-size:10px;font-weight:700;color:var(--dim);min-width:14px">' + (i + 1) + '</span>' +
+      '<span style="flex:1;font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' +
+        kisa + '</span>' +
+      '<span style="font-size:9.5px;font-weight:700;padding:2px 6px;border-radius:9px;background:' +
+        (hazir ? 'var(--ok-soft)' : 'var(--panel3)') + ';color:' +
+        (hazir ? 'var(--ok)' : 'var(--dim)') + '">' + onaySayi + '/' + ONAY_MADDELERI.length + '</span>' +
+      '<span class="sil" style="color:var(--dim);font-size:14px;padding:0 2px" title="Sil">×</span>';
+
+    d.onclick = e => {
+      if (e.target.classList.contains('sil')){
+        e.stopPropagation();
+        nesneSil(o.id);
+        return;
+      }
+      S.seciliId = o.id;
+      arayuzGuncelle();
+      ciz();
+    };
+    kap.appendChild(d);
+  });
+}
+
+function nesneSil(id){
+  S.nesneler = S.nesneler.filter(o => o.id !== id);
+  if (S.seciliId === id) S.seciliId = S.nesneler.length ? S.nesneler[S.nesneler.length - 1].id : null;
+  arayuzGuncelle();
+  ciz();
+}
+
+function secimFormuGuncelle(){
+  const o = seciliNesne();
+  if (!o){
+    $('bosSecim').style.display = '';
+    $('secimFormu').style.display = 'none';
+    return;
+  }
+  $('bosSecim').style.display = 'none';
+  $('secimFormu').style.display = '';
+
+  const sadeceMetin = ['metin','cizgi'].includes(o.tip);
+  $('oIcerik').parentElement.style.display = (o.tip === 'metin') ? '' : 'none';
+  $('oIcerik').value = o.icerik;
+  $('oFont').value = o.font;
+  $('oBoy').value = o.boy;
+  if ($('oAci')) $('oAci').value = Math.round(o.aci || 0);
+  if ($('oGuc')) $('oGuc').value = o.guc != null ? o.guc : 60;
+  $('oKalin').checked = o.kalin;
+  $('oAyna').checked = o.ayna;
+  $('onayKalınSatir').style.display = (o.tip === 'metin') ? '' : 'none';
+  $('onayAynaSatir').style.display  = (o.tip === 'metin') ? '' : 'none';
+  olcuBilgiYaz(o);
+}
+
+/* Gerçek ölçü göstergesi — kullanıcı "kaç mm, kaç dakika" görsün.
+   Değer girilmez; tabladaki ölçüden hesaplanır. Dürüstlük kuralı: mm = mm. */
+function olcuBilgiYaz(o){
+  const el = $('olcuBilgi');
+  if (!el) return;
+  const k = nesneKutu(o);
+  const s = S.ayar || {};
+  const hiz = o.hiz != null ? o.hiz : (s.hiz || 100);      // mm/dk
+  const pas = o.pas != null ? o.pas : (s.pas || 1);
+  const aralik = o.aralik != null ? o.aralik : (s.aralik || 0.08);
+
+  let satirlar = [];
+  satirlar.push('ölçü : ' + k.w.toFixed(1) + ' × ' + k.h.toFixed(1) + ' mm');
+  // Konum gösterge kutusuna yaz (form değil, okunur bilgi)
+  if ($('kgKonum')) $('kgKonum').textContent = 'X ' + o.x.toFixed(1) + ' · Y ' + o.y.toFixed(1) + ' mm';
+  if ($('kgAci'))   $('kgAci').textContent   = Math.round(o.aci || 0) + '°';
+
+  if (o.tip === 'metin'){
+    // Dolgu (tarama) yolu uzunluğu: alan / satır aralığı
+    const alan = k.w * k.h;                                 // mm²
+    const yol = aralik > 0 ? alan / aralik : 0;             // mm toplam tarama
+    const dk  = hiz > 0 ? (yol * pas) / hiz : 0;
+    satirlar.push('tarama: ' + Math.round(yol) + ' mm yol');
+    satirlar.push('süre  : ' + sureYaz(dk) + (pas > 1 ? ' (' + pas + ' pas)' : ''));
+  } else {
+    const yol = (o.tip === 'cizgi') ? Math.hypot(o.g, o.h) * pas : (2 * (o.g + o.h)) * pas;
+    const dk = hiz > 0 ? yol / hiz : 0;
+    satirlar.push('yol   : ' + Math.round(yol) + ' mm');
+    satirlar.push('süre  : ' + sureYaz(dk));
+  }
+  el.textContent = satirlar.join('\n');
+}
+
+function sureYaz(dk){
+  if (!dk || !isFinite(dk)) return '—';
+  if (dk < 1) return Math.round(dk * 60) + ' sn';
+  const t = Math.floor(dk), sn = Math.round((dk - t) * 60);
+  return t + ' dk ' + (sn ? sn + ' sn' : '').trim();
+}
+
+/* Form bağlantıları */
+$('oIcerik').oninput = e => { const o = seciliNesne(); if (o){ o.icerik = e.target.value; isListesiCiz(); ciz(); } };
+$('oFont').onchange  = e => { const o = seciliNesne(); if (o){ o.font = e.target.value; ciz(); } };
+$('oBoy').oninput    = e => { const o = seciliNesne(); if (o){ o.boy = +e.target.value || 2; ciz(); } };
+/* oX / oY form kutuları KALDIRILDI — konum tablada fareyle belirlenir.
+   (LightBurn/RDWorks mantığı: koordinat yazarak değil, sürükleyerek.)
+   Tabla sürüklemesi mevcut editor.js üzerinden o.x / o.y'yi zaten günceller;
+   arayüzGuncelle() çağrısı konum göstergesini canlı yansıtır. */
+$('oAci').oninput     = e => {
+  const o = seciliNesne(); if (!o) return;
+  o.aci = Math.max(-180, Math.min(180, +e.target.value || 0));
+  arayuzGuncelle(); ciz();
+};
+$('oGuc').oninput    = e => {
+  const o = seciliNesne(); if (!o) return;
+  o.guc = Math.max(1, Math.min(100, +e.target.value || 60));
+  gucArayuzGuncelle(); ciz();
+};
+$('oKalin').onchange = e => { const o = seciliNesne(); if (o){ o.kalin = e.target.checked; ciz(); } };
+$('oAyna').onchange  = e => { const o = seciliNesne(); if (o){ o.ayna = e.target.checked; ciz(); } };
+
+/* Nesneyi tabla sınırları içinde tut — kendi boyutunu hesaba katar,
+   böylece yazı kenardan taşmaz ve kullanıcı kaybetmez. */
+function sinirla(o){
+  const k = nesneKutu(o);
+  const ag = Math.max(2, k.w), ah = Math.max(2, k.h);
+  o.x = Math.max(0, Math.min(TABLA_MM - ag, o.x));
+  o.y = Math.max(0, Math.min(TABLA_MM - ah, o.y));
+}
+
+function durumGuncelle(){
+  const o = seciliNesne();
+  $('durumSecili').textContent = o
+    ? ((o.tip === 'metin' ? o.icerik : ({cizgi:'Çizgi',dikdortgen:'Çerçeve',logo:'Logo'}[o.tip])) || '-')
+    : 'yok';
+}
+
+/* ============================================================
+   EKLEME TUŞLARI
+   ============================================================ */
+/* Ekleme tuşları — nesne oluştur, seç ve (yazı ise) canlı yazmaya geç.
+   Kullanıcı sol panele gitmek zorunda kalmadan tablada yazabilsin. */
+function ekle(tip, ek){
+  const o = nesneOlustur(tip, ek);
+  S.seciliId = o.id;
+  if (tip === 'metin') edit.yazimBasla(o, true);   // imleç yanıp sönsün, yazmaya hazır
+  arayuzGuncelle();
+  ciz();
+  return o;
+}
+$('btnMetinEkle').onclick = () => ekle('metin');
+$('btnCizgiEkle').onclick  = () => ekle('cizgi',  { g:50, h:50, boy:2 });
+$('btnDikdortgen').onclick = () => ekle('dikdortgen', { g:60, h:40, boy:2 });
+$('btnLogo').onclick       = () => ekle('logo', { g:35, h:35, boy:4 });
+
+/* ============================================================
+   TABLA ETKİLEŞİMİ — sürükle / seç
+   ============================================================ */
+let surukle = null;
+
+function posMm(ev){
+  const r = canvas.getBoundingClientRect();
+  const x = (ev.clientX - r.left) / mmPx;
+  const y = (ev.clientY - r.top)  / mmPx;
+  return { x: Math.round(x * 10) / 10, y: Math.round(y * 10) / 10 };
+}
+
+/* ============================================================
+   KANVAS EDİTÖRÜ — tıkla-yaz, taşı, büyüt, döndür
+   Mantık ayrı modülde: public/js/editor.js
+   ============================================================ */
+const edit = EditoKur({
+  S, PX, MM,
+  mmPxAl  : () => mmPx,
+  ciz, arayuzGuncelle, nesneKutu, sinirla, renk,
+  nesneOlustur, nesneSil
+});
+
+canvas.addEventListener('mousemove', ev => {
+  const p = posMm(ev);
+  S.imlec = p;
+  $('imlecPos').textContent = p.x.toFixed(0) + ', ' + p.y.toFixed(0) + ' mm';
+  if (!edit.hareket(ev, p)) {
+    // sürükleme yoksa sadece imleç şeklini güncelle
+    if (!S._testModu) canvas.style.cursor = edit.imlec(p);
+  }
+});
+
+canvas.addEventListener('mousedown', ev => {
+  // TEST modu: tıklanan yere kırmızı işaret koy (eski davranış korunur)
+  if (S._testModu){
+    testNoktasiKoy(...Object.values(posMm(ev)));
+    return;
+  }
+  const p = posMm(ev);
+  canvas.focus();
+  edit.bas(ev, p);
+});
+
+canvas.addEventListener('mouseup',    ev => { edit.birak(); });
+canvas.addEventListener('mouseleave', () => { edit.birak(); });
+
+/* Dokunmatik destek (tablet) */
+canvas.addEventListener('touchstart', ev => {
+  if (ev.touches.length !== 1) return;
+  const t = ev.touches[0];
+  const r = canvas.getBoundingClientRect();
+  const p = { x:(t.clientX - r.left)/mmPx, y:(t.clientY - r.top)/mmPx };
+  edit.bas({ detail:1, shiftKey:false }, p);
+  ev.preventDefault();
+}, { passive:false });
+canvas.addEventListener('touchmove', ev => {
+  if (ev.touches.length !== 1) return;
+  const t = ev.touches[0];
+  const r = canvas.getBoundingClientRect();
+  const p = { x:(t.clientX - r.left)/mmPx, y:(t.clientY - r.top)/mmPx };
+  edit.hareket({ shiftKey:false }, p);
+  ev.preventDefault();
+}, { passive:false });
+canvas.addEventListener('touchend', () => { edit.birak(); });
+
+/* Klavye — önce YAZI YAZMA modu, sonra kısayollar.
+   DİKKAT: yazma modunda form alanlarına odaklanılmış olsa bile
+   harfler tabloya gider; kullanıcı imleci tabloda sanıyordur. */
+document.addEventListener('keydown', ev => {
+  if (ev.ctrlKey && ev.key === 't'){ ev.preventDefault(); $('btnTema').click(); return; }
+
+  const etkin = document.activeElement;
+  const formda = etkin && ['INPUT','TEXTAREA','SELECT'].includes(etkin.tagName);
+
+  // Yazma modu AKTİFSE: form alanında değilsen harfleri tabloya yaz
+  if (edit.yazimAktifMi() && !formda){
+    if (edit.tus(ev)){ ev.preventDefault(); return; }
+  }
+
+  if (formda) return;
+
+  // Yazma modu kapalıysa editör kısayolları (Enter ile düzenle, R ile döndür)
+  if (edit.tus(ev)){ ev.preventDefault(); return; }
+
+  if (ev.key === 'Delete' && S.seciliId){ nesneSil(S.seciliId); }
+  if (ev.key === 'Escape'){ S._testModu = false; testModuArayuz(); ciz(); }
+});
+
+/* Sayfa gövdesine odaklanma — tabloya tıklanınca klavye hazır olsun */
+document.body.setAttribute('tabindex', '-1');
+document.body.style.outline = 'none';
+
+/* ============================================================
+   GÖRÜNÜM AYARLARI
+   ============================================================ */
+$('btnZoomArti').onclick  = () => { S.zoom = Math.min(MAX_ZOOM, S.zoom * 1.2); tablaBoyutlandir(); zoomYaz(); };
+$('btnZoomEksi').onclick  = () => { S.zoom = Math.max(MIN_ZOOM, S.zoom / 1.2); tablaBoyutlandir(); zoomYaz(); };
+$('btnZoomSifir').onclick = () => { S.zoom = 1; tablaBoyutlandir(); zoomYaz(); };
+function zoomYaz(){ $('zoomEtiket').textContent = '%' + Math.round(S.zoom * 100); }
+
+$('izgaraOn').onchange = e => { S.izgaraOn = e.target.checked; ciz(); };
+$('olcuOn').onchange   = e => { S.olcuOn   = e.target.checked; ciz(); };
+
+$('btnTemizle').onclick = () => {
+  if (!S.nesneler.length && !S.testGecmis.length) return;
+  if (confirm('Tüm öğeler ve test işaretleri silinsin mi?')){
+    S.nesneler = []; S.seciliId = null; S.testGecmis = []; S.testNokta = null;
+    arayuzGuncelle(); ciz();
+  }
+};
+
+/* ============================================================
+   ★ TEST — kırmızı işaret (lazer düşük güçle yer işaretler)
+   ============================================================
+   Gerçek makinede bu adım: lazer KAPALI hareket (G0) ile hedeflenen
+   noktaya gidilir, sonra ÇOK DÜŞÜK güç (S-min, ~%1-3) ile kısa süre
+   yakılarak referans noktası bırakılır. Burada görsel olarak KIRMIZI
+   işaretle temsil edilir; kullanıcı konumu gözle doğrular.
+*/
+function testModuArayuz(){
+  const btn = $('btnTest');
+  if (btn) btn.classList.toggle('birincil', !!S._testModu);
+}
+
+/* KONTROL LİSTESİ — seçili öğe için onay maddeleri (Core truncated'da kayıptı;
+   arayuzGuncelle bunu her etkileşimde çağırıyordu → "onayKartiCiz is not defined"
+   → tüm arayüz güncellemesi patlıyor, tuval yazıya tepki vermiyordu). */
+function onayKartiCiz(){
+  const kap = $('onayListesi'); if (!kap) return;
+  const o = S.nesneler.find(n => n.id === S.seciliId);
+  if (!o){ kap.innerHTML = '<div style="font-size:11px;color:var(--dim);padding:8px 0;text-align:center">Öğe seçili değil</div>'; return; }
+  if (!o.onay) o.onay = {};
+  kap.innerHTML = '';
+  ONAY_MADDELERI.forEach(m => {
+    const d = document.createElement('label');
+    d.style.cssText = 'display:flex;align-items:center;gap:8px;padding:6px 4px;font-size:11.5px;cursor:pointer;color:var(--txt)';
+    d.innerHTML = '<input type="checkbox" ' + (o.onay[m.k] ? 'checked' : '') + ' style="accent-color:var(--accent)"><span></span>';
+    d.querySelector('span').textContent = m.t;
+    d.querySelector('input').onchange = e => { o.onay[m.k] = e.target.checked; isListesiCiz(); };
+    kap.appendChild(d);
+  });
+}
+/* Güç arayüzü — seçili öğenin güç/hız değerlerini panele yansıt (yoksa no-op). */
+function gucArayuzGuncelle(){
+  const o = S.nesneler.find(n => n.id === S.seciliId);
+  if (!o) return;
+  if (o.guc != null && $('gGuc')) { $('gGuc').value = o.guc; if ($('gGucDeger')) $('gGucDeger').textContent = '%' + o.guc; }
+  if (o.hiz != null && $('gHiz')) { $('gHiz').value = o.hiz; if ($('gHizDeger')) $('gHizDeger').textContent = o.hiz + ' mm/dk'; }
+}
+
+/* ============================================================
+   ★ KONTROL KATMANI (2026-09-12, Claude tarafından tamamlandı)
+   Core'un dosya_yaz'ı burayı "…(kısaltıldı)" placeholder'ıyla yarıda
+   bırakmıştı → tüm eylem butonları ölüydü. Burada:
+   malzeme/mod ayarları · G-code (GERÇEK engrave motoru: engrave.js) ·
+   .nc indir · Falcon2 Pro'ya OTOMATİK seri gönderim (Web Serial) tamamlandı.
+   ============================================================ */
+
+/* Kullanıcı bildirimi (lazer.js window.uyariGoster bekliyor). */
+function uyariGoster(metin, tip){
+  const el = $('durumUyari');
+  if (el) el.innerHTML = '<span style="color:var(--' + (tip === 'red' ? 'red' : tip === 'ok' ? 'ok' : 'accent') + ');font-weight:700">' + metin + '</span>';
+}
+window.uyariGoster = uyariGoster;
+const uyar = uyariGoster;
+
+/* ---------- Malzeme / güç ön ayarları ---------- */
+function malzemeUygula(id){
+  const p = GUC_PRESET[id]; if (!p) return;
+  if ($('gGuc'))    { $('gGuc').value = p.guc;       $('gGucDeger').textContent = '%' + p.guc; }
+  if ($('gHiz'))    { $('gHiz').value = p.hiz;       $('gHizDeger').textContent = p.hiz + ' mm/dk'; }
+  if ($('gPas'))    { $('gPas').value = p.pas;       $('gPasDeger').textContent = p.pas + ' pas'; }
+  if ($('gAralik')) { $('gAralik').value = p.aralik; $('gAralikDeger').textContent = p.aralik.toFixed(2) + ' mm'; }
+}
+if ($('gMalzeme')) $('gMalzeme').onchange = e => malzemeUygula(e.target.value);
+if ($('gGuc'))    $('gGuc').oninput    = e => $('gGucDeger').textContent = '%' + e.target.value;
+if ($('gHiz'))    $('gHiz').oninput    = e => $('gHizDeger').textContent = e.target.value + ' mm/dk';
+if ($('gPas'))    $('gPas').oninput    = e => $('gPasDeger').textContent = e.target.value + ' pas';
+if ($('gAralik')) $('gAralik').oninput = e => $('gAralikDeger').textContent = (+e.target.value).toFixed(2) + ' mm';
+
+/* İşlem türü seçici (Kaşe kabartma-ayna / Düz kazıma / Kesme) — panele enjekte. */
+function modSeciciKur(){
+  if ($('isMod') || !$('gMalzeme')) return;
+  const bolum = $('gMalzeme').closest('.bolum'); if (!bolum) return;
+  const wrap = document.createElement('div');
+  wrap.className = 'satir';
+  wrap.innerHTML = '<label for="isMod">İşlem türü</label>'
+    + '<select id="isMod">'
+    + '<option value="kase">Kaşe — ayna + kabartma (zemini kazır)</option>'
+    + '<option value="kazima">Düz kazıma (yüzey markalama)</option>'
+    + '<option value="kesme">Kesme (çerçeve/şekil kes)</option>'
+    + '</select>';
+  bolum.insertBefore(wrap, bolum.firstChild ? bolum.firstChild.nextSibling : null);
+}
+
+/* Aktif engrave ayarları (arayüzden). */
+function aktifAyar(){
+  return {
+    mod:    ($('isMod') && $('isMod').value) || 'kase',
+    guc:    +($('gGuc') ? $('gGuc').value : 78),
+    hiz:    +($('gHiz') ? $('gHiz').value : 900),
+    pas:    +($('gPas') ? $('gPas').value : 1),
+    aralik: +($('gAralik') ? $('gAralik').value : 0.10),
+    kesmeGuc: 100, kesmeHiz: 600, kesmePas: 3,
+    ayna: S.nesneler.some(o => o.ayna),
+    kutuFn: nesneKutu
+  };
+}
+
+/* ---------- GERÇEK G-code üretimi (engrave.js raster motoru) ---------- */
+function gcodeUret(){
+  if (!S.nesneler.length){ uyar('Önce tablaya yazı/şekil ekle.', 'red'); return null; }
+  if (typeof Engrave === 'undefined'){ uyar('Engrave motoru yüklenmedi.', 'red'); return null; }
+  const r = Engrave.uret(S.nesneler, aktifAyar());
+  if (r.hata){ uyar(r.hata, 'red'); return null; }
+  return r.gcode;
+}
+
+/* G-code önizleme penceresi (modal). */
+function gcodeModalGoster(){
+  const g = gcodeUret(); if (!g) return;
+  const satir = g.split('\n').length;
+  let ov = $('gcodeOverlay');
+  if (!ov){
+    ov = document.createElement('div');
+    ov.id = 'gcodeOverlay';
+    ov.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:9999';
+    ov.innerHTML = '<div style="background:var(--panel);border:1px solid var(--line);border-radius:12px;width:min(680px,92vw);max-height:82vh;display:flex;flex-direction:column;overflow:hidden">'
+      + '<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line)"><b>G-code önizleme</b><span id="gcodeKapat" style="cursor:pointer;font-size:20px;color:var(--dim)">×</span></div>'
+      + '<textarea id="gcodeAlan" readonly style="flex:1;min-height:300px;background:var(--mat);color:var(--txt);border:0;padding:14px;font:12px/1.5 monospace;resize:none"></textarea>'
+      + '<div style="display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--line)"><button class="birincil" id="gcodeIndirBtn" style="flex:1">💾 .nc indir</button><button class="hayalet" id="gcodeKapat2" style="flex:1">Kapat</button></div>'
+      + '</div>';
+    document.body.appendChild(ov);
+    const kapat = () => ov.style.display = 'none';
+    $('gcodeKapat').onclick = kapat;
+    $('gcodeKapat2').onclick = kapat;
+    $('gcodeIndirBtn').onclick = gcodeIndir;
+    ov.addEventListener('click', e => { if (e.target === ov) kapat(); });
+  }
+  $('gcodeAlan').value = g;
+  ov.style.display = 'flex';
+  uyar('G-code hazır — ' + satir + ' satır.', 'accent');
+}
+
+/* .nc dosyası indir (tarayıcı, sunucu gerekmez). */
+function gcodeIndir(){
+  const g = gcodeUret(); if (!g) return;
+  const blob = new Blob([g], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'kase-' + Date.now() + '.nc';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 3000);
+  uyar('✓ .nc indirildi — LightBurn / LaserGRBL ile açıp yakabilirsin.', 'ok');
+}
+
+/* ---------- Lazere OTOMATİK gönderim (Web Serial → Falcon2 Pro) ---------- */
+function lazerVar(){ return typeof window.LazerAPI !== 'undefined' && window.LazerAPI.destekliMi && window.LazerAPI.destekliMi(); }
+
+async function lazereBaglan(){
+  if (!lazerVar()){ uyar('Web Serial desteklenmiyor — Chrome veya Edge kullan.', 'red'); return false; }
+  if (window.LazerAPI.durum().bagli) return true;
+  uyar('Lazere bağlanılıyor… (port penceresinden makineni seç)', 'accent');
+  const b = await window.LazerAPI.baglan();
+  if (!b.tamam){ uyar('Bağlantı başarısız: ' + (b.hata || b.kod), 'red'); return false; }
+  uyar('✓ Lazer bağlı — hazır.', 'ok');
+  gonderButonDurumu();
+  return true;
+}
+
+async function lazereGonder(){
+  const g = gcodeUret(); if (!g) return;
+  if (!await lazereBaglan()) return;
+  uyar('🔥 Markalama başladı — durdurmak için Durdur.', 'accent');
+  const r = await window.LazerAPI.kes(g, {
+    ilerleme: p => uyar('Gönderiliyor… ' + p.gonderilen + '/' + p.toplam + ' satır', 'accent')
+  });
+  if (r.tamam) uyar('✓ Markalama tamamlandı (' + r.satir + ' satır).', 'ok');
+  else if (/ALARM/i.test(String(r.hata || ''))) uyar('⚠️ Makine ALARM durumunda (' + r.hata + '). KURTARMA: "Sıfırla" (home) butonuna bas — kafa köşeye gidip alarmı temizler — sonra tekrar YAZ. (Alarm genelde hareket sırasında reset ya da sınır anahtarından olur.)', 'red');
+  else uyar('Durduruldu / hata: ' + (r.hata || r.kod), 'red');
+}
+
+function lazerDurdur(){
+  if (lazerVar() && window.LazerAPI.acilDurdur){ window.LazerAPI.acilDurdur(); uyar('⏹ Durduruldu (acil).', 'red'); }
+}
+
+function gonderButonDurumu(){
+  const bagli = lazerVar() && window.LazerAPI.durum && window.LazerAPI.durum().bagli;
+  ['btnLazereGonder', 'isBtnGonder', 'btnYaz'].forEach(id => { const b = $(id); if (b) b.disabled = !bagli && id === 'btnLazereGonder'; });
+  const lz = $('btnLazer'); if (lz) lz.classList.toggle('bagli', !!bagli);
+}
+
+/* ---------- YAZI EKLE — CorelDRAW gibi metin kutusu (2026-09-12) ----------
+   Eski akış "Yazı Ekle → tuvale kör yaz" idi (non-teknik kullanıcı yapamıyordu).
+   Artık tıklayınca net bir metin kutusu açılır; yazıp Ekle deyince tuvale gelir. */
+function yaziEkleModal(mevcut){
+  let ov = $('yaziOverlay');
+  if (!ov){
+    ov = document.createElement('div');
+    ov.id = 'yaziOverlay';
+    ov.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:10000';
+    ov.innerHTML = '<div style="background:var(--panel);border:1px solid var(--line);border-radius:12px;width:min(440px,92vw);padding:22px">'
+      + '<div style="font-weight:700;font-size:15px;margin-bottom:4px">Kaşeye yazılacak metin</div>'
+      + '<div style="font-size:11px;color:var(--dim);margin-bottom:12px">Alt satır için Enter. Bitince "Ekle".</div>'
+      + '<textarea id="yaziInput" rows="3" style="width:100%;box-sizing:border-box;background:var(--mat);color:var(--txt);border:1px solid var(--line);border-radius:8px;padding:11px;font-size:15px;line-height:1.4;resize:vertical" placeholder="Örn:&#10;AHMET YILMAZ&#10;Mali Müşavir"></textarea>'
+      + '<div style="display:flex;gap:8px;margin-top:16px"><button class="birincil" id="yaziOk" style="flex:1;padding:11px">✓ Ekle</button><button class="hayalet" id="yaziIptal" style="flex:1;padding:11px">İptal</button></div>'
+      + '</div>';
+    document.body.appendChild(ov);
+    const kapat = () => { ov.style.display = 'none'; };
+    const uygula = () => {
+      const t = $('yaziInput').value.replace(/\r/g, '').replace(/\n{3,}/g, '\n\n').trim();
+      if (t){
+        if (ov._duzenle){ ov._duzenle.icerik = t; }
+        else {
+          const o = nesneOlustur('metin', { icerik: t });
+          if (o){ o.icerik = t; S.seciliId = o.id; }
+        }
+        try { if (typeof edit !== 'undefined' && edit.yazimBitir) edit.yazimBitir(); } catch (e) {}
+        arayuzGuncelle(); ciz();
+      }
+      kapat();
+    };
+    $('yaziOk').onclick = uygula;
+    $('yaziIptal').onclick = kapat;
+    $('yaziInput').addEventListener('keydown', e => { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); uygula(); } });
+    ov.addEventListener('click', e => { if (e.target === ov) kapat(); });
+  }
+  ov._duzenle = (mevcut && mevcut.tip === 'metin') ? mevcut : null;
+  $('yaziInput').value = ov._duzenle ? (ov._duzenle.icerik || '') : '';
+  ov.style.display = 'flex';
+  setTimeout(() => { const i = $('yaziInput'); if (i){ i.focus(); i.select(); } }, 40);
+}
+
+/* ---------- Buton bağlama ---------- */
+function butonBagla(id, fn){ const b = $(id); if (b) b.onclick = fn; }
+butonBagla('btnMetinEkle',    () => yaziEkleModal());
+butonBagla('btnGcode',        gcodeModalGoster);
+butonBagla('isBtnIndir',      gcodeIndir);
+butonBagla('isBtnGonder',     lazereGonder);
+butonBagla('btnLazereGonder', lazereGonder);
+butonBagla('btnYaz',          lazereGonder);
+butonBagla('btnLazer',        lazereBaglan);
+butonBagla('btnMakineBasa',   () => { if (lazerVar() && window.LazerAPI.durum().bagli) window.LazerAPI.isBaslangica(); else uyar('Önce lazere bağlan.', 'red'); });
+butonBagla('btnMakineSifirla', async () => {
+  if (!(lazerVar() && window.LazerAPI.durum().bagli)) { uyar('Önce lazere bağlan.', 'red'); return; }
+  uyar('🏠 Makine sıfırlanıyor (home)… kafa köşeye gidip alarmı temizleyecek. Bitince YAZ diyebilirsin.', 'accent');
+  try { await window.LazerAPI.sifirla(); } catch (e) { uyar('Sıfırlama hatası: ' + (e && e.message || e), 'red'); }
+});
+butonBagla('btnAcilDurdur',   lazerDurdur);   // GERÇEK durdur butonu (btnDurdur diye bir şey yoktu → durmuyordu)
+butonBagla('btnGucUygula',    () => {
+  const guc = +(($('gGuc') || {}).value || 78), hiz = +(($('gHiz') || {}).value || 900),
+        pas = +(($('gPas') || {}).value || 1), aralik = +(($('gAralik') || {}).value || 0.10);
+  S.nesneler.forEach(o => { o.guc = guc; o.hiz = hiz; o.pas = pas; o.aralik = aralik; });
+  arayuzGuncelle(); uyar('✓ Güç/hız ayarları tüm öğelere uygulandı.', 'ok');
+});
+butonBagla('btnOnayTum',  () => { const o = S.nesneler.find(n => n.id === S.seciliId); if (o){ if (!o.onay) o.onay = {}; ONAY_MADDELERI.forEach(m => o.onay[m.k] = true); arayuzGuncelle(); } else uyar('Önce bir öğe seç.', 'red'); });
+butonBagla('btnOnaySifir', () => { const o = S.nesneler.find(n => n.id === S.seciliId); if (o){ o.onay = {}; arayuzGuncelle(); } });
+butonBagla('btnTest', async () => {
+  if (lazerVar() && window.LazerAPI.durum().bagli){ await window.LazerAPI.isBaslangica(); uyar('TEST: başlangıç noktasına gidildi — konumu gözle doğrula.', 'accent'); }
+  else uyar('TEST için önce lazere bağlan (konum doğrulama makinede yapılır).', 'red');
+});
+
+/* Bağlantı durumunu izle → gönder butonlarını aç/kapat. */
+if (lazerVar() && window.LazerAPI.dinle){
+  try { window.LazerAPI.dinle('durum', gonderButonDurumu); } catch (e) {}
+}
+
+/* ============================================================
+   BAŞLATMA
+   ============================================================ */
+/* "Merkeze gel" butonu — konumlandırma için lazeri tasarımın ortasına götürür (yoktu). */
+function merkezeButonKur(){
+  if ($('btnMerkeze') || !$('btnMakineBasa')) return;
+  const b = document.createElement('button');
+  b.className = 'hayalet mini'; b.id = 'btnMerkeze';
+  b.textContent = 'Merkeze gel';
+  b.title = 'Lazeri tasarımın ortasına götür (rubberı yerleştirmek için)';
+  $('btnMakineBasa').parentNode.appendChild(b);
+  b.onclick = () => {
+    if (!(lazerVar() && window.LazerAPI.durum().bagli)) { uyar('Önce lazere bağlan.', 'red'); return; }
+    let cx = TABLA_MM / 2, cy = TABLA_MM / 2;
+    try { const s = Engrave.sinirKutu(S.nesneler, nesneKutu); if (s) { cx = s.x + s.w / 2; cy = s.y + s.h / 2; } } catch (e) {}
+    window.LazerAPI.komutGonder('G0 X' + cx.toFixed(1) + ' Y' + cy.toFixed(1));
+    uyar('Lazer tasarım merkezine gidiyor (' + cx.toFixed(0) + ', ' + cy.toFixed(0) + ' mm) — rubberı oraya hizala.', 'accent');
+  };
+}
+
+function baslat(){
+  try { const t = localStorage.getItem('numex-kase-tema'); if (t) temaUygula(t); } catch (e) {}
+  modSeciciKur();
+  merkezeButonKur();
+  malzemeUygula($('gMalzeme') ? $('gMalzeme').value : 'kauçuk');
+  gonderButonDurumu();
+  try { tablaBoyutlandir(); } catch (e) {}
+  try { arayuzGuncelle(); } catch (e) {}
+  try { ciz(); } catch (e) {}
+}
+baslat();
+window.addEventListener('resize', () => { try { tablaBoyutlandir(); zoomYaz(); } catch (e) {} });
+
+</script>
+</body>
+</html>

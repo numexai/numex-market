@@ -1,0 +1,774 @@
+/* ============================================================
+   AURA OS — Koyu Siber Web İşletim Sistemi Tema
+   ============================================================ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Consolas', 'Courier New', 'Share Tech Mono', monospace;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #020208;
+  color: #c7ffea;
+}
+
+/* ---------- ANA YERLEŞİM ---------- */
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- MASAÜSTÜ ARKA PLAN ---------- */
+#desktop-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 50px; /* taskbar kadar boşluk */
+  z-index: 1;
+  background:
+    radial-gradient(ellipse at 20% 80%, rgba(0, 100, 255, 0.18), transparent 55%),
+    radial-gradient(ellipse at 80% 15%, rgba(255, 0, 200, 0.16), transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(0, 255, 200, 0.05), transparent 70%),
+    linear-gradient(135deg, #01010c 0%, #050521 45%, #031024 100%);
+  user-select: none;
+}
+
+/* Siber ızgara animasyon şeritleri */
+#desktop-bg .grid-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(0deg, rgba(0, 255, 200, 0.07) 0px, rgba(0, 255, 200, 0.07) 1px, transparent 1px, transparent 48px),
+    repeating-linear-gradient(90deg, rgba(0, 255, 200, 0.07) 0px, rgba(0, 255, 200, 0.07) 1px, transparent 1px, transparent 48px);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* CRT tarama çizgileri */
+#desktop-bg .scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, rgba(0,0,0,0.18) 0px, rgba(0,0,0,0.18) 1px, transparent 1px, transparent 3px);
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+/* Merkezi neon parlama */
+#desktop-bg .radial-glow {
+  position: absolute;
+  width: 45vw;
+  height: 45vw;
+  left: 50%;
+  top: 40%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(0,255,220,0.08) 0%, transparent 60%);
+  filter: blur(30px);
+  animation: glowPulse 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* Sol üst sistem bilgisi */
+#sys-info {
+  position: absolute;
+  top: 26px;
+  left: 34px;
+  font-size: 22px;
+  letter-spacing: 3px;
+  color: rgba(0, 255, 200, 0.75);
+  text-shadow: 0 0 12px rgba(0, 255, 200, 0.55);
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  pointer-events: none;
+  user-select: none;
+}
+
+#sys-info #sys-name {
+  color: #00ffcc;
+  font-weight: bold;
+}
+
+#sys-info .sys-sep { opacity: 0.35; color: #ffffff; font-size: 16px; }
+#sys-info #sys-ver { color: #ff00e0; font-size: 15px; letter-spacing: 2px; }
+#sys-info #sys-security { color: #39ff14; font-size: 14px; }
+
+/* ---------- MASAÜSTÜ SİMGELERİ ---------- */
+#desktop-icons {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 50px;
+  z-index: 3;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.app-icon {
+  width: 92px;
+  padding: 12px 6px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  pointer-events: auto;
+  user-select: none;
+  transition: background 0.15s, border-color 0.15s, transform 0.1s;
+}
+
+.app-icon:hover {
+  background: rgba(0, 255, 200, 0.08);
+  border-color: rgba(0, 255, 200, 0.35);
+}
+
+.app-icon:active { transform: scale(0.95); }
+
+.app-icon .icon-img {
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  border-radius: 10px;
+  color: #000;
+  text-shadow: 0 0 8px rgba(255,255,255,0.3);
+  box-shadow: 0 0 14px rgba(0,255,200,0.4);
+}
+
+.app-icon .icon-label {
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: #d0fff4;
+  text-align: center;
+  text-shadow: 0 0 6px rgba(0,255,200,0.8), 0 1px 3px #000;
+  word-break: break-word;
+}
+
+.app-icon.selected {
+  background: rgba(0, 255, 200, 0.14);
+  border-color: rgba(0, 255, 200, 0.6);
+}
+
+/* Uygulamaya özgü ikon renkleri */
+.app-icon[data-app="notes"] .icon-img { background: linear-gradient(135deg, #39ff14, #00b34a); }
+.app-icon[data-app="terminal"] .icon-img { background: linear-gradient(135deg, #ffffff, #889999); color: #080808; }
+.app-icon[data-app="paint"] .icon-img { background: linear-gradient(135deg, #ff00ff, #ffaa00); }
+
+/* ---------- PENCERE KATMANI ---------- */
+#window-layer {
+  position: absolute;
+  inset: 0 0 50px 0;
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* ---------- AURA PENCERESİ ---------- */
+.aura-window {
+  position: absolute;
+  min-width: 320px;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  background: rgba(4, 12, 22, 0.94);
+  border: 1px solid rgba(0, 255, 200, 0.5);
+  border-radius: 8px;
+  box-shadow: 0 0 0 1px rgba(0,255,200,0.15),
+              0 0 22px rgba(0,255,200,0.22),
+              0 18px 50px rgba(0,0,0,0.8);
+  pointer-events: auto;
+  overflow: hidden;
+  user-select: none;
+}
+
+.aura-window.active {
+  border-color: rgba(0, 255, 200, 0.95);
+  box-shadow: 0 0 0 1px rgba(0,255,200,0.3),
+              0 0 36px rgba(0,255,200,0.4),
+              0 20px 60px rgba(0,0,0,0.9);
+}
+
+.aura-window.minimized {
+  display: none;
+}
+
+.aura-window .window-titlebar {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(90deg, rgba(0, 60, 50, 0.9), rgba(2, 20, 40, 0.95));
+  border-bottom: 1px solid rgba(0,255,200,0.35);
+  height: 38px;
+  padding: 0 8px 0 12px;
+  cursor: grab;
+  flex-shrink: 0;
+}
+
+.aura-window .window-titlebar:active { cursor: grabbing; }
+
+.window-titlebar .win-icon { margin-right: 8px; font-size: 16px; }
+.window-titlebar .win-title {
+  flex: 1;
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: #a9ffe9;
+  text-shadow: 0 0 6px rgba(0,255,200,0.6);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.window-titlebar .win-btns { display: flex; gap: 6px; }
+
+.win-btn {
+  width: 30px;
+  height: 24px;
+  border: 1px solid rgba(0,255,200,0.4);
+  background: rgba(0, 40, 35, 0.6);
+  color: #8affdd;
+  font-size: 13px;
+  line-height: 1;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.12s;
+}
+
+.win-btn:hover { background: rgba(0,255,200,0.22); color: #fff; }
+
+.win-btn.btn-min { font-size: 15px; }
+.win-btn.btn-close { border-color: rgba(255,60,60,0.6); color: #ff7777; }
+.win-btn.btn-close:hover { background: rgba(255,60,60,0.3); color: #fff; }
+
+.aura-window .window-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  user-select: text;
+  background: rgba(2, 8, 16, 0.9);
+  min-height: 0;
+  min-width: 0;
+}
+
+/* Uygulama kök konteynerları pencere gövdesini tam doldursun (flex column) */
+.term-app, .note-app, .paint-app {
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+}
+
+/* ---------- GÖREV ÇUBUĞU (TASKBAR) ---------- */
+#taskbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 50px;
+  z-index: 100;
+  background: linear-gradient(180deg, rgba(8, 16, 32, 0.98), rgba(2, 6, 14, 0.99));
+  border-top: 1px solid rgba(0, 255, 200, 0.45);
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  gap: 10px;
+  box-shadow: 0 -6px 24px rgba(0,255,200,0.08);
+  user-select: none;
+}
+
+#start-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border: 1px solid rgba(0,255,200,0.5);
+  border-radius: 6px;
+  background: linear-gradient(90deg, rgba(0,80,70,0.55), rgba(0,60,90,0.55));
+  cursor: pointer;
+  color: #8affdd;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+#start-btn:hover { background: rgba(0,255,200,0.25); box-shadow: 0 0 12px rgba(0,255,200,0.4); }
+#start-btn.open { background: rgba(0,255,200,0.3); box-shadow: 0 0 16px rgba(0,255,200,0.55); }
+
+#start-btn .start-icon { font-size: 13px; color: #00ffcc; }
+
+#taskbar-separator {
+  width: 1px;
+  height: 28px;
+  background: rgba(0,255,200,0.3);
+  flex-shrink: 0;
+}
+
+/* Açık pencere butonları */
+#taskbar-windows {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 2px 0;
+}
+
+#taskbar-windows::-webkit-scrollbar { height: 4px; }
+#taskbar-windows::-webkit-scrollbar-thumb { background: rgba(0,255,200,0.4); }
+
+.task-window-btn {
+  flex-shrink: 0;
+  max-width: 170px;
+  min-width: 60px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 10px;
+  border: 1px solid rgba(0,255,200,0.3);
+  border-radius: 6px;
+  background: rgba(0, 30, 30, 0.4);
+  color: #7fe8cc;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.13s;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.task-window-btn .tw-icon { font-size: 13px; flex-shrink: 0; }
+.task-window-btn .tw-label { overflow: hidden; text-overflow: ellipsis; }
+
+.task-window-btn:hover { background: rgba(0,255,200,0.18); }
+
+.task-window-btn.active {
+  background: rgba(0,255,200,0.3);
+  border-color: rgba(0,255,200,0.8);
+  color: #fff;
+  box-shadow: 0 0 10px rgba(0,255,200,0.3);
+  font-weight: bold;
+}
+
+/* Saat kısmı */
+#taskbar-right {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+  padding: 4px 8px;
+  border-left: 1px solid rgba(0,255,200,0.2);
+  margin-left: 6px;
+}
+
+#taskbar-clock {
+  font-size: 17px;
+  font-weight: bold;
+  color: #00ffcc;
+  text-shadow: 0 0 8px rgba(0,255,200,0.7);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 1px;
+}
+
+#taskbar-date {
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: #6aa;
+  text-transform: uppercase;
+}
+
+/* ---------- BAŞLAT MENÜSÜ ---------- */
+#start-menu {
+  position: fixed;
+  left: 10px;
+  bottom: 58px;
+  width: 300px;
+  background: rgba(3, 8, 18, 0.96);
+  border: 1px solid rgba(0,255,200,0.5);
+  border-radius: 6px;
+  box-shadow: 0 0 30px rgba(0,255,200,0.2), 0 12px 40px rgba(0,0,0,0.9);
+  z-index: 200;
+  overflow: hidden;
+}
+
+#start-menu.hidden { display: none; }
+
+.start-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: linear-gradient(90deg, rgba(0,90,70,0.5), rgba(0,40,80,0.5));
+  border-bottom: 1px solid rgba(0,255,200,0.3);
+}
+
+.start-header .start-logo { font-size: 24px; color: #00ffcc; text-shadow: 0 0 10px #0fc; }
+.start-header .start-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #00ffcc;
+  letter-spacing: 3px;
+  text-shadow: 0 0 8px rgba(0,255,200,0.6);
+}
+
+.start-body {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.start-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border: 1px solid rgba(0,255,200,0.2);
+  border-radius: 8px;
+  background: rgba(0,50,50,0.2);
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00ffcc, #0066ff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.user-meta { display: flex; flex-direction: column; }
+.user-name { color: #00ffcc; font-size: 14px; font-weight: bold; }
+.user-status { color: #39ff14; font-size: 10px; letter-spacing: 1px; }
+
+.start-apps-title {
+  font-size: 10px;
+  color: #4a8080;
+  letter-spacing: 3px;
+  margin-top: 4px;
+}
+
+.start-apps {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.start-app-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.12s;
+}
+
+.start-app-item:hover { background: rgba(0,255,200,0.12); border-color: rgba(0,255,200,0.3); }
+
+.start-app-item .sa-icon { font-size: 20px; width: 26px; text-align: center; }
+.start-app-item .sa-meta { display: flex; flex-direction: column; }
+.start-app-item .sa-name { color: #b5ffe9; font-size: 13px; }
+.start-app-item .sa-desc { color: #4a8080; font-size: 9px; letter-spacing: 0.5px; }
+
+.start-actions { border-top: 1px solid rgba(0,255,200,0.15); padding-top: 8px; display: flex; flex-direction: column; }
+
+.start-action {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: #8affdd;
+  padding: 7px 8px;
+}
+
+.start-action.muted { color: #4a6a6a; }
+
+/* ---------- UYGULAMA: NOT DEFTERİ ---------- */
+.note-app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #02070c;
+}
+
+.note-statusbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px;
+  font-size: 10px;
+  color: #5a8a7a;
+  border-bottom: 1px solid rgba(0,255,200,0.15);
+  background: rgba(0,30,30,0.3);
+}
+
+.note-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #39ff14;
+  box-shadow: 0 0 6px #39ff14;
+  animation: blinkDot 1.6s infinite;
+}
+
+@keyframes blinkDot { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+.note-enc-tag { margin-left: auto; }
+
+.note-textarea {
+  flex: 1;
+  min-height: 170px;
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: none;
+  color: #b7ffe4;
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 12px 14px;
+  caret-color: #00ffcc;
+}
+
+.note-textarea::placeholder { color: #2a6a5a; }
+
+.note-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border-top: 1px solid rgba(0,255,200,0.2);
+  border-bottom: 1px solid rgba(0,255,200,0.15);
+}
+
+.note-save-btn {
+  padding: 7px 16px;
+  background: linear-gradient(90deg, rgba(0,255,200,0.25), rgba(0,140,255,0.25));
+  border: 1px solid rgba(0,255,200,0.6);
+  color: #adffe9;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 13px;
+  letter-spacing: 1px;
+  transition: all 0.15s;
+}
+
+.note-save-btn:hover { background: rgba(0,255,200,0.4); box-shadow: 0 0 10px rgba(0,255,200,0.3); }
+.note-save-btn:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
+
+.note-toolbar .note-save-hint { font-size: 10px; color: #4a8080; }
+
+.note-saved-msg { font-size: 11px; color: #39ff14; margin-left: auto; text-shadow: 0 0 5px rgba(57,255,20,0.6); }
+
+.note-list-label {
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: #4a8080;
+  padding: 6px 14px;
+  background: rgba(0,30,30,0.2);
+}
+
+.note-list {
+  max-height: 220px;
+  overflow-y: auto;
+  padding: 0 10px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.note-item {
+  border: 1px solid rgba(0,255,200,0.25);
+  border-left: 3px solid #00ffcc;
+  border-radius: 4px;
+  background: rgba(0,40,40,0.25);
+  padding: 7px 10px;
+}
+
+.note-item .ni-text { font-size: 12px; color: #c4ffe9; white-space: pre-wrap; word-break: break-word; user-select: text; }
+.note-item .ni-date { font-size: 9px; color: #39ff14; margin-top: 4px; letter-spacing: 1px; }
+.note-item .ni-empty { color: #4a8080; font-size: 11px; text-align: center; padding: 20px 0; }
+
+.note-list .ni-empty, .note-list-label.note-none { all: unset; text-align: center; color: #4a8080; font-size: 11px; }
+
+/* ---------- UYGULAMA: HACKER TERMİNALİ ---------- */
+.term-app {
+  height: 100%;
+  display: flex;
+  background: #010902;
+}
+
+.term-crt {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 12px;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at center, rgba(0,130,60,0.08), transparent 70%),
+    #010902;
+  color: #37ff8b;
+  text-shadow: 0 0 6px rgba(55,255,139,0.55);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.term-output {
+  flex: 1;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.term-output::-webkit-scrollbar { width: 5px; }
+.term-output::-webkit-scrollbar-thumb { background: rgba(55,255,139,0.35); }
+
+.term-inputline {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-top: 5px;
+  border-top: 1px solid rgba(55,255,139,0.2);
+}
+
+.term-prompt { color: #37ff8b; font-weight: bold; flex-shrink: 0; }
+
+.term-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #ccffdd;
+  font-size: 13px;
+  caret-color: #37ff8b;
+}
+
+/* Terminalde CRT tarama efekti */
+.term-crt::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(0deg, rgba(0,0,0,0.12) 0px, transparent 1px, transparent 2px);
+  opacity: 0.4;
+}
+
+.term-success { color: #37ff8b; }
+.term-info { color: #0fd0ff; }
+.term-warn { color: #ffc400; }
+.term-error { color: #ff4d4d; }
+.term-dim { color: #2c8f55; }
+
+/* ---------- UYGULAMA: NEON PAINT ---------- */
+.paint-app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #03060d;
+}
+
+.paint-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(255,0,255,0.3);
+  background: rgba(20,0,20,0.25);
+  flex-shrink: 0;
+}
+
+.paint-tools { display: flex; gap: 8px; }
+
+.color-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.2);
+  cursor: pointer;
+  transition: all 0.13s;
+  box-shadow: 0 0 8px rgba(0,0,0,0.5);
+}
+
+.color-btn:hover { transform: scale(1.2); box-shadow: 0 0 14px currentColor; }
+.color-btn.active {
+  border: 3px solid #fff;
+  box-shadow: 0 0 16px currentColor;
+  transform: scale(1.15);
+}
+
+.paint-clear-btn {
+  padding: 7px 14px;
+  border: 1px solid rgba(255,90,90,0.6);
+  background: rgba(80,10,10,0.4);
+  color: #ff9b9b;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  transition: all 0.15s;
+}
+
+.paint-clear-btn:hover { background: rgba(200,30,30,0.45); color: #fff; box-shadow: 0 0 12px rgba(255,60,60,0.4); }
+
+.paint-canvas-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at center, rgba(255,0,255,0.06), transparent 60%),
+    #050510;
+}
+
+.paint-canvas {
+  background: #05060f;
+  border: 1px solid rgba(255,0,255,0.25);
+  border-radius: 4px;
+  box-shadow: 0 0 30px rgba(255,0,255,0.15);
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.paint-hint {
+  font-size: 9px;
+  color: #5a4a6a;
+  padding: 4px 10px;
+  text-align: center;
+  letter-spacing: 1px;
+  border-top: 1px solid rgba(255,0,255,0.1);
+  flex-shrink: 0;
+  flex-shrink: 0;
+}

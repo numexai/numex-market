@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" role="img" aria-label="Boşlukta Form sergi afişi">
+  <rect width="640" height="480" fill="#f4efe6"/>
+  <!-- katmanlı formlar -->
+  <g opacity=".95">
+    <rect x="90" y="80" width="230" height="230" fill="#7d2b4e"/>
+    <rect x="170" y="140" width="230" height="230" fill="#d9a441" opacity=".88"/>
+    <circle cx="330" cy="270" r="115" fill="#211a1f" opacity=".9"/>
+    <circle cx="330" cy="270" r="76" fill="none" stroke="#f4efe6" stroke-width="1.6"/>
+    <path d="M215 270 L445 270" stroke="#f4efe6" stroke-width="1" opacity=".45"/>
+    <path d="M330 155 L330 385" stroke="#f4efe6" stroke-width="1" opacity=".45"/>
+  </g>
+  <!-- tipografi -->
+  <text x="380" y="80" font-family="Helvetica, Arial, sans-serif" font-size="11" letter-spacing="4" fill="#211a1f" opacity=".7">SERGİ · 14 EKİM – 30 KASIM</text>
+  <text x="470" y="420" text-anchor="middle" font-family="Georgia, serif" font-size="40" fill="#211a1f" letter-spacing="-1">BOŞLUKTA</text>
+  <text x="470" y="452" text-anchor="middle" font-family="Georgia, serif" font-size="40" fill="#7d2b4e" letter-spacing="-1">FORM</text>
+  <line x1="392" y1="466" x2="548" y2="466" stroke="#211a1f" stroke-width="1.5"/>
+  <text x="40" y="452" font-family="Helvetica, Arial, sans-serif" font-size="10" letter-spacing="3" fill="#211a1f" opacity=".6">HEYKEL · GALERİ SARNIÇ</text>
+</svg>

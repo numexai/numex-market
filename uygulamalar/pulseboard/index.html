@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="tr" data-tema="koyu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PulseBoard — Kişisel Çalışma Paneli</title>
+  <meta name="description" content="Günlük görevlerini ve alışkanlıklarını tek ekranda takip et." />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="styles/tokens.css" />
+  <link rel="stylesheet" href="styles/base.css" />
+  <link rel="stylesheet" href="styles/components.css" />
+  <link rel="stylesheet" href="styles/views.css" />
+  <link rel="stylesheet" href="styles/responsive.css" />
+</head>
+<body>
+  <a class="atla-baglantisi" href="#ana-icerik">İçeriğe atla</a>
+
+  <!-- Mobil üst bar -->
+  <header class="mobil-bar" id="mobilBar">
+    <button class="ikon-btn" id="drawerBtn" aria-label="Menüyü aç" aria-expanded="false" aria-controls="sidebar">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" /></svg>
+    </button>
+    <span class="mobil-logo">
+      <span class="logo-isaret" aria-hidden="true"></span>
+      PulseBoard
+    </span>
+    <button class="ikon-btn" id="mobilTemaBtn" aria-label="Tema değiştir">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" /></svg>
+    </button>
+  </header>
+
+  <div class="uygulama-kabuk">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar" aria-label="Ana menü">
+      <div class="sidebar-ust">
+        <a class="marka" href="#/genel-bakis">
+          <span class="logo-isaret" aria-hidden="true"></span>
+          <span class="marka-metin">Pulse<strong>Board</strong></span>
+        </a>
+        <button class="ikon-btn sidebar-kapat" id="drawerKapat" aria-label="Menüyü kapat">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" /></svg>
+        </button>
+      </div>
+
+      <nav class="menu" aria-label="Sayfalar">
+        <a class="menu-ogesi" href="#/genel-bakis" data-rota="genel-bakis">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13h6V4H4v9Zm0 7h6v-5H4v5Zm10 0h6v-9h-6v9Zm0-16v5h6V4h-6Z"/></svg>
+          <span>Genel Bakış</span>
+        </a>
+        <a class="menu-ogesi" href="#/gorevler" data-rota="gorevler">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4 6l1.2 1.2L7.5 4.9M4 12l1.2 1.2L7.5 10.9M4 18l1.2 1.2L7.5 16.9"/></svg>
+          <span>Görevler</span>
+          <span class="rozet" id="rozetGorevler" hidden>0</span>
+        </a>
+        <a class="menu-ogesi" href="#/aliskanliklar" data-rota="aliskanliklar">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.4-7-9.6A4.4 4.4 0 0 1 12 8a4.4 4.4 0 0 1 7 3.4C19 16.6 12 21 12 21Z"/></svg>
+          <span>Alışkanlıklar</span>
+        </a>
+        <a class="menu-ogesi" href="#/istatistikler" data-rota="istatistikler">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20V10M12 20V4M19 20v-6"/></svg>
+          <span>İstatistikler</span>
+        </a>
+        <a class="menu-ogesi" href="#/ayarlar" data-rota="ayarlar">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15.5A3.5 3.5 0 1 0 12 8.5a3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 7.5 19.4l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3.6 14H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 7.5l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.6 1.6 0 0 0 10 3.6V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 2.5 1.4l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0 1.1 2.7H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1Z"/></svg>
+          <span>Ayarlar</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-alt">
+        <div class="gunluk-kutu" id="sidebarIlerleme">
+          <div class="gunluk-kutu-ust">
+            <span>Günlük ilerleme</span>
+            <strong id="sidebarYuzde">0%</strong>
+          </div>
+          <div class="ilerleme-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="sidebarBarKapsayici">
+            <span class="ilerleme-dolgu" id="sidebarBar" style="width:0%"></span>
+          </div>
+        </div>
+        <button class="tema-degistir" id="temaToggle" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+          <span id="temaToggleMetin">Açık temaya geç</span>
+        </button>
+      </div>
+    </aside>
+
+    <div class="perde" id="perde" hidden></div>
+
+    <!-- Ana içerik -->
+    <main class="icerik" id="ana-icerik">
+      <header class="ust-bolum">
+        <div class="ust-sol">
+          <h1 class="selamlama" id="selamlama">Günaydın</h1>
+          <p class="tarih-satiri">
+            <span id="tarihMetin">—</span>
+            <span class="ayrac" aria-hidden="true">•</span>
+            <span id="bugunlukDurum">Bugün için planın hazır</span>
+          </p>
+        </div>
+        <div class="ust-sag">
+          <div class="hizli-ilerleme" title="Bugünkü görev tamamlama oranı">
+            <svg class="halka" viewBox="0 0 44 44" aria-hidden="true">
+              <circle class="halka-zemin" cx="22" cy="22" r="18" />
+              <circle class="halka-dolgu" id="halkaDolgu" cx="22" cy="22" r="18" />
+            </svg>
+            <div class="hizli-ilerleme-metin">
+              <strong id="ustYuzde">0%</strong>
+              <span>günlük ilerleme</span>
+            </div>
+          </div>
+          <button class="btn btn-ana" id="hizliEkleBtn" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+            <span>Hızlı görev ekle</span>
+          </button>
+        </div>
+      </header>
+
+      <section class="gorunum" id="gorunum" tabindex="-1" aria-live="polite"></section>
+    </main>
+  </div>
+
+  <!-- Modal kökü -->
+  <div class="modal-kok" id="modalKok" hidden></div>
+
+  <!-- Toast kökü -->
+  <div class="toast-kok" id="toastKok" role="status" aria-live="polite" aria-atomic="false"></div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

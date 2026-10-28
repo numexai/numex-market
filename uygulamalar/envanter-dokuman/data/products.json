@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "name": "Laptop",
+    "categoryId": 1,
+    "unitPrice": 25000,
+    "stock": 13,
+    "minimumStock": 10,
+    "createdAt": "2026-08-19T02:41:30.339Z",
+    "updatedAt": "2026-08-19T02:41:46.851Z"
+  },
+  {
+    "id": 2,
+    "name": "Kulakl�k",
+    "categoryId": 1,
+    "unitPrice": 1500,
+    "stock": 3,
+    "minimumStock": 8,
+    "createdAt": "2026-08-19T02:41:30.376Z",
+    "updatedAt": "2026-08-19T02:41:30.376Z"
+  },
+  {
+    "id": 3,
+    "name": "Zeytinya��",
+    "categoryId": 2,
+    "unitPrice": 850,
+    "stock": 20,
+    "minimumStock": 15,
+    "createdAt": "2026-08-19T02:41:30.409Z",
+    "updatedAt": "2026-08-19T02:41:30.409Z"
+  }
+]

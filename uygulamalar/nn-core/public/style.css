@@ -1,0 +1,177 @@
+/* =========================================================
+   NUMEX AI — Neural Network Core — Profesyonel Tema
+   ========================================================= */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #05060f;
+  --panel: rgba(10, 14, 30, 0.72);
+  --accent: #00e2ff;
+  --cool: #5865F2;
+  --amber: #ffdc5a;
+  --text: #e7ecf7;
+  --dim: #8290b0;
+  --border: rgba(255,255,255,0.08);
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+#app { position: relative; width: 100vw; height: 100vh; }
+
+/* ---- Arka plan sinir ağı ---- */
+#net {
+  position: absolute;
+  inset: 0;
+  display: block;
+  z-index: 1;
+}
+
+/* ---- Üst HUD ---- */
+#hud {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 26px;
+  background: linear-gradient(180deg, rgba(5,6,15,0.9), rgba(5,6,15,0));
+  pointer-events: none;
+}
+
+.brand { display: flex; align-items: center; gap: 12px; }
+.logo-dot {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #fff, var(--accent));
+  box-shadow: 0 0 18px var(--accent);
+  animation: breathe 2.4s ease-in-out infinite;
+}
+@keyframes breathe {
+  0%,100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.25); opacity: 0.75; }
+}
+.brand-name {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 4px;
+  color: #fff;
+}
+.brand-name .ai {
+  color: var(--accent);
+  margin-left: 4px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  vertical-align: super;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  font-size: 13px;
+  color: var(--dim);
+}
+.status-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #31e08a;
+  box-shadow: 0 0 10px #31e08a;
+}
+.stat-chip {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 6px 12px;
+  border-radius: 20px;
+  backdrop-filter: blur(6px);
+}
+.stat-chip b { color: var(--text); font-weight: 700; font-variant-numeric: tabular-nums; }
+
+/* ---- Sol panel ---- */
+#panel {
+  position: absolute;
+  left: 26px; top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  width: 190px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+}
+#panel h3 {
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 16px;
+}
+#panel ul { list-style: none; }
+#panel li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+.lbl { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+.lbl.hot  { background: var(--accent);  box-shadow: 0 0 8px var(--accent); }
+.lbl.cool { background: var(--cool);    box-shadow: 0 0 8px var(--cool); }
+.lbl.text { background: var(--amber);   box-shadow: 0 0 8px var(--amber); }
+
+.gauge {
+  margin-top: 20px;
+  height: 6px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.gauge-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--cool), var(--accent));
+  border-radius: 10px;
+  transition: width 0.4s ease;
+  box-shadow: 0 0 12px var(--accent);
+}
+#gaugeLabel {
+  margin-top: 10px;
+  font-size: 11px;
+  color: var(--dim);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- Alt grafik ---- */
+#chart {
+  position: absolute;
+  bottom: 26px; right: 26px;
+  z-index: 5;
+  width: 520px;
+  max-width: calc(100vw - 52px);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 10px;
+  backdrop-filter: blur(10px);
+}
+#lossChart { display: block; width: 100%; height: auto; }
+
+/* ---- Mobil uyum ---- */
+@media (max-width: 720px) {
+  #panel { display: none; }
+  #hud { padding: 14px 16px; }
+  .status { gap: 8px; }
+  .stat-chip { display: none; }
+  #chart { left: 16px; right: 16px; bottom: 16px; width: auto; }
+}

@@ -1,0 +1,43 @@
+{
+  "slug": "numex-aqua-world",
+  "name": "Numex Aqua World",
+  "tagline": "Gelecek, denizin altında",
+  "summary": "Tarayıcıda çalışan, tamamen kodla üretilmiş etkileşimli 3D su altı şehri. Hazır model, doku ya da video kullanılmadı; her nesne Three.js geometrisiyle sıfırdan inşa edildi.",
+  "version": "1.0.0",
+  "author": "Numex AI",
+  "license": "MIT",
+  "category": "3D / Deneysel",
+  "tags": ["three.js", "3d", "webgl", "okyanus", "şehir", "etkileşimli", "kodla-üretim"],
+  "entry": "index.html",
+  "language": "tr",
+  "responsive": true,
+  "offline": true,
+  "dependencies": [
+    { "name": "three.js", "version": "0.160.0", "bundled": true, "path": "vendor/three.module.js", "license": "MIT" }
+  ],
+  "controls": [
+    { "input": "Fare sürükleme", "action": "360° kamera döndürme" },
+    { "input": "Tekerlek / pinch", "action": "Yakınlaştırma, uzaklaştırma" },
+    { "input": "Kubbeye tıklama", "action": "Kamera o kubbeye yaklaşır, bilgi kartı açılır" },
+    { "input": "T", "action": "Sinematik tur" },
+    { "input": "N", "action": "Gece / gündüz" },
+    { "input": "F", "action": "Denizaltı takip kamerası" },
+    { "input": "R", "action": "Kamerayı sıfırla" },
+    { "input": "Esc", "action": "Kartı / modu kapat" }
+  ],
+  "features": [
+    "4 cam kubbeli yaşam alanı, içlerinde ışıklı binalar",
+    "Kubbeleri birbirine bağlayan şeffaf, ışıklı tüneller ve destek payandaları",
+    "Sürü davranışıyla dolaşan beş balık sürüsü",
+    "Üç denizaltı, farlarıyla birlikte kubbe aralarında seyrediyor",
+    "Mercan kümeleri, deniz çayırı, kayalar ve uzak kaya sırtları",
+    "Yüzen parçacıklar, deniz karı, ışık huzmeleri, su sisi",
+    "Gece/gündüz geçişli aydınlatma (bloom dahil)",
+    "Sinematik şehir turu ve denizaltı takip kamerası"
+  ],
+  "performance": {
+    "target": "60 fps (masaüstü)",
+    "notes": "Gölge haritası 2048px, bloom tek geçiş, piksel oranı 1.8 ile sınırlı."
+  },
+  "screenshots": ["screenshot.png"]
+}

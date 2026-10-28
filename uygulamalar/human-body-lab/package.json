@@ -1,0 +1,27 @@
+{
+  "name": "human-body-neural-circulation-lab",
+  "version": "1.0.0",
+  "description": "Interaktif insan vucudu dolasim + sinir sistemi simulasyon laboratuvari",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "node test-physiology.js && node test-dom.js"
+  },
+  "keywords": [
+    "physiology",
+    "simulation",
+    "circulation",
+    "neural",
+    "canvas"
+  ],
+  "author": "Numex AI",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}

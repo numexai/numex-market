@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Numex Dream City — Uyuyan Şehir</title>
+<meta name="description" content="Kodla üretilmiş, kendi kendine yaşayan sinematik minyatür şehir. Gece, gündüz, gün batımı, yağmur ve kar." />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<canvas id="scene"></canvas>
+
+<!-- Açılış perdesi -->
+<div id="intro">
+  <div class="intro-inner">
+    <h1><span>Numex</span> Dream City</h1>
+    <p class="sub">küçük bir şehir, kocaman bir hayal</p>
+    <div class="loader"><i></i></div>
+    <p class="hint">İçeri girdiğinde şehir çoktan uyanmış olacak…</p>
+  </div>
+</div>
+
+<!-- Üst başlık -->
+<header id="topbar">
+  <div class="brand">
+    <span class="dot"></span>
+    <b>Dream City</b>
+    <em>Uyuyan Şehir</em>
+  </div>
+  <div class="clock">
+    <span id="saat">22:00</span>
+    <span id="hava" class="hava">Açık</span>
+  </div>
+</header>
+
+<!-- Alt kontrol paneli -->
+<nav id="panel" aria-label="Şehir kontrolleri">
+  <div class="grup" role="group" aria-label="Gün ışığı">
+    <button class="btn" data-zaman="gunduz" title="Gündüz">Gündüz</button>
+    <button class="btn" data-zaman="gunbatimi" title="Gün batımı">Gün Batımı</button>
+    <button class="btn aktif" data-zaman="gece" title="Gece">Gece</button>
+  </div>
+
+  <div class="grup" role="group" aria-label="Hava durumu">
+    <button class="btn" data-hava="yok" title="Hava açık">Açık</button>
+    <button class="btn" data-hava="yagmur" title="Yağmur">Yağmur</button>
+    <button class="btn" data-hava="kar" title="Kar">Kar</button>
+  </div>
+
+  <div class="grup">
+    <button class="btn vurgu" id="turBtn" title="Sinematik şehir turu (T)">
+      <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+      Şehir Turu
+    </button>
+  </div>
+
+  <div class="grup sag">
+    <button class="btn ikon" id="otoBtn" title="Otomatik gün döngüsü" aria-pressed="true">
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 6a6 6 0 100 12 6 6 0 000-12zm0-4v3m0 14v3M2 12h3m14 0h3M4.9 4.9l2.1 2.1m10 10l2.1 2.1M19.1 4.9L17 7m-10 10l-2.1 2.1" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>
+      Oto
+    </button>
+    <button class="btn ikon" id="sesBtn" title="Sesi aç/kapat" aria-pressed="false">
+      <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true">
+        <path d="M3 9.5v5h3.2L11 18.3V5.7L6.2 9.5H3z" fill="currentColor"/>
+        <path id="sesDalga" d="M14.2 8.6a4.6 4.6 0 010 6.8M17 6a8.4 8.4 0 010 12" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+      </svg>
+    </button>
+  </div>
+</nav>
+
+<!-- İpucu -->
+<div id="ipucu">
+  <span class="fare">🖱️</span> Sürükle: döndür &nbsp;·&nbsp; Tekerlek: yakınlaş &nbsp;·&nbsp; Bir binaya tıkla: odaların ışığı değişsin
+  <button id="ipucuKapat" aria-label="İpucunu kapat">×</button>
+</div>
+
+<!-- Bina bilgi kartı -->
+<aside id="kart" class="gizli" aria-live="polite">
+  <div class="kart-ust">
+    <h2 id="kartAd">Ev</h2>
+    <button id="kartKapat" aria-label="Kapat">×</button>
+  </div>
+  <p id="kartAlt">Pencerelere tıkla, odaların ışığı değişsin.</p>
+  <div class="kart-aksiyon">
+    <button class="btn" id="kartIsik">Tüm ışıkları değiştir</button>
+  </div>
+</aside>
+
+<div id="hata" class="gizli"></div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

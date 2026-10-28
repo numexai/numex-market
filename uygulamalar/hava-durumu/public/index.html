@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hava Durumu</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Hava Durumu</h1>
+            <p class="subtitle">Türkiye'nin dört bir yanından canlı veriler</p>
+        </header>
+        <div class="grid">
+            <div class="card" data-id="istanbul">
+                <div class="ikon">⛅</div>
+                <div class="sehir-adi">İstanbul</div>
+                <div class="sicaklik" id="istanbul-sicaklik">22°C</div>
+                <div class="detaylar">
+                    <div class="detay">
+                        <span class="label">Nem</span>
+                        <span class="deger" id="istanbul-nem">%65</span>
+                    </div>
+                    <div class="detay">
+                        <span class="label">Rüzgar</span>
+                        <span class="deger" id="istanbul-ruzgar">12 km/s</span>
+                    </div>
+                </div>
+            </div>
+            <div class="card" data-id="ankara">
+                <div class="ikon">☀️</div>
+                <div class="sehir-adi">Ankara</div>
+                <div class="sicaklik" id="ankara-sicaklik">18°C</div>
+                <div class="detaylar">
+                    <div class="detay">
+                        <span class="label">Nem</span>
+                        <span class="deger" id="ankara-nem">%55</span>
+                    </div>
+                    <div class="detay">
+                        <span class="label">Rüzgar</span>
+                        <span class="deger" id="ankara-ruzgar">8 km/s</span>
+                    </div>
+                </div>
+            </div>
+            <div class="card" data-id="izmir">
+                <div class="ikon">☀️</div>
+                <div class="sehir-adi">İzmir</div>
+                <div class="sicaklik" id="izmir-sicaklik">25°C</div>
+                <div class="detaylar">
+                    <div class="detay">
+                        <span class="label">Nem</span>
+                        <span class="deger" id="izmir-nem">%60</span>
+                    </div>
+                    <div class="detay">
+                        <span class="label">Rüzgar</span>
+                        <span class="deger" id="izmir-ruzgar">15 km/s</span>
+                    </div>
+                </div>
+            </div>
+            <div class="card" data-id="antalya">
+                <div class="ikon">☀️</div>
+                <div class="sehir-adi">Antalya</div>
+                <div class="sicaklik" id="antalya-sicaklik">28°C</div>
+                <div class="detaylar">
+                    <div class="detay">
+                        <span class="label">Nem</span>
+                        <span class="deger" id="antalya-nem">%70</span>
+                    </div>
+                    <div class="detay">
+                        <span class="label">Rüzgar</span>
+                        <span class="deger" id="antalya-ruzgar">10 km/s</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer>
+            <p>Son güncelleme: <span id="son-guncelleme">--:--:--</span></p>
+        </footer>
+    </div>
+    <script src="js/app.js"></script>
+</body>
+</html>

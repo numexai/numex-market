@@ -1,0 +1,15 @@
+{
+  "name": "canli-doviz",
+  "version": "1.0.0",
+  "description": "Canlı döviz kurları uygulaması",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": ["doviz", "kur", "canli"],
+  "author": "Numex AI",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

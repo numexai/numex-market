@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title ? (title + ' · Envanter') : 'Envanter' %></title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="<%= bodyClass || '' %>">
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a href="/" class="brand">📦 Envanter Yönetimi</a>
+      <nav class="nav">
+        <a href="/" class="<%= bodyClass === 'dashboard' ? 'active' : '' %>">Panel</a>
+        <a href="/api/products" class="<%= bodyClass === 'list-page' || bodyClass === 'form-page' || bodyClass === 'detail-page' ? 'active' : '' %>">Ürünler</a>
+        <a href="/api/categories" class="<%= bodyClass === 'categories-list' ? 'active' : '' %>">Kategoriler</a>
+        <a href="/api/stock/movements" class="<%= bodyClass === 'movements-page' ? 'active' : '' %>">Hareketler</a>
+        <a href="/api/reports/category" class="<%= bodyClass === 'reports-page' ? 'active' : '' %>">Raporlar</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <%- body %>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>Numex Envanter Sistemi · Node.js / Express</p>
+    </div>
+  </footer>
+</body>
+</html>

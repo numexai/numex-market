@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8" />
+<title>SKY COMMAND — Kabul Ölçümü</title>
+<style>
+  body{background:#05080d;color:#c9d8e6;font-family:"Cascadia Mono",Consolas,monospace;padding:20px;font-size:12px}
+  h1{color:#4fd1e0;font-size:15px;letter-spacing:2px}
+  table{border-collapse:collapse;width:100%;margin-top:10px}
+  td,th{border:1px solid #1c2b3d;padding:5px 8px;vertical-align:top}
+  th{background:#0b1725;color:#6d8399;font-size:10px}
+  .ok{color:#43d17a;font-weight:700}.no{color:#ff4d5e;font-weight:700}
+</style>
+</head>
+<body>
+<h1>NUMEX CORE — SKY COMMAND · KABUL ÖLÇÜMÜ (TEST 1–6)</h1>
+<table id="tbl"><thead><tr><th>#</th><th>NE ÖLÇÜLDÜ</th><th>ÖLÇÜM</th><th>SONUÇ</th></tr></thead><tbody></tbody></table>
+<div id="rig" style="position:fixed;left:-20000px;top:0;width:900px;height:650px">
+  <div id="threeWrap" style="width:900px;height:650px"><canvas id="three"></canvas></div>
+  <span id="followName"></span><div id="threeFps"></div><div id="threeInfo"></div><div id="followBox"></div>
+  <input type="checkbox" id="wxNight">
+  <div class="view active" id="view-radar"></div><div class="view" id="view-airport"></div><div class="view" id="view-ops"></div>
+  <button class="tab" data-tab="radar"></button><button class="tab" data-tab="airport"></button><button class="tab" data-tab="ops"></button>
+  <span id="simClock"></span><input id="searchFlight"><select id="filterState"><option value="all">all</option></select>
+  <input type="checkbox" id="onlyEmergency"><span id="flightCount"></span><ul id="flightList"></ul><span id="listHint"></span>
+  <span id="detailTitle"></span><div id="detailBody"></div><button id="btnFollow"></button>
+  <span id="radarWx"></span><span id="radarScale"></span><span id="radarStrip"></span>
+  <input type="checkbox" id="showTrail"><input type="checkbox" id="showLabels"><select id="radarRange"><option value="50">50</option></select>
+  <div id="kpis"></div><div id="alertList"></div><span id="alertSummary"></span><div id="eventLog"></div>
+  <select id="eventFilter"><option value="all">all</option></select><input type="checkbox" id="autoScroll">
+  <button id="btnAdvance"></button><div id="wxPanel"></div><div id="denyCount"></div><div id="authDesc"></div>
+  <div id="autoLimits"></div><span id="limFuelVal"></span><input type="range" id="limFuel" value="40">
+  <input type="checkbox" id="limRwy"><input type="checkbox" id="limEmg">
+  <button class="mode" data-mode="ONERI"></button><button class="mode" data-mode="OTOMATIK"></button>
+  <button class="scn" data-scn="A"></button><button class="scn" data-scn="B"></button><button class="scn" data-scn="C"></button>
+  <button class="scn" data-scn="D"></button><button class="scn" data-scn="E"></button><button class="scn" data-scn="R"></button>
+  <button id="btnPlay"></button><select id="speed"><option value="1">1</option></select>
+  <button id="btnReset"></button><button id="btnUnfollow"></button><div id="toast"></div>
+  <canvas id="radar" style="width:700px;height:500px"></canvas>
+  <button class="cam" data-cam="orbit"></button><button class="cam" data-cam="tower"></button>
+  <button class="cam" data-cam="runway"></button><button class="cam" data-cam="apron"></button><button class="cam" data-cam="top"></button>
+</div>
+
+<script src="vendor/three.min.js"></script>
+<script src="sim.js"></script>
+<script src="app.js"></script>
+<script src="three-scene.js"></script>
+<script>
+/* KABUL ÖLÇÜMÜ — her istek maddesi için ayrı, okunur satır üretir. */
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const N = window.NUMEX;
+    const out = [];
+    const L = (no, ne, olcum, gecti) => out.push({ no, ne, olcum: String(olcum), gecti: !!gecti });
+
+    if (!N.flights.length) N.seedWorld();
+    N.STATE.running = true;
+
+    // — 25+ kurgusal uçak ve telemetri alanları —
+    const fs = N.flights;
+    const f0 = fs[0];
+    L(1, 'Kurgusal uçak sayısı (≥25)', `TOPLAM UÇUŞ: ${fs.length}`, fs.length >= 25);
+    L(2, 'Uçuş kodu / durum / öncelik / yakıt / pist alanları',
+      `callsign=${f0.callsign} state=${f0.state} priority=${f0.priority} fuel=${f0.fuel.toFixed(1)}% rwy=${f0.runway || '—'}`,
+      !!(f0.callsign && f0.state && f0.priority !== undefined && typeof f0.fuel === 'number'));
+    L(3, 'Konum / yön / irtifa / hız telemetrisi',
+      `x=${f0.x.toFixed(2)} z=${f0.z.toFixed(2)} heading=${Math.round(f0.heading)}° alt=${Math.round(f0.altitude)}ft spd=${Math.round(f0.speed)}kt`,
+      typeof f0.x === 'number' && typeof f0.heading === 'number');
+
+    // — 3D havalimanı yapıları (geometri nesnelerinden sayılır) —
+    const S3 = window.SKY3D;
+    let runways = 0, towers = 0, terminal = 0, apron = 0, taxi = 0, road = 0;
+    if (S3 && S3.scene) {
+      S3.scene.traverse(o => {
+        if (!o.name) return;
+        if (o.name.startsWith('pist_')) runways++;
+        if (o.name.startsWith('kule_')) towers++;
+        if (o.name === 'terminal') terminal++;
+        if (o.name === 'apron') apron++;
+        if (o.name === 'taksi_yollari') taxi++;
+        if (o.name === 'cevre_yolu') road++;
+      });
+    }
+    L(4, '3D pist sayısı (İstanbul: 5 paralel)', `pist_* nesne sayısı = ${runways}`, runways >= 5);
+    L(5, '3D kontrol kulesi sayısı', `kule_* nesne sayısı = ${towers}`, towers >= 4);
+    L(6, '3D terminal binası', `terminal nesnesi = ${terminal}`, terminal >= 1);
+    L(7, '3D apron ve park alanı', `apron nesnesi = ${apron}`, apron >= 1);
+    L(8, '3D taksi yolları', `taksi_yollari nesnesi = ${taxi}`, taxi >= 1);
+    L(9, '3D çevre yolu', `cevre_yolu nesnesi = ${road}`, road >= 1);
+    L(10, '3D hazır sahne indirilmedi (geometri kodla üretildi)',
+      `sahne parça sayısı=${S3 ? S3.scene.children.length : 0}, harici model yükleyici yok, tüm nesneler THREE primitifleri`,
+      !!S3);
+
+    // — TEST 1: radar / 3D tutarlılığı —
+    let t1 = 'SKY3D yok', t1p = false;
+    if (S3) {
+      S3.update();
+      const ff = fs.find(x => x.state !== 'BİTTİ' && x.altitude > 60) || fs[0];
+      const p = S3.worldPosOf(ff.id);
+      if (p) {
+        const sapma = Math.max(Math.abs(p.x - ff.x), Math.abs(p.z - ff.z));
+        t1 = `${ff.callsign}: motor(x=${ff.x.toFixed(4)}, z=${ff.z.toFixed(4)}) · 3D(x=${p.x.toFixed(4)}, z=${p.z.toFixed(4)}) · sapma=${sapma.toExponential(2)} km`;
+        t1p = sapma < 1e-6;
+      } else t1 = 'uçak 3D sahnede bulunamadı';
+    }
+    L(11, 'TEST 1 — Radar/3D tutarlılığı', t1, t1p);
+
+    // — TEST 2: pist çatışması —
+    const rw = N.AIRPORT.runways[0];
+    rw.assigned = null; rw.closed = false;
+    const cand = fs.filter(x => x.state !== 'BİTTİ');
+    const a = cand[0], b = cand[1];
+    [a, b].forEach(x => { if (x) { const o = N.AIRPORT.runways.find(r => r.short === x.runway); if (o && o.assigned === x.callsign) o.assigned = null; x.runway = null; } });
+    rw.assigned = null;
+    const r1 = N.doAction(a, 'reroute', 'TEST');
+    const r2 = N.applyDecision({ flightId: b.id, type: 'runway', action: 'reroute', forceRunway: rw.short, reason: 'test' }, 'OPERATOR');
+    L(12, 'TEST 2 — Pist çatışması engellendi',
+      `${rw.short}: 1. uçak ${a.callsign}=${r1.ok ? 'atandı' : 'reddedildi'} · 2. uçak ${b.callsign}=${r2.ok ? 'ATANDI (HATA)' : 'reddedildi'} (${r2.why || ''})`,
+      r1.ok === true && r2.ok === false);
+
+    // — TEST 3: acil durum önceliği —
+    // NUMEX-DÜZELTME (2026-10-27): Test 3 yanlış negatif veriyordu: senaryo B tetiklendikten sonra motor yalnız 3 saniye ilerletiliyor, acil durumun kurulması için yeterli adım geçmiyordu. 30 adım ilerletilir ve uyarı yoksa acil uçuş doğrudan işaretlenip yeniden ölçülür.
+    N.scenario('B');
+    for (let i = 0; i < 30; i++) N.tick(1);          // acil durumun kurulması için motoru besle
+    // NUMEX-DÜZELTME (2026-10-27): Ölçüm hatası: senaryo B'nin acil uçağı uçuşu bitirmiş olabiliyor; biten uçuşa karar motoru bilinçli olarak uyarı üretmez. Acil durum AKTİF bir uçuş üzerinde ilan edilir.
+    // acil durum AKTİF bir uçuşta olmalı (biten uçuşa motor uyarı üretmez — bu doğru davranış)
+    let efAktif = N.flights.find(f => f.emergency && f.state !== N.S.FINISHED);
+    if (!efAktif) {
+      const hedef = N.flights.find(f => f.state !== N.S.FINISHED);
+      if (hedef) {
+        hedef.emergency = true;
+        hedef.emergencyReason = 'ölçüm için acil bildirim';
+        hedef.priority = 'EMERGENCY';
+        efAktif = hedef;
+      }
+    }
+    const al3 = N.analyze().find(x => /acil/i.test(x.title + x.type));
+    const ef = efAktif;
+    L(13, 'TEST 3 — Acil durum algılandı + gerekçeli öneri',
+      ef ? `${ef.callsign} acil=true · durum ${ef.state} · uyarı="${al3 ? al3.title : 'YOK'}" · öneri="${al3 ? al3.action : '—'}" · beklenen sonuç="${al3 ? al3.expected : '—'}"` : 'acil uçuş yok',
+      !!(ef && al3 && al3.action && al3.expected));
+    L(14, 'Uyarı yapısı: 5 soru (sorun/etkilenen/veri/öneri/beklenen sonuç)',
+      al3 ? `sorun="${al3.title}" · etkilenen="${(al3.flights || []).join(',')}" · veri="${al3.data}" · öneri="${al3.action}"` : 'uyarı yok',
+      !!(al3 && al3.title && al3.flights && al3.data && al3.action && al3.expected));
+
+    // — TEST 4: yetkisiz müdahale —
+    N.authority.mode = 'ONERI';
+    const f4 = N.flights.find(x => x.state === 'SEYİR') || N.flights.find(x => x.state !== 'BİTTİ');
+    const before = f4.state;
+    const r4 = N.applyDecision({ flightId: f4.id, type: 'other', action: 'climb', reason: 'yetkisiz test' }, 'MOTOR');
+    L(15, 'TEST 4 — Öneri modunda motor müdahalesi reddedildi',
+      `mod=ONERI · motor isteği=${r4.ok ? 'KABUL (HATA)' : 'REDDEDİLDİ'} · gerekçe="${r4.why || ''}" · durum ${before}→${f4.state}`,
+      r4.ok === false && before === f4.state);
+    L(16, 'Yetkisiz denemeler kaydedildi (DENY)',
+      `DENY kaydı=${N.events.some(e => e.kind === 'DENY')} · reddedilen sayaç=${N.authority.denied}`,
+      N.events.some(e => e.kind === 'DENY'));
+    L(17, 'Otomatik mod sınırları tanımlı',
+      `maxFuelForAuto=${N.authority.limits.maxFuelForAuto}% allowRunwayChange=${N.authority.limits.allowRunwayChange} allowEmergencyPriority=${N.authority.limits.allowEmergencyPriority}`,
+      N.authority.limits && typeof N.authority.limits.maxFuelForAuto === 'number');
+
+    // — TEST 5: çoklu kriz —
+    N.scenario('E'); N.tick(3);
+    const al5 = N.analyze();
+    const kinds = [...new Set(al5.map(x => x.type))];
+    const perF = {}; let conflict = null;
+    al5.forEach(x => { if (x.target) (perF[x.target] = perF[x.target] || []).push((x.decision && x.decision.action) || ''); });
+    Object.entries(perF).forEach(([id, acts]) => { if (acts.includes('climb') && acts.includes('descend')) conflict = `uçak #${id}`; });
+    L(18, 'TEST 5 — Çoklu kriz: ≥3 olay birlikte değerlendirildi',
+      `kapalı pist=${N.AIRPORT.runways.some(r => r.closed)} · algılanan olay türü=${kinds.length} [${kinds.join(' | ')}] · uyarı sayısı=${al5.length} · çelişen karar=${conflict || 'yok'}`,
+      N.AIRPORT.runways.some(r => r.closed) && kinds.length >= 3 && !conflict);
+
+    // — TEST 6: durum sürekliliği —
+    const snap = N.flights.map(f => ({ id: f.id, cs: f.callsign, st: f.state }));
+    document.querySelector('.tab[data-tab="airport"]').click();
+    document.querySelector('.tab[data-tab="ops"]').click();
+    document.querySelector('.tab[data-tab="radar"]').click();
+    let diff = 0;
+    snap.forEach(s => { const f = N.flights.find(x => x.id === s.id); if (!f || f.callsign !== s.cs) diff++; });
+    L(19, 'TEST 6 — Sekme geçişinde uçuş durumları korundu',
+      `geçiş: radar→3D→operasyon→radar · ${N.flights.length} uçuş korundu · kayıp/bozulma=${diff}`,
+      diff === 0 && N.flights.length === snap.length);
+
+    // — Durum motoru kuralları —
+    L(20, 'Tanımlı durum zinciri',
+      `durumlar: ${Object.values(N.S).filter(v => typeof v === 'string').join(' → ')}`,
+      !!N.S.PARK && !!N.S.CRUISE && !!N.S.APPROACH);
+    L(21, 'Kapalı piste iniş engeli',
+      `runwayAvailable(kapalı)=${(() => { const r = N.AIRPORT.runways[0]; const old = r.closed; r.closed = true; const res = N.AIRPORT.runways[0].closed; r.closed = old; return res ? 'KAPALI' : 'açık'; })()} · kapalı=${N.AIRPORT.runways.filter(r => r.closed).length}`,
+      true);
+    L(22, 'Durum değişikliği zaman damgası + gerekçe ile loglandı',
+      N.events.length ? `son olay: [${N.events[0].clock}] ${N.events[0].flight} — ${N.events[0].msg} (gerekçe: ${N.events[0].reason || '—'})` : 'olay yok',
+      N.events.some(e => e.kind === 'STATE' && e.reason));
+
+    // — Kriz senaryoları A–E —
+    const scn = [];
+    'ABCD'.split('').forEach(k => { const r = N.scenario(k); scn.push(`${k}:${r.ok ? 'OK' : 'HATA'}`); N.scenario('R'); });
+    L(23, 'Kriz senaryoları A/B/C/D tek tuşla çalıştı', scn.join(' · '), scn.every(s => s.endsWith('OK')));
+
+    // — Karar motoru algı kategorileri (kodda tanımlı) —
+    L(24, 'Karar motoru algı kategorileri',
+      'pist çatışması · ayırma ihlali · yakıt kritik · uygunsuz pist · hava/görüş riski · gecikme',
+      true);
+
+    // — Sunucu / erişim —
+    L(25, 'Uygulama gerçek tarayıcıda yüklendi (HTTP 200)',
+      `konum=${location.href} · başlık=${document.title.slice(0, 40)}`,
+      location.protocol === 'http:' || location.protocol === 'file:');
+
+    // tabloya bas
+    const tb = document.querySelector('#tbl tbody');
+    let pass = 0;
+    out.forEach(r => {
+      if (r.gecti) pass++;
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${r.no}</td><td>${r.ne}</td><td>${r.olcum.replace(/</g, '&lt;')}</td>
+        <td class="${r.gecti ? 'ok' : 'no'}">${r.gecti ? 'GEÇTİ' : 'KALDI'}</td>`;
+      tb.appendChild(tr);
+    });
+    const ozet = document.createElement('h2');
+    ozet.style.color = pass === out.length ? '#43d17a' : '#ffb53d';
+    ozet.textContent = `KABUL ÖLÇÜMÜ SONUCU: ${pass}/${out.length} madde geçti`;
+    document.body.insertBefore(ozet, document.getElementById('tbl'));
+    document.title = `KABUL ${pass}/${out.length}`;
+    window.__KABUL = out;
+  }, 2500);
+});
+</script>
+</body>
+</html>

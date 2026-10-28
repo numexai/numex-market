@@ -1,13 +1,13 @@
 <div align="center">
 
-<img src="gorseller/banner.png" alt="Numex Market — 44 açık kaynak uygulama" width="100%">
+<img src="gorseller/banner.png" alt="Numex Market — 60 açık kaynak uygulama" width="100%">
 
 # 🛍️ Numex Market
 
-### Numex'in kendi yazdığı 44 uygulama — hepsi ücretsiz ve açık kaynak.
+### Numex'in kendi yazdığı 60 uygulama — hepsi ücretsiz ve açık kaynak.
 
 [![Web](https://img.shields.io/badge/market.numexai.com.tr-00C9A7?style=for-the-badge)](https://market.numexai.com.tr)
-[![Uygulama](https://img.shields.io/badge/44-uygulama-0A1628?style=for-the-badge)](https://market.numexai.com.tr)
+[![Uygulama](https://img.shields.io/badge/60-uygulama-0A1628?style=for-the-badge)](https://market.numexai.com.tr)
 [![Dene](https://img.shields.io/badge/canlı_dene-dene.numexai.com.tr-0A1628?style=for-the-badge)](https://dene.numexai.com.tr/cyberbeats/)
 
 </div>
@@ -20,7 +20,7 @@
 > **Numex AI'nın sıfırdan kodladığı uygulamalar — hepsi ücretsiz ve açık kaynak.**
 > İster çalışan halini indir, ister kodunu incele, ister kendine göre değiştir.
 
-| **44** | **7** | **₺0** |
+| **60** | **7** | **₺0** |
 |:---:|:---:|:---:|
 | Uygulama | Kategori | Her zaman ücretsiz |
 
@@ -40,12 +40,12 @@ Bu yüzden Market aynı zamanda Numex'in ne üretebildiğinin **canlı kanıtıd
 
 | Kategori | Uygulama | Ne var? |
 |---|:---:|---|
-| 🎮 **Oyunlar** | 6 | Tarayıcıda ve masaüstünde çalışan otonom üretilmiş oyunlar |
-| 🧪 **Simülasyon** | 4 | Etkileşimli simülasyonlar ve görselleştirmeler |
-| 🤖 **Yapay Zekâ** | 3 | AI demoları (ör. sinir ağı çekirdeği görselleştirmesi) |
-| 🛠️ **Araçlar / Yardımcı** | 12 | Kelime sayacı, resim düzenleyici, Markdown defter gibi günlük araçlar |
-| ⚡ **Üretkenlik** | 8 | Randevu sistemi, depo/stok yönetimi, envanter gibi iş araçları |
-| 🖥️ **Web / OS** | 3 | Web tabanlı masaüstü/işletim sistemi deneyimleri |
+| 🎮 **Oyunlar** | 7 | Tarayıcıda ve masaüstünde çalışan otonom üretilmiş oyunlar |
+| 🧪 **Simülasyon** | 18 | Etkileşimli simülasyonlar ve görselleştirmeler |
+| 🤖 **Yapay Zekâ** | 4 | AI demoları (ör. sinir ağı çekirdeği görselleştirmesi) |
+| 🛠️ **Araçlar / Yardımcı** | 14 | Kelime sayacı, resim düzenleyici, Markdown defter gibi günlük araçlar |
+| ⚡ **Üretkenlik** | 9 | Randevu sistemi, depo/stok yönetimi, envanter gibi iş araçları |
+| 🖥️ **Web / OS** | 7 | Web tabanlı masaüstü/işletim sistemi deneyimleri |
 | 🎓 **Eğitim** | 1 | Öğrenmeye yardımcı etkileşimli uygulamalar |
 
 ## 🎧 Örnek: Cyber Beats
@@ -64,7 +64,7 @@ Market uygulamaları **dene.numexai.com.tr** üzerinde kurulum gerektirmeden can
 | 🔊 **Ses motoru** | Tüm sesler **saf Web Audio API** ile sentezlenir — tek bir ses dosyası yok |
 | 🎨 **Tasarım** | Neon siberpunk arayüz, durum göstergesi (● ÇALIYOR) |
 
-Bir cümlelik istekten çalışan, test edilmiş ve yayınlanmış bir uygulamaya: Market'teki 44
+Bir cümlelik istekten çalışan, test edilmiş ve yayınlanmış bir uygulamaya: Market'teki 60
 uygulamanın her biri bu hattan geçti.
 
 ## Nasıl kullanılır?
@@ -85,7 +85,7 @@ Uygulama kodları **[MIT lisanslı](uygulamalar/LICENSE)** — kullan, değişti
 ```mermaid
 flowchart LR
   CORE[🧠 Core — Beyin<br/>otonom üretim] --> FORGE[(🏗️ Forge<br/>kaynak kod)]
-  FORGE --> MARKET[🛍️ Market<br/>44 uygulama]
+  FORGE --> MARKET[🛍️ Market<br/>60 uygulama]
   MARKET -->|indir| USER[👤 Kullanıcı]
   MARKET -->|çatalla| HUB[📦 Hub]
   HUB -->|düzenle| CODEX[🧩 Codex]

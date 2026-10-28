@@ -1,0 +1,14 @@
+{
+  "name": "uzay-18000-alem",
+  "version": "1.0.0",
+  "private": true,
+  "description": "18.000 Alem — Canlı uzay sahnesi (saf Canvas 2D). Güneş, Ay, gezegenler kendi eksenlerinde döner; ilahi güç katmanı.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node _dogrula/dogrula.js"
+  },
+  "dependencies": {
+    "playwright": "^1.63.0"
+  }
+}

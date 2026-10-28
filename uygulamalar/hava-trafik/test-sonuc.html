@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8" />
+<title>SKY COMMAND — Test Sonuçları</title>
+<style>
+  body { background:#05080d; color:#c9d8e6; font-family:"Cascadia Mono",Consolas,monospace; padding:24px; margin:0; }
+  h1 { font-size:16px; letter-spacing:2px; color:#4fd1e0; }
+  table { border-collapse:collapse; width:100%; margin-top:14px; }
+  td,th { border:1px solid #1c2b3d; padding:7px 9px; font-size:12px; vertical-align:top; }
+  th { background:#0b1725; color:#6d8399; text-align:left; font-size:10px; letter-spacing:1px; }
+  .pass { color:#43d17a; font-weight:700; }
+  .fail { color:#ff4d5e; font-weight:700; }
+  .det { color:#9db4c7; font-size:11px; }
+  .sum { margin-top:16px; font-size:14px; }
+  #rig { position:fixed; left:-20000px; top:0; width:800px; height:600px; }
+</style>
+</head>
+<body>
+<h1>NUMEX CORE — SKY COMMAND · OTOMATİK TEST SONUÇLARI</h1>
+<p class="det">TEST 1–6, çalışan simülasyon motoruna karşı gerçek tarayıcıda koşulmuştur (3D sahne gerçekten kurulur).</p>
+<table id="tbl"><thead><tr><th>#</th><th>TEST</th><th>SONUÇ</th><th>ÖLÇÜM</th></tr></thead><tbody></tbody></table>
+<div class="sum" id="sum"></div>
+
+<!-- Uygulamanın ihtiyaç duyduğu DOM iskeleti (üretim sayfasındaki düğümlerin aynısı, görünmez) -->
+<div id="rig">
+  <div id="threeWrap" style="position:fixed;left:-9000px;top:0;width:800px;height:600px"><canvas id="three"></canvas></div>
+  <span id="followName"></span><div id="threeFps"></div><div id="threeInfo"></div><div id="followBox"></div>
+  <input type="checkbox" id="wxNight">
+  <div class="view active" id="view-radar"></div>
+  <div class="view" id="view-airport"></div>
+  <div class="view" id="view-ops"></div>
+  <button class="tab" data-tab="radar"></button>
+  <button class="tab" data-tab="airport"></button>
+  <button class="tab" data-tab="ops"></button>
+  <span id="simClock"></span>
+  <input id="searchFlight"><select id="filterState"><option value="all">all</option></select>
+  <input type="checkbox" id="onlyEmergency">
+  <span id="flightCount"></span><ul id="flightList"></ul><span id="listHint"></span>
+  <span id="detailTitle"></span><div id="detailBody"></div><button id="btnFollow"></button>
+  <span id="radarWx"></span><span id="radarScale"></span><span id="radarStrip"></span>
+  <input type="checkbox" id="showTrail"><input type="checkbox" id="showLabels">
+  <select id="radarRange"><option value="50">50</option></select>
+  <div id="kpis"></div><div id="alertList"></div><span id="alertSummary"></span>
+  <div id="eventLog"></div><select id="eventFilter"><option value="all">all</option></select>
+  <input type="checkbox" id="autoScroll"><button id="btnAdvance"></button>
+  <div id="wxPanel"></div><div id="denyCount"></div><div id="authDesc"></div>
+  <div id="autoLimits"></div><span id="limFuelVal"></span><input type="range" id="limFuel" value="40">
+  <input type="checkbox" id="limRwy"><input type="checkbox" id="limEmg">
+  <button class="mode" data-mode="ONERI"></button><button class="mode" data-mode="OTOMATIK"></button>
+  <button class="scn" data-scn="A"></button><button class="scn" data-scn="B"></button>
+  <button class="scn" data-scn="C"></button><button class="scn" data-scn="D"></button>
+  <button class="scn" data-scn="E"></button><button class="scn" data-scn="R"></button>
+  <button id="btnPlay"></button><select id="speed"><option value="1">1</option></select>
+  <button id="btnReset"></button><button id="btnUnfollow"></button><div id="toast"></div>
+</div>
+
+<script src="vendor/three.min.js"></script>
+<script src="sim.js"></script>
+<script src="three-scene.js"></script>
+<script src="tests.js"></script>
+<script>
+// 3D sahnesi #three canvas'ını arıyor; rig içindeki ilk canvas'ı kullanır.
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const res = window.__RUN_TESTS();
+    const tb = document.querySelector('#tbl tbody');
+    res.forEach(r => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${r.id}</td><td>${r.name}</td>
+        <td class="${r.pass ? 'pass' : 'fail'}">${r.pass ? 'GEÇTİ' : 'KALDI'}</td>
+        <td class="det">${String(r.detail).replace(/</g, '&lt;')}</td>`;
+      tb.appendChild(tr);
+    });
+    const passed = res.filter(r => r.pass).length;
+    document.getElementById('sum').innerHTML =
+      `<b style="color:${passed === res.length ? '#43d17a' : '#ffb53d'}">SONUÇ: ${passed}/${res.length} test geçti</b>`;
+    document.title = `TEST ${passed}/${res.length} GEÇTİ`;
+  }, 2000);
+});
+</script>
+</body>
+</html>

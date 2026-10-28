@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="theme-color" content="#02030a">
+<title>18.000 Alem · Canlı Uzay</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Ana tuval: tüm evren burada çizilir -->
+  <canvas id="evren" aria-label="Canlı uzay boşluğu, 18.000 alem"></canvas>
+
+  <!-- İlahi güç katmanı: canvas üstü ışık taşması -->
+  <div id="ilahi-perde" aria-hidden="true"></div>
+
+  <!-- HUD: üst başlık -->
+  <header class="hud hud-ust">
+    <h1 class="baslik">18.000 ALEM</h1>
+    <p class="alt-yazi">uzay boşluğunda canlı evren</p>
+  </header>
+
+  <!-- Kontrol paneli -->
+  <aside class="panel" id="panel">
+    <button class="panel-ac" id="panelAc" aria-label="Kontrol panelini aç/kapa">⚙</button>
+
+    <div class="panel-govde" id="panelGovde">
+      <div class="satir">
+        <label for="hiz">Evren Hızı</label>
+        <input type="range" id="hiz" min="0" max="3" step="0.05" value="1">
+        <span class="deger" id="hizDeger">1.0×</span>
+      </div>
+
+      <div class="satir">
+        <label for="ilahi">İlahi Güç</label>
+        <input type="range" id="ilahi" min="0" max="1" step="0.01" value="0.75">
+        <span class="deger" id="ilahiDeger">75%</span>
+      </div>
+
+      <div class="satir">
+        <label for="yildiz">Yıldız Yoğunluğu</label>
+        <input type="range" id="yildiz" min="200" max="1600" step="50" value="800">
+        <span class="deger" id="yildizDeger">800</span>
+      </div>
+
+      <div class="satir satir-buton">
+        <button id="yorungeBtn" class="mini-btn aktif">Yörüngeler</button>
+        <button id="etiketBtn" class="mini-btn">İsimler</button>
+        <button id="duraklatBtn" class="mini-btn">Duraklat</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Alt bilgi -->
+  <footer class="hud hud-alt">
+    <span id="durum">evren akıyor…</span>
+    <span class="ayrac">·</span>
+    <span id="fps">– fps</span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

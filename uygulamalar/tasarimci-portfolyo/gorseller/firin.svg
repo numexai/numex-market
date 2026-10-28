@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" role="img" aria-label="Ekşi Maya Fırın marka kimliği">
+  <rect width="640" height="480" fill="#d9a441"/>
+  <!-- hamur kesiği formu -->
+  <circle cx="320" cy="212" r="126" fill="#211a1f"/>
+  <path d="M236 232 q42 -58 84 0 q42 -58 84 0" fill="none" stroke="#d9a441" stroke-width="14" stroke-linecap="round"/>
+  <path d="M256 168 l20 26 M320 152 l0 32 M384 168 l-20 26" stroke="#d9a441" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="320" cy="212" r="152" fill="none" stroke="#211a1f" stroke-width="2" stroke-dasharray="8 10"/>
+  <!-- logotype -->
+  <text x="320" y="392" text-anchor="middle" font-family="Georgia, serif" font-size="42" fill="#211a1f" letter-spacing="-1">EKŞİ MAYA</text>
+  <text x="320" y="422" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="12" letter-spacing="9" fill="#211a1f" opacity=".75">MAHALLE FIRINI</text>
+  <line x1="240" y1="442" x2="400" y2="442" stroke="#211a1f" stroke-width="1.5"/>
+</svg>

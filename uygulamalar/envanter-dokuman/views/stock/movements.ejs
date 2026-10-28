@@ -1,0 +1,60 @@
+<div class="page-head">
+  <h1>Stok Hareketleri</h1>
+  <p class="muted">Tüm giriş/çıkış logları — toplam <strong><%= counts.total %></strong> hareket</p>
+</div>
+
+<div class="stat-grid mini">
+  <div class="stat-card tag-in">
+    <div class="stat-value"><%= counts.in %></div>
+    <div class="stat-label">Giriş (+)</div>
+  </div>
+  <div class="stat-card tag-out">
+    <div class="stat-value"><%= counts.out %></div>
+    <div class="stat-label">Çıkış (−)</div>
+  </div>
+</div>
+
+<div class="card">
+  <form method="GET" action="/api/stock/movements" class="filter-bar">
+    <select name="type">
+      <option value="">Tüm Tipler</option>
+      <option value="in" <%= typeFilter === 'in' ? 'selected' : '' %>>Giriş</option>
+      <option value="out" <%= typeFilter === 'out' ? 'selected' : '' %>>Çıkış</option>
+    </select>
+    <button type="submit" class="btn">Filtrele</button>
+    <a href="/api/stock/movements" class="btn btn-ghost">Sıfırla</a>
+  </form>
+</div>
+
+<div class="card">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Ürün</th>
+        <th>Tip</th>
+        <th>Miktar</th>
+        <th>Kalan Stok</th>
+        <th>Not</th>
+        <th>Tarih</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (movements.length === 0) { %>
+        <tr><td colspan="7" class="muted center">Bu filtrede hareket bulunamadı.</td></tr>
+      <% } %>
+      <% movements.forEach(m => { %>
+        <tr>
+          <td><%= m.id %></td>
+          <td><a href="/api/products/<%= m.productId %>"><%= m.productName %></a></td>
+          <td><span class="tag <%= m.type === 'in' ? 'tag-in' : 'tag-out' %>">
+            <%= m.type === 'in' ? 'Giriş +' : 'Çıkış −' %></span></td>
+          <td class="<%= m.type === 'out' ? 'text-danger' : 'text-ok' %>"><%= m.quantity %></td>
+          <td><%= m.remainingStock %></td>
+          <td class="muted"><%= m.note || '—' %></td>
+          <td class="muted"><%= new Date(m.date).toLocaleString('tr-TR') %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>

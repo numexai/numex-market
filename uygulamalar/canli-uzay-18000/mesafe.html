@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="theme-color" content="#02030a">
+<title>Güneş Sistemi · Mesafe Haritası</title>
+<link rel="stylesheet" href="mesafe.css">
+</head>
+<body>
+
+  <!-- Ana sahne: mesafe şeması burada çizilir -->
+  <canvas id="sahne" aria-label="Güneş ve gezegenler arası mesafe haritası"></canvas>
+
+  <!-- Başlık -->
+  <header class="hud">
+    <h1>GÜNEŞ SİSTEMİ <span>MESAFE HARİTASI</span></h1>
+    <p>Güneş'e olan uzaklık <em>ve</em> gezegenler arası mesafe — yan yana, etiketli</p>
+  </header>
+
+  <!-- Ölçek / filtre kontrolleri -->
+  <div class="panel">
+    <div class="grup">
+      <span class="etiket">Ölçek</span>
+      <button class="olcek-btn aktif" data-olcek="log">Sıkıştırılmış</button>
+      <button class="olcek-btn" data-olcek="gercek">Gerçek oran</button>
+    </div>
+    <label class="onay"><input type="checkbox" id="gunesCizgi" checked> Güneş'e uzaklık çizgileri</label>
+    <label class="onay"><input type="checkbox" id="gezegenCizgi" checked> Gezegenler arası mesafe</label>
+    <label class="onay"><input type="checkbox" id="boyutOransal" checked> Boyutlar oransal</label>
+  </div>
+
+  <!-- Bilgi kartı (hover / tıklama ile dolar) -->
+  <div class="kart" id="kart" aria-live="polite">
+    <div class="kart-bos" id="kartBos">Bir gezegenin üzerine gel → detay burada</div>
+    <div class="kart-ic" id="kartIc" hidden>
+      <div class="kart-ust">
+        <span class="nokta" id="kartNokta"></span>
+        <h2 id="kartAd">—</h2>
+      </div>
+      <dl>
+        <dt>Güneş'e uzaklık</dt><dd id="kartGunes">—</dd>
+        <dt>Önceki gezegene</dt><dd id="kartOnceki">—</dd>
+        <dt>Çap</dt><dd id="kartCap">—</dd>
+        <dt>Yörünge süresi</dt><dd id="kartYil">—</dd>
+      </dl>
+    </div>
+  </div>
+
+  <!-- Ölçek açıklaması -->
+  <div class="olcek-not" id="olcekNot">Sıkıştırılmış ölçek (karekök) — iç gezegenler okunur kalsın diye Neptün mesafesi görsel olarak sıkıştırıldı</div>
+
+  <script src="mesafe.js"></script>
+</body>
+</html>

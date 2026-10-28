@@ -1,0 +1,47 @@
+
+=== OKEY MVP — Birim Testleri ===
+
+[Deste & Dağıtım]
+  ✓ testDeckSize: deste 106 taş
+  ✓ testDeckSize: her renk 26, her sayı 8 taş
+  ✓ testDealCounts: 15/14/14/14 dağıtım
+  ✓ testDeckSize: taş id’leri benzersiz
+
+[Gösterge & Okey Hesabı]
+  ✓ testOkeyCalc: 13 sonrası 1 olur
+  ✓ testOkeyCalc: gösterge rengiyle aynı okey run’da doğru hesaplanır
+  ✓ testOkeyCalc: 13 gösterge => okey 1 (aynı renk)
+  ✓ testFakeOkey: sahte okey daima joker, asla gerçek okey değil
+  ✓ countJokers: okey + sahte okey sayımı
+
+[Per (Set/Run) Doğrulama]
+  ✓ testRun: aynı renk ardışık 3 taş geçerli
+  ✓ testSet: aynı sayı farklı renk 3 taş geçerli
+
+[Kazanma Kontrolü]
+  ✓ testWinningHand: 14 taş tam perlere ayrılırsa kazanır
+  ✓ testWinningHand: 2 taşlık eksik grup kazandırmaz
+  ✓ testWinningHand: geçerli 14 taşlık el kazanır
+  ✓ testWinningHand: 5 uzun per (3+3+3+3+2 degil) — sadece 14 tam per kazanır
+  ✓ testWinningHand: 4 run + 1 set (4+3+3+4=14) ile KAZANIR
+  ✓ testWinningHand: joker (okey) boşluğu doldurunca kazanır
+  ✓ isWinningHand: 13 taşlı el kazanmaz (boyut kuralı)
+
+[Bot & Oyun Döngüsü]
+  ✓ botChooseDiscard: asla joker atmaz
+  ✓ botChooseDiscard: her zaman geçerli bir taş döner
+  ✓ botChooseDiscard: sadece joker varsa yine de taş döner (kilitlenmez)
+  ✓ testNoLockup: deste bitince atılanlar geri karışır
+  ✓ testNoLockup: deste tamamen boşsa taze deste üretir
+  ✓ createGame: başlangıç durumu doğru
+  ✓ tur akışı: çek -> at -> sıra ilerler
+  ✓ atılan taştan çekme çalışır
+  ✓ bot turu: çeker ve atar, el boyutu korunur
+  ✓ autoPlayBots: sıra insana gelene kadar botlar oynar (kilitlenme yok)
+  ✓ checkAllWins: geçerli elle kazanan tespit edilir
+      info: 200/200 oyun doğal olarak kazanıldı (kalanı süre sınırı)
+  ✓ simülasyon: 200 tam oyun kilitlenmeden tamamlanır
+
+=== Sonuç: 30 geçti, 0 başarısız ===
+
+TÜM TESTLER GEÇTİ ✅

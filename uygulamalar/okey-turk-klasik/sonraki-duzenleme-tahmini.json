@@ -1,0 +1,8 @@
+{
+  "line": 167,
+  "find": "  color: #fff;",
+  "replace": "  color: #fff;                       /* kontrast: 4.6:1 (beyaz/ef5350) */",
+  "reason": "Aynı dosyada az önce .btn-primary bloğunda kontrast oranının ölçülebilir tek tonla güvenceye alındığı yorum satırıyla belgelendi (satır 157). Mantıksal ardıl: .btn-danger için de aynı ölçülebilir kontrast belgelemesi eklenmeli; aksi halde iki buton aynı kurala tabi ama biri belgeli diğeri değil.",
+  "none": false,
+  "confidence": 0.55
+}

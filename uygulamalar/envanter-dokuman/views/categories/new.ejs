@@ -1,0 +1,20 @@
+<div class="page-head">
+  <h1>Yeni Kategori</h1>
+  <p class="muted">Ürünleri gruplamak için yeni bir kategori oluşturun</p>
+</div>
+
+<div class="card form-card">
+  <form id="categoryForm" action="/api/categories" method="POST" class="form">
+    <div class="form-group">
+      <label for="catName">Kategori Adı *</label>
+      <input type="text" id="catName" name="name" required placeholder="Örn: Mobilya">
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Kategori Ekle</button>
+      <a href="/api/categories" class="btn btn-ghost">İptal</a>
+    </div>
+  </form>
+  <div id="categoryError" class="alert alert-danger" style="display:none;"></div>
+</div>
+
+<script src="/js/categories.js"></script>

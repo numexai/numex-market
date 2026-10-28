@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="tr" data-theme="light">
+<head>
+  <!-- Tema yanıp sönmesini (FOUC) önle: CSS yüklenmeden önce kayıtlı temayı uygula -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem('nexusyazi.tema') || 'light';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) { /* klasör modunda localStorage yoksa görmezden gel */ }
+    })();
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NexusYazı — Kelime İşlemci</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M4 19.5A2.5 2.5 0 0 1 6.5 17H20' fill='none' stroke='%234f46e5' stroke-width='2' stroke-linecap='round'/><path d='M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z' fill='none' stroke='%234f46e5' stroke-width='2'/></svg>">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+
+    <!-- ===== ÜST ŞERİT ===== -->
+    <header class="topbar">
+      <div class="brand">
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+        </svg>
+        <div class="brand-meta">
+          <h1>nexusyazi</h1>
+          <span class="file-name" id="fileName" contenteditable="true" title="Dosya adını düzenlemek için tıklayın">Belgesiz.docx</span>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <button class="icon-btn toc-toggle" id="btnToc" title="İçindekiler (başlıklar)" aria-label="İçindekileri aç/kapat" aria-expanded="false">
+          <svg viewBox="0 0 24 24"><path d="M4 6h10M4 12h10M4 18h10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M18 5l4 4M20 7v0l-3 3M18 11l4 4M20 13v0l-3 3M18 17l4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="icon-btn" id="btnUndo" title="Geri al (Ctrl+Z)" aria-label="Geri al">
+          <svg viewBox="0 0 24 24"><path d="M9 14 4 9l5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 9h10a6 6 0 0 1 6 6v5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <button class="icon-btn" id="btnRedo" title="Yinele (Ctrl+Y)" aria-label="Yinele">
+          <svg viewBox="0 0 24 24"><path d="m15 14 5-5-5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 9H10a6 6 0 0 0-6 6v5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+        <span class="divider"></span>
+        <button class="icon-btn" id="btnTheme" title="Açık / Koyu tema" aria-label="Tema değiştir">
+          <svg class="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="btn new" id="btnNew" title="Yeni belge" aria-label="Yeni belge">
+          <svg viewBox="0 0 24 24"><path d="M12 20h9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span>Yeni</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ===== ARAÇ ÇUBUĞU ===== -->
+    <nav class="toolbar" aria-label="Araç çubuğu">
+      <div class="tool-group">
+        <select id="selBlock" class="tselect" title="Stil" aria-label="Stil">
+          <option value="p">Normal metin</option>
+          <option value="h1">Başlık 1</option>
+          <option value="h2">Başlık 2</option>
+          <option value="h3">Başlık 3</option>
+        </select>
+      </div>
+
+      <div class="tool-group">
+        <select id="selFont" class="tselect" title="Yazı tipi" aria-label="Yazı tipi">
+          <option value="Arial">Arial</option>
+          <option value="Georgia">Georgia</option>
+          <option value="Courier New">Courier New</option>
+          <option value="'Segoe UI'">Segoe UI</option>
+          <option value="Tahoma">Tahoma</option>
+          <option value="'Trebuchet MS'">Trebuchet MS</option>
+          <option value="Impact">Impact</option>
+        </select>
+        <select id="selSize" class="tselect small" title="Boyut" aria-label="Boyut">
+          <option value="2">10</option>
+          <option value="3" selected>12</option>
+          <option value="4">14</option>
+          <option value="5">18</option>
+          <option value="6">24</option>
+          <option value="7">32</option>
+        </select>
+      </div>
+
+      <div class="tool-group">
+        <button class="tool" data-cmd="bold" title="Kalın (Ctrl+B)"><svg viewBox="0 0 24 24"><path d="M6 4h8a4 4 0 0 1 0 8H6zM6 12h9a4 4 0 0 1 0 8H6z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></button>
+        <button class="tool" data-cmd="italic" title="İtalik (Ctrl+I)"><svg viewBox="0 0 24 24"><path d="M19 4h-9M14 20H5M15 4 9 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <button class="tool" data-cmd="underline" title="Altı çizili (Ctrl+U)"><svg viewBox="0 0 24 24"><path d="M6 3v7a6 6 0 0 0 12 0V3M4 21h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <button class="tool" data-cmd="strikeThrough" title="Üstü çizili"><svg viewBox="0 0 24 24"><path d="M16 4H9a3 3 0 0 0-2.8 4M14 12a3 3 0 0 1-3 3H6c0-1 .5-2 1.5-3M4 20h16M16 6c0-1.1-.9-2-2-2m0 0h3v7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </div>
+
+      <div class="tool-group">
+        <button class="tool" data-cmd="insertUnorderedList" title="Madde listesi"><svg viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M4 6h.01M4 12h.01M4 18h.01" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg></button>
+        <button class="tool" data-cmd="insertOrderedList" title="Numaralı liste"><svg viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M4 5h.01M3.5 9h1M3 13h1l-1 3h2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </div>
+
+      <div class="tool-group">
+        <button class="tool" data-cmd="justifyLeft" title="Sola hizala"><svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h12M3 18h18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <button class="tool" data-cmd="justifyCenter" title="Ortala"><svg viewBox="0 0 24 24"><path d="M3 6h18M6 12h12M3 18h18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <button class="tool" data-cmd="justifyRight" title="Sağa hizala"><svg viewBox="0 0 24 24"><path d="M3 6h18M9 12h12M3 18h18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <button class="tool" data-cmd="justifyFull" title="İki yana yasla"><svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+      </div>
+
+      <div class="tool-row-2">
+        <div class="tool-group">
+          <span class="colorbtn" id="wrapFg" title="Metin rengi">
+            <input type="color" id="colorFg" value="#111111" aria-label="Metin rengi">
+            <svg viewBox="0 0 24 24"><path d="M13 2 5 17h4l1-3h4l1 3h4L13 2Zm-2.3 9 1.3-3.3L13.4 11h-2.7Z" fill="currentColor"/></svg>
+          </span>
+          <span class="colorbtn" id="wrapBg" title="Vurgu (highlight)">
+            <input type="color" id="colorBg" value="#fff176" aria-label="Vurgu rengi">
+            <svg viewBox="0 0 24 24"><path d="M9 14c-2 0-4 1-4 3l-1 4h8v-4c0-2-1-3-3-3Zm5-2 4-4M15 3l-4.5 4.5L17 14l4.5-4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+        <div class="tool-group">
+          <button class="tool" id="btnClearFmt" title="Biçimi temizle"><svg viewBox="0 0 24 24"><path d="m3 3 18 18M9.5 10.5 8 15l4 1 3 .75M14 8.5 17 5l3-2-1 4-3 3-2 .5M6 20l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </div>
+      </div>
+
+      <!-- ===== PARAGRAF: satır aralığı + girinti ===== -->
+      <div class="tool-group">
+        <select id="selLineHeight" class="tselect thin" title="Satır aralığı" aria-label="Satır aralığı">
+          <option value="1">1,0</option>
+          <option value="1.15">1,15</option>
+          <option value="1.4">1,4</option>
+          <option value="1.5">1,5</option>
+          <option value="1.8">1,8</option>
+          <option value="2">2,0</option>
+          <option value="2.5">2,5</option>
+          <option value="3">3,0</option>
+        </select>
+        <button class="tool" id="btnOutdent" title="Sol girintiyi azalt"><svg viewBox="0 0 24 24"><path d="M9 10 4 15l5 5M4 4h16M4 19h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button class="tool" id="btnIndent" title="Sol girintiyi artır"><svg viewBox="0 0 24 24"><path d="M9 10 14 15l-5 5M20 4H4M20 19H4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </div>
+
+      <!-- ===== EKLEME: tablo / resim / yazdır ===== -->
+      <div class="tool-group">
+        <button class="tool" id="btnTable" title="Tablo ekle"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4zM4 10h16M4 15h16M10 4v16M15 4v16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></button>
+        <button class="tool" id="btnImage" title="Resim ekle"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="8.5" cy="9" r="1.6" fill="currentColor" stroke="none"/><path d="m21 16-5-5L5 21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button class="tool" id="btnPrint" title="Yazdır / PDF (Ctrl+P)"><svg viewBox="0 0 24 24"><path d="M7 8V3h10v5M7 18H5a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M7 14h10v7H7z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></button>
+
+        <!-- Tablo boyut seçici (popover) -->
+        <div class="tbl-panel" id="tblPanel" hidden>
+          <div class="tbl-label"><b id="tblSizeLabel">3 × 3</b> &nbsp;Tablo</div>
+          <div class="grid" id="tblGrid"></div>
+        </div>
+      </div>
+
+      <div class="tool-group actions">
+        <button class="btn save" id="btnSave" title="Kaydet (Ctrl+S)"><svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M17 21v-8H7v8M7 3v5h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Kaydet</span></button>
+        <button class="btn open" id="btnOpen" title="Belgeyi aç"><svg viewBox="0 0 24 24"><path d="M2 12h5l2 3h6l2-3h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 3h9l5 5v13H5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span>Aç</span></button>
+        <button class="btn export" id="btnExport" title="Dışa aktar"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M5 21h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Dışa aktar</span></button>
+      </div>
+    </nav>
+
+    <!-- ===== BUL & DEĞİŞTİR PANELİ (Ctrl+F) ===== -->
+    <div class="findbar" id="findbar" hidden>
+      <svg class="findbar-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4a6 6 0 1 0 0 12 6 6 0 0 0 0-12ZM20 20l-5.2-5.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <input type="text" id="findInput" class="findbar-input" placeholder="Bul…" autocomplete="off" spellcheck="false">
+      <span class="find-count" id="findCount"></span>
+      <button class="findbar-btn" id="findPrev" title="Önceki (Shift+Enter)">▲</button>
+      <button class="findbar-btn" id="findNext" title="Sonraki (Enter)">▼</button>
+      <div class="find-sep" id="find-sep-repl"></div>
+      <input type="text" id="replaceInput" class="replace-input" placeholder="Değiştir…" autocomplete="off" spellcheck="false">
+      <button class="findbar-btn" id="btnReplace" title="Değiştir">Değiştir</button>
+      <button class="findbar-btn" id="btnReplaceAll" title="Tümünü değiştir">Tümünü değiştir</button>
+      <button class="findbar-x" id="findClose" title="Kapat (Esc)" aria-label="Bul panelini kapat">✕</button>
+    </div>
+
+
+    <!-- ===== SAYFA (düzenleme alanı) ===== -->
+    <!-- ===== İÇİNDEKİLER (başlık gezinme) ===== -->
+    <aside class="toc" id="tocPanel" aria-label="İçindekiler" hidden>
+      <div class="toc-head">
+        <span>İçindekiler</span>
+        <button class="toc-close" id="tocClose" title="Kapat (Esc)" aria-label="İçindekiler panelini kapat">✕</button>
+      </div>
+      <ul class="toc-body" id="tocBody"></ul>
+      <div class="toc-empty" id="tocEmpty">Başlık bulunamadı.<br><small>Başlık 1-2-3 uygulayınca burada listelenir.</small></div>
+    </aside>
+
+    <main class="stage">
+      <div class="page" contenteditable="true" spellcheck="true" id="editor">
+        <h1>nexusyazi</h1>
+        <p>Bu, NexusYazı ile açılan yeni bir belgedir. Yazmaya başlayabilirsiniz.</p>
+        <p>Üstteki araç çubuğundan metni <strong>kalın</strong>, <em>italik</em>, <u>altı çizili</u> yapabilir, renk ve vurgu verebilirsiniz.</p>
+        <p>Her 3 saniyede bir <mark>otomatik kaydedilir</mark>. Sağ alttaki &ldquo;Kaydedildi&rdquo; göstergesini izleyin. Verileriniz yalnızca bu tarayıcıda saklanır.</p>
+      </div>
+    </main>
+
+    <!-- ===== DURUM ÇUBUĞU ===== -->
+    <footer class="statusbar">
+      <span id="sttNoFile" class="hidden">—</span>
+      <span class="stat"><b id="countWords">0</b> kelime</span>
+      <span class="stat"><b id="countChars">0</b> karakter</span>
+      <span class="spacer"></span>
+      <span class="save-ind" id="saveState"></span>
+    </footer>
+
+    <!-- ===== ALTBANT: NumexAI künyesi ===== -->
+    <a class="numex-badge" href="https://numexai.com.tr" target="_blank" rel="noopener" aria-label="NumexAI — numexai.com.tr" title="NumexAI.com.tr">
+      <span>NumexAI ile yapılmıştır</span>
+    </a>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

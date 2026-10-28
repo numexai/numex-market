@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>NUMEX CLOCKWORK — Zamanın İçini Gör</title>
+<meta name="description" content="Numex Clockwork: tamamen kodla üretilmiş, gerçek zamanlı 3D mekanik saat. Dişliler, sarkaç, kadran ve zaman kontrolü." />
+<meta name="theme-color" content="#0a0805" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- Yükleyici -->
+<div id="loader" class="loader">
+  <div class="loader-inner">
+    <div class="loader-gear">
+      <svg viewBox="0 0 100 100" aria-hidden="true">
+        <g id="lg1"></g>
+      </svg>
+      <svg viewBox="0 0 100 100" aria-hidden="true">
+        <g id="lg2"></g>
+      </svg>
+    </div>
+    <h1 class="loader-title">NUMEX CLOCKWORK</h1>
+    <p class="loader-sub">Zamanın İçini Gör</p>
+    <div class="loader-bar"><span id="loader-fill"></span></div>
+    <p class="loader-hint" id="loader-hint">Mekanizma kuruluyor…</p>
+  </div>
+</div>
+
+<!-- Sahne -->
+<canvas id="stage" aria-label="3D mekanik saat sahnesi"></canvas>
+
+<!-- Üst marka -->
+<header class="brand">
+  <div class="brand-mark">
+    <svg viewBox="0 0 32 32" aria-hidden="true">
+      <circle cx="16" cy="16" r="14" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".55"/>
+      <circle cx="16" cy="16" r="9" fill="none" stroke="currentColor" stroke-width="1.2" opacity=".35"/>
+      <path d="M16 8.5V16l5.2 3.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <div class="brand-text">
+    <span class="brand-name">NUMEX CLOCKWORK</span>
+    <span class="brand-tag">Zamanın İçini Gör</span>
+  </div>
+</header>
+
+<!-- Dijital saat okuması -->
+<div class="readout" id="readout">
+  <span id="clock-hh">00</span><i>:</i><span id="clock-mm">00</span><i>:</i><span id="clock-ss">00</span>
+  <small id="clock-mode">gerçek zaman</small>
+</div>
+
+<!-- Kontrol paneli -->
+<nav class="panel" id="panel" aria-label="Kontrol paneli">
+  <div class="panel-group">
+    <span class="panel-label">Zaman</span>
+    <div class="seg" role="group" aria-label="Zaman hızı">
+      <button type="button" data-speed="1" class="seg-btn is-active" aria-pressed="true" title="Normal hız">1×</button>
+      <button type="button" data-speed="0.15" class="seg-btn" aria-pressed="false" title="Ağır çekim">0.15×</button>
+      <button type="button" data-speed="0" class="seg-btn" aria-pressed="false" title="Zamanı durdur">❙❙</button>
+      <button type="button" data-speed="6" class="seg-btn" aria-pressed="false" title="Hızlı">6×</button>
+    </div>
+  </div>
+
+  <div class="panel-sep" aria-hidden="true"></div>
+
+  <div class="panel-group">
+    <span class="panel-label">Mekanizma</span>
+    <button type="button" class="btn" id="explode-btn" aria-pressed="false" title="Parçalara ayır / birleştir">
+      <span class="btn-dot"></span><span id="explode-txt">Parçalara Ayır</span>
+    </button>
+  </div>
+
+  <div class="panel-sep" aria-hidden="true"></div>
+
+  <div class="panel-group">
+    <span class="panel-label">Görünüm</span>
+    <div class="seg" role="group" aria-label="Görünüm modu">
+      <button type="button" class="seg-btn is-active" id="view-mech" aria-pressed="true" title="Mekanizma modu">Mekanizma</button>
+      <button type="button" class="seg-btn" id="view-dial" aria-pressed="false" title="Kadran modu">Kadran</button>
+    </div>
+  </div>
+
+  <div class="panel-sep" aria-hidden="true"></div>
+
+  <div class="panel-group">
+    <span class="panel-label">Kamera</span>
+    <button type="button" class="icon-btn" id="reset-cam" title="Kamerayı sıfırla" aria-label="Kamerayı sıfırla">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v5h5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <button type="button" class="icon-btn" id="tour-btn" title="Sinematik tur" aria-label="Sinematik tur">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10-6.5-10-6.5z" fill="currentColor"/></svg>
+    </button>
+  </div>
+</nav>
+
+<p class="hint">Sürükle: döndür · Tekerlek: yakınlaş · <kbd>Space</kbd> durdur · <kbd>E</kbd> parçala</p>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "./vendor/three.module.js",
+    "three/addons/": "./vendor/"
+  }
+}
+</script>
+<script type="module" src="clockwork.js"></script>
+</body>
+</html>

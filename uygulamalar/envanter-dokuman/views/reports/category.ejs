@@ -1,0 +1,76 @@
+<div class="page-head">
+  <h1>Kategori Raporu</h1>
+  <p class="muted">Kategori seçin ve tarih aralığı belirleyin — detaylı stok raporu görün</p>
+</div>
+
+<div class="card">
+  <form id="reportForm" class="filter-bar report-filter">
+    <select id="reportCategory">
+      <option value="all">Tüm Kategoriler</option>
+      <% categories.forEach(c => { %>
+        <option value="<%= c.id %>"><%= c.name %></option>
+      <% }) %>
+    </select>
+    <input type="date" id="fromDate" placeholder="Başlangıç">
+    <input type="date" id="toDate" placeholder="Bitiş">
+    <button type="submit" class="btn btn-primary">Raporla</button>
+  </form>
+</div>
+
+<div id="reportSummary" class="stat-grid">
+  <div class="stat-card">
+    <div class="stat-icon">🏷️</div>
+    <div><div class="stat-value" id="repCategory">—</div><div class="stat-label">Kategori</div></div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon">📦</div>
+    <div><div class="stat-value" id="repProducts">0</div><div class="stat-label">Ürün Sayısı</div></div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon">💵</div>
+    <div><div class="stat-value" id="repValue">0 ₺</div><div class="stat-label">Stok Değeri</div></div>
+  </div>
+  <div class="stat-card tag-in">
+    <div class="stat-icon">🔺</div>
+    <div><div class="stat-value" id="repIn">0</div><div class="stat-label">Giriş</div></div>
+  </div>
+  <div class="stat-card tag-out">
+    <div class="stat-icon">🔻</div>
+    <div><div class="stat-value" id="repOut">0</div><div class="stat-label">Çıkış</div></div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon">⚖️</div>
+    <div><div class="stat-value" id="repNet">0</div><div class="stat-label">Net</div></div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Kategori Özetleri</h2>
+  <table class="table" id="catSummaryTable">
+    <thead>
+      <tr>
+        <th>Kategori</th><th>Ürün</th><th>Stok Değeri</th><th>Düşük Stok</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% summaries.forEach(c => { %>
+        <tr>
+          <td><%= c.name %></td>
+          <td><%= c.totalProducts %></td>
+          <td><%= c.totalStockValue.toLocaleString('tr-TR') %> ₺</td>
+          <td class="<%= c.lowStockCount > 0 ? 'badge-err' : '' %>">
+            <%= c.lowStockCount > 0 ? '⚠️ ' + c.lowStockCount : '—' %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<div class="card">
+  <h2>Seçilen Rapor — Hareketler</h2>
+  <div id="reportMovements">
+    <p class="muted">Raporlamak için yukarıdan kategori seçip "Raporla" butonuna basın.</p>
+  </div>
+</div>
+
+<script src="/js/reports.js"></script>

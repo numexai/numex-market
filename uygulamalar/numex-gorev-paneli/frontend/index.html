@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<!--
+  Numex Görev Paneli — ana arayüz
+  ---------------------------------------------------------------
+  Sol tarafta: görev ekleme formu + görevlerin listelendiği kart alanı
+  Sağ tarafta: WebSocket'ten gelen canlı sistem logları (canlı konsol)
+
+  Not: Bu sayfa FastAPI tarafından "/" adresinden servis edilir.
+  Tarayıcıdan doğrudan dosya olarak (file://) açılırsa API istekleri
+  CORS/ağ kısıtı yüzünden çalışmaz; sunucu üzerinden açılmalıdır.
+-->
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Numex Görev Paneli · Canlı Log İzleme</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+  <!-- Üst başlık ve bağlantı durumu göstergesi -->
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-logo" aria-hidden="true">◈</span>
+      <div>
+        <h1>Numex Görev Paneli</h1>
+        <p class="brand-sub">Gerçek zamanlı görev yönetimi &amp; canlı log izleme</p>
+      </div>
+    </div>
+
+    <!-- WebSocket bağlantı durumu: app.js tarafından güncellenir -->
+    <div class="status-chip" id="ws-status" data-state="connecting">
+      <span class="dot" aria-hidden="true"></span>
+      <span id="ws-status-text">Bağlanıyor…</span>
+    </div>
+  </header>
+
+  <!-- İstatistik kartları: /api/v1/tasks/stats/ozet verisiyle dolar -->
+  <section class="stats" aria-label="Görev özeti">
+    <article class="stat-card">
+      <span class="stat-label">Toplam</span>
+      <strong class="stat-value" id="stat-total">0</strong>
+    </article>
+    <article class="stat-card accent-pending">
+      <span class="stat-label">Bekleyen</span>
+      <strong class="stat-value" id="stat-pending">0</strong>
+    </article>
+    <article class="stat-card accent-progress">
+      <span class="stat-label">Devam Eden</span>
+      <strong class="stat-value" id="stat-progress">0</strong>
+    </article>
+    <article class="stat-card accent-completed">
+      <span class="stat-label">Tamamlanan</span>
+      <strong class="stat-value" id="stat-completed">0</strong>
+    </article>
+  </section>
+
+  <!-- Ana yerleşim: görev paneli (sol) + canlı konsol (sağ) -->
+  <main class="layout">
+
+    <!-- ===================== SOL: GÖREV PANELİ ===================== -->
+    <section class="panel tasks-panel" aria-labelledby="tasks-heading">
+      <h2 id="tasks-heading">Görevler</h2>
+
+      <!-- Görev ekleme formu -->
+      <form id="task-form" class="task-form" autocomplete="off" novalidate>
+        <label class="visually-hidden" for="task-title">Görev başlığı</label>
+        <input
+          type="text"
+          id="task-title"
+          name="title"
+          placeholder="Yeni görev başlığı yaz…"
+          maxlength="200"
+          required
+        />
+        <label class="visually-hidden" for="task-status">Görev durumu</label>
+        <select id="task-status" name="status">
+          <option value="pending">Bekliyor</option>
+          <option value="in_progress">Devam Ediyor</option>
+          <option value="completed">Tamamlandı</option>
+        </select>
+        <button type="submit" class="btn btn-primary">+ Ekle</button>
+      </form>
+
+      <!-- Hata/başarı bildirimi: app.js doldurur -->
+      <div id="form-message" class="form-message" role="status" aria-live="polite"></div>
+
+      <!-- Görev kartlarının listelendiği alan -->
+      <div id="task-list" class="task-list" aria-live="polite">
+        <p class="empty-state">Görevler yükleniyor…</p>
+      </div>
+    </section>
+
+    <!-- ===================== SAĞ: CANLI KONSOL ===================== -->
+    <section class="panel console-panel" aria-labelledby="console-heading">
+      <div class="console-head">
+        <h2 id="console-heading">Canlı Sistem Logu</h2>
+        <div class="console-actions">
+          <label class="autoscroll-toggle">
+            <input type="checkbox" id="autoscroll" checked />
+            <span>Otomatik kaydır</span>
+          </label>
+          <button type="button" class="btn btn-ghost" id="clear-console">Temizle</button>
+        </div>
+      </div>
+
+      <!-- Konsol: satırlar app.js tarafından eklenir, en alta otomatik kayar -->
+      <div id="console" class="console" role="log" aria-live="polite"></div>
+
+      <!-- WebSocket'ten gelen son ölçüm değerleri -->
+      <div class="console-metrics">
+        <div class="metric">
+          <span class="metric-label">CPU</span>
+          <span class="metric-value" id="metric-cpu">—</span>
+        </div>
+        <div class="metric">
+          <span class="metric-label">Aktif Bağlantı</span>
+          <span class="metric-value" id="metric-conn">—</span>
+        </div>
+        <div class="metric">
+          <span class="metric-label">Son Güncelleme</span>
+          <span class="metric-value" id="metric-time">—</span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <span>Numex AI · FastAPI + Vanilla JS · <code>/api/v1/tasks</code> · <code>/ws/logs</code></span>
+  </footer>
+
+  <!-- Uygulama mantığı: fetch CRUD + WebSocket -->
+  <script src="/static/app.js" defer></script>
+</body>
+</html>

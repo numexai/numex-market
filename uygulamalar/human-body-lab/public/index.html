@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Human Body Neural & Circulation Lab — Numex AI</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="logo" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#021014"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="9"></circle>
+        <path d="M6 12h3l2-4 2.5 8L16 12h2"></path>
+      </svg>
+    </div>
+    <div>
+      <h1>Human Body <span>Neural &amp; Circulation</span> Lab</h1>
+      <p class="sub">Canlı fizyoloji simülatörü — kalp pompası × sinir iletimi</p>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div class="sim-clock">
+      <span class="lbl">SİM SÜRESİ</span>
+      <strong id="clock">0.0s</strong>
+    </div>
+    <span class="numex-tag">Numex AI</span>
+  </div>
+</header>
+
+<main class="layout">
+
+  <!-- ============ SOL PANEL ============ -->
+  <aside class="panel panel-left">
+    <section class="block">
+      <h2 class="block-title"><span>⚙</span> Simülasyon Kontrol</h2>
+      <div class="btn-row">
+        <button id="btn-toggle" class="btn btn-primary">⏸ Duraklat</button>
+        <button id="btn-reset" class="btn">↺ Sıfırla</button>
+      </div>
+      <label class="field">
+        <span class="field-label">Simülasyon Hızı <b id="speed-label">1×</b></span>
+        <input id="speed" type="range" min="0.25" max="4" step="0.25" value="1">
+      </label>
+    </section>
+
+    <section class="block">
+      <h2 class="block-title"><span>❤</span> Kalp Pompası</h2>
+      <div class="btn-row">
+        <button id="btn-hr-down" class="btn btn-sm">− Yavaşlat</button>
+        <button id="btn-hr-up" class="btn btn-sm">+ Hızlandır</button>
+      </div>
+      <label class="field">
+        <span class="field-label">Kalp Hızı (manuel)</span>
+        <input id="hr-slider" type="range" min="30" max="200" step="1" value="72">
+      </label>
+      <p class="hint">Manuel ayar senaryoyu geçersiz kılar; senaryo yeniden seçilince sıfırlanır.</p>
+    </section>
+
+    <section class="block grow">
+      <h2 class="block-title"><span>🧪</span> Senaryolar</h2>
+      <div id="scenario-list" class="scenario-list"></div>
+      <p id="scenario-desc" class="scenario-desc"></p>
+    </section>
+
+    <section class="block">
+      <h2 class="block-title"><span>⌨</span> Kısayollar</h2>
+      <ul class="keys">
+        <li><kbd>Space</kbd> duraklat/devam</li>
+        <li><kbd>R</kbd> sıfırla</li>
+        <li><kbd>↑</kbd><kbd>↓</kbd> kalp hızı</li>
+        <li><kbd>1</kbd>–<kbd>6</kbd> senaryo seç</li>
+      </ul>
+    </section>
+  </aside>
+
+  <!-- ============ ORTA PANEL ============ -->
+  <section class="panel panel-center">
+    <div class="canvas-wrap">
+      <canvas id="body-canvas"></canvas>
+      <div class="canvas-hint">
+        <span class="dot"></span> Bir kola veya bacağa tıkla — sinyal beyinden o bölgeye gitsin
+      </div>
+      <div class="legend">
+        <div class="leg"><span class="sw sw-artery"></span>Atardamar (O₂'li kan)</div>
+        <div class="leg"><span class="sw sw-vein"></span>Toplardamar (O₂'siz kan)</div>
+        <div class="leg"><span class="sw sw-motor"></span>Motor sinyal</div>
+        <div class="leg"><span class="sw sw-sensory"></span>Duyusal sinyal</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SAĞ PANEL ============ -->
+  <aside class="panel panel-right">
+    <section class="block">
+      <h2 class="block-title"><span>❤</span> Kardiyak</h2>
+      <div class="metric-hero">
+        <div class="metric-label">Kalp Hızı</div>
+        <div class="metric-value big" id="m-hr">72</div>
+        <div class="metric-unit">bpm</div>
+        <div class="metric-badge good" id="m-hr-badge">NORMAL</div>
+        <canvas class="spark" id="spark-hr"></canvas>
+      </div>
+      <div class="metric-grid">
+        <div class="metric"><span>Kan Basıncı</span><strong id="m-bp">120/80</strong><small>mmHg</small></div>
+        <div class="metric"><span>Kalp Debisi</span><strong id="m-flow">5.00</strong><small>L/dk</small></div>
+        <div class="metric"><span>Atım Hacmi</span><strong id="m-sv">70</strong><small>mL</small></div>
+        <div class="metric"><span>Ort. Arter B.</span><strong id="m-map">93</strong><small>mmHg</small></div>
+      </div>
+      <canvas class="spark wide" id="spark-flow"></canvas>
+    </section>
+
+    <section class="block">
+      <h2 class="block-title"><span>🫁</span> Oksijenleme</h2>
+      <div class="metric-hero">
+        <div class="metric-label">Oksijen Satürasyonu</div>
+        <div class="metric-value big good" id="m-spo2">98.0</div>
+        <div class="metric-unit">SpO₂ %</div>
+        <canvas class="spark" id="spark-spo2"></canvas>
+      </div>
+      <div class="metric-grid">
+        <div class="metric"><span>Arteriyel PO₂</span><strong id="m-pao2">95.0</strong><small>mmHg</small></div>
+        <div class="metric"><span>Solunum</span><strong id="m-resp">14</strong><small>/dk</small></div>
+      </div>
+      <canvas class="spark wide" id="spark-resp"></canvas>
+    </section>
+
+    <section class="block">
+      <h2 class="block-title"><span>⚡</span> Nöral İletim</h2>
+      <div class="metric-grid">
+        <div class="metric"><span>Tepki Süresi</span><strong id="m-response">—</strong><small>gecikme</small></div>
+        <div class="metric"><span>İletim Katsayısı</span><strong id="m-conduction">1.00×</strong><small>normal</small></div>
+      </div>
+      <div class="metric last-target">
+        <span>Son Uyarılan Bölge</span>
+        <strong id="m-last-target">—</strong>
+      </div>
+    </section>
+  </aside>
+</main>
+
+<!-- ============ ALT PANEL ============ -->
+<section class="logbar">
+  <header>
+    <h2><span>▤</span> Olay Günlüğü</h2>
+    <span class="log-count-wrap"><b id="log-count">0</b> kayıt</span>
+  </header>
+  <div id="event-log" class="event-log"></div>
+</section>
+
+<footer class="site-footer">
+  <span>Numex AI · Human Body Neural &amp; Circulation Lab</span>
+  <span class="disc">Fizyolojik modeller basitleştirilmiştir — eğitim/demo amaçlıdır, klinik tanı aracı değildir.</span>
+</footer>
+
+<script src="js/physiology.js"></script>
+<script src="js/anatomy.js"></script>
+<script src="js/particles.js"></script>
+<script src="js/scenarios.js"></script>
+<script src="js/body-render.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
