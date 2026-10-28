@@ -1,0 +1,79 @@
+<!doctype html>
+<!-- Numex Market tanıtım kartı (gorseller/banner.png ve numex_nedir/gorseller/kart-market.png).
+     PNG'yi yeniden üretmek için bu sayfayı 1280x640 görünümde açıp ekran görüntüsü alın. -->
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>Numex Market kartı</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --teal:#00C9A7; --bg:#0d1117; --surface:#161b22; --text:#e6edf3; --muted:#8b98a9; --line:rgba(0,201,167,.18); }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html, body { width:1280px; height:640px; overflow:hidden; }
+  body {
+    font-family:'Outfit',system-ui,sans-serif; color:var(--text);
+    background:
+      radial-gradient(ellipse 520px 360px at 1120px 60px, rgba(0,201,167,.13), transparent 70%),
+      radial-gradient(ellipse 520px 300px at 0 640px, rgba(34,68,204,.22), transparent 70%),
+      radial-gradient(rgba(255,255,255,.06) 1px, transparent 1.2px) 0 0/28px 28px,
+      #080d16;
+    display:flex; align-items:center; justify-content:space-between; padding:0 64px;
+  }
+  .sol { width:560px; }
+  .logo { display:flex; align-items:center; gap:18px; font-family:'Syne',sans-serif; font-weight:800; font-size:30px; letter-spacing:.5px; }
+  .logo svg { width:38px; height:38px; }
+  .logo b { color:var(--teal); font-weight:800; }
+  .adres { font-family:ui-monospace,'DejaVu Sans Mono',monospace; color:var(--teal); font-size:16px; letter-spacing:1px; margin:26px 0 8px; }
+  h1 { font-family:'Syne',sans-serif; font-weight:800; font-size:45px; line-height:1.04; letter-spacing:0; }
+  h1 span { color:var(--teal); }
+  p { color:#a9b4c2; font-size:19px; line-height:1.55; margin-top:18px; }
+  p strong { color:var(--text); font-weight:600; }
+  .rakam { display:flex; gap:34px; margin-top:28px; }
+  .rakam div { font-family:'Syne',sans-serif; font-weight:800; font-size:30px; }
+  .rakam small { display:block; font-family:'Outfit',sans-serif; font-weight:500; font-size:12px; letter-spacing:2.5px; color:var(--muted); margin-top:4px; }
+  .pano { width:568px; background:rgba(13,17,23,.92); border:1px solid var(--line); border-radius:18px; padding:22px; box-shadow:0 30px 80px rgba(0,0,0,.45); }
+  .pano h6 { font-size:12.5px; font-weight:500; letter-spacing:2.5px; color:var(--muted); margin-bottom:14px; }
+  .izgara { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .kat { display:flex; align-items:center; justify-content:space-between; background:var(--surface); border:1px solid rgba(255,255,255,.06); border-radius:12px; height:48px; padding:0 18px; font-size:17px; font-weight:500; }
+  .kat b { color:var(--teal); font-weight:700; font-size:18px; }
+  .ornek { margin-top:12px; border:1px solid rgba(233,72,120,.45); border-radius:12px; padding:14px 16px; background:linear-gradient(90deg,rgba(233,72,120,.12),rgba(143,107,255,.10)); }
+  .ornek div:first-child { font-size:14.5px; color:#c9d3df; }
+  .ornek strong { color:var(--text); }
+  .adim { display:grid; grid-template-columns:repeat(12,1fr); gap:9px; margin-top:12px; }
+  .adim i { height:16px; border-radius:4px; background:#1b2330; }
+  .adim .p { background:#e94878; } .adim .t { background:var(--teal); } .adim .m { background:#8b6fff; }
+</style>
+</head>
+<body>
+  <div class="sol">
+    <div class="logo">
+      <svg viewBox="0 0 120 120"><defs><linearGradient id="a" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00C9A7"/><stop offset="100%" stop-color="#0f2080"/></linearGradient><linearGradient id="b" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stop-color="#00e5c0"/><stop offset="100%" stop-color="#2244cc"/></linearGradient></defs><path d="M60 12 L71 38 L95 26 L83 50 L109 60 L83 70 L95 94 L71 82 L60 108 L49 82 L25 94 L37 70 L11 60 L37 50 L25 26 L49 38 Z" fill="url(#a)" opacity="0.9"/><circle cx="60" cy="60" r="25" fill="#050c1a"/><circle cx="60" cy="60" r="17" fill="url(#b)" opacity="0.9"/><circle cx="60" cy="60" r="6" fill="white"/></svg>
+      <div>numex <b>market</b></div>
+    </div>
+    <div class="adres">market.numexai.com.tr</div>
+    <h1>Numex’in<br>yazdığı<br><span>44 uygulama.</span></h1>
+    <p>Hepsi <strong>ücretsiz ve açık kaynak</strong>. Çalışan halini dene, kodunu incele, çatalla, kendine göre değiştir.</p>
+    <div class="rakam">
+      <div>44<small>UYGULAMA</small></div>
+      <div>7<small>KATEGORİ</small></div>
+      <div>₺0<small>HER ZAMAN</small></div>
+    </div>
+  </div>
+  <div class="pano">
+    <h6>AÇIK KAYNAK · ÜCRETSİZ · OTONOM ÜRETİM</h6>
+    <div class="izgara">
+      <div class="kat">🎮 Oyunlar <b>6</b></div>
+      <div class="kat">🧪 Simülasyon <b>4</b></div>
+      <div class="kat">🤖 Yapay Zekâ <b>3</b></div>
+      <div class="kat">🛠️ Araçlar <b>12</b></div>
+      <div class="kat">⚡ Üretkenlik <b>8</b></div>
+      <div class="kat">🖥️ Web / OS <b>3</b></div>
+      <div class="kat" style="grid-column:1 / -1">📦 Diğer <span style="color:var(--muted);font-size:14px;flex:1;margin-left:10px">tanıtım sayfaları, ilan platformu ve daha fazlası</span><b>8</b></div>
+    </div>
+    <div class="ornek">
+      <div>🎧 <strong>Cyber Beats</strong> — saf Web Audio API ile 16 adımlı ritim makinesi</div>
+      <div class="adim"><i class="p"></i><i></i><i class="t"></i><i></i><i class="p"></i><i class="m"></i><i class="t"></i><i></i><i class="p"></i><i></i><i class="t"></i><i class="m"></i></div>
+    </div>
+  </div>
+</body>
+</html>

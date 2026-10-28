@@ -42,7 +42,7 @@ Bu yüzden Market aynı zamanda Numex'in ne üretebildiğinin **canlı kanıtıd
 |---|:---:|---|
 | 🎮 **Oyunlar** | 6 | Tarayıcıda ve masaüstünde çalışan otonom üretilmiş oyunlar |
 | 🧪 **Simülasyon** | 4 | Etkileşimli simülasyonlar ve görselleştirmeler |
-| 🤖 **Yapay Zeka** | 3 | AI demoları (ör. sinir ağı çekirdeği görselleştirmesi) |
+| 🤖 **Yapay Zekâ** | 3 | AI demoları (ör. sinir ağı çekirdeği görselleştirmesi) |
 | 🛠️ **Araçlar / Yardımcı** | 12 | Kelime sayacı, resim düzenleyici, Markdown defter gibi günlük araçlar |
 | ⚡ **Üretkenlik** | 8 | Randevu sistemi, depo/stok yönetimi, envanter gibi iş araçları |
 | 🖥️ **Web / OS** | 3 | Web tabanlı masaüstü/işletim sistemi deneyimleri |
