@@ -67,17 +67,20 @@ const ETIKETLER = {
   'Araçlar': ['ücretsiz araç', 'online araç', 'web tool', 'utility'],
   'Üretkenlik': ['stok takip', 'randevu sistemi', 'productivity', 'business app'],
   'Web / OS': ['web işletim sistemi', 'web masaüstü', 'web os', 'web desktop'],
+  'Eğitim': ['eğitim uygulaması', 'öğrenme', 'education', 'learning'],
   'Diğer': ['web sitesi şablonu', 'tanıtım sayfası', 'landing page', 'template'],
 };
 const ORTAK_ETIKETLER = ['açık kaynak', 'türkçe', 'yapay zeka ile yapıldı', 'open source', 'javascript', 'ai generated', 'numex ai'];
 
 const TEKIL = { 'Oyunlar': 'tarayıcı oyunu', 'Simülasyon': 'simülasyon', 'Yapay Zekâ': 'yapay zekâ uygulaması', 'Araçlar': 'araç',
-  'Üretkenlik': 'iş ve üretkenlik uygulaması', 'Web / OS': 'web masaüstü uygulaması', 'Diğer': 'web uygulaması' };
+  'Üretkenlik': 'iş ve üretkenlik uygulaması', 'Web / OS': 'web masaüstü uygulaması', 'Eğitim': 'eğitim uygulaması', 'Diğer': 'web uygulaması' };
 // README'de < > HTML etiketi sanılmasın
 const md = (s) => String(s ?? '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const uygulamaOzeti = (u) => `> **${md(u.name)}** — Numex AI'nın otonom olarak yazıp test ettiği ücretsiz, açık kaynak bir **${TEKIL[kova(u.category)]}**. Kurulum yok, tarayıcıda çalışır.`;
 
 const DEPO = 'numexai/numex-market';
+// Vitrindeki canlı demo adresi (yalnız http/https kabul edilir)
+const demo = (u) => (/^https?:\/\//i.test(String(u.demo_url || '')) ? String(u.demo_url) : null);
 const stackblitz = (u) => `https://stackblitz.com/github/${DEPO}/tree/main/${KLASOR}/${kisaAd(u.app_id)}`;
 const codesandbox = (u) => `https://codesandbox.io/s/github/${DEPO}/tree/main/${KLASOR}/${kisaAd(u.app_id)}`;
 
@@ -87,7 +90,7 @@ const numexBlogu = (u) => {
 
 **Kategori:** ${kova(u.category)} · Numex AI tarafından otonom üretildi ve test edildi.
 
-- ⚡ Tarayıcıda aç ve düzenle: [StackBlitz](${stackblitz(u)}) · [CodeSandbox](${codesandbox(u)}) — kurulum yok
+${demo(u) ? `- ▶️ [Canlı demo](${demo(u)})\n` : ''}- ⚡ Tarayıcıda aç ve düzenle: [StackBlitz](${stackblitz(u)}) · [CodeSandbox](${codesandbox(u)}) — kurulum yok
 - 🛍️ [Numex Market'te gör](https://market.numexai.com.tr) · 🏗️ [Numex Forge](https://forge.numexai.com.tr/explore/repos)
 - 💬 [Numex AI ile kendi uygulamanı yap](https://numexai.com.tr) — Türkçe yapay zekâ asistanı
 
@@ -122,7 +125,7 @@ export function galeri(liste, canli) {
   <span class="cip">${kacisHtml(kova(u.category))}</span>
   <h3>${kacisHtml(u.name)}</h3>
   <p>${kacisHtml(u.description || '')}</p>
-  <nav>${canli(u) ? `<a class="ana" href="${kisaAd(u.app_id)}/">▶ Canlı aç</a>` : ''}<a href="${kod(u)}">Kod</a><a href="${stackblitz(u)}">StackBlitz</a><a href="${codesandbox(u)}">CodeSandbox</a></nav>
+  <nav>${canli(u) ? `<a class="ana" href="${kisaAd(u.app_id)}/">▶ Canlı aç</a>` : demo(u) ? `<a class="ana" href="${kacisHtml(demo(u))}">▶ Canlı aç</a>` : ''}<a href="${kod(u)}">Kod</a><a href="${stackblitz(u)}">StackBlitz</a><a href="${codesandbox(u)}">CodeSandbox</a></nav>
 </article>`;
   const bolumler = KOVALAR.map(({ ad, simge }) => {
     const grup = liste.filter((u) => kova(u.category) === ad).sort((a, b) => a.name.localeCompare(b.name, 'tr'));

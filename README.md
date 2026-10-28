@@ -46,7 +46,7 @@ Bu yüzden Market aynı zamanda Numex'in ne üretebildiğinin **canlı kanıtıd
 | 🛠️ **Araçlar / Yardımcı** | 12 | Kelime sayacı, resim düzenleyici, Markdown defter gibi günlük araçlar |
 | ⚡ **Üretkenlik** | 8 | Randevu sistemi, depo/stok yönetimi, envanter gibi iş araçları |
 | 🖥️ **Web / OS** | 3 | Web tabanlı masaüstü/işletim sistemi deneyimleri |
-| 📦 **Diğer** | 8 | Ürün tanıtım sayfaları, ilan platformu ve daha fazlası |
+| 🎓 **Eğitim** | 1 | Öğrenmeye yardımcı etkileşimli uygulamalar |
 
 ## 🎧 Örnek: Cyber Beats
 
