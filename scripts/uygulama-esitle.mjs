@@ -14,7 +14,9 @@ const INDIR = process.env.MARKET_INDIR || new URL('/api/hub/download/', KAYNAK).
 const KLASOR = 'uygulamalar';
 const EN_BUYUK = 10 * 1024 * 1024;
 
-const ALINMAZ = [/(^|\/)\.env(\.|$)/i, /\.(pem|key|p12|pfx|crt|exe|dll|msi)$/i, /(^|\/)id_(rsa|ed25519)/, /(^|\/)(node_modules|\.git|\.hub-artifacts)(\/|$)/];
+const ALINMAZ = [/(^|\/)\.env(\.|$)/i, /\.(pem|key|p12|pfx|crt|exe|dll|msi)$/i, /(^|\/)id_(rsa|ed25519)/, /(^|\/)(node_modules|\.git|\.hub-artifacts)(\/|$)/,
+  // üretim sırasında kalan test çıktıları ve kazara oluşmuş dosyalar
+  /\.(log|nc)$/i, /(^|\/)test[-_]?(run[-_]?out|sonuc|final|dogrulama)[^/]*\.txt$/i, /(^|\/)_[^/]*\.py$/, /(^|\/)_js_check\.js$/, /[\[\]()]{2,}[^/]*$/];
 const GIZLI_IZ = [/\bsk-(proj-|ant-)?[A-Za-z0-9_-]{32,}/, /AKIA[0-9A-Z]{16}/, /-----BEGIN [A-Z ]*PRIVATE KEY-----/, /gh[pousr]_[A-Za-z0-9]{36}/, /AIza[0-9A-Za-z_-]{35}/, /xox[baprs]-[A-Za-z0-9-]{10,}/];
 
 export const kisaAd = (id) => String(id || '').toLowerCase().replace(/[^a-z0-9_-]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 80);
