@@ -44,6 +44,13 @@ jobs:
       - name: Hugging Face Space'e yayımla
         if: env.HF_TOKEN != ''
         run: |
+          # Space yoksa Static türünde oluştur (sahibi token'ın kullanıcısıysa organization gönderilmez)
+          if [ "$(curl -s -o /dev/null -w '%{http_code}' -H "Authorization: Bearer ${HF_TOKEN}" "https://huggingface.co/api/spaces/${HF_SPACE}")" = "404" ]; then
+            kullanici=$(curl -sf -H "Authorization: Bearer ${HF_TOKEN}" https://huggingface.co/api/whoami-v2 | python3 -c 'import json,sys; print(json.load(sys.stdin)["name"])')
+            istek=$(python3 -c 'import json,sys; s,u=sys.argv[1],sys.argv[2]; o,n=s.split("/",1); d={"type":"space","name":n,"sdk":"static","private":False}; d.update({} if o==u else {"organization":o}); print(json.dumps(d))' "$HF_SPACE" "$kullanici")
+            curl -sf -X POST -H "Authorization: Bearer ${HF_TOKEN}" -H "Content-Type: application/json" -d "$istek" https://huggingface.co/api/repos/create
+            echo; echo "Space oluşturuldu: ${HF_SPACE}"
+          fi
           git clone --depth 1 "https://user:${HF_TOKEN}@huggingface.co/spaces/${HF_SPACE}" /tmp/space
           cd /tmp/space
           git lfs install --local
