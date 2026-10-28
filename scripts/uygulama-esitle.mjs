@@ -3,7 +3,7 @@
 // Güvenlik: .env, anahtar/sertifika, .exe ve büyük dosyalar alınmaz; içinde gizli anahtar izi bulunan uygulama hiç yayımlanmaz.
 // Liste okunamaz ya da uygulama sayısı %20'den çok düşerse hiçbir şey değiştirilmez.
 // Yerel deneme: MARKET_KAYNAK=/yol/apps.json MARKET_INDIR=/zip/klasoru node scripts/uygulama-esitle.mjs
-import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync, statSync, rmSync, renameSync, mkdtempSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync, readdirSync, statSync, rmSync, renameSync, mkdtempSync, cpSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { tmpdir } from 'node:os';
 import { execFileSync } from 'node:child_process';
@@ -235,24 +235,35 @@ if (process.argv[1]?.endsWith('uygulama-esitle.mjs')) {
     throw new Error(`Kaynakta ${liste.length} uygulama var, klasörde ${mevcut.length} — beklenmedik düşüş, hiçbir şey değiştirilmedi`);
   }
 
+  // Her şey önce hazırlık klasöründe kurulur; uygulamalar/ ancak sonuç tutarlıysa değiştirilir.
+  // Geçici klasör başka bir diskte olabilir: taşıma (rename) değil kopyalama (cp) kullanılır.
+  const HAZIRLIK = `${KLASOR}.hazirlik`;
+  rmSync(HAZIRLIK, { recursive: true, force: true });
+  mkdirSync(HAZIRLIK);
   const yayimlanan = [];
   for (const u of liste) {
-    const hedef = join(KLASOR, kisaAd(u.app_id));
+    const ad = kisaAd(u.app_id), eski = join(KLASOR, ad), yeni = join(HAZIRLIK, ad);
     const gecici = mkdtempSync(join(tmpdir(), 'numex-'));
     try {
       const kok = await hazirla(u, gecici);
-      if (kok) { rmSync(hedef, { recursive: true, force: true }); renameSync(kok, hedef); yayimlanan.push(u); }
-      else rmSync(hedef, { recursive: true, force: true }); // gizli iz bulunduysa eski kopya da kalmasın
+      if (kok) { cpSync(kok, yeni, { recursive: true }); yayimlanan.push(u); } // gizli iz bulunduysa (null) eski kopya da alınmaz
     } catch (e) {
-      console.warn(`⚠️  ${u.app_id}: kaynak alınamadı (${e.message}) — ${existsSync(hedef) ? 'önceki kopya korundu' : 'atlandı'}`);
-      if (existsSync(hedef)) yayimlanan.push(u);
+      const korundu = existsSync(eski);
+      console.warn(`⚠️  ${u.app_id}: kaynak alınamadı (${e.message}) — ${korundu ? 'önceki kopya korundu' : 'atlandı'}`);
+      if (korundu) { cpSync(eski, yeni, { recursive: true }); yayimlanan.push(u); }
     } finally { rmSync(gecici, { recursive: true, force: true }); }
   }
+  if (yayimlanan.length < liste.length * 0.8) {
+    rmSync(HAZIRLIK, { recursive: true, force: true });
+    throw new Error(`Yalnız ${yayimlanan.length}/${liste.length} uygulama hazırlanabildi — ${KLASOR}/ değiştirilmedi`);
+  }
   const adlar = new Set(liste.map((u) => kisaAd(u.app_id)));
-  for (const eski of mevcut) if (!adlar.has(eski)) { rmSync(join(KLASOR, eski), { recursive: true, force: true }); console.log(`Market'ten kalkan uygulama silindi: ${eski}`); }
+  for (const eski of mevcut) if (!adlar.has(eski)) console.log(`Market'ten kalkan uygulama silindi: ${eski}`);
 
-  writeFileSync(join(KLASOR, 'README.md'), dizinReadme(yayimlanan));
-  writeFileSync(join(KLASOR, 'LICENSE'), LISANS);
-  writeFileSync(join(KLASOR, 'index.html'), galeri(yayimlanan, (u) => existsSync(join(KLASOR, kisaAd(u.app_id), 'index.html'))));
+  writeFileSync(join(HAZIRLIK, 'README.md'), dizinReadme(yayimlanan));
+  writeFileSync(join(HAZIRLIK, 'LICENSE'), LISANS);
+  writeFileSync(join(HAZIRLIK, 'index.html'), galeri(yayimlanan, (u) => existsSync(join(HAZIRLIK, kisaAd(u.app_id), 'index.html'))));
+  rmSync(KLASOR, { recursive: true, force: true });
+  renameSync(HAZIRLIK, KLASOR); // ikisi de çalışma klasöründe, aynı disk
   console.log(`Uygulamalar: ${yayimlanan.length}/${liste.length} yayımlandı → ${KLASOR}/`);
 }
