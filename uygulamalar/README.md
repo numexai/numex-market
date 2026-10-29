@@ -1,6 +1,6 @@
 # Numex Market uygulamaları — ücretsiz, açık kaynak, Türkçe
 
-Numex AI'nın otonom olarak yazdığı, test ettiği ve [Numex Market](https://market.numexai.com.tr)'te yayımladığı **60 uygulamanın** kaynak kodu:
+Numex AI'nın otonom olarak yazdığı, test ettiği ve [Numex Market](https://market.numexai.com.tr)'te yayımladığı **61 uygulamanın** kaynak kodu:
 tarayıcı oyunları, simülasyonlar, yapay zekâ demoları, günlük araçlar, iş uygulamaları ve web masaüstleri.
 Her gün [numexai.com.tr](https://numexai.com.tr) vitrininden kendiliğinden eşitlenir. Hepsi [MIT lisanslı](LICENSE): dene, incele, çatalla.
 
@@ -50,7 +50,7 @@ Her gün [numexai.com.tr](https://numexai.com.tr) vitrininden kendiliğinden eş
 | [**Sinir Akışı**](neuralflow/) | Sinir ağı katmanlarını görsel olarak kurup eğitimi canlı izleyebildiğin etkileşimli araç. |
 | [**Yol Bulucu — Yapay Zekâ**](pathfinder-ai/) | A* ve Dijkstra yol bulma algoritmalarını canlı gösteren etkileşimli görselleştirme. |
 
-## 🛠️ Araçlar (14)
+## 🛠️ Araçlar (15)
 
 | Uygulama | Ne yapar |
 |---|---|
@@ -63,6 +63,7 @@ Her gün [numexai.com.tr](https://numexai.com.tr) vitrininden kendiliğinden eş
 | [**Kelime & Karakter Sayacı**](kelime-sayaci/) | Metnindeki kelime, karakter ve cümle sayısını anlık gösteren pratik araç. |
 | [**Mahalle Fırını Sipariş Takibi**](mahalle-firini/) | Fırın için sipariş takibi: simit, poğaça, açma, ekmek; müşteri adıyla sipariş, hazır/teslim işareti, gün sonu cirosu. Veriler tarayıcıda saklanır, telefonda da rahat kullanılır. |
 | [**Nöbetçi Operasyon Merkezi**](nobetci-operasyon/) | Operasyon izleme ve nöbet yönetim paneli. |
+| [**Numex Görsel Dönüştürücü — PNG · JPG · WebP**](gorsel-donusturucu/) | Görselleri cihazınızdan çıkmadan PNG, JPG ve WebP'ye dönüştürün: sürükle-bırak ile çoklu dosya, kalite ayarı, saydam alanlar için arka plan rengi, yüzde/genişlik/çerçeveye göre yeniden boyutlandırma, tek tek indirme ya da hepsini ZIP. Sunucu yok, hesap yok; tamamen tarayıcıda çalışır, kurulum gerektirmez. |
 | [**Numex İşletme — Sipariş, Stok ve Risk Paneli**](numex-isletme/) | Küçük işletme için yönetim paneli: müşteri, sipariş, stok, ödeme ve teslimat. Aynı anda gelen siparişlerde çift satış ve eksi stok olmaz, ödeme sırasında sunucu çökerse açılışta kurtarılır, geciken siparişler kanıtıyla risk listesine düşer; müşteri silme gibi yıkıcı işlemler onaysız yapılmaz. Express + SQLite; canlı demoda veriler 30 dakikada bir sıfırlanır. |
 | [**Numex Kaşe Stüdyo — Lazer Markalama**](numex-kase-studyo/) | Kaşe/lazer markalama tasarım arayüzü — G-code üretimi ve baskı simülasyonu. |
 | [**Randevu Sistemi**](randevu-sistemi/) | Randevu oluşturma, listeleme ve takip için sade bir randevu yönetim arayüzü. |

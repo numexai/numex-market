@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Numex Görsel Dönüştürücü — Çevrimdışı PNG · JPG · WebP</title>
+<meta name="description" content="Görselleri cihazınızdan çıkmadan PNG, JPG ve WebP'ye dönüştürün. Ücretsiz, çevrimdışı, hesapsız.">
+<style>
+  :root{
+    --lacivert:#12203a;
+    --lacivert-2:#1b2c4a;
+    --kagit:#f6f7f9;
+    --beyaz:#ffffff;
+    --cizgi:#dfe4ec;
+    --metin:#182238;
+    --soluk:#5b6780;
+    --vurgu:#0f7d6c;
+    --vurgu-koyu:#0b6355;
+    --tehlike:#c0392b;
+    --uyari:#b8791a;
+    --basari:#177a4b;
+    --golge:0 1px 2px rgba(18,32,58,.06), 0 8px 24px rgba(18,32,58,.06);
+    --yaricap:14px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--kagit);
+    color:var(--metin);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    font-size:15px;
+    line-height:1.5;
+    overflow-y:auto;
+    overflow-x:hidden;
+    -webkit-text-size-adjust:100%;
+  }
+  /* Geniş ekran: sayfa KAYMAZ, iki kolon kalan yüksekliği doldurur */
+  @media (min-width:981px) and (min-height:560px){
+    /* Tek kaynak: body=100vh. height:100% + 100vh birlikte kullanılınca
+       (24px taban + padding) gövde 64px taşıp alt kısmı kırpıyordu. */
+    html{height:100%;overflow:hidden}
+    body{
+      overflow:hidden;height:100vh;margin:0;padding:0;
+      display:flex;flex-direction:column;
+    }
+    header.ust{flex:0 0 auto}
+    /* min-height:0 VE overflow:hidden: iç çocukların padding'i kabuğu büyütmesin */
+    .kabuk{
+      flex:1 1 auto;min-height:0;height:auto;overflow:hidden;
+      display:flex;flex-direction:column;
+    }
+    .icerik{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;padding-bottom:0;overflow:hidden}
+    /* ÖLÇÜM (1440×900): banner 64px + main başlangıcı 10px marj + 10px alt padding
+       = 84px. Ana ızgara bu sabit değeri düşerek tam kalan alanı kaplar; taşma yok. */
+    .icerik main{
+      flex:1 1 auto;min-height:0;display:flex;flex-direction:column;
+      padding-bottom:0;height:calc(100vh - 64px);
+    }
+    .sag-kolon > .liste-alan{flex:1 1 auto;min-height:0;max-height:none}
+    /* 2 kolon: grid (temel kuralı ezip yan yana dizer) */
+    .ana-izgara{
+      display:grid !important;
+      grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
+      gap:14px;align-items:stretch;
+      margin:10px 0 0;height:calc(100% - 10px);min-height:0;
+    }
+    /* Sol kolon: tam yükseklik; bırakma alanı esner, ayar paneli alta oturur */
+    .ana-izgara > .sol-kolon{
+      flex:1 1 50%;min-height:0;height:100%;max-height:100%;
+      overflow-y:auto;overflow-x:hidden;padding-right:3px;
+    }
+    /* Bırakma alanı esner — tur 143'teki dengeli hâl (ayarlar altında tam görünür) */
+    .sol-kolon > .damla{
+      flex:1 1 auto;min-height:150px;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+    }
+    .sol-kolon > .panel{flex:0 0 auto}
+    /* Sağ kolon kalan yüksekliği doldurur; liste ortada esner, dipnot en altta */
+    .ana-izgara > .sag-kolon{flex:1 1 50%;min-height:0;height:100%;max-height:100%;overflow:hidden}
+    /* Dipnot kolon içinde kalır (main dışına taşıp kırpılmıyordu) */
+    .sag-kolon > .dipnot{flex:0 0 auto;margin:0 !important}
+    .sag-kolon > .liste-alan{flex:1 1 auto;min-height:0}
+    .sag-kolon > #listeKapsayici{flex:1 1 auto;min-height:0}
+    .sol-kolon::-webkit-scrollbar{width:9px}
+    .sol-kolon::-webkit-scrollbar-thumb{background:#cfd7e3;border-radius:99px}
+    .sag-kolon .liste-alan{flex:1 1 auto;min-height:0;overflow-y:auto}
+    .sag-kolon .dipnot{margin-top:auto;padding-top:8px}
+  }
+
+  /* Gövde: banner tam genişlik, içerik ortalanmış sütun.
+     Banner negatif margin'le taşırılmıyor (kesik görünüyordu). */
+  .kabuk{max-width:none;margin:0;padding:0;display:flex;flex-direction:column}
+  .icerik{
+    max-width:1480px;width:100%;margin:0 auto;
+    padding:0 clamp(12px,3vw,22px) 10px;
+    flex:1 1 auto;display:flex;flex-direction:column;min-height:0;
+    box-sizing:border-box;
+  }
+  .icerik main{flex:1 1 auto;display:flex;flex-direction:column;min-height:0}
+
+  /* ---------- Üst şerit (banner) ---------- */
+  header.ust{
+    background:linear-gradient(180deg,#16253f 0%,var(--lacivert) 100%);
+    color:#eaf0fa;
+    margin:0;
+    padding:7px 0;
+    border-bottom:3px solid var(--vurgu);
+    flex:0 0 auto;
+  }
+  header.ust .ic{
+    max-width:1480px;margin:0 auto;padding:0 clamp(12px,3vw,22px);
+    display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between;
+  }
+  .marka{display:flex;align-items:center;gap:11px;min-width:0}
+  .marka .simge{width:32px;height:32px;flex:0 0 32px;border-radius:9px;background:var(--vurgu);display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;letter-spacing:-.5px}
+  .marka h1{margin:0;font-size:clamp(15px,2.4vw,18px);font-weight:650;letter-spacing:-.2px}
+  .marka p{margin:1px 0 0;font-size:clamp(11px,1.8vw,12.5px);color:#a9bbd6}
+  .rozetler{display:flex;flex-wrap:wrap;gap:6px}
+  .rozet{font-size:11.5px;padding:4px 9px;border-radius:999px;background:rgba(255,255,255,.09);color:#cfe0f5;border:1px solid rgba(255,255,255,.14);white-space:nowrap}
+
+  /* ---------- Ana yerleşim (temel: dar ekran, tek kolon) ---------- */
+  .ana-izgara{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:12px;
+    align-items:start;
+    margin-top:10px;
+  }
+  .sol-kolon,.sag-kolon{
+    display:flex;flex-direction:column;gap:10px;min-width:0;
+  }
+  .sag-kolon{min-height:0}
+  .liste-alan{min-height:0}
+  /* Liste alanı içerikle büyür; uzarsa kendi içinde kayar */
+  .liste-alan{min-height:180px;overflow-y:auto;overflow-x:hidden;padding-right:3px}
+  .liste-alan::-webkit-scrollbar{width:9px}
+  .liste-alan::-webkit-scrollbar-thumb{background:#cfd7e3;border-radius:99px}
+  .liste-alan::-webkit-scrollbar-thumb:hover{background:#b7c2d2}
+
+  /* Ayar alanları: kendi kolonunda iki sütun (dikeyde yarıya iner) */
+  .panel .ızgara{grid-template-columns:1fr 1fr;column-gap:12px;row-gap:9px}
+
+
+  /* ---------- Alan bırakma ---------- */
+  .damla{
+    margin-top:0;
+    background:var(--beyaz);
+    border:2px dashed #c3cddd;
+    border-radius:var(--yaricap);
+    padding:12px 16px;
+    text-align:center;
+    transition:border-color .15s, background .15s, box-shadow .15s;
+    cursor:pointer;
+    box-shadow:var(--golge);
+  }
+  .damla:focus-visible{outline:3px solid rgba(15,125,108,.45);outline-offset:3px}
+  .damla.uzerinde{border-color:var(--vurgu);background:#f1faf8;box-shadow:0 0 0 4px rgba(15,125,108,.10)}
+  .damla .ok-ikon{width:36px;height:36px;margin:0 auto 6px;border-radius:50%;background:#eef6f4;display:grid;place-items:center}
+  .damla .ok-ikon svg{width:21px;height:21px;stroke:var(--vurgu);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+  .damla h2{margin:0 0 4px;font-size:clamp(14px,2vw,16px);font-weight:650}
+  .damla p{margin:0;color:var(--soluk);font-size:12.5px;line-height:1.4}
+  .damla .kisit{margin-top:7px;font-size:11px;color:#8794aa;line-height:1.35}
+  .damla .btn{margin-top:10px;min-height:40px}
+  .damla.kucuk{padding:10px 12px;display:flex;align-items:center;gap:10px;text-align:left}
+  .damla.kucuk .ok-ikon{width:32px;height:32px;margin:0;flex:0 0 32px}
+  .damla.kucuk .ok-ikon svg{width:16px;height:16px}
+  .damla.kucuk h2{font-size:13.5px;margin:0}
+  .damla.kucuk p,.damla.kucuk .kisit,.damla.kucuk .btn{display:none}
+  .damla.kucuk .yazi{min-width:0}
+  .damla.kucuk .yazi span{display:block;font-size:11px;color:var(--soluk);margin-top:1px}
+  input[type=file]{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+
+  /* ---------- Butonlar ---------- */
+  .btn{
+    -webkit-appearance:none;appearance:none;
+    border:1px solid var(--cizgi);background:var(--beyaz);color:var(--metin);
+    min-height:44px;padding:10px 16px;border-radius:10px;
+    font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    transition:background .13s,border-color .13s,color .13s,transform .06s;
+    touch-action:manipulation;
+  }
+  .btn:hover:not(:disabled){background:#f2f5f9;border-color:#c9d2e0}
+  .btn:active:not(:disabled){transform:translateY(1px)}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+  .btn:focus-visible{outline:3px solid rgba(15,125,108,.40);outline-offset:2px}
+  .btn.ana{background:var(--vurgu);border-color:var(--vurgu);color:#fff}
+  .btn.ana:hover:not(:disabled){background:var(--vurgu-koyu);border-color:var(--vurgu-koyu)}
+  .btn.ikincil{background:#eef2f7}
+  .btn.tehlike{color:var(--tehlike);border-color:#efd3cf}
+  .btn.tehlike:hover:not(:disabled){background:#fdf1ef;border-color:#e0b6b0}
+  .btn.kucuk{min-height:36px;padding:6px 11px;font-size:12.5px;border-radius:8px}
+  .btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:0 0 16px}
+
+  /* ---------- Panel ---------- */
+  .panel{
+    background:var(--beyaz);border:1px solid var(--cizgi);border-radius:var(--yaricap);
+    box-shadow:var(--golge);padding:11px;margin:0;
+  }
+  .panel h3{margin:0 0 7px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--soluk)}
+  .ızgara{display:grid;grid-template-columns:1fr;gap:8px}
+  .alan{min-width:0}
+  .alan > label,.alan > .etiket{display:block;font-size:12px;font-weight:650;margin-bottom:4px;color:var(--metin)}
+  .alan .ipucu{display:block;font-size:11px;color:var(--soluk);margin-top:3px;line-height:1.35}
+  select,input[type=number],input[type=text]{
+    font-family:inherit;font-size:13.5px;color:var(--metin);
+    background:var(--beyaz);border:1px solid var(--cizgi);border-radius:9px;
+    min-height:36px;padding:5px 9px;width:100%;
+  }
+  select:focus,input:focus{outline:3px solid rgba(15,125,108,.35);outline-offset:1px;border-color:var(--vurgu)}
+  .kapali{opacity:.45;pointer-events:none}
+
+  /* Biçim seçici */
+  .secim-grubu{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  /* Radyo düğmeleri görsel olarak gizli; etiketleri tıklanır. pointer-events:none
+     olmadan 1px'lik kutular üst üste binip etiket tıklamasını yiyordu. */
+  .secim-grubu{position:relative}
+  /* Doğru görsel gizleme: kırpma tekniği. 1px'lik kutu yerine klavye odağı da
+     korunur; hiçbir gizli kutu tıklamayı yemez. */
+  .secim-grubu input{
+    position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
+    clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0;
+  }
+  .secim-grubu label{
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+    min-height:52px;border:1.5px solid var(--cizgi);border-radius:10px;cursor:pointer;
+    font-size:13px;font-weight:650;background:var(--beyaz);transition:all .13s;text-align:center;padding:6px 4px;
+  }
+  .secim-grubu label small{font-weight:500;font-size:10.5px;color:var(--soluk);letter-spacing:.02em}
+  .secim-grubu input:checked + label{border-color:var(--vurgu);background:#effaf7;color:var(--vurgu-koyu);box-shadow:inset 0 0 0 1px var(--vurgu)}
+  .secim-grubu input:focus-visible + label{outline:3px solid rgba(15,125,108,.40);outline-offset:2px}
+
+  /* Kalite kaydırıcı */
+  .kaydirici-satir{display:flex;align-items:center;gap:10px}
+  input[type=range]{
+    -webkit-appearance:none;appearance:none;flex:1;height:6px;border-radius:99px;
+    background:linear-gradient(to right,var(--vurgu) var(--dolu,80%),#e3e8f0 var(--dolu,80%));
+    min-height:30px;background-clip:content-box;background-origin:content-box;padding:12px 0;
+    cursor:pointer;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:#fff;
+    border:2px solid var(--vurgu);box-shadow:0 1px 4px rgba(0,0,0,.18);cursor:grab;
+  }
+  input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#fff;border:2px solid var(--vurgu);cursor:grab}
+  input[type=range]:focus-visible{outline:3px solid rgba(15,125,108,.35);outline-offset:2px;border-radius:99px}
+  .kaydirici-deger{font-variant-numeric:tabular-nums;font-size:13px;font-weight:650;min-width:46px;text-align:right}
+
+  /* Renk */
+  .renk-satir{display:flex;align-items:center;gap:10px}
+  /* Renk kutusu: damalı zemin + belirgin çerçeve. Seçili renk üstteki
+     .renk-onizleme katmanına JS ile yazılır (beyaz renkte de sınır görünür). */
+  .renk-kutu{
+    width:52px;height:44px;flex:0 0 52px;border-radius:9px;position:relative;
+    border:2px solid #6f7c8f;overflow:hidden;cursor:pointer;
+    box-shadow:0 1px 3px rgba(18,32,58,.18);
+    background-image:linear-gradient(45deg,#d8dee8 25%,transparent 25%,transparent 75%,#d8dee8 75%),
+                     linear-gradient(45deg,#d8dee8 25%,transparent 25%,transparent 75%,#d8dee8 75%);
+    background-size:10px 10px;background-position:0 0,5px 5px;
+  }
+  /* Seçili renk bu katmanda gösterilir. Beyaz seçiliyken de kutunun boş
+     görünmemesi için damalı zemin üstte ince bir iç çerçeveyle kalır. */
+  .renk-onizleme{
+    position:absolute;inset:0;pointer-events:none;background-color:#ffffff;
+    box-shadow:inset 0 0 0 1px rgba(18,32,58,.35);
+    border-radius:7px;
+  }
+  /* Beyaz renk: katman beyaz kalır, ayırt edilebilmesi için içeriye
+     hafif gri bir çerçeve ve köşe işareti çizilir. */
+  .renk-onizleme[data-renk="#ffffff"]::after{
+    content:"";position:absolute;inset:0;border-radius:7px;
+    box-shadow:inset 0 0 0 1px #c3ccd8;
+    background-image:linear-gradient(135deg,transparent calc(50% - 1px),#c3ccd8 calc(50% - 1px),#c3ccd8 50%,transparent 50%);
+    background-size:100% 100%;opacity:.55;
+  }
+  .renk-kutu input[type=color]{
+    position:absolute;inset:0;width:100%;height:100%;
+    opacity:0;cursor:pointer;padding:0;border:0;
+  }
+
+  .renk-satir input[type=text]{flex:1;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;text-transform:uppercase}
+
+  /* Boyutlandırma */
+  .boyut-satir{display:flex;align-items:center;gap:8px}
+  .boyut-satir input{width:100%}
+  .boyut-satir .carpi{color:var(--soluk);font-weight:600}
+
+  /* ---------- Eylem çubuğu ---------- */
+  .eylemler{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+  .eylemler .btn{flex:0 1 auto}
+  .eylemler .sag{flex:1 1 120px;display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+
+  /* İlerleme */
+  .ilerleme-kutu{margin-top:14px;display:none}
+  .ilerleme-kutu.acik{display:block}
+  .ilerleme-ust{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-size:12.5px;margin-bottom:6px}
+  .ilerleme-ust .yuzde{font-variant-numeric:tabular-nums;font-weight:700;color:var(--vurgu-koyu)}
+  .cubuk{height:10px;border-radius:99px;background:#e5eaf2;overflow:hidden}
+  .cubuk > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--vurgu),#23a893);border-radius:99px;transition:width .18s ease}
+  .cubuk.durdu > i{background:linear-gradient(90deg,#b8791a,#d39b3a)}
+
+  /* ---------- Liste ---------- */
+  .liste-baslik{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;justify-content:space-between;margin:22px 0 10px}
+  .liste-baslik h3{margin:0;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--soluk)}
+  .liste-baslik .ozet{font-size:12.5px;color:var(--soluk);font-variant-numeric:tabular-nums}
+  ul.gorseller{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+  li.kart{
+    background:var(--beyaz);border:1px solid var(--cizgi);border-radius:12px;padding:12px;
+    display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:12px;align-items:center;
+    box-shadow:0 1px 2px rgba(18,32,58,.04);
+  }
+  li.kart.hata{border-color:#efd3cf;background:#fefaf9}
+  li.kart.basarili{border-color:#cfe8dd}
+  .onizleme{
+    width:64px;height:64px;border-radius:9px;background:#eef1f6 center/cover no-repeat;
+    border:1px solid var(--cizgi);display:grid;place-items:center;font-size:10.5px;color:var(--soluk);text-align:center;overflow:hidden;
+  }
+  .bilgi{min-width:0}
+  .bilgi .ad{
+    font-weight:650;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    overflow-wrap:anywhere;
+  }
+  .bilgi .meta{font-size:12px;color:var(--soluk);margin-top:3px;display:flex;flex-wrap:wrap;gap:4px 10px;font-variant-numeric:tabular-nums}
+  .bilgi .meta .pill{background:#eef2f7;border-radius:6px;padding:1px 6px;font-size:11px;color:#40506d}
+  .bilgi .durum{font-size:12px;margin-top:5px;font-weight:600}
+  .bilgi .durum.ok{color:var(--basari)}
+  .bilgi .durum.hata{color:var(--tehlike)}
+  .bilgi .durum.bekliyor{color:var(--soluk);font-weight:500}
+  .bilgi .durum.isliyor{color:var(--vurgu-koyu)}
+  .bilgi .hata-mesaji{font-size:12px;color:var(--tehlike);margin-top:4px;overflow-wrap:anywhere}
+  .kart-eylem{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+  .fark{font-variant-numeric:tabular-nums;font-weight:650;font-size:12.5px;padding:2px 7px;border-radius:6px;white-space:nowrap}
+  .fark.kucuk{background:#e9f7f0;color:var(--basari)}
+  .fark.buyuk{background:#fdeeea;color:var(--tehlike)}
+  .fark.esit{background:#eef1f6;color:var(--soluk)}
+
+  .bos-durum{
+    text-align:center;color:var(--soluk);font-size:13px;padding:26px 14px;
+    border:1px dashed var(--cizgi);border-radius:12px;background:#fbfcfd;line-height:1.6;
+  }
+  /* Geniş ekranda boş liste, kalan alanı kaplayıp ortalanır */
+  @media (min-width:981px) and (min-height:560px){
+    #listeKapsayici{display:flex;flex-direction:column;flex:1 1 auto;min-height:0;overflow-y:auto}
+    #listeKapsayici > .bos-durum{
+      flex:1 1 auto;display:flex;align-items:center;justify-content:center;
+      min-height:120px;border-style:dashed;margin:0;
+    }
+    .liste-alan{display:flex;flex-direction:column}
+  }
+
+  /* ---------- Uyarı / bilgi ---------- */
+  .uyari-kutu{
+    display:none;margin-top:14px;padding:11px 13px;border-radius:10px;font-size:13px;
+    background:#fff8ea;border:1px solid #f0dcb4;color:#7a5510;
+  }
+  .uyari-kutu.acik{display:block}
+  .uyari-kutu strong{font-weight:700}
+
+  .dipnot{margin:0;font-size:11px;color:#8794aa;line-height:1.35}
+  .dipnot a{color:var(--vurgu-koyu);text-decoration:none;font-weight:600}
+  .dipnot a:hover{text-decoration:underline}
+
+  .gizli{display:none !important}
+
+  /* Dar ekran: tek kolon, sayfa normal akışla kayar */
+  @media (max-width:980px){
+    .ana-izgara{grid-template-columns:1fr;height:auto;min-height:0}
+    .sol-kolon,.sag-kolon{overflow:visible;height:auto}
+    .liste-alan{overflow:visible;max-height:none}
+    .panel .ızgara{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+    .kabuk{padding-bottom:20px}
+  }
+  @media (max-width:560px){
+    .panel .ızgara{grid-template-columns:1fr}
+  }
+  @media (max-width:620px){
+    li.kart{grid-template-columns:54px minmax(0,1fr);gap:10px}
+    .onizleme{width:54px;height:54px}
+    .kart-eylem{grid-column:1 / -1;justify-content:stretch;margin-top:2px}
+    .kart-eylem .btn{flex:1 1 auto}
+    .eylemler .btn{width:100%}
+    .eylemler .sag{width:100%}
+    .eylemler .sag .btn{flex:1 1 0}
+    .damla .btn{width:100%}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none !important}
+  }
+</style>
+</head>
+<body>
+<header class="ust">
+    <div class="ic">
+      <div class="marka">
+        <div class="simge" aria-hidden="true">NX</div>
+        <div>
+          <h1>Numex Görsel Dönüştürücü</h1>
+          <p>Çevrimdışı · Hesapsız · Dosyalar cihazınızdan çıkmaz</p>
+        </div>
+      </div>
+      <div class="rozetler" aria-label="Uygulama özellikleri">
+        <span class="rozet">%100 tarayıcıda</span>
+        <span class="rozet">Sunucu yok</span>
+        <span class="rozet">PNG · JPG · WebP</span>
+      </div>
+    </div>
+</header>
+
+<div class="kabuk">
+  <div class="icerik">
+  <main>
+   <div class="ana-izgara">
+    <div class="sol-kolon">
+    <!-- Bırakma alanı -->
+    <div class="damla" id="damla" role="button" tabindex="0"
+         aria-label="Görselleri seçmek için tıklayın veya buraya sürükleyip bırakın">
+      <div class="ok-ikon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M12 16V4m0 0L7 9m5-5 5 5"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
+      </div>
+      <h2>Görselleri buraya sürükleyin</h2>
+      <p>ya da dosya seçmek için tıklayın — istediğiniz kadar görsel ekleyebilirsiniz</p>
+      <span class="btn ana" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+        Görsel Seç
+      </span>
+      <div class="kisit">Desteklenen giriş biçimleri: PNG, JPG, WebP, GIF, BMP, AVIF (tarayıcınızın çözebildiği her format)</div>
+    </div>
+    <input type="file" id="dosyaGirdi" accept="image/*" multiple>
+
+    <!-- Ayarlar -->
+    <section class="panel" aria-labelledby="ayarBaslik">
+      <h3 id="ayarBaslik">Dönüştürme ayarları</h3>
+      <div class="ızgara">
+
+        <div class="alan">
+          <span class="etiket" id="hedefEtiket">Hedef biçim</span>
+          <div class="secim-grubu" role="radiogroup" aria-labelledby="hedefEtiket">
+            <input type="radio" name="hedef" id="hedefPng" value="png">
+            <label for="hedefPng">PNG<small>kayıpsız</small></label>
+            <input type="radio" name="hedef" id="hedefJpg" value="jpeg" checked>
+            <label for="hedefJpg">JPG<small>küçük boyut</small></label>
+            <input type="radio" name="hedef" id="hedefWebp" value="webp">
+            <label for="hedefWebp">WebP<small>modern</small></label>
+          </div>
+          <span class="ipucu" id="hedefIpuclari">JPG seçildi: saydam alanlar arka plan rengiyle doldurulur.</span>
+        </div>
+
+        <div class="alan" id="kaliteAlan">
+          <label for="kalite">Kalite <span class="kaydirici-deger" id="kaliteDeger">85%</span></label>
+          <div class="kaydirici-satir">
+            <input type="range" id="kalite" min="10" max="100" step="1" value="85"
+                   aria-describedby="kaliteIpucu">
+          </div>
+          <span class="ipucu" id="kaliteIpucu">Kayıplı biçimlerde (JPG/WebP) dosya boyutunu belirler. PNG'de yok sayılır.</span>
+        </div>
+
+        <div class="alan" id="arkaPlanAlan">
+          <label for="arkaPlan">JPG arka plan rengi</label>
+          <div class="renk-satir">
+            <div class="renk-kutu" title="Renk seçmek için tıklayın">
+              <div class="renk-onizleme" id="renkOnizleme"></div>
+              <input type="color" id="arkaPlan" value="#ffffff" aria-label="JPG arka plan rengi seçin">
+            </div>
+            <input type="text" id="arkaPlanKod" value="#FFFFFF" maxlength="7" spellcheck="false"
+                   aria-label="Arka plan rengi hex kodu">
+          </div>
+          <span class="ipucu">Saydam PNG/WebP → JPG çevriminde şeffaf alanlar bu renkle doldurulur.</span>
+        </div>
+
+        <div class="alan">
+          <span class="etiket">Yeniden boyutlandırma</span>
+          <select id="boyutModu" aria-label="Yeniden boyutlandırma modu">
+            <option value="yok" selected>Yok — orijinal boyut</option>
+            <option value="yuzde">Yüzdeyle ölçekle</option>
+            <option value="genislik">Genişliğe göre (oran korunur)</option>
+            <option value="cerceve">Çerçeveye sığdır (oran korunur)</option>
+          </select>
+
+          <div class="boyut-satir gizli" id="boyutYuzde" style="margin-top:10px">
+            <input type="range" id="yuzde" min="5" max="200" step="5" value="100" aria-label="Ölçek yüzdesi">
+            <span class="kaydirici-deger" id="yuzdeDeger">100%</span>
+          </div>
+
+          <div class="boyut-satir gizli" id="boyutGenislik" style="margin-top:10px">
+            <input type="number" id="genislik" min="1" max="20000" value="1600" inputmode="numeric" aria-label="Hedef genişlik (piksel)">
+            <span class="carpi">px</span>
+          </div>
+
+          <div class="boyut-satir gizli" id="boyutCerceve" style="margin-top:10px">
+            <input type="number" id="cerceveG" min="1" max="20000" value="1200" inputmode="numeric" aria-label="Çerçeve genişliği (piksel)">
+            <span class="carpi">×</span>
+            <input type="number" id="cerceveY" min="1" max="20000" value="1200" inputmode="numeric" aria-label="Çerçeve yüksekliği (piksel)">
+            <span class="carpi">px</span>
+          </div>
+
+          <span class="ipucu" id="boyutIpucu">Görseller orijinal çözünürlüğünde kalır.</span>
+        </div>
+
+        <div class="alan">
+          <label for="zemin">Şeffaf zemin</label>
+          <select id="zemin" aria-label="Şeffaf zemin deseni">
+            <option value="damali" selected>Damalı (klasik)</option>
+            <option value="beyaz">Beyaz</option>
+            <option value="siyah">Siyah</option>
+          </select>
+          <span class="ipucu">Yalnızca önizleme görünümünü etkiler; dönüşüm verisine dokunmaz.</span>
+        </div>
+
+      </div>
+    </section>
+    </div><!-- /sol-kolon -->
+
+    <div class="sag-kolon">
+    <!-- Eylemler + ilerleme -->
+    <div class="eylemler" style="margin-top:0">
+      <button class="btn ana" id="donusturBtn" disabled>
+        <svg viewBox="0 0 24 24"><path d="M4 7h11l-3-3m3 3-3 3"/><path d="M20 17H9l3-3m-3 3 3 3"/></svg>
+        <span id="donusturEtiket">Dönüştür</span>
+      </button>
+      <button class="btn ikincil" id="zipBtn" disabled>
+        <svg viewBox="0 0 24 24"><path d="M6 3h12v18H6z"/><path d="M11 3v2h2V3M11 7v2h2V7M11 11v2h2v-2"/></svg>
+        ZIP indir
+      </button>
+      <div class="sag">
+        <button class="btn" id="temizleBtn" disabled>
+          <svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>
+          Listeyi temizle
+        </button>
+      </div>
+    </div>
+
+    <div class="ilerleme-kutu" id="ilerlemeKutu" role="status" aria-live="polite">
+      <div class="ilerleme-ust">
+        <span id="ilerlemeMetin">Hazır</span>
+        <span class="yuzde" id="ilerlemeYuzde">0%</span>
+      </div>
+      <div class="cubuk" id="cubuk"><i id="cubukDolu"></i></div>
+      <div class="eylemler" style="margin-top:10px">
+        <button class="btn tehlike kucuk" id="iptalBtn">
+          <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>
+          İptal
+        </button>
+      </div>
+    </div>
+
+    <div class="uyari-kutu" id="uyariKutu" role="alert"></div>
+
+    <!-- Liste -->
+    <div class="liste-baslik" style="margin:2px 0 8px">
+      <h3>Görseller</h3>
+      <span class="ozet" id="listeOzet"></span>
+    </div>
+    <div class="liste-alan">
+      <div id="listeKapsayici">
+        <div class="bos-durum" id="bosDurum">Henüz görsel eklenmedi. Soldaki alana sürükleyin ya da dosya seçin.</div>
+        <ul class="gorseller" id="liste"></ul>
+      </div>
+    </div>
+    <p class="dipnot" style="margin-top:auto;text-align:left;padding-top:6px">
+      Tüm işlem cihazınızda yapılır, hiçbir dosya yüklenmez ·
+      <a href="https://www.numexai.com.tr" target="_blank" rel="noopener">numexai.com.tr</a>
+    </p>
+    </div><!-- /sag-kolon -->
+   </div><!-- /ana-izgara -->
+  </main>
+  </div><!-- /icerik -->
+</div><!-- /kabuk -->
+
+<script src="image-core.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
