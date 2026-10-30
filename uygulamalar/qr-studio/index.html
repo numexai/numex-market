@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Numex QR Studio — Tasarla, okut, paylaş</title>
+<meta name="description" content="Bağlantı, metin, telefon, e-posta ve Wi-Fi için okunabilir QR kodlar üret. Renk, gradyan, logo ekle; SVG ve yüksek çözünürlüklü PNG indir. Veriler tarayıcında kalır.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230f172a'/%3E%3Cg fill='%2338bdf8'%3E%3Crect x='6' y='6' width='8' height='8' rx='2'/%3E%3Crect x='18' y='6' width='8' height='8' rx='2'/%3E%3Crect x='6' y='18' width='8' height='8' rx='2'/%3E%3Crect x='18' y='18' width='4' height='4' rx='1'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="ust">
+  <div class="marka">
+    <span class="logo" aria-hidden="true">
+      <svg viewBox="0 0 32 32" width="30" height="30"><rect width="32" height="32" rx="8" fill="#0f172a"/><g fill="#38bdf8"><rect x="6" y="6" width="8" height="8" rx="2"/><rect x="18" y="6" width="8" height="8" rx="2"/><rect x="6" y="18" width="8" height="8" rx="2"/><rect x="18" y="18" width="4" height="4" rx="1"/><rect x="23" y="23" width="3" height="3" rx="1"/></g></svg>
+    </span>
+    <div>
+      <h1>Numex QR Studio</h1>
+      <p>Tasarla, okut, paylaş.</p>
+    </div>
+  </div>
+  <div class="ust-sag">
+    <a class="ust-bag" href="hakkinda.html">← Tanıtım</a>
+    <div class="ust-not">Veriler cihazından çıkmaz</div>
+  </div>
+</header>
+
+<main class="duzen">
+
+  <!-- SOL: AYARLAR -->
+  <section class="kart ayarlar" aria-label="QR ayarları">
+
+    <nav class="sekmeler" role="tablist" aria-label="QR türü">
+      <button class="sekme aktif" role="tab" data-tur="url">🔗 Bağlantı</button>
+      <button class="sekme" role="tab" data-tur="metin">📝 Metin</button>
+      <button class="sekme" role="tab" data-tur="tel">📞 Telefon</button>
+      <button class="sekme" role="tab" data-tur="eposta">✉️ E-posta</button>
+      <button class="sekme" role="tab" data-tur="wifi">📶 Wi-Fi</button>
+    </nav>
+
+    <div id="formAlanlari" class="alanlar">
+
+      <div class="panel" data-panel="url">
+        <label for="url">Bağlantı adresi</label>
+        <input id="url" name="url" type="text" inputmode="url" placeholder="ornek.com/sayfa" value="https://www.numexai.com.tr" autocomplete="off">
+        <p class="ipucu">Protokol yazmasan da olur, https:// otomatik eklenir.</p>
+      </div>
+
+      <div class="panel" data-panel="metin" hidden>
+        <label for="metin">Metin</label>
+        <textarea id="metin" name="metin" rows="5" placeholder="Okutulduğunda görünecek metin..."></textarea>
+      </div>
+
+      <div class="panel" data-panel="tel" hidden>
+        <label for="tel">Telefon numarası</label>
+        <input id="tel" name="tel" type="tel" inputmode="tel" placeholder="0500 000 00 00">
+        <p class="ipucu">Okutan kişiye arama ekranı açılır.</p>
+      </div>
+
+      <div class="panel" data-panel="eposta" hidden>
+        <label for="eposta">E-posta adresi</label>
+        <input id="eposta" name="eposta" type="email" inputmode="email" placeholder="ornek@site.com" autocomplete="off">
+        <label for="epostaKonu">Konu <span class="soluk">(isteğe bağlı)</span></label>
+        <input id="epostaKonu" name="epostaKonu" type="text" placeholder="Konu">
+        <label for="epostaGovde">Mesaj <span class="soluk">(isteğe bağlı)</span></label>
+        <textarea id="epostaGovde" name="epostaGovde" rows="3" placeholder="Hazır mesaj metni"></textarea>
+      </div>
+
+      <div class="panel" data-panel="wifi" hidden>
+        <label for="wifiAd">Ağ adı (SSID)</label>
+        <input id="wifiAd" name="wifiAd" type="text" placeholder="EvWifi" autocomplete="off">
+        <label for="wifiGuvenlik">Güvenlik</label>
+        <select id="wifiGuvenlik" name="wifiGuvenlik">
+          <option value="WPA">WPA / WPA2 / WPA3</option>
+          <option value="WEP">WEP</option>
+          <option value="nopass">Şifresiz</option>
+        </select>
+        <div id="wifiSifreAlani">
+          <label for="wifiSifre">Şifre</label>
+          <input id="wifiSifre" name="wifiSifre" type="text" placeholder="Ağ şifresi" autocomplete="off">
+        </div>
+        <label class="onay"><input type="checkbox" name="wifiGizli"> Gizli ağ</label>
+        <p class="ipucu">Telefon, QR'ı okutunca ağa doğrudan bağlanır.</p>
+      </div>
+
+    </div>
+
+    <hr>
+
+    <h2 class="bolum">Tasarım</h2>
+    <div class="stil-secim" role="group" aria-label="QR stili">
+      <button class="stil" data-still="kare">
+        <span class="stil-ikon stil-kare" aria-hidden="true"></span> Kare
+      </button>
+      <button class="stil" data-still="yuvarlak">
+        <span class="stil-ikon stil-yuvarlak" aria-hidden="true"></span> Yuvarlatılmış
+      </button>
+      <button class="stil" data-still="nokta">
+        <span class="stil-ikon stil-nokta" aria-hidden="true"></span> Noktalı
+      </button>
+    </div>
+
+    <div class="izgara2">
+      <div class="alan">
+        <label for="renk1">Ana renk <span class="deger" id="renk1Deger">#0F172A</span></label>
+        <input type="color" id="renk1" value="#0f172a">
+      </div>
+      <div class="alan">
+        <label for="renk2">Gradyan rengi <span class="deger" id="renk2Deger">#2563EB</span></label>
+        <input type="color" id="renk2" value="#2563eb">
+      </div>
+    </div>
+
+    <div class="izgara2">
+      <div class="alan">
+        <label for="gradyanYon">Gradyan yönü</label>
+        <select id="gradyanYon">
+          <option value="capraz">Çapraz</option>
+          <option value="dikey">Dikey</option>
+          <option value="yatay">Yatay</option>
+        </select>
+      </div>
+      <div class="alan">
+        <label class="onay orta"><input type="checkbox" id="gradyanKapat"> Gradyan kullanma</label>
+      </div>
+    </div>
+
+    <div class="alan">
+      <label>Zemin</label>
+      <div class="zemin-secim" role="group" aria-label="Zemin rengi">
+        <button class="zemin" data-zemin="#ffffff" title="Beyaz zemin">◻ Beyaz</button>
+        <button class="zemin" data-zemin="" title="Şeffaf zemin">▦ Şeffaf</button>
+        <label class="zemin renk-sec" title="Özel zemin rengi">
+          <svg class="renk-nokta" id="zeminRenkNokta" viewBox="0 0 20 20" width="20" height="20" aria-hidden="true">
+            <rect x="0.5" y="0.5" width="19" height="19" rx="4.5" fill="#f8fafc" stroke="#cbd5e1"/>
+          </svg>
+          <input type="color" class="renk-gizli" id="zeminRenk" value="#f8fafc" aria-label="Özel zemin rengi seç">
+          Özel
+        </label>
+      </div>
+    </div>
+
+    <div class="alan">
+      <label for="logoDosya">Ortaya logo <span class="soluk">(isteğe bağlı)</span></label>
+      <div class="logo-satir">
+        <label class="dosya-sec" for="logoDosya">Görsel seç</label>
+        <input type="file" id="logoDosya" accept="image/png,image/jpeg,image/svg+xml,image/webp" hidden>
+        <span id="logoBilgi" class="soluk kucuk"></span>
+        <button id="logoKaldir" class="mini" hidden>Kaldır</button>
+      </div>
+      <label for="logoBoyut">Logo boyutu <span class="deger" id="logoBoyutDeger">20%</span></label>
+      <input type="range" id="logoBoyut" min="10" max="28" value="20">
+      <p class="ipucu">Logo eklenince hata düzeltme otomatik <strong>H</strong> seviyesine çıkar, kod okunur kalır.</p>
+    </div>
+
+    <div class="izgara2">
+      <div class="alan">
+        <label for="kenar">Kenar boşluğu <span class="deger" id="kenarDeger">4 modül</span></label>
+        <input type="range" id="kenar" min="0" max="8" value="4">
+      </div>
+      <div class="alan">
+        <label for="cozunurluk">PNG çözünürlüğü</label>
+        <select id="cozunurluk">
+          <option value="1024">1024 × 1024</option>
+          <option value="2048" selected>2048 × 2048</option>
+          <option value="4096">4096 × 4096</option>
+        </select>
+      </div>
+    </div>
+
+    <hr>
+
+    <h2 class="bolum">Hazır şablonlar</h2>
+    <div class="sablonlar" id="sablonlar" role="group" aria-label="Tasarım şablonları">
+      <button class="sablon" data-sablon="0" title="Gece Mavisi"></button>
+      <button class="sablon" data-sablon="1" title="Turuncu Alev"></button>
+      <button class="sablon" data-sablon="2" title="Orman"></button>
+      <button class="sablon" data-sablon="3" title="Mor Düş"></button>
+      <button class="sablon" data-sablon="4" title="Baskı Siyahı"></button>
+      <button class="sablon" data-sablon="5" title="Şeffaf Zemin"></button>
+    </div>
+
+  </section>
+
+  <!-- SAĞ: ÖNİZLEME -->
+  <section class="kart onizleme-kart" aria-label="QR önizleme">
+    <div class="onizleme-baslik">
+      <h2>Canlı önizleme</h2>
+      <span class="rozet" id="durumCubugu">—</span>
+    </div>
+
+    <div id="onizlemeKutusu" class="onizleme-kutu">
+      <div id="onizleme" class="qr-svg"></div>
+    </div>
+
+    <p id="hataKutusu" class="hata" hidden></p>
+    <p id="kontrastUyari" class="uyari" role="status" hidden></p>
+    <p id="boyutEtiket" class="boyut-etiket">—</p>
+    <p class="icerik-onizleme"><span class="soluk">İçerik:</span> <code id="icerikOnizleme">—</code></p>
+
+    <div class="indirme">
+      <button id="svgIndir" class="btn btn-ana">SVG indir <span class="soluk">vektörel</span></button>
+      <button id="pngIndir" class="btn btn-ana">PNG indir <span class="soluk">yüksek çözünürlük</span></button>
+      <button id="kopyala" class="btn btn-ikincil">SVG kodunu kopyala</button>
+      <button id="sifirla" class="btn btn-ghost">Ayarları sıfırla</button>
+    </div>
+
+    <ul class="notlar">
+      <li>Tüm üretim tarayıcında yapılır; bağlantın hiçbir sunucuya gönderilmez.</li>
+      <li>Şeffaf zemin baskıda kullanılacaksa arka planı koyu tut, kontrastı koru.</li>
+      <li>Okunabilirlik için renkler arasında yeterli kontrast bırak (koyu kod, açık zemin).</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="alt">
+  <span>Numex QR Studio — Numex AI tarafından geliştirildi</span>
+  <span class="soluk">Tarayıcıda çalışır · Çevrimdışı kullanılabilir</span>
+</footer>
+
+<div id="bildirim" role="status" aria-live="polite"></div>
+
+<script src="vendor/qrcode-kernel.js"></script>
+<script src="js/qr.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

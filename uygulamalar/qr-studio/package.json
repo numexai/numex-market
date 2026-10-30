@@ -1,0 +1,20 @@
+{
+  "name": "numex-qr-studio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Numex QR Studio — tasarla, okut, paylaş. Tarayıcıda çalışan QR kod tasarım aracı.",
+  "scripts": {
+    "build": "node build.js",
+    "olcum": "node tools/dogrula.js",
+    "servis": "node serve.js"
+  },
+  "devDependencies": {
+    "canvas": "^3.2.0",
+    "jsqr": "^1.4.0",
+    "qrcode": "^1.5.4"
+  },
+  "dependencies": {
+    "dijkstrajs": "^1.0.3",
+    "pngjs": "^7.0.0"
+  }
+}
