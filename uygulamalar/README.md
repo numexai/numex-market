@@ -1,6 +1,6 @@
 # Numex Market uygulamaları — ücretsiz, açık kaynak, Türkçe
 
-Numex AI'nın otonom olarak yazdığı, test ettiği ve [Numex Market](https://market.numexai.com.tr)'te yayımladığı **62 uygulamanın** kaynak kodu:
+Numex AI'nın otonom olarak yazdığı, test ettiği ve [Numex Market](https://market.numexai.com.tr)'te yayımladığı **63 uygulamanın** kaynak kodu:
 tarayıcı oyunları, simülasyonlar, yapay zekâ demoları, günlük araçlar, iş uygulamaları ve web masaüstleri.
 Her gün [numexai.com.tr](https://numexai.com.tr) vitrininden kendiliğinden eşitlenir. Hepsi [MIT lisanslı](LICENSE): dene, incele, çatalla.
 
@@ -50,7 +50,7 @@ Her gün [numexai.com.tr](https://numexai.com.tr) vitrininden kendiliğinden eş
 | [**Sinir Akışı**](neuralflow/) | Sinir ağı katmanlarını görsel olarak kurup eğitimi canlı izleyebildiğin etkileşimli araç. |
 | [**Yol Bulucu — Yapay Zekâ**](pathfinder-ai/) | A* ve Dijkstra yol bulma algoritmalarını canlı gösteren etkileşimli görselleştirme. |
 
-## 🛠️ Araçlar (16)
+## 🛠️ Araçlar (17)
 
 | Uygulama | Ne yapar |
 |---|---|
@@ -63,6 +63,7 @@ Her gün [numexai.com.tr](https://numexai.com.tr) vitrininden kendiliğinden eş
 | [**Kelime & Karakter Sayacı**](kelime-sayaci/) | Metnindeki kelime, karakter ve cümle sayısını anlık gösteren pratik araç. |
 | [**Mahalle Fırını Sipariş Takibi**](mahalle-firini/) | Fırın için sipariş takibi: simit, poğaça, açma, ekmek; müşteri adıyla sipariş, hazır/teslim işareti, gün sonu cirosu. Veriler tarayıcıda saklanır, telefonda da rahat kullanılır. |
 | [**Nöbetçi Operasyon Merkezi**](nobetci-operasyon/) | Operasyon izleme ve nöbet yönetim paneli. |
+| [**Numex E-Ticaret — Mağaza Başlangıç İskeleti**](numex-eticaret/) | Kendi mağazanızı kurmak için açık kaynak başlangıç iskeleti: vitrin, arama ve kategori, ürün detayı, sepet, kapıda ödeme, sipariş takibi ve yönetim paneli (ürün, kategori, sipariş, satış grafiği). Node.js, Express, SQLite ve EJS ile tek komutla çalışır, ayrı veritabanı sunucusu gerekmez. Stripe bağlantısı ve imzalı webhook kodda hazırdır, kendi anahtarınızla denenmelidir; iyzico deneyseldir, henüz çalışmaz. Hazır mağaza değildir: canlı satıştan önce ödeme, güvenlik ve yasal metinler gözden geçirilmelidir. Canlı demoda ürünler temsilîdir, panel salt okunurdur (demo@ornek.com / demo1234). MIT lisanslı. |
 | [**Numex Görsel Dönüştürücü — PNG · JPG · WebP**](gorsel-donusturucu/) | Görselleri cihazınızdan çıkmadan PNG, JPG ve WebP'ye dönüştürün: sürükle-bırak ile çoklu dosya, kalite ayarı, saydam alanlar için arka plan rengi, yüzde/genişlik/çerçeveye göre yeniden boyutlandırma, tek tek indirme ya da hepsini ZIP. Sunucu yok, hesap yok; tamamen tarayıcıda çalışır, kurulum gerektirmez. |
 | [**Numex İşletme — Sipariş, Stok ve Risk Paneli**](numex-isletme/) | Küçük işletme için yönetim paneli: müşteri, sipariş, stok, ödeme ve teslimat. Aynı anda gelen siparişlerde çift satış ve eksi stok olmaz, ödeme sırasında sunucu çökerse açılışta kurtarılır, geciken siparişler kanıtıyla risk listesine düşer; müşteri silme gibi yıkıcı işlemler onaysız yapılmaz. Express + SQLite; canlı demoda veriler 30 dakikada bir sıfırlanır. |
 | [**Numex Kaşe Stüdyo — Lazer Markalama**](numex-kase-studyo/) | Kaşe/lazer markalama tasarım arayüzü — G-code üretimi ve baskı simülasyonu. |
