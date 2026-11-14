@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Numex Studio X — Tasarım Editörü</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="logo-mark" aria-hidden="true">
+      <svg viewBox="0 0 32 32" width="26" height="26"><rect x="2" y="2" width="28" height="28" rx="7" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M9 23V9l14 14V9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="brand-text">
+      <span class="brand-name">Numex Studio <em>X</em></span>
+      <span class="brand-sub" id="docName">Adsız Tasarım</span>
+    </div>
+  </div>
+
+  <div class="top-center">
+    <div class="size-picker">
+      <label for="sizeSelect" class="sr-only-label">Tuval boyutu</label>
+      <select id="sizeSelect" data-test="size-select" title="Tuval boyutu"></select>
+    </div>
+    <div class="zoom-group">
+      <button class="icon-btn" id="zoomOut" title="Uzaklaştır" data-test="zoom-out">−</button>
+      <input type="range" id="zoomRange" min="10" max="200" value="60" title="Yakınlaştırma" aria-label="Yakınlaştırma">
+      <button class="icon-btn" id="zoomIn" title="Yakınlaştır" data-test="zoom-in">+</button>
+      <button class="ghost-btn" id="zoomFit" title="Ekrana sığdır">Sığdır</button>
+      <span class="zoom-value" id="zoomValue">60%</span>
+    </div>
+  </div>
+
+  <div class="top-actions">
+    <button class="ghost-btn" id="btnTemplates" data-test="templates-open" title="Hazır şablon">Şablonlar</button>
+    <button class="ghost-btn" id="btnOpen" data-test="open-project" title="Kayıtlı proje aç">Aç</button>
+    <button class="primary-btn" id="btnSave" data-test="save-project" title="Projeyi kaydet (Ctrl+S)">Kaydet</button>
+    <div class="export-wrap">
+      <button class="primary-btn accent" id="btnExport" data-test="export-open" title="Dışa aktar">Dışa Aktar ▾</button>
+      <div class="menu" id="exportMenu" data-test="export-menu" hidden>
+        <button data-export="png">PNG olarak indir</button>
+        <button data-export="svg">SVG olarak indir</button>
+        <button data-export="pdf">PDF olarak indir</button>
+        <div class="menu-sep"></div>
+        <button data-export="json">Proje dosyası (.json)</button>
+      </div>
+    </div>
+    <input type="file" id="imageInput" accept="image/*" hidden>
+    <input type="file" id="svgInput" accept=".svg,image/svg+xml" hidden>
+    <input type="file" id="projectInput" accept=".json,application/json" hidden>
+  </div>
+</header>
+
+<main class="workspace">
+  <!-- SOL: ARAÇLAR -->
+  <aside class="panel panel-left" aria-label="Araçlar">
+    <div class="panel-block">
+      <h3 class="panel-title">Ekle</h3>
+      <div class="tool-grid">
+        <button class="tool-btn" data-tool="text" data-test="tool-text" title="Metin ekle (T)">
+          <svg viewBox="0 0 24 24" width="20" height="20"><path d="M5 6V4h14v2M12 4v16M9 20h6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+          <span>Metin</span>
+        </button>
+        <button class="tool-btn" data-tool="heading" data-test="tool-heading" title="Başlık ekle">
+          <svg viewBox="0 0 24 24" width="20" height="20"><path d="M6 4v16M18 4v16M6 12h12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <span>Başlık</span>
+        </button>
+        <button class="tool-btn" data-tool="image" data-test="tool-image" title="Görsel yükle">
+          <svg viewBox="0 0 24 24" width="20" height="20"><rect x="3" y="4" width="18" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="9" cy="10" r="2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M4 18l5-5 4 4 3-3 4 4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+          <span>Görsel</span>
+        </button>
+        <button class="tool-btn" data-tool="svg" data-test="tool-svg" title="SVG dosyası ekle">
+          <svg viewBox="0 0 24 24" width="20" height="20"><path d="M4 10V4h6M20 14v6h-6M4 6l6 6M20 18l-6-6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+          <span>SVG</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="panel-block">
+      <h3 class="panel-title">Şekiller</h3>
+      <div class="shape-grid">
+        <button class="shape-btn" data-shape="rect" data-test="shape-rect" title="Dikdörtgen"><span class="sw sw-rect"></span></button>
+        <button class="shape-btn" data-shape="ellipse" data-test="shape-ellipse" title="Elips"><span class="sw sw-ellipse"></span></button>
+        <button class="shape-btn" data-shape="triangle" data-test="shape-triangle" title="Üçgen"><span class="sw sw-triangle"></span></button>
+        <button class="shape-btn" data-shape="line" data-test="shape-line" title="Çizgi"><span class="sw sw-line"></span></button>
+        <button class="shape-btn" data-shape="star" data-test="shape-star" title="Yıldız"><span class="sw sw-star"></span></button>
+        <button class="shape-btn" data-shape="circle" data-test="shape-circle" title="Daire"><span class="sw sw-circle"></span></button>
+      </div>
+    </div>
+
+    <div class="panel-block">
+      <h3 class="panel-title">Tuval</h3>
+      <label class="field-label">Arka plan</label>
+      <div class="color-row">
+        <input type="color" id="bgColor" data-test="bg-color" value="#101014">
+        <div class="swatches" id="bgSwatches">
+          <button class="swatch" data-color="#101014" style="--c:#101014"></button>
+          <button class="swatch" data-color="#f4efe6" style="--c:#f4efe6"></button>
+          <button class="swatch" data-color="#ff4d5e" style="--c:#ff4d5e"></button>
+          <button class="swatch" data-color="#1f2a44" style="--c:#1f2a44"></button>
+          <button class="swatch" data-color="#f0c419" style="--c:#f0c419"></button>
+          <button class="swatch" data-color="#2ec4a0" style="--c:#2ec4a0"></button>
+        </div>
+      </div>
+      <label class="field-label">Arka plan biçimi</label>
+      <select id="bgStyle" class="input">
+        <option value="solid">Düz renk</option>
+        <option value="linear">Doğrusal geçiş</option>
+        <option value="radial">Işınsal geçiş</option>
+      </select>
+      <div class="color-row" id="bgColor2Wrap" hidden>
+        <input type="color" id="bgColor2" value="#2b1f4d" title="İkinci renk">
+        <span class="hint">İkinci renk</span>
+      </div>
+    </div>
+
+    <div class="panel-block keys-block">
+      <h3 class="panel-title">Kısayollar</h3>
+      <ul class="keys">
+        <li><kbd>Ctrl</kbd>+<kbd>Z</kbd> geri al</li>
+        <li><kbd>Ctrl</kbd>+<kbd>Y</kbd> ileri al</li>
+        <li><kbd>Del</kbd> sil · <kbd>Ctrl</kbd>+<kbd>D</kbd> çoğalt</li>
+        <li><kbd>Shift</kbd> döndürmede açı kilidi</li>
+      </ul>
+    </div>
+  </aside>
+
+  <!-- ORTA: TUVAL -->
+  <section class="canvas-area" id="canvasArea">
+    <div class="canvas-viewport" id="viewport">
+      <div class="canvas-stage" id="stageWrap">
+        <div class="canvas" id="canvas" data-test="canvas" tabindex="0" aria-label="Tasarım tuvali">
+          <div class="canvas-bg" id="canvasBg"></div>
+          <div class="objects" id="objects"></div>
+        </div>
+      </div>
+    </div>
+    <div class="canvas-hint" id="canvasHint">Boş tuval — soldan metin, şekil ya da görsel ekleyin.</div>
+    <div class="object-toolbar" id="objToolbar" hidden>
+      <button data-act="front" title="En öne">Öne</button>
+      <button data-act="forward" title="Bir öne">↑</button>
+      <button data-act="backward" title="Bir geri">↓</button>
+      <button data-act="back" title="En arkaya">Arkaya</button>
+      <span class="tb-sep"></span>
+      <button data-act="duplicate" title="Çoğalt (Ctrl+D)">Çoğalt</button>
+      <button data-act="delete" class="danger" title="Sil (Del)">Sil</button>
+    </div>
+  </section>
+
+  <!-- SAĞ: ÖZELLİKLER + KATMANLAR -->
+  <aside class="panel panel-right" aria-label="Özellikler ve katmanlar">
+    <div class="tabbar">
+      <button class="tab active" data-tab="props" data-test="tab-props">Özellikler</button>
+      <button class="tab" data-tab="layers" data-test="tab-layers">Katmanlar</button>
+    </div>
+
+    <div class="tab-pane" id="paneProps">
+      <div class="empty-state" id="propsEmpty">
+        <p class="empty-title">Nesne seçilmedi</p>
+        <p class="empty-desc">Tuvalde bir nesneye tıklayın; renk, yazı tipi, hizalama ve şeffaflık ayarları burada açılır.</p>
+      </div>
+
+      <div id="propsBody" hidden>
+        <div class="panel-block">
+          <h3 class="panel-title" id="propTypeLabel">Metin</h3>
+
+          <!-- Konum & boyut -->
+          <div class="grid-4">
+            <label class="mini-field"><span>X</span><input type="number" id="pX" class="input sm"></label>
+            <label class="mini-field"><span>Y</span><input type="number" id="pY" class="input sm"></label>
+            <label class="mini-field"><span>G</span><input type="number" id="pW" class="input sm"></label>
+            <label class="mini-field"><span>Y</span><input type="number" id="pH" class="input sm"></label>
+          </div>
+          <div class="grid-2">
+            <label class="mini-field"><span>Açı</span><input type="range" id="pRot" min="-180" max="180" value="0"><output id="pRotOut">0°</output></label>
+            <label class="mini-field"><span>Şeffaf</span><input type="range" id="pOpacity" min="0" max="100" value="100"><output id="pOpacityOut">100%</output></label>
+          </div>
+        </div>
+
+        <div class="panel-block" id="textBlock" hidden>
+          <h3 class="panel-title">Metin</h3>
+          <textarea id="pText" class="input textarea" rows="3" data-test="text-content"></textarea>
+          <label class="field-label">Yazı tipi</label>
+          <select id="pFont" class="input" data-test="font-select">
+            <option value="'Space Grotesk', sans-serif">Space Grotesk</option>
+            <option value="'Instrument Serif', serif">Instrument Serif</option>
+            <option value="Inter, sans-serif">Inter</option>
+            <option value="'JetBrains Mono', monospace">JetBrains Mono</option>
+            <option value="Georgia, serif">Georgia</option>
+            <option value="Arial, sans-serif">Arial</option>
+            <option value="'Times New Roman', serif">Times New Roman</option>
+            <option value="Impact, sans-serif">Impact</option>
+          </select>
+          <div class="grid-2">
+            <label class="mini-field"><span>Boyut</span><input type="number" id="pFontSize" class="input sm" min="6" max="400"></label>
+            <label class="mini-field"><span>Satır</span><input type="number" id="pLineHeight" class="input sm" min="0.8" max="3" step="0.05"></label>
+          </div>
+          <div class="seg-row">
+            <div class="seg" id="segAlign" role="group" aria-label="Yatay hizalama">
+              <button data-align="left" title="Sola yasla">
+                <svg viewBox="0 0 24 24" width="16" height="16"><path d="M4 6h16M4 12h10M4 18h13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              </button>
+              <button data-align="center" title="Ortala">
+                <svg viewBox="0 0 24 24" width="16" height="16"><path d="M4 6h16M7 12h10M6 18h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              </button>
+              <button data-align="right" title="Sağa yasla">
+                <svg viewBox="0 0 24 24" width="16" height="16"><path d="M4 6h16M10 12h10M7 18h13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              </button>
+            </div>
+            <div class="seg" id="segWeight" role="group" aria-label="Yazı ağırlığı">
+              <button data-weight="400" title="Normal">A</button>
+              <button data-weight="600" title="Yarı kalın"><b>A</b></button>
+              <button data-weight="700" title="Kalın"><strong>A</strong></button>
+            </div>
+          </div>
+          <div class="chk-row">
+            <label class="chk"><input type="checkbox" id="pItalic"> İtalik</label>
+            <label class="chk"><input type="checkbox" id="pUnderline"> Altı çizili</label>
+            <label class="chk"><input type="checkbox" id="pUpper"> BÜYÜK HARF</label>
+          </div>
+        </div>
+
+        <div class="panel-block" id="fillBlock">
+          <h3 class="panel-title">Renk</h3>
+          <div class="color-row">
+            <input type="color" id="pFill" data-test="fill-color" title="Dolgu rengi">
+            <input type="text" id="pFillHex" class="input sm hex" maxlength="7" aria-label="Renk kodu">
+          </div>
+          <div class="swatches big" id="fillSwatches">
+            <button class="swatch" data-color="#ff4d5e" style="--c:#ff4d5e"></button>
+            <button class="swatch" data-color="#f0c419" style="--c:#f0c419"></button>
+            <button class="swatch" data-color="#2ec4a0" style="--c:#2ec4a0"></button>
+            <button class="swatch" data-color="#4d7cff" style="--c:#4d7cff"></button>
+            <button class="swatch" data-color="#ffffff" style="--c:#ffffff"></button>
+            <button class="swatch" data-color="#101014" style="--c:#101014"></button>
+          </div>
+          <div id="strokeRow" hidden>
+            <label class="field-label">Kenarlık</label>
+            <div class="color-row">
+              <input type="color" id="pStroke" title="Kenarlık rengi">
+              <input type="number" id="pStrokeW" class="input sm" min="0" max="40" title="Kenarlık kalınlığı">
+            </div>
+          </div>
+          <div id="radiusRow" hidden>
+            <label class="field-label">Köşe yuvarlaklığı</label>
+            <input type="range" id="pRadius" min="0" max="200" value="0">
+          </div>
+          <div id="replaceImgRow" hidden>
+            <button class="ghost-btn full" id="btnReplaceImg">Görseli değiştir</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane" id="paneLayers" hidden>
+      <div class="layers-head">
+        <span id="layerCount">0 nesne</span>
+      </div>
+      <ul class="layers" id="layerList" data-test="layer-list"></ul>
+    </div>
+  </aside>
+</main>
+
+<!-- ŞABLON MODALI -->
+<div class="modal" id="tplModal" hidden data-test="template-modal">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h2>Hazır şablonlar</h2>
+      <button class="icon-btn" id="tplClose" title="Kapat">✕</button>
+    </div>
+    <div class="tpl-grid" id="tplGrid"></div>
+  </div>
+</div>
+
+<!-- BİLDİRİM -->
+<div class="toast-wrap" id="toastWrap" aria-live="polite"></div>
+
+<!-- DIŞA AKTARMA İÇİN GİZLİ SVG KÖKÜ -->
+<div id="exportRoot" hidden></div>
+
+<script src="js/editor.js"></script>
+</body>
+</html>

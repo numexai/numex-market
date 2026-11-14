@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "ad": "NUMEX Ahşap Anahtarlık 80×40 mm",
+  "birim": "mm",
+  "bed": { "w": 300, "h": 200 },
+  "activeLayer": "cut",
+  "layers": {
+    "cut":     { "name": "Kesim",      "color": "#ff3b4e", "speed": 12,  "power": 85, "passes": 1 },
+    "engrave": { "name": "Gravür",     "color": "#3b8bff", "speed": 120, "power": 45, "passes": 1 },
+    "mark":    { "name": "İşaretleme", "color": "#25d366", "speed": 200, "power": 20, "passes": 1 }
+  },
+  "objects": [
+    {
+      "id": "k_body", "type": "rect", "name": "Dış kontur",
+      "x": 110, "y": 80, "w": 80, "h": 40, "rot": 0, "radius": 6,
+      "layer": "cut", "style": "outline"
+    },
+    {
+      "id": "k_hole", "type": "ellipse", "name": "Anahtarlık deliği",
+      "x": 116, "y": 97, "w": 6, "h": 6, "rot": 0,
+      "layer": "cut", "style": "outline"
+    },
+    {
+      "id": "k_text", "type": "text", "name": "NUMEX yazısı",
+      "x": 141.6, "y": 96, "w": 28.8, "h": 8, "rot": 0,
+      "text": "NUMEX", "fontSize": 8,
+      "layer": "engrave", "style": "filled"
+    }
+  ]
+}

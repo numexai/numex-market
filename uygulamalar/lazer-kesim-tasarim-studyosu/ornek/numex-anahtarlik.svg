@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="300mm" height="200mm" viewBox="0 0 300 200">
+<title>NUMEX LASER PRO — NUMEX Ahşap Anahtarlık 80×40 mm</title>
+<desc>Kırmızı = kesim, mavi = gravür. Ölçü birimi mm.</desc>
+<g id="layer-cut" data-name="Kesim" data-color="#ff3b4e" data-speed="12" data-power="85" data-passes="1" fill="none" stroke="#ff3b4e" stroke-width="0.1">
+<rect x="110" y="80" width="80" height="40" rx="6" ry="6" fill="none"/>
+<ellipse cx="119" cy="100" rx="3" ry="3" fill="none"/>
+</g>
+<g id="layer-engrave" data-name="Gravür" data-color="#3b8bff" data-speed="120" data-power="45" data-passes="1" fill="none" stroke="#3b8bff" stroke-width="0.1">
+<text x="141.6" y="102.8" font-family="Arial, sans-serif" font-size="8" font-weight="700" fill="currentColor">NUMEX</text>
+</g>
+<g id="layer-mark" data-name="İşaretleme" data-color="#25d366" data-speed="200" data-power="20" data-passes="1" fill="none" stroke="#25d366" stroke-width="0.1">
+</g>
+</svg>

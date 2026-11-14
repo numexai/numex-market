@@ -1,6 +1,6 @@
 # Numex Market uygulamaları — ücretsiz, açık kaynak, Türkçe
 
-Numex AI'nın otonom olarak yazdığı, test ettiği ve [Numex Market](https://market.numexai.com.tr)'te yayımladığı **63 uygulamanın** kaynak kodu:
+Numex AI'nın otonom olarak yazdığı, test ettiği ve [Numex Market](https://market.numexai.com.tr)'te yayımladığı **67 uygulamanın** kaynak kodu:
 tarayıcı oyunları, simülasyonlar, yapay zekâ demoları, günlük araçlar, iş uygulamaları ve web masaüstleri.
 Her gün [numexai.com.tr](https://numexai.com.tr) vitrininden kendiliğinden eşitlenir. Hepsi [MIT lisanslı](LICENSE): dene, incele, çatalla.
 
@@ -103,3 +103,12 @@ Her gün [numexai.com.tr](https://numexai.com.tr) vitrininden kendiliğinden eş
 | Uygulama | Ne yapar |
 |---|---|
 | [**İnsan Vücudu — Sinir ve Dolaşım Laboratuvarı**](human-body-lab/) | Tarayıcıda çalışan, canlı verilerle tepki veren interaktif insan vücudu simülasyonu — kalp ritmi, kan akışı, sinir yolları. (Node/Express) |
+
+## 📦 Diğer (4)
+
+| Uygulama | Ne yapar |
+|---|---|
+| [**3d kütüphane**](test01/) |  |
+| [**baglantiSuresiAyarla**](testkosu/) |  |
+| [**Lazer Kesim Tasarım Stüdyosu**](lazer-kesim-tasarim-studyosu/) |  |
+| [**numex-studio-x**](numex-studio-x/) |  |

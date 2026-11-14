@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NUMEX LASER PRO — Lazer Kesim Tasarım Stüdyosu</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- ÜST ARAÇ ÇUBUĞU -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">N</div>
+      <div class="brand-text">
+        <strong>NUMEX LASER PRO</strong>
+        <span>v1.0 · mm tabanlı vektör stüdyo</span>
+      </div>
+    </div>
+
+    <div class="toolgroup" id="drawTools">
+      <button class="tool" data-tool="select" title="Seçim (V)"><svg viewBox="0 0 24 24"><path d="M4 2l16 8-7 2-3 7z"/></svg><span>Seç</span></button>
+      <button class="tool" data-tool="rect" title="Dikdörtgen (R)"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1"/></svg><span>Dikdörtgen</span></button>
+      <button class="tool" data-tool="ellipse" title="Daire (O)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></svg><span>Daire</span></button>
+      <button class="tool" data-tool="line" title="Çizgi (L)"><svg viewBox="0 0 24 24"><line x1="4" y1="20" x2="20" y2="4"/></svg><span>Çizgi</span></button>
+      <button class="tool" data-tool="polygon" title="Çokgen (P)"><svg viewBox="0 0 24 24"><polygon points="12,3 21,9 18,20 6,20 3,9"/></svg><span>Çokgen</span></button>
+      <button class="tool" data-tool="path" title="Serbest çizim (F)"><svg viewBox="0 0 24 24"><path d="M3 18c3-9 6-9 9-4s6 5 9-4"/></svg><span>Serbest</span></button>
+      <button class="tool" data-tool="text" title="Metin (T)"><svg viewBox="0 0 24 24"><path d="M5 4h14M12 4v16M8 20h8"/></svg><span>Metin</span></button>
+    </div>
+
+    <div class="toolgroup" id="actionTools">
+      <button class="tb" id="btnUndo" title="Geri al (Ctrl+Z)">↶</button>
+      <button class="tb" id="btnRedo" title="İleri al (Ctrl+Y)">↷</button>
+      <button class="tb" id="btnDup" title="Çoğalt (Ctrl+D)">⧉</button>
+      <button class="tb" id="btnGroup" title="Grupla (Ctrl+G)">Grupla</button>
+      <button class="tb" id="btnUngroup" title="Grubu çöz (Ctrl+Shift+G)">Çöz</button>
+      <button class="tb" id="btnDel" title="Sil (Del)">Sil</button>
+    </div>
+
+    <div class="toolgroup right">
+      <button class="tb tb-accent" id="btnImport">SVG İçe Aktar</button>
+      <button class="tb tb-accent" id="btnExport">Dışa Aktar ▾</button>
+      <button class="tb" id="btnNew" title="Yeni proje">Yeni</button>
+      <button class="tb" id="btnSave" title="Projeyi JSON olarak kaydet">Kaydet</button>
+      <button class="tb" id="btnOpen" title="JSON proje aç">Aç</button>
+      <input type="file" id="fileImportSvg" accept=".svg,image/svg+xml" hidden>
+      <input type="file" id="fileOpen" accept=".json,application/json" hidden>
+    </div>
+
+    <!-- Dışa aktar menüsü -->
+    <div class="menu" id="exportMenu" hidden>
+      <button data-exp="svg">SVG <em>vektörel</em></button>
+      <button data-exp="dxf">DXF <em>R12 / mm</em></button>
+      <button data-exp="png">PNG <em>önizleme</em></button>
+      <button data-exp="json">JSON <em>proje</em></button>
+      <hr>
+      <button data-exp="verify">SVG/DXF Ölçü Doğrula</button>
+      <button data-exp="report">Ölçüm Raporu Göster</button>
+    </div>
+  </header>
+
+  <!-- ORTA GÖVDE -->
+  <main class="workspace">
+
+    <!-- SOL: ARAÇLAR + KATMANLAR -->
+    <aside class="panel left">
+      <section class="panel-block">
+        <h3>İşlem Katmanları</h3>
+        <div class="layer-list" id="layerList"></div>
+        <div class="layer-props" id="layerProps"></div>
+      </section>
+
+      <section class="panel-block">
+        <h3>Nesneler</h3>
+        <ul class="object-list" id="objectList"></ul>
+      </section>
+    </aside>
+
+    <!-- ORTA: KANVAS -->
+    <section class="stage">
+      <div class="stage-tools">
+        <div class="zoom-box">
+          <button class="tb small" id="zoomOut">−</button>
+          <span id="zoomLabel">%100</span>
+          <button class="tb small" id="zoomIn">+</button>
+          <button class="tb small" id="zoomFit" title="Tümünü sığdır">Sığdır</button>
+        </div>
+        <div class="hint" id="hintBar">Araç seç · çizim için sürükle</div>
+      </div>
+      <div class="canvas-wrap" id="canvasWrap">
+        <canvas id="rulers" class="rulers"></canvas>
+        <canvas id="board" class="board"></canvas>
+      </div>
+      <div class="statusbar">
+        <span id="stCursor">X: 0.0 mm · Y: 0.0 mm</span>
+        <span id="stSel">Seçim: —</span>
+        <span id="stCount">0 nesne</span>
+      </div>
+    </section>
+
+    <!-- SAĞ: ÖZELLİKLER + KONTROL -->
+    <aside class="panel right">
+      <section class="panel-block">
+        <h3>Nesne Özellikleri</h3>
+        <div id="props" class="props-empty">Nesne seçilmedi</div>
+      </section>
+
+      <section class="panel-block">
+        <h3>Çalışma Alanı</h3>
+        <div class="field-grid">
+          <label>Genişlik (mm)<input type="number" id="bedW" value="300" step="1" min="10"></label>
+          <label>Yükseklik (mm)<input type="number" id="bedH" value="200" step="1" min="10"></label>
+        </div>
+      </section>
+
+      <section class="panel-block">
+        <h3>Kesim Kontrolü <button class="tb small" id="btnAnalyze">Analiz Et</button></h3>
+        <div id="analysis" class="analysis">
+          <div class="muted">Analiz et düğmesine bas.</div>
+        </div>
+      </section>
+
+      <section class="panel-block safety">
+        <h3>Güvenlik</h3>
+        <p>Bu sürüm <strong>yalnızca tasarım ve dosya hazırlama</strong> yazılımıdır. Makineye bağlanmaz, G-code üretmez, lazeri çalıştırmaz. Kesim/güç/hız değerleri yalnız iş hazırlığı içindir; malzemeye uygunluğu operatör doğrulamalıdır.</p>
+      </section>
+    </aside>
+  </main>
+</div>
+
+<!-- Modal -->
+<div class="modal-back" id="modalBack" hidden>
+  <div class="modal">
+    <div class="modal-head">
+      <strong id="modalTitle">Bilgi</strong>
+      <button class="tb small" id="modalClose">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

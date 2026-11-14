@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Numex Core — Flow Engine</title>
+<link rel="stylesheet" href="css/tema.css" />
+</head>
+<body>
+<div id="uygulama">
+
+  <!-- ÜST ÇUBUK -->
+  <header class="ust-cubuk">
+    <div class="marka">
+      <span class="marka-nokta"></span>
+      <span class="marka-ad">NUMEX <b>CORE</b></span>
+      <span class="marka-alt">Flow Engine</span>
+    </div>
+
+    <div class="ust-orta">
+      <button class="btn btn-birincil" id="btnCalistir" title="Akışı çalıştır (Ctrl+Enter)">
+        <span class="oynat">▶</span> Çalıştır
+      </button>
+      <button class="btn" id="btnDurdur" title="Çalışan akışı durdur" disabled>■ Durdur</button>
+      <span class="ayrac"></span>
+      <button class="btn btn-sade" id="btnKaydet" title="Akışı kaydet (Ctrl+S)">Kaydet</button>
+      <button class="btn btn-sade" id="btnDisari" title="JSON olarak dışa aktar">Dışa Aktar</button>
+      <button class="btn btn-sade" id="btnIceri" title="JSON içe aktar">İçe Aktar</button>
+      <button class="btn btn-sade" id="btnOrnek" title="Hazır örnek akışı yükle">Örnek</button>
+      <button class="btn btn-sade btn-tehlike" id="btnTemizle" title="Tuvali temizle">Temizle</button>
+      <input type="file" id="dosyaGirdi" accept="application/json,.json" hidden />
+    </div>
+
+    <div class="ust-sag">
+      <span class="kayit-durum" id="kayitDurum">Kaydedildi</span>
+      <span class="ayrac"></span>
+      <div class="yakinlastirma">
+        <button class="btn-ikon" id="btnUzaklastir" title="Uzaklaştır">−</button>
+        <span id="zoomYuzde">100%</span>
+        <button class="btn-ikon" id="btnYakinlastir" title="Yakınlaştır">+</button>
+        <button class="btn-ikon" id="btnSigdir" title="Akışı ekrana sığdır">⤢</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="govde">
+    <!-- SOL: DÜĞÜM PALETİ -->
+    <aside class="sol-panel">
+      <div class="panel-baslik">Düğümler</div>
+      <div class="palet" id="palet"></div>
+      <div class="panel-baslik" style="margin-top:18px">Bağlantı Türü</div>
+      <div class="alan" style="padding:0 0 6px">
+        <select id="baglantiTuru">
+          <option value="kalici">Kalıcı bağlantı</option>
+          <option value="10">10 saniyelik bağlantı</option>
+          <option value="30">30 saniyelik bağlantı</option>
+          <option value="60">60 saniyelik bağlantı</option>
+          <option value="ozel">Özel süre…</option>
+        </select>
+        <div id="ozelSureKap" hidden style="margin-top:6px;display:flex;gap:6px;align-items:center">
+          <input type="number" id="ozelSure" min="1" max="86400" value="15" style="flex:1" />
+          <span class="yardim" style="margin:0">saniye</span>
+        </div>
+        <div class="yardim">Yeni çizdiğin bağlantılar bu türde oluşur.</div>
+      </div>
+      <div class="panel-baslik" style="margin-top:18px">İpucu</div>
+      <div class="ipucu">
+        <p>Paletden tuvale <b>sürükle</b> ya da çift tıkla.</p>
+        <p>Bağlamak için bir düğümün sağ <b>çıkış noktasından</b> diğerine sürükle.</p>
+        <p>Süreli bağlantı <b class="renk-aktif">turkuaz</b>, son 5 saniyede <b class="renk-uyari">sarı</b>, süresi dolunca <b class="renk-doldu">kırmızı</b> olur.</p>
+        <p>Bağlantıya tıkla: türünü değiştir ya da sil. Çift tık: sil.</p>
+        <p><kbd>Del</kbd> düğüm/bağlantı siler, <kbd>Ctrl</kbd>+<kbd>Enter</kbd> çalıştırır.</p>
+      </div>
+    </aside>
+
+    <!-- ORTA: TUVAL -->
+    <section class="tuval-kap" id="tuvalKap">
+      <div class="izgara" id="izgara"></div>
+      <div class="tuval" id="tuval">
+        <svg class="baglanti-katman" id="baglantiKatman">
+          <defs>
+            <marker id="okUcu" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#5b6b8c"></path>
+            </marker>
+            <marker id="okUcuAktif" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#4fd1c5"></path>
+            </marker>
+            <marker id="okUcuUyari" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#ffd166"></path>
+            </marker>
+            <marker id="okUcuDoldu" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#e5484d"></path>
+            </marker>
+            <marker id="okUcuRet" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#e5484d"></path>
+            </marker>
+          </defs>
+          <g id="baglantilar"></g>
+          <g id="baglantiEtiketler"></g>
+          <path id="geciciCizgi" class="gecici-cizgi" d="" fill="none"></path>
+        </svg>
+        <div class="dugum-katman" id="dugumKatman"></div>
+      </div>
+
+      <div class="tuval-durum" id="tuvalDurum">
+        <span id="durumNokta" class="durum-nokta bos"></span>
+        <span id="durumMetin">Hazır</span>
+      </div>
+
+      <div class="canvas-arac" id="canvasArac">
+        <button class="btn-ikon" id="btnCerceve" title="Akışı sığdır">⤢</button>
+      </div>
+
+      <div class="baglam-menu" id="baglamMenu" hidden>
+        <div class="baglam-baslik">Düğüm ekle</div>
+        <div id="baglamListe"></div>
+      </div>
+
+      <div class="toast" id="toast" hidden></div>
+    </section>
+
+    <!-- SAĞ: AYARLAR + GEÇMİŞ -->
+    <aside class="sag-panel">
+      <div class="sekme-cubuk">
+        <button class="sekme aktif" data-sekme="ayarlar">Ayarlar</button>
+        <button class="sekme" data-sekme="gecmis">Çalışma Geçmişi</button>
+      </div>
+
+      <div class="sekme-govde" id="sekmeAyarlar">
+        <div id="ayarIcerik" class="ayar-icerik">
+          <div class="bos-ayar">
+            <div class="bos-ikon">◫</div>
+            <p>Bir düğüm seçin</p>
+            <small>Ayarları burada düzenlenir.</small>
+          </div>
+        </div>
+        <div class="ayar-alt" id="ayarAlt" hidden>
+          <button class="btn btn-sade btn-tehlike btn-genis" id="btnDugumSil">Düğümü Sil</button>
+        </div>
+      </div>
+
+      <div class="sekme-govde" id="sekmeGecmis" hidden>
+        <div class="gecmis-baslik">
+          <span>Çalışmalar</span>
+          <button class="btn btn-sade btn-kucuk" id="btnGecmisTemizle">Temizle</button>
+        </div>
+        <div id="gecmisListe" class="gecmis-liste"></div>
+        <div id="gecmisDetay" class="gecmis-detay" hidden></div>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="alt-cubuk">
+    <span id="sayacMetin">0 düğüm · 0 bağlantı</span>
+    <span class="ayrac"></span>
+    <span id="akistaDurum">Akış hazır</span>
+    <span class="sag-it"></span>
+    <span class="surum">Numex Core · Flow Engine v1.1</span>
+  </footer>
+</div>
+
+<script type="module" src="js/uygulama.js"></script>
+</body>
+</html>
