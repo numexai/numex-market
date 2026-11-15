@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="tr" data-tema="gece">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Numex Magic Letter — Sihirli Mektup Atölyesi</title>
+<meta name="description" content="Kendi mektubunu tasarla, zarfa koy, mumla mühürle ve sevdiğine gönder. Numex Magic Letter.">
+<meta name="theme-color" content="#140b18">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<canvas id="ortam" aria-hidden="true"></canvas>
+<div class="vinyet" aria-hidden="true"></div>
+<canvas id="parcacik" aria-hidden="true"></canvas>
+
+<!-- ==================== GİRİŞ SAHNESİ ==================== -->
+<section class="giris" id="giris">
+  <div class="glow glow-a" aria-hidden="true"></div>
+  <div class="glow glow-b" aria-hidden="true"></div>
+
+  <div class="giris-ic">
+    <div class="giris-metin">
+      <p class="ust-yazi">Numex Market · el emeğiyle</p>
+      <h1 class="giris-baslik">Numex <em>Magic</em> Letter</h1>
+      <p class="giris-alt">Kâğıdın dokusu, mumun sıcaklığı, birkaç satır.<br>Mektup, aceleye gelmeyen tek şeydir.</p>
+      <div class="giris-eylem">
+        <button class="btn btn-buyuk" id="girisBtn" type="button">Atölyeye gir</button>
+        <span class="giris-kucuk">Verilerin cihazından çıkmaz</span>
+      </div>
+    </div>
+
+    <div class="giris-komp" id="girisKomp" aria-hidden="true">
+      <div class="obje obje-mum">
+        <span class="mum-alev"></span>
+        <span class="mum-govde"></span>
+        <span class="mum-tabak"></span>
+      </div>
+
+      <div class="obje obje-dal">
+        <svg viewBox="0 0 120 170" fill="none">
+          <path d="M60 165C60 120 60 75 60 20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M60 60C40 60 26 46 26 30C48 30 60 44 60 60Z" fill="currentColor" fill-opacity=".2" stroke="currentColor" stroke-width="1.1"/>
+          <path d="M60 100C80 100 94 86 94 70C72 70 60 84 60 100Z" fill="currentColor" fill-opacity=".2" stroke="currentColor" stroke-width="1.1"/>
+          <path d="M60 36C60 24 66 12 78 6" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/>
+          <circle cx="79" cy="4" r="3.2" fill="currentColor" fill-opacity=".35"/>
+        </svg>
+      </div>
+
+      <div class="obje obje-kalem">
+        <svg viewBox="0 0 90 200" fill="none">
+          <path d="M45 8C60 42 62 72 52 106C47 123 44 142 44 162L46 194" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          <path d="M45 8C52 26 55 44 53 62C40 50 38 28 45 8Z" fill="currentColor" fill-opacity=".22"/>
+          <path d="M44 194L39 174L49 174Z" fill="currentColor"/>
+        </svg>
+      </div>
+
+      <article class="mektup mektup-hero" id="girisMektup"></article>
+
+      <div class="zarf-statik">
+        <span class="zs-arka"></span>
+        <span class="zs-cep"></span>
+        <span class="zs-kapak"></span>
+        <span class="zs-muhur" id="girisMuhur"></span>
+      </div>
+    </div>
+  </div>
+
+  <p class="giris-dip">Numex Magic Letter · 2026</p>
+</section>
+
+<!-- ==================== GELEN MEKTUP ==================== -->
+<section class="gelen gizli" id="gelen">
+  <div class="gelen-metin">
+    <p class="ust-yazi">Numex Magic Letter</p>
+    <h2 class="gelen-baslik">Sana bir mektup var</h2>
+    <p class="gelen-alt" id="gelenAlt">Mum mühürü kırmak için düğmeye dokun.</p>
+  </div>
+
+  <div class="sahne gelen-sahne" id="gelenSahne">
+    <div class="sahne-perde">
+      <div class="sahne-komp" id="gelenKomp">
+        <div class="zarf muhurlu">
+          <div class="zarf-arka"></div>
+          <article class="mektup"></article>
+          <div class="zarf-cep"></div>
+          <div class="zarf-kapak"></div>
+          <div class="zarf-muhur"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="gelen-dugme">
+    <button class="btn btn-buyuk" id="gelenBtn" type="button">Mührü kır ve oku</button>
+    <button class="btn btn-hayalet" id="gelenYeni" type="button">Kendi mektubunu yaz</button>
+  </div>
+</section>
+
+<!-- ==================== ATÖLYE ==================== -->
+<main class="atolye gizli" id="atolye">
+  <header class="atolye-ust">
+    <button class="marka" id="markaBtn" type="button" title="Başlangıca dön">
+      <span class="marka-nokta" aria-hidden="true"></span>
+      <span>Magic <em>Letter</em></span>
+    </button>
+
+    <div class="temalar" id="temalar" role="group" aria-label="Tema seçimi">
+      <button class="tema" type="button" data-tema="gece"><i></i>Romantik gece</button>
+      <button class="tema" type="button" data-tema="nostalji"><i></i>Altın nostalji</button>
+      <button class="tema" type="button" data-tema="bahce"><i></i>Çiçek bahçesi</button>
+      <button class="tema" type="button" data-tema="gokyuzu"><i></i>Yıldızlı gökyüzü</button>
+    </div>
+  </header>
+
+  <div class="atolye-govde">
+    <aside class="panel">
+      <div class="panel-kaydir">
+        <div class="alan">
+          <label for="fAlici">Alıcı</label>
+          <input id="fAlici" type="text" maxlength="40" placeholder="Ayşe" autocomplete="off" spellcheck="false">
+        </div>
+
+        <div class="alan">
+          <label for="fBaslik">Başlık</label>
+          <input id="fBaslik" type="text" maxlength="70" autocomplete="off">
+        </div>
+
+        <div class="alan">
+          <label for="fMetin">Mektubun <span class="sayac" id="sayac">0</span></label>
+          <textarea id="fMetin" rows="9" maxlength="2600" spellcheck="false"></textarea>
+        </div>
+
+        <div class="alan">
+          <label for="fImza">İmza</label>
+          <input id="fImza" type="text" maxlength="40" autocomplete="off">
+        </div>
+
+        <div class="alan">
+          <span class="etiket">Yazı tipi</span>
+          <div class="secenekler" id="fontlar"></div>
+        </div>
+
+        <div class="alan">
+          <span class="etiket">Kâğıt rengi</span>
+          <div class="renkler" id="kagitlar"></div>
+        </div>
+
+        <div class="alan">
+          <span class="etiket">Zarf rengi</span>
+          <div class="renkler" id="zarflar"></div>
+        </div>
+
+        <div class="alan">
+          <span class="etiket">Mum mühür deseni</span>
+          <div class="muhurler" id="muhurler"></div>
+        </div>
+
+        <div class="alan">
+          <span class="etiket">Süsleme</span>
+          <div class="secenekler" id="susler"></div>
+        </div>
+
+        <p class="panel-dip">Taslağın yalnız bu tarayıcıda saklanır. Hiçbir sunucuya gönderilmez.</p>
+      </div>
+    </aside>
+
+    <section class="sahne" id="sahne" data-durum="acik">
+      <div class="sahne-perde">
+        <div class="sahne-komp" id="sahneKomp">
+          <div class="zarf acik">
+            <div class="zarf-arka"></div>
+            <article class="mektup"></article>
+            <div class="zarf-cep"></div>
+            <div class="zarf-kapak"></div>
+            <div class="zarf-muhur"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sahne-alt">
+        <p class="sahne-ipucu" id="sahneIpucu">Mektubun hazır. Mühürle ve sevdiğine gönder.</p>
+        <div class="sahne-dugme">
+          <button class="btn btn-ikincil" id="onizleBtn" type="button">Önizle</button>
+          <button class="btn btn-ana" id="muhurleBtn" type="button">Mühürle</button>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<!-- ==================== PAYLAŞIM ==================== -->
+<div class="modal gizli" id="paylasim" role="dialog" aria-modal="true" aria-labelledby="paylasimBaslik">
+  <div class="modal-kart">
+    <h3 id="paylasimBaslik">Mektubun mühürlendi</h3>
+    <p class="modal-alt">Bu bağlantıyı gönderdiğin kişi, mektubunu açılış animasyonuyla okuyacak.</p>
+
+    <div class="paylas-alan">
+      <input id="paylasUrl" type="text" readonly>
+      <button class="btn btn-ana" id="kopyalaBtn" type="button">Kopyala</button>
+    </div>
+
+    <p class="uyari" id="paylasUyari"></p>
+    <p class="modal-not">Bağlantıdaki bilgiler kodlanmış hâlde metnin içinde taşınır; bu yüzden teknik bilgisi olan biri içeriği okuyabilir. Çok özel bir mektup için PNG olarak indirip elden vermek daha güvenlidir.</p>
+
+    <div class="modal-dugme">
+      <button class="btn btn-ikincil" id="pngBtn" type="button">PNG indir</button>
+      <button class="btn btn-ikincil" id="acilisBtn" type="button">Açılışı izle</button>
+      <button class="btn btn-ana" id="kapatBtn" type="button">Tamam</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== OKUMA ==================== -->
+<div class="okuma gizli" id="okuma" role="dialog" aria-modal="true" aria-label="Mektup">
+  <button class="okuma-kapat" id="okumaKapat" type="button" aria-label="Kapat">✕</button>
+  <article class="mektup mektup-okuma" id="okumaMektup" data-sigdir="0"></article>
+</div>
+
+<script src="assets/app.js"></script>
+</body>
+</html>

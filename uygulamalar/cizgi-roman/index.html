@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Numex Story Forge — İnteraktif Çizgi Roman Atölyesi</title>
+<meta name="description" content="Tarayıcıda çalışan çizgi roman stüdyosu: karakterler, mekânlar, paneller, balonlar, okuma modu, PNG ve PDF çıktısı.">
+<link rel="stylesheet" href="css/stil.css">
+</head>
+<body>
+<div class="uygulama">
+
+  <header class="ust">
+    <div class="marka">
+      <span class="marka-kutu" aria-hidden="true">
+        <svg viewBox="0 0 40 40" width="28" height="28"><rect x="2" y="2" width="36" height="36" fill="none" stroke="currentColor" stroke-width="3"/><path d="M8 32 L8 10 L20 24 L20 10 M24 10 L24 30" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg>
+      </span>
+      <div class="marka-metin">
+        <strong>Numex Story Forge</strong>
+        <span>İnteraktif çizgi roman atölyesi</span>
+      </div>
+    </div>
+
+    <label class="baslik-alan">
+      <span class="gizli">Çizgi roman başlığı</span>
+      <input id="proje-baslik" type="text" value="Gökyüzü Korsanları" maxlength="70" autocomplete="off">
+    </label>
+
+    <div class="ust-eylemler">
+      <span id="durum" class="durum" role="status" aria-live="polite">Hazır</span>
+      <button id="geri-al" class="dugme ince" title="Son işlemi geri al (Ctrl+Z)">Geri al</button>
+      <button id="png-indir" class="dugme ince">PNG</button>
+      <button id="pdf-indir" class="dugme ince">PDF</button>
+      <button id="json-indir" class="dugme ince">JSON indir</button>
+      <label class="dugme ince dosya-sec">JSON yükle
+        <input id="json-yukle" type="file" accept="application/json,.json" hidden>
+      </label>
+      <button id="okuma-ac" class="dugme birincil">Okuma modu</button>
+    </div>
+
+    <div class="mobil-arac">
+      <button class="dugme ince" data-cekmece="kutuphane">Kütüphane</button>
+      <button class="dugme ince" data-cekmece="ozellik">Özellikler</button>
+    </div>
+  </header>
+
+  <aside class="kutuphane-kutu" id="kutuphane-kutu">
+    <div class="panel-baslik">
+      <h2>Kütüphane</h2>
+      <button class="kapat" data-cekmece="kutuphane" aria-label="Kütüphaneyi kapat">&times;</button>
+    </div>
+    <div class="sekmeler" id="sekmeler" role="tablist">
+      <button data-sekme="karakter" class="aktif" role="tab">Karakter</button>
+      <button data-sekme="mekan" role="tab">Mekân</button>
+      <button data-sekme="nesne" role="tab">Nesne</button>
+      <button data-sekme="balon" role="tab">Balon</button>
+    </div>
+    <div id="kutuphane" class="kutuphane"></div>
+  </aside>
+
+  <main class="sahne-alani">
+    <div class="sahne-ust">
+      <span id="sayfa-etiket" class="sayfa-etiket">Sayfa 1 / 2</span>
+      <div class="sayfa-eylem">
+        <button id="ekle-sayfa" class="dugme ince">+ Sayfa</button>
+        <button id="sil-sayfa" class="dugme ince tehlike">Sayfayı sil</button>
+      </div>
+    </div>
+    <div class="sahne-cerceve">
+      <div id="sahne" class="sahne" aria-label="Çizgi roman sayfası düzenleme alanı"></div>
+    </div>
+    <p class="sahne-ipucu">Sürükleyerek taşı · tekerlekle boyutlandır · balon metnini sağ panelden düzenle</p>
+  </main>
+
+  <aside class="ozellik-kutu" id="ozellik-kutu">
+    <div class="panel-baslik">
+      <h2>Özellikler</h2>
+      <button class="kapat" data-cekmece="ozellik" aria-label="Özellikleri kapat">&times;</button>
+    </div>
+    <div id="ozellikler" class="ozellikler"></div>
+  </aside>
+
+  <footer class="alt" id="alt">
+    <section class="sayfa-bolum">
+      <div class="bolum-baslik"><h2>Sayfalar</h2></div>
+      <div class="sayfa-serif" id="sayfa-serif"></div>
+    </section>
+    <section class="zaman-bolum">
+      <div class="zaman" id="zaman"></div>
+    </section>
+  </footer>
+
+</div>
+
+<div class="okuma" id="okuma" role="dialog" aria-modal="true" aria-label="Okuma modu">
+  <div class="okuma-ust">
+    <div class="okuma-bilgi">
+      <strong id="okuma-baslik">Çizgi roman</strong>
+      <span id="okuma-sayaci"></span>
+    </div>
+    <div class="okuma-eylem">
+      <button id="okuma-geri" class="dugme ince">◀ Geri</button>
+      <button id="okuma-ileri" class="dugme ince">İleri ▶</button>
+      <button id="okuma-kapat" class="dugme birincil">Kapat (Esc)</button>
+    </div>
+  </div>
+  <div class="okuma-sahne" id="okuma-sahne"></div>
+  <div class="okuma-alt">Boşluk veya sağ ok: sıradaki panel · Sol ok: geri</div>
+</div>
+
+<script src="js/sanat.js"></script>
+<script src="js/uygulama.js"></script>
+</body>
+</html>

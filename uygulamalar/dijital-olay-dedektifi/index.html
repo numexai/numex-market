@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Numex Core — Dijital Olay Dedektifi</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <span class="mark">NC</span>
+    <div>
+      <h1>NUMEX CORE</h1>
+      <p>Dijital Olay Dedektifi — adli analiz merkezi</p>
+    </div>
+  </div>
+  <div class="top-actions">
+    <label class="btn ghost" for="file">Dosya Yükle (CSV / JSON)</label>
+    <input id="file" type="file" accept=".csv,.json,application/json,text/csv" hidden>
+    <button id="btnRapor" class="btn" disabled>Rapor Oluştur</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="panel" id="veriPaneli">
+    <h2>1 · Kaynak Veri</h2>
+    <p class="hint">Sentetik olay kayıtlarını üret ya da elindeki CSV/JSON dosyasını yükle. Analiz motoruna yalnızca kayıtlar verilir; üreticinin cevap anahtarı ayrı tutulur.</p>
+    <div class="row">
+      <button id="btnUret" class="btn primary">5.000+ Sentetik Kayıt Üret</button>
+      <button id="btnCsv" class="btn ghost" disabled>CSV İndir</button>
+      <button id="btnJson" class="btn ghost" disabled>JSON İndir</button>
+    </div>
+    <div id="veriDurum" class="durum">Henüz kayıt yok.</div>
+  </section>
+
+  <section class="panel" id="analizPaneli" hidden>
+    <h2>2 · Analiz</h2>
+    <div class="kpi" id="kpi"></div>
+    <div class="hukum" id="hukum"></div>
+  </section>
+
+  <div class="grid" id="gridAna" hidden>
+    <section class="panel span2">
+      <h2>Canlı Olay Zaman Çizelgesi</h2>
+      <div class="slider-wrap">
+        <input type="range" id="slider" min="0" max="100" value="100">
+        <div class="slider-meta">
+          <span id="sliderEtiket">Tüm olaylar</span>
+          <button id="btnSon10" class="mini">Çöküşten önceki 10 dakika</button>
+        </div>
+      </div>
+      <div id="timeline" class="timeline"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Servis Sağlık Göstergeleri</h2>
+      <div id="saglik" class="saglik"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Hata Yoğunluğu</h2>
+      <canvas id="yogunluk" width="680" height="220"></canvas>
+      <div class="legend"><span class="lg err"></span>Hata <span class="lg warn"></span>Uyarı <span class="lg ok"></span>Normal</div>
+    </section>
+
+    <section class="panel span2">
+      <h2>İlişki Ağı</h2>
+      <p class="hint">Düğümler servisler, bağlantılar istek kimliği paylaşımı/orijin zinciri üzerinden kurulan nedensel ilişkilerdir. Çizgi kalınlığı kanıt gücünü gösterir.</p>
+      <svg id="ag" viewBox="0 0 900 380" preserveAspectRatio="xMidYMid meet"></svg>
+    </section>
+
+    <section class="panel">
+      <h2>Şüpheli Olaylar</h2>
+      <div id="supheli" class="liste"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Kök Neden Adayları</h2>
+      <div id="adaylar" class="adaylar"></div>
+    </section>
+
+    <section class="panel span2">
+      <h2>Kanıt Paneli</h2>
+      <div id="kanit" class="kanit">Bir olay, bir aday ya da şüpheli kayıt seçin.</div>
+    </section>
+  </div>
+</main>
+
+<div class="modal" id="modal" hidden>
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 id="modalBaslik">Rapor</h3>
+      <div class="row">
+        <button id="btnIndirHtml" class="btn ghost">HTML İndir</button>
+        <button id="btnIndirJson" class="btn ghost">JSON İndir</button>
+        <button id="modalKapat" class="btn">Kapat</button>
+      </div>
+    </div>
+    <div id="raporGovde" class="rapor"></div>
+  </div>
+</div>
+
+<script src="generator.js"></script>
+<script src="analyzer.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

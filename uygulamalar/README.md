@@ -1,6 +1,6 @@
 # Numex Market uygulamaları — ücretsiz, açık kaynak, Türkçe
 
-Numex AI'nın otonom olarak yazdığı, test ettiği ve [Numex Market](https://market.numexai.com.tr)'te yayımladığı **67 uygulamanın** kaynak kodu:
+Numex AI'nın otonom olarak yazdığı, test ettiği ve [Numex Market](https://market.numexai.com.tr)'te yayımladığı **77 uygulamanın** kaynak kodu:
 tarayıcı oyunları, simülasyonlar, yapay zekâ demoları, günlük araçlar, iş uygulamaları ve web masaüstleri.
 Her gün [numexai.com.tr](https://numexai.com.tr) vitrininden kendiliğinden eşitlenir. Hepsi [MIT lisanslı](LICENSE): dene, incele, çatalla.
 
@@ -104,11 +104,21 @@ Her gün [numexai.com.tr](https://numexai.com.tr) vitrininden kendiliğinden eş
 |---|---|
 | [**İnsan Vücudu — Sinir ve Dolaşım Laboratuvarı**](human-body-lab/) | Tarayıcıda çalışan, canlı verilerle tepki veren interaktif insan vücudu simülasyonu — kalp ritmi, kan akışı, sinir yolları. (Node/Express) |
 
-## 📦 Diğer (4)
+## 📦 Diğer (14)
 
 | Uygulama | Ne yapar |
 |---|---|
-| [**3d kütüphane**](test01/) |  |
 | [**baglantiSuresiAyarla**](testkosu/) |  |
+| [**Çılgın Makineler Atölyesi**](mutluluk/) | Tarayıcıda çalışan, gerçek zamanlı fizik simülasyonuna dayalı Rube Goldberg makine atölyesi. |
+| [**çizgi roman yapımı**](cizgi-roman/) |  |
+| [**Dijital Olay Dedektifi**](dijital-olay-dedektifi/) | Sıfırdan yazılmış, tarayıcıda çalışan olay analizi ve kök neden araştırma platformu. |
+| [**interaktif hayal dünyası**](interaktif-jayal-dunyasi/) | Tarayıcıda çalışan, tamamen yerel (model API'si gerektirmeyen) parçacık sanatı uygulaması. |
+| [**ipek yolu**](ipek-yolu/) |  |
 | [**Lazer Kesim Tasarım Stüdyosu**](lazer-kesim-tasarim-studyosu/) |  |
+| [**mektup**](mektup/) |  |
+| [**numex dron acil durum kordinat merkezi**](test125/) |  |
+| [**Numex Minyatür Dünya**](numex-minyatur-dunya/) | Numex Minyatür Dünya - tarayıcıda 3D diorama atölyesi |
 | [**numex-studio-x**](numex-studio-x/) |  |
+| [**operasyon merkezi**](operasyon-merkezi/) | Mini Fabrika Yönetim Merkezi - üretim planlama, iş emri, stok ve maliyet motoru |
+| [**test2655yasayan mahelle**](test2655yasayan-mahelle/) |  |
+| [**Yaşayan Şehir**](test126/) |  |

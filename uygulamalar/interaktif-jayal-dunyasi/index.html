@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Numex Dream Studio — İnteraktif Hayal Atölyesi</title>
+<meta name="description" content="Binlerce ışık parçacığıyla kendi görsel eserini üret. Galaksi, kalp, kelebek, çiçek, yıldız ve kendi ismin — tamamen tarayıcıda, kurulum yok.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="stage">
+  <canvas id="scene" aria-label="Parçacık sahnesi"></canvas>
+  <div class="vignette" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+</div>
+
+<header class="brand">
+  <div class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></div>
+  <div class="brand-text">
+    <h1>Numex Dream Studio</h1>
+    <p>İnteraktif Hayal Atölyesi</p>
+  </div>
+</header>
+
+<div class="hud" aria-hidden="true">
+  <div class="hud-mode" id="hudMode">Galaksi</div>
+  <div class="hud-stat"><b id="hudFps">60</b> FPS<span class="sep">·</span><b id="hudCount">0</b> parçacık</div>
+</div>
+
+<button class="panel-toggle" id="panelToggle" type="button" aria-expanded="true" aria-controls="panel">
+  <span aria-hidden="true">☰</span> Atölye
+</button>
+
+<aside class="panel" id="panel" aria-label="Atölye ayarları">
+  <div class="panel-inner">
+
+    <section class="block">
+      <h2 class="block-title">Şekil</h2>
+      <div class="modes" id="modes">
+        <button class="mode is-active" type="button" data-mode="galaxy">Galaksi</button>
+        <button class="mode" type="button" data-mode="heart">Kalp</button>
+        <button class="mode" type="button" data-mode="butterfly">Kelebek</button>
+        <button class="mode" type="button" data-mode="flower">Çiçek</button>
+        <button class="mode" type="button" data-mode="star">Yıldız</button>
+        <button class="mode" type="button" data-mode="text">İsim</button>
+        <button class="mode" type="button" data-mode="vortex">Girdap</button>
+      </div>
+    </section>
+
+    <section class="block">
+      <h2 class="block-title">İsim / Kelime</h2>
+      <div class="text-row">
+        <input id="textInput" type="text" maxlength="18" placeholder="Örn. ELA" autocomplete="off" spellcheck="false" aria-label="Parçacıklarla yazılacak kelime">
+        <button id="textApply" class="btn btn-accent" type="button">Yaz</button>
+      </div>
+      <p class="block-note">Türkçe karakterler desteklenir: Ç Ğ İ Ö Ş Ü</p>
+    </section>
+
+    <section class="block">
+      <h2 class="block-title">Renk paleti</h2>
+      <div class="palettes" id="palettes"></div>
+    </section>
+
+    <section class="block">
+      <label class="slider" for="density">
+        <span>Yoğunluk <b id="densityVal">60%</b></span>
+        <input id="density" type="range" min="15" max="100" value="60">
+      </label>
+      <label class="slider" for="speed">
+        <span>Hareket hızı <b id="speedVal">1.0×</b></span>
+        <input id="speed" type="range" min="15" max="250" value="100">
+      </label>
+      <label class="slider" for="zoom">
+        <span>Yakınlaşma <b id="zoomVal">100%</b></span>
+        <input id="zoom" type="range" min="40" max="260" value="100">
+      </label>
+    </section>
+
+    <section class="block">
+      <div class="btn-grid">
+        <button id="btnCinema" class="btn" type="button">Sinematik</button>
+        <button id="btnPng" class="btn" type="button">PNG kaydet</button>
+        <button id="btnExport" class="btn" type="button">JSON dışa</button>
+        <button id="btnImport" class="btn" type="button">JSON içe</button>
+      </div>
+      <p class="block-note">JSON, kompozisyonunu (şekil, palet, ayar) saklar; sonra aynen geri açarsın.</p>
+    </section>
+
+  </div>
+</aside>
+
+<div class="hint" id="hint">
+  Sürükle: girdap<span class="sep">·</span>Tıkla: ışık patlaması<span class="sep">·</span>Tekerlek: yakınlaş<span class="sep">·</span><kbd>Boşluk</kbd> sinematik
+</div>
+
+<input type="file" id="fileImport" accept="application/json,.json" hidden>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<noscript><p style="position:fixed;inset:0;display:grid;place-items:center;background:#05060f;color:#fff;font-family:sans-serif">Bu deneyim için JavaScript gerekli.</p></noscript>
+
+<script src="js/palettes.js"></script>
+<script src="js/shapes.js"></script>
+<script src="js/perf.js"></script>
+<script src="js/particle.js"></script>
+<script src="js/renderer.js"></script>
+<script src="js/controls.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

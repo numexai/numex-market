@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>NUMEX SMART CITY — Trafik Komuta Merkezi</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<div class="shell">
+  <aside class="side">
+    <div class="brand">
+      <div class="logo">N</div>
+      <div>
+        <h1>NUMEX SMART CITY</h1>
+        <p>Otonom Trafik Komuta Merkezi</p>
+      </div>
+    </div>
+
+    <section class="card clock-card">
+      <div class="clock-row">
+        <span id="hud-clock" class="clock">00:00</span>
+        <span id="hud-phase" class="badge">GÜNDÜZ</span>
+      </div>
+      <div class="sub">Şehir saati · gece/gündüz döngüsü</div>
+    </section>
+
+    <section class="card">
+      <h2>Canlı Trafik</h2>
+      <div class="grid3">
+        <div class="stat"><span id="hud-cars">0</span><label>Araç</label></div>
+        <div class="stat"><span id="hud-moving">0</span><label>Hareketli</label></div>
+        <div class="stat"><span id="hud-waiting">0</span><label>Bekleyen</label></div>
+      </div>
+      <div class="cong">
+        <div class="cong-head">
+          <span>Ortalama yoğunluk</span>
+          <strong id="hud-cong">0%</strong>
+        </div>
+        <div class="cong-track"><div id="cong-bar" class="cong-bar"></div></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Olay Durumu</h2>
+      <div class="grid4">
+        <div class="stat"><span id="hud-accidents">0</span><label>Aktif kaza</label></div>
+        <div class="stat"><span id="hud-amb">0</span><label>Ambulans</label></div>
+        <div class="stat"><span id="hud-closed">0</span><label>Kapalı yol</label></div>
+        <div class="stat"><span id="hud-resolved">0</span><label>Kapanan olay</label></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Müdahale</h2>
+      <div class="btn-row">
+        <button data-mode="accident" class="mode">Kaza Ekle</button>
+        <button data-mode="close" class="mode">Yol Kapat</button>
+        <button data-mode="none" class="mode">İzle</button>
+      </div>
+      <div class="btn-row">
+        <button id="btn-random-accident">Rastgele Kaza</button>
+        <button id="btn-triple" class="danger">3 Eşzamanlı Kaza</button>
+      </div>
+      <div class="btn-row">
+        <button id="btn-density-up">Yoğunluk +</button>
+        <button id="btn-density-down">Yoğunluk −</button>
+      </div>
+      <div class="btn-row">
+        <button id="btn-pause">Duraklat</button>
+        <button id="btn-clear">Tüm Olayları Kapat</button>
+      </div>
+      <div class="btn-row speeds">
+        <span class="lbl">Hız</span>
+        <button data-speed="1">1×</button>
+        <button data-speed="2">2×</button>
+        <button data-speed="3">3×</button>
+      </div>
+      <p id="mode-label" class="mode-label">Haritaya tıkla: o noktada kaza oluşturulur</p>
+    </section>
+
+    <section class="card grow">
+      <h2>Olay Günlüğü</h2>
+      <ul id="log-list" class="log"></ul>
+    </section>
+
+    <div class="foot">
+      <span>FPS <b id="hud-fps">60</b></span>
+      <span>35 kavşak · 58 hat</span>
+    </div>
+  </aside>
+
+  <main class="stage">
+    <canvas id="map"></canvas>
+    <div class="legend">
+      <span><i class="dot g"></i>Akıcı</span>
+      <span><i class="dot y"></i>Yoğun</span>
+      <span><i class="dot r"></i>Tıkalı</span>
+      <span><i class="dot c"></i>Ambulans koridoru</span>
+      <span><i class="dot w"></i>Kapalı hat</span>
+    </div>
+  </main>
+</div>
+<script type="module" src="js/ui.js"></script>
+</body>
+</html>

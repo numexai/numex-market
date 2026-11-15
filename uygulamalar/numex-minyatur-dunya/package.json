@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "three": "^0.169.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2"
+  },
+  "name": "numex-minyatur-dunya",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Numex Minyatür Dünya - tarayıcıda 3D diorama atölyesi",
+  "scripts": {
+    "build": "esbuild src/main.js --bundle --format=iife --target=es2020 --outfile=app.js"
+  }
+}

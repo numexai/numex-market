@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Numex Minyatür Dünya — Kendi küçük dünyanı kur</title>
+<meta name="description" content="Masanın üstünde kendi minyatür dioramanı kur: 29 nesne, canlı tren, akan su, gece ışıkları.">
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<canvas id="sahne"></canvas>
+
+<!-- üst bar -->
+<header class="bar ust">
+  <div class="marka">
+    <span class="logo">◈</span>
+    <div>
+      <b>Minyatür Dünya</b>
+      <small>Numex Yaratıcı Atölye</small>
+    </div>
+  </div>
+
+  <div class="atmosfer" id="atmosferler" role="group" aria-label="Atmosfer seçimi">
+    <button data-hava="gunduz" class="hava secili" title="Gündüz">☀️ <span>Gündüz</span></button>
+    <button data-hava="gunbatimi" class="hava" title="Gün batımı">🌅 <span>Gün batımı</span></button>
+    <button data-hava="gece" class="hava" title="Gece">🌙 <span>Gece</span></button>
+    <button data-hava="yagmur" class="hava" title="Yağmur">🌧️ <span>Yağmur</span></button>
+    <button data-hava="kar" class="hava" title="Kar">❄️ <span>Kar</span></button>
+  </div>
+
+  <div class="sag-ust">
+    <button id="btnKamera" class="ikon-btn" title="Kamera konumunu sıfırla (C)">⌖</button>
+    <button id="btnPng" class="ikon-btn" title="PNG ekran görüntüsü al (P)">🖼️</button>
+    <button id="btnKaydet" class="ikon-btn" title="Tarayıcıya kaydet (Ctrl+S)">💾</button>
+    <button id="btnMenu" class="ikon-btn" title="Dosya işlemleri">⋯</button>
+  </div>
+</header>
+
+<!-- sol: nesne kütüphanesi -->
+<aside class="panel sol" id="panelSol">
+  <div class="panel-baslik">
+    <b>Nesne Kütüphanesi</b>
+    <button class="kucuk" id="btnKatlaSol" title="Paneli daralt">‹</button>
+  </div>
+  <div class="kategoriler" id="kategoriler"></div>
+  <div class="nesneler" id="nesneler"></div>
+  <p class="ipucu">Nesneye tıkla → sahneye eklenir. Sürüklemek için sahne içinde tut ve bırak.</p>
+</aside>
+
+<!-- sağ: seçili nesne -->
+<aside class="panel sag" id="panelSag">
+  <div class="panel-baslik">
+    <b id="secBaslik">Seçili nesne yok</b>
+    <button class="kucuk" id="btnKatlaSag" title="Paneli daralt">›</button>
+  </div>
+  <div id="secIcerik" class="sec-icerik">
+    <p class="bos">Sahnede bir nesneye tıkla, ayarları burada açılsın.</p>
+  </div>
+</aside>
+
+<!-- alt: araçlar -->
+<footer class="bar alt">
+  <div class="arac-grup" role="group" aria-label="Dönüşüm araçları">
+    <button class="arac secili" data-mod="translate" title="Taşı (1)">✥ <span>Taşı</span></button>
+    <button class="arac" data-mod="rotate" title="Döndür (2)">⟳ <span>Döndür</span></button>
+    <button class="arac" data-mod="scale" title="Ölçekle (3)">⤢ <span>Ölçekle</span></button>
+  </div>
+  <div class="ayrac"></div>
+  <div class="arac-grup">
+    <button id="btnGeriAl" class="arac" title="Geri al (Ctrl+Z)">↶</button>
+    <button id="btnYinele" class="arac" title="Yinele (Ctrl+Y)">↷</button>
+    <button id="btnKopyala" class="arac" title="Kopyala (Ctrl+D)">⧉</button>
+    <button id="btnSil" class="arac" title="Sil (Delete)">🗑</button>
+  </div>
+  <div class="ayrac"></div>
+  <div class="arac-grup">
+    <button id="btnIzgara" class="arac acik" title="Izgaraya hizalama (G)">▦ <span>Izgara</span></button>
+    <button id="btnSablon" class="arac" title="Hazır sahne şablonları">✧ <span>Şablon</span></button>
+    <button id="btnTren" class="arac acik" title="Treni çalıştır / durdur">🚂 <span>Tren</span></button>
+  </div>
+  <div class="durum" id="durum">Hazır</div>
+</footer>
+
+<!-- dosya menüsü -->
+<div class="menu" id="menu" hidden>
+  <button data-eylem="kaydet">💾 Tarayıcıya kaydet</button>
+  <button data-eylem="yukle">📂 Kayıtlı sahneyi yükle</button>
+  <hr>
+  <button data-eylem="disa">⬇️ JSON indir (.json)</button>
+  <button data-eylem="ice">⬆️ JSON yükle</button>
+  <button data-eylem="paylas">🔗 Sahneyi paylaş (JSON kopyala)</button>
+  <hr>
+  <button data-eylem="png">🖼️ PNG ekran görüntüsü</button>
+  <button data-eylem="sifirla">🧹 Platformu temizle</button>
+</div>
+
+<!-- şablon penceresi -->
+<div class="ortu" id="sablonOrtu" hidden>
+  <div class="modal">
+    <h3>Hazır sahneler</h3>
+    <p class="modal-alt">Bir şablon seç, üstüne kendi dokunuşunu ekle. Mevcut sahnen değişir.</p>
+    <div class="sablonlar" id="sablonlar"></div>
+    <button class="kapat" id="btnSablonKapat">Vazgeç</button>
+  </div>
+</div>
+
+<input type="file" id="dosyaGirisi" accept="application/json,.json" hidden>
+<div class="toast" id="toast" hidden></div>
+<div class="yukleniyor" id="yukleniyor"><div class="halka"></div><p>Minyatür dünya kuruluyor…</p></div>
+
+<script src="app.js"></script>
+</body>
+</html>

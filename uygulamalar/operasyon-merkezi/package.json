@@ -1,0 +1,14 @@
+{
+  "name": "numex-core-operasyon",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Mini Fabrika Yönetim Merkezi - üretim planlama, iş emri, stok ve maliyet motoru",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node tests/kabul.test.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

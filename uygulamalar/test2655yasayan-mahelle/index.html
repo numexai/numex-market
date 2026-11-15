@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="description" content="Numex Living Neighborhood — tarayıcıda gezilebilen, kendi kendine yaşayan küçük bir Türk mahallesi." />
+<title>Yaşayan Mahalle — Numex Living Neighborhood</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div id="app">
+  <!-- Sahn e tuvali: bütün mahalle burada çizilir -->
+  <canvas id="scene"></canvas>
+  <canvas id="fx" aria-hidden="true"></canvas>
+  <div class="vignette" aria-hidden="true"></div>
+
+  <!-- Üst şerit: kimlik ve saat -->
+  <header class="hud hud-top">
+    <div class="brand">
+      <span class="brand-mark">N</span>
+      <div class="brand-text">
+        <h1>Yaşayan Mahalle</h1>
+        <p>Numex Living Neighborhood</p>
+      </div>
+    </div>
+
+    <div class="clock" id="clock">
+      <span class="clock-time" id="clock-time">07:00</span>
+      <span class="clock-phase" id="clock-phase">Sabah</span>
+    </div>
+  </header>
+
+  <!-- Sağ panel: zaman, hava, görünüm -->
+  <aside class="hud hud-panel" id="panel">
+    <section class="panel-block">
+      <h2>Zaman</h2>
+      <div class="btn-row" id="time-buttons">
+        <button type="button" data-hour="6.6">Sabah</button>
+        <button type="button" data-hour="12.5">Öğle</button>
+        <button type="button" data-hour="18.2">Gün Batımı</button>
+        <button type="button" data-hour="20.6">Akşam</button>
+        <button type="button" data-hour="23.6">Gece</button>
+      </div>
+      <label class="range">
+        <span class="range-label">Akış</span>
+        <input id="speed" type="range" min="0" max="8" step="0.5" value="2" />
+        <output id="speed-out" class="range-out">2×</output>
+      </label>
+    </section>
+
+    <section class="panel-block">
+      <h2>Hava</h2>
+      <div class="btn-row" id="weather-buttons">
+        <button type="button" data-weather="clear" class="is-on">Açık</button>
+        <button type="button" data-weather="rain">Yağmur</button>
+        <button type="button" data-weather="snow">Kar</button>
+        <button type="button" data-weather="fog">Sis</button>
+      </div>
+    </section>
+
+    <section class="panel-block">
+      <h2>Görünüm</h2>
+      <div class="btn-row">
+        <button type="button" id="btn-overview">Genel Görünüm</button>
+        <button type="button" id="btn-street">Sokak</button>
+      </div>
+      <p class="stats" id="stats">— kişi · — araç</p>
+    </section>
+  </aside>
+
+  <!-- Alt ipucu şeridi -->
+  <footer class="hud hud-hint">
+    <span><b>Sürükle</b> mahallede gez</span>
+    <span><b>Tekerlek</b> yakınlaştır</span>
+    <span><b>Bir eve tıkla</b> kapısı açılsın</span>
+    <span><b>Boşluk</b> genel görünüm</span>
+  </footer>
+
+  <!-- Fare imlecinin altındaki yapının adı -->
+  <div id="tip" class="tip" hidden></div>
+
+  <!-- İç mekân şeridi -->
+  <div id="interior-bar" class="interior-bar" hidden>
+    <span id="interior-title">Salon</span>
+    <button type="button" id="btn-exit">Dışarı Çık</button>
+  </div>
+
+  <div id="loader" class="loader">
+    <div class="loader-box">
+      <span class="loader-mark">N</span>
+      <p>Mahalle kuruluyor…</p>
+    </div>
+  </div>
+</div>
+
+<script src="js/gl.js"></script>
+<script src="js/world.js"></script>
+<script src="js/life.js"></script>
+<script src="js/render.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

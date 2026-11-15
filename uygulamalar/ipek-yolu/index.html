@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Numex İpek Yolu — Yaşayan Ticaret İmparatorluğu</title>
+<link rel="stylesheet" href="css/stil.css" />
+</head>
+<body>
+<div id="uygulama">
+  <canvas id="sahne" aria-label="İpek Yolu dünyası"></canvas>
+
+  <header class="bar">
+    <div class="marka">
+      <span class="marka-ad">NUMEX</span>
+      <span class="marka-alt">İPEK YOLU</span>
+    </div>
+    <div class="zaman">
+      <div class="zaman-satir"><span id="gunEtiket">1. Gün</span><span class="ayrac">·</span><span id="saatEtiket">07:00</span></div>
+      <div class="hava" id="havaEtiket">Açık</div>
+    </div>
+    <div class="kasa">
+      <div class="kasa-etiket">Sermaye</div>
+      <div class="kasa-deger" id="sermayeEtiket">3.000 akçe</div>
+    </div>
+    <div class="hiz" id="hizGrubu">
+      <button class="hiz-btn onceki" data-hiz="0" title="Zamanı durdur">Dur</button>
+      <button class="hiz-btn" data-hiz="1">1×</button>
+      <button class="hiz-btn" data-hiz="4">4×</button>
+      <button class="hiz-btn" data-hiz="12">12×</button>
+    </div>
+    <div class="kayit">
+      <button class="mini-btn" id="kaydetBtn" title="Oyunu kaydet">Kaydet</button>
+      <button class="mini-btn" id="yukleBtn" title="Kayıtlı oyunu aç">Yükle</button>
+      <button class="mini-btn" id="yardimBtn" title="Kısa yardım">?</button>
+    </div>
+  </header>
+
+  <aside class="panel sehirler" id="sehirPanel">
+    <h2 class="panel-baslik">Şehirler</h2>
+    <div id="sehirListesi" class="liste"></div>
+    <h2 class="panel-baslik kervan-baslik">Kervanların</h2>
+    <div id="kervanListesi" class="liste"></div>
+  </aside>
+
+  <aside class="panel detay" id="detayPanel">
+    <div id="detayIcerik"></div>
+  </aside>
+
+  <footer class="panel islem" id="islemPanel">
+    <div id="islemIcerik" class="islem-ic"></div>
+  </footer>
+
+  <section class="panel olaylar" id="olayPanel">
+    <h2 class="panel-baslik">Pazar Nabzı</h2>
+    <div id="olayListesi" class="olay-liste"></div>
+  </section>
+
+  <div class="ipucu" id="ipucu">Sürükle: döndür · Tekerlek: yakınlaş · Sağ tık sürükle: kaydır · Bir şehre tıkla</div>
+
+  <div class="perde" id="perde">
+    <div class="perde-kart">
+      <h2 id="perdeBaslik">İpek Yolu</h2>
+      <p id="perdeMetin"></p>
+      <button class="mini-btn" id="perdeKapat">Anladım</button>
+    </div>
+  </div>
+</div>
+
+<script src="vendor/three.min.js"></script>
+<script src="js/ekonomi.js"></script>
+<script src="js/dunya.js"></script>
+<script src="js/arayuz.js"></script>
+<script src="js/oyun.js"></script>
+</body>
+</html>

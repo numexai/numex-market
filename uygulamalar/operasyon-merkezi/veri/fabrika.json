@@ -1,0 +1,934 @@
+{
+  "surum": 1,
+  "simAyar": {
+    "hiz": 60
+  },
+  "sayac": {
+    "siparis": 3,
+    "emir": 3,
+    "hareket": 0
+  },
+  "siparisler": [
+    {
+      "id": "SIP-2026-0001",
+      "urunId": "P1",
+      "urunAd": "Ahşap Sandalye",
+      "adet": 20,
+      "musteri": "Numex Mobilya",
+      "birimFiyat": 1850,
+      "toplamTutar": 37000,
+      "malzemeMaliyeti": 4926,
+      "iscilikMaliyeti": 12600,
+      "toplamMaliyet": 17526,
+      "birimMaliyet": 876.3,
+      "tahminiKar": 19474,
+      "durum": "calisiyor",
+      "tarih": 1794680415206,
+      "emirId": "IE-0001"
+    },
+    {
+      "id": "SIP-2026-0002",
+      "urunId": "P1",
+      "urunAd": "Ahşap Sandalye",
+      "adet": 20,
+      "musteri": "İç Sipariş",
+      "birimFiyat": 1850,
+      "toplamTutar": 37000,
+      "malzemeMaliyeti": 4926,
+      "iscilikMaliyeti": 12600,
+      "toplamMaliyet": 17526,
+      "birimMaliyet": 876.3,
+      "tahminiKar": 19474,
+      "durum": "kuyrukta",
+      "tarih": 1794680896816,
+      "emirId": "IE-0002"
+    },
+    {
+      "id": "SIP-2026-0003",
+      "urunId": "P2",
+      "urunAd": "Ahşap Masa",
+      "adet": 20,
+      "musteri": "İç Sipariş",
+      "birimFiyat": 6400,
+      "toplamTutar": 128000,
+      "malzemeMaliyeti": 8524,
+      "iscilikMaliyeti": 28800,
+      "toplamMaliyet": 37324,
+      "birimMaliyet": 1866.2,
+      "tahminiKar": 90676,
+      "durum": "kuyrukta",
+      "tarih": 1794680903317,
+      "emirId": "IE-0003"
+    }
+  ],
+  "emirler": [
+    {
+      "id": "IE-0001",
+      "siparisId": "SIP-2026-0001",
+      "urunId": "P1",
+      "urunAd": "Ahşap Sandalye",
+      "adet": 20,
+      "durum": "calisiyor",
+      "olusturmaSim": 107680824912360,
+      "baslangicSim": 107680824912360,
+      "bitisSim": 107680824912387,
+      "tahminiToplamDk": 177,
+      "gercekBaslangicMs": 1794680415221,
+      "gercekBitisMs": null,
+      "adimlar": [
+        {
+          "istasyonId": "S1",
+          "istasyon": "Kesim",
+          "baslangicSim": 107680824912360,
+          "bitisSim": 107680824912370,
+          "planlananDk": 120,
+          "tamamlananDk": 120,
+          "durum": "tamamlandi",
+          "parcalar": [
+            {
+              "bas": 107680824912360,
+              "bit": 107680824912361,
+              "adet": 2
+            },
+            {
+              "bas": 107680824912361,
+              "bit": 107680824912362,
+              "adet": 2
+            },
+            {
+              "bas": 107680824912362,
+              "bit": 107680824912363,
+              "adet": 2
+            },
+            {
+              "bas": 107680824912363,
+              "bit": 107680824912364,
+              "adet": 2
+            },
+            {
+              "bas": 107680824912364,
+              "bit": 107680824912365,
+              "adet": 2
+            },
+            {
+              "bas": 107680824912365,
+              "bit": 107680824912366,
+              "adet": 2
+            },
+            {
+              "bas": 107680824912366,
+              "bit": 107680824912367,
+              "adet": 2
+            },
+            {
+              "bas": 107680824912367,
+              "bit": 107680824912368,
+              "adet": 2
+            },
+            {
+              "bas": 107680824912368,
+              "bit": 107680824912369,
+              "adet": 2
+            },
+            {
+              "bas": 107680824912369,
+              "bit": 107680824912370,
+              "adet": 2
+            }
+          ]
+        },
+        {
+          "istasyonId": "S2",
+          "istasyon": "Montaj",
+          "baslangicSim": 107680824912370,
+          "bitisSim": 107680824912377,
+          "planlananDk": 200,
+          "tamamlananDk": 48,
+          "durum": "calisiyor",
+          "parcalar": [
+            {
+              "bas": 107680824912370,
+              "bit": 107680824912371,
+              "adet": 3
+            },
+            {
+              "bas": 107680824912371,
+              "bit": 107680824912372,
+              "adet": 3
+            },
+            {
+              "bas": 107680824912372,
+              "bit": 107680824912373,
+              "adet": 3
+            },
+            {
+              "bas": 107680824912373,
+              "bit": 107680824912374,
+              "adet": 3
+            },
+            {
+              "bas": 107680824912374,
+              "bit": 107680824912375,
+              "adet": 3
+            },
+            {
+              "bas": 107680824912375,
+              "bit": 107680824912376,
+              "adet": 3
+            },
+            {
+              "bas": 107680824912376,
+              "bit": 107680824912377,
+              "adet": 2
+            }
+          ]
+        },
+        {
+          "istasyonId": "S3",
+          "istasyon": "Boyama",
+          "baslangicSim": 107680824912377,
+          "bitisSim": 107680824912387,
+          "planlananDk": 100,
+          "tamamlananDk": 0,
+          "durum": "kuyrukta",
+          "parcalar": [
+            {
+              "bas": 107680824912377,
+              "bit": 107680824912378,
+              "adet": 2
+            },
+            {
+              "bas": 107680824912378,
+              "bit": 107680824912379,
+              "adet": 2
+            },
+            {
+              "bas": 107680824912379,
+              "bit": 107680824912380,
+              "adet": 2
+            },
+            {
+              "bas": 107680824912380,
+              "bit": 107680824912381,
+              "adet": 2
+            },
+            {
+              "bas": 107680824912381,
+              "bit": 107680824912382,
+              "adet": 2
+            },
+            {
+              "bas": 107680824912382,
+              "bit": 107680824912383,
+              "adet": 2
+            },
+            {
+              "bas": 107680824912383,
+              "bit": 107680824912384,
+              "adet": 2
+            },
+            {
+              "bas": 107680824912384,
+              "bit": 107680824912385,
+              "adet": 2
+            },
+            {
+              "bas": 107680824912385,
+              "bit": 107680824912386,
+              "adet": 2
+            },
+            {
+              "bas": 107680824912386,
+              "bit": 107680824912387,
+              "adet": 2
+            }
+          ]
+        }
+      ],
+      "rezervasyon": [
+        {
+          "malzemeId": "M1",
+          "miktar": 80
+        },
+        {
+          "malzemeId": "M4",
+          "miktar": 240
+        },
+        {
+          "malzemeId": "M5",
+          "miktar": 6
+        },
+        {
+          "malzemeId": "M6",
+          "miktar": 5
+        },
+        {
+          "malzemeId": "M7",
+          "miktar": 20
+        }
+      ],
+      "malzemeDusuldu": false,
+      "toplamMaliyet": 17526,
+      "malzemeMaliyeti": 4926,
+      "iscilikMaliyeti": 12600,
+      "iptalNedeni": null
+    },
+    {
+      "id": "IE-0002",
+      "siparisId": "SIP-2026-0002",
+      "urunId": "P1",
+      "urunAd": "Ahşap Sandalye",
+      "adet": 20,
+      "durum": "kuyrukta",
+      "olusturmaSim": 107680853808960,
+      "baslangicSim": 107680853808960,
+      "bitisSim": 107680853808987,
+      "tahminiToplamDk": 177,
+      "gercekBaslangicMs": null,
+      "gercekBitisMs": null,
+      "adimlar": [
+        {
+          "istasyonId": "S1",
+          "istasyon": "Kesim",
+          "baslangicSim": 107680853808960,
+          "bitisSim": 107680853808970,
+          "planlananDk": 120,
+          "tamamlananDk": 0,
+          "durum": "kuyrukta",
+          "parcalar": [
+            {
+              "bas": 107680853808960,
+              "bit": 107680853808961,
+              "adet": 2
+            },
+            {
+              "bas": 107680853808961,
+              "bit": 107680853808962,
+              "adet": 2
+            },
+            {
+              "bas": 107680853808962,
+              "bit": 107680853808963,
+              "adet": 2
+            },
+            {
+              "bas": 107680853808963,
+              "bit": 107680853808964,
+              "adet": 2
+            },
+            {
+              "bas": 107680853808964,
+              "bit": 107680853808965,
+              "adet": 2
+            },
+            {
+              "bas": 107680853808965,
+              "bit": 107680853808966,
+              "adet": 2
+            },
+            {
+              "bas": 107680853808966,
+              "bit": 107680853808967,
+              "adet": 2
+            },
+            {
+              "bas": 107680853808967,
+              "bit": 107680853808968,
+              "adet": 2
+            },
+            {
+              "bas": 107680853808968,
+              "bit": 107680853808969,
+              "adet": 2
+            },
+            {
+              "bas": 107680853808969,
+              "bit": 107680853808970,
+              "adet": 2
+            }
+          ]
+        },
+        {
+          "istasyonId": "S2",
+          "istasyon": "Montaj",
+          "baslangicSim": 107680853808970,
+          "bitisSim": 107680853808977,
+          "planlananDk": 200,
+          "tamamlananDk": 0,
+          "durum": "kuyrukta",
+          "parcalar": [
+            {
+              "bas": 107680853808970,
+              "bit": 107680853808971,
+              "adet": 3
+            },
+            {
+              "bas": 107680853808971,
+              "bit": 107680853808972,
+              "adet": 3
+            },
+            {
+              "bas": 107680853808972,
+              "bit": 107680853808973,
+              "adet": 3
+            },
+            {
+              "bas": 107680853808973,
+              "bit": 107680853808974,
+              "adet": 3
+            },
+            {
+              "bas": 107680853808974,
+              "bit": 107680853808975,
+              "adet": 3
+            },
+            {
+              "bas": 107680853808975,
+              "bit": 107680853808976,
+              "adet": 3
+            },
+            {
+              "bas": 107680853808976,
+              "bit": 107680853808977,
+              "adet": 2
+            }
+          ]
+        },
+        {
+          "istasyonId": "S3",
+          "istasyon": "Boyama",
+          "baslangicSim": 107680853808977,
+          "bitisSim": 107680853808987,
+          "planlananDk": 100,
+          "tamamlananDk": 0,
+          "durum": "kuyrukta",
+          "parcalar": [
+            {
+              "bas": 107680853808977,
+              "bit": 107680853808978,
+              "adet": 2
+            },
+            {
+              "bas": 107680853808978,
+              "bit": 107680853808979,
+              "adet": 2
+            },
+            {
+              "bas": 107680853808979,
+              "bit": 107680853808980,
+              "adet": 2
+            },
+            {
+              "bas": 107680853808980,
+              "bit": 107680853808981,
+              "adet": 2
+            },
+            {
+              "bas": 107680853808981,
+              "bit": 107680853808982,
+              "adet": 2
+            },
+            {
+              "bas": 107680853808982,
+              "bit": 107680853808983,
+              "adet": 2
+            },
+            {
+              "bas": 107680853808983,
+              "bit": 107680853808984,
+              "adet": 2
+            },
+            {
+              "bas": 107680853808984,
+              "bit": 107680853808985,
+              "adet": 2
+            },
+            {
+              "bas": 107680853808985,
+              "bit": 107680853808986,
+              "adet": 2
+            },
+            {
+              "bas": 107680853808986,
+              "bit": 107680853808987,
+              "adet": 2
+            }
+          ]
+        }
+      ],
+      "rezervasyon": [
+        {
+          "malzemeId": "M1",
+          "miktar": 80
+        },
+        {
+          "malzemeId": "M4",
+          "miktar": 240
+        },
+        {
+          "malzemeId": "M5",
+          "miktar": 6
+        },
+        {
+          "malzemeId": "M6",
+          "miktar": 5
+        },
+        {
+          "malzemeId": "M7",
+          "miktar": 20
+        }
+      ],
+      "malzemeDusuldu": false,
+      "toplamMaliyet": 17526,
+      "malzemeMaliyeti": 4926,
+      "iscilikMaliyeti": 12600,
+      "iptalNedeni": null
+    },
+    {
+      "id": "IE-0003",
+      "siparisId": "SIP-2026-0003",
+      "urunId": "P2",
+      "urunAd": "Ahşap Masa",
+      "adet": 20,
+      "durum": "kuyrukta",
+      "olusturmaSim": 107680854199020,
+      "baslangicSim": 107680854199020,
+      "bitisSim": 107680854199047,
+      "tahminiToplamDk": 417,
+      "gercekBaslangicMs": null,
+      "gercekBitisMs": null,
+      "adimlar": [
+        {
+          "istasyonId": "S1",
+          "istasyon": "Kesim",
+          "baslangicSim": 107680854199020,
+          "bitisSim": 107680854199030,
+          "planlananDk": 300,
+          "tamamlananDk": 0,
+          "durum": "kuyrukta",
+          "parcalar": [
+            {
+              "bas": 107680854199020,
+              "bit": 107680854199021,
+              "adet": 2
+            },
+            {
+              "bas": 107680854199021,
+              "bit": 107680854199022,
+              "adet": 2
+            },
+            {
+              "bas": 107680854199022,
+              "bit": 107680854199023,
+              "adet": 2
+            },
+            {
+              "bas": 107680854199023,
+              "bit": 107680854199024,
+              "adet": 2
+            },
+            {
+              "bas": 107680854199024,
+              "bit": 107680854199025,
+              "adet": 2
+            },
+            {
+              "bas": 107680854199025,
+              "bit": 107680854199026,
+              "adet": 2
+            },
+            {
+              "bas": 107680854199026,
+              "bit": 107680854199027,
+              "adet": 2
+            },
+            {
+              "bas": 107680854199027,
+              "bit": 107680854199028,
+              "adet": 2
+            },
+            {
+              "bas": 107680854199028,
+              "bit": 107680854199029,
+              "adet": 2
+            },
+            {
+              "bas": 107680854199029,
+              "bit": 107680854199030,
+              "adet": 2
+            }
+          ]
+        },
+        {
+          "istasyonId": "S2",
+          "istasyon": "Montaj",
+          "baslangicSim": 107680854199030,
+          "bitisSim": 107680854199037,
+          "planlananDk": 440,
+          "tamamlananDk": 0,
+          "durum": "kuyrukta",
+          "parcalar": [
+            {
+              "bas": 107680854199030,
+              "bit": 107680854199031,
+              "adet": 3
+            },
+            {
+              "bas": 107680854199031,
+              "bit": 107680854199032,
+              "adet": 3
+            },
+            {
+              "bas": 107680854199032,
+              "bit": 107680854199033,
+              "adet": 3
+            },
+            {
+              "bas": 107680854199033,
+              "bit": 107680854199034,
+              "adet": 3
+            },
+            {
+              "bas": 107680854199034,
+              "bit": 107680854199035,
+              "adet": 3
+            },
+            {
+              "bas": 107680854199035,
+              "bit": 107680854199036,
+              "adet": 3
+            },
+            {
+              "bas": 107680854199036,
+              "bit": 107680854199037,
+              "adet": 2
+            }
+          ]
+        },
+        {
+          "istasyonId": "S3",
+          "istasyon": "Boyama",
+          "baslangicSim": 107680854199037,
+          "bitisSim": 107680854199047,
+          "planlananDk": 240,
+          "tamamlananDk": 0,
+          "durum": "kuyrukta",
+          "parcalar": [
+            {
+              "bas": 107680854199037,
+              "bit": 107680854199038,
+              "adet": 2
+            },
+            {
+              "bas": 107680854199038,
+              "bit": 107680854199039,
+              "adet": 2
+            },
+            {
+              "bas": 107680854199039,
+              "bit": 107680854199040,
+              "adet": 2
+            },
+            {
+              "bas": 107680854199040,
+              "bit": 107680854199041,
+              "adet": 2
+            },
+            {
+              "bas": 107680854199041,
+              "bit": 107680854199042,
+              "adet": 2
+            },
+            {
+              "bas": 107680854199042,
+              "bit": 107680854199043,
+              "adet": 2
+            },
+            {
+              "bas": 107680854199043,
+              "bit": 107680854199044,
+              "adet": 2
+            },
+            {
+              "bas": 107680854199044,
+              "bit": 107680854199045,
+              "adet": 2
+            },
+            {
+              "bas": 107680854199045,
+              "bit": 107680854199046,
+              "adet": 2
+            },
+            {
+              "bas": 107680854199046,
+              "bit": 107680854199047,
+              "adet": 2
+            }
+          ]
+        }
+      ],
+      "rezervasyon": [
+        {
+          "malzemeId": "M2",
+          "miktar": 20
+        },
+        {
+          "malzemeId": "M4",
+          "miktar": 480
+        },
+        {
+          "malzemeId": "M5",
+          "miktar": 12
+        },
+        {
+          "malzemeId": "M6",
+          "miktar": 16
+        },
+        {
+          "malzemeId": "M7",
+          "miktar": 40
+        }
+      ],
+      "malzemeDusuldu": false,
+      "toplamMaliyet": 37324,
+      "malzemeMaliyeti": 8524,
+      "iscilikMaliyeti": 28800,
+      "iptalNedeni": null
+    }
+  ],
+  "emirlerArsiv": [],
+  "stok": [
+    {
+      "id": "M1",
+      "ad": "Kereste (sandalye profili)",
+      "birim": "adet",
+      "stok": 240,
+      "min": 100,
+      "birimFiyat": 38
+    },
+    {
+      "id": "M2",
+      "ad": "Kereste (masa tablası)",
+      "birim": "adet",
+      "stok": 70,
+      "min": 40,
+      "birimFiyat": 210
+    },
+    {
+      "id": "M3",
+      "ad": "Kereste (raf paneli)",
+      "birim": "adet",
+      "stok": 160,
+      "min": 60,
+      "birimFiyat": 62
+    },
+    {
+      "id": "M4",
+      "ad": "Vida ve bağlantı seti",
+      "birim": "set",
+      "stok": 1500,
+      "min": 400,
+      "birimFiyat": 4.5
+    },
+    {
+      "id": "M5",
+      "ad": "Tutkal (kg)",
+      "birim": "kg",
+      "stok": 85,
+      "min": 25,
+      "birimFiyat": 46
+    },
+    {
+      "id": "M6",
+      "ad": "Ahşap verniği (kg)",
+      "birim": "kg",
+      "stok": 60,
+      "min": 20,
+      "birimFiyat": 92
+    },
+    {
+      "id": "M7",
+      "ad": "Zımpara kağıdı",
+      "birim": "adet",
+      "stok": 300,
+      "min": 80,
+      "birimFiyat": 3.5
+    }
+  ],
+  "urunler": [
+    {
+      "id": "P1",
+      "ad": "Ahşap Sandalye",
+      "birimFiyat": 1850,
+      "iscilikSaat": 1.5,
+      "iscilikUcreti": 420,
+      "bom": [
+        {
+          "malzemeId": "M1",
+          "miktar": 4
+        },
+        {
+          "malzemeId": "M4",
+          "miktar": 12
+        },
+        {
+          "malzemeId": "M5",
+          "miktar": 0.3
+        },
+        {
+          "malzemeId": "M6",
+          "miktar": 0.25
+        },
+        {
+          "malzemeId": "M7",
+          "miktar": 1
+        }
+      ],
+      "rotalar": [
+        {
+          "istasyonId": "S1",
+          "sureDk": 6
+        },
+        {
+          "istasyonId": "S2",
+          "sureDk": 10
+        },
+        {
+          "istasyonId": "S3",
+          "sureDk": 5
+        }
+      ]
+    },
+    {
+      "id": "P2",
+      "ad": "Ahşap Masa",
+      "birimFiyat": 6400,
+      "iscilikSaat": 3,
+      "iscilikUcreti": 480,
+      "bom": [
+        {
+          "malzemeId": "M2",
+          "miktar": 1
+        },
+        {
+          "malzemeId": "M4",
+          "miktar": 24
+        },
+        {
+          "malzemeId": "M5",
+          "miktar": 0.6
+        },
+        {
+          "malzemeId": "M6",
+          "miktar": 0.8
+        },
+        {
+          "malzemeId": "M7",
+          "miktar": 2
+        }
+      ],
+      "rotalar": [
+        {
+          "istasyonId": "S1",
+          "sureDk": 15
+        },
+        {
+          "istasyonId": "S2",
+          "sureDk": 22
+        },
+        {
+          "istasyonId": "S3",
+          "sureDk": 12
+        }
+      ]
+    },
+    {
+      "id": "P3",
+      "ad": "Ahşap Raf",
+      "birimFiyat": 2250,
+      "iscilikSaat": 1,
+      "iscilikUcreti": 400,
+      "bom": [
+        {
+          "malzemeId": "M3",
+          "miktar": 3
+        },
+        {
+          "malzemeId": "M4",
+          "miktar": 8
+        },
+        {
+          "malzemeId": "M5",
+          "miktar": 0.2
+        },
+        {
+          "malzemeId": "M6",
+          "miktar": 0.2
+        },
+        {
+          "malzemeId": "M7",
+          "miktar": 1
+        }
+      ],
+      "rotalar": [
+        {
+          "istasyonId": "S1",
+          "sureDk": 5
+        },
+        {
+          "istasyonId": "S2",
+          "sureDk": 7
+        },
+        {
+          "istasyonId": "S3",
+          "sureDk": 4
+        }
+      ]
+    }
+  ],
+  "istasyonlar": [
+    {
+      "id": "S1",
+      "ad": "Kesim",
+      "kapasite": 2,
+      "durum": "hazir",
+      "baslayanSaat": 8,
+      "bitenSaat": 18
+    },
+    {
+      "id": "S2",
+      "ad": "Montaj",
+      "kapasite": 3,
+      "durum": "hazir",
+      "baslayanSaat": 8,
+      "bitenSaat": 18
+    },
+    {
+      "id": "S3",
+      "ad": "Boyama",
+      "kapasite": 2,
+      "durum": "hazir",
+      "baslayanSaat": 8,
+      "bitenSaat": 18
+    }
+  ],
+  "hareketler": [
+    {
+      "id": "H0",
+      "tarih": 1794680415198,
+      "malzemeId": "M1",
+      "tip": "giris",
+      "miktar": 240,
+      "aciklama": "Açılış stoğu"
+    },
+    {
+      "id": "H00",
+      "tarih": 1794680415198,
+      "malzemeId": "M2",
+      "tip": "giris",
+      "miktar": 70,
+      "aciklama": "Açılış stoğu"
+    }
+  ],
+  "gunlukUretim": []
+}

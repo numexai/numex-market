@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>NUMEX RESCUE — Otonom Afet Koordinasyon Merkezi</title>
+<style>
+  :root{
+    --bg:#03060c; --panel:rgba(9,15,27,.88); --panel-2:rgba(12,20,35,.92);
+    --line:#182539; --line-soft:#111c2d;
+    --ink:#e9f2ff; --dim:#7c8da9; --dim-2:#546682;
+    --cyan:#38e1ff; --red:#ff3b5c; --amber:#ff9f1c; --yellow:#ffd93d; --green:#35e08a;
+    --mono:ui-monospace,'Cascadia Mono','JetBrains Mono',Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:
+      radial-gradient(1200px 600px at 20% -10%, #0a1b2e 0%, transparent 60%),
+      radial-gradient(900px 500px at 90% 110%, #0a1f24 0%, transparent 55%),
+      var(--bg);
+    color:var(--ink);
+    font-family:system-ui,'Segoe UI',Roboto,sans-serif;
+    display:grid; grid-template-rows:auto 1fr; height:100vh; overflow:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  /* ---------- üst bar ---------- */
+  header{
+    display:flex; align-items:center; gap:22px; padding:12px 20px;
+    border-bottom:1px solid var(--line);
+    background:linear-gradient(180deg, rgba(9,17,30,.95), rgba(5,10,18,.7));
+    backdrop-filter:blur(10px);
+    position:relative; z-index:5;
+  }
+  header::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:1px;
+    background:linear-gradient(90deg, transparent, rgba(56,225,255,.55), transparent)}
+  .brand{display:flex;align-items:center;gap:12px}
+  .mark{
+    width:38px;height:38px;border-radius:11px;position:relative;
+    background:linear-gradient(140deg,#0d2b3a,#07131f);
+    border:1px solid rgba(56,225,255,.35);
+    box-shadow:0 0 22px rgba(56,225,255,.18), inset 0 0 14px rgba(56,225,255,.08);
+    display:grid;place-items:center;font-size:18px;
+  }
+  .mark::before{content:'';position:absolute;inset:-4px;border-radius:14px;border:1px solid rgba(56,225,255,.12);animation:halo 3.4s ease-in-out infinite}
+  @keyframes halo{0%,100%{opacity:.25;transform:scale(1)}50%{opacity:.8;transform:scale(1.05)}}
+  .brand h1{font-size:17px;letter-spacing:.16em;font-weight:800;
+    background:linear-gradient(90deg,#ffffff,#8be9ff 55%,#38e1ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .brand p{font-size:10.5px;letter-spacing:.18em;color:var(--dim-2);text-transform:uppercase;margin-top:2px}
+  .chips{display:flex;gap:10px;margin-left:auto;flex-wrap:wrap}
+  .chip{
+    display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:9px;
+    border:1px solid var(--line);background:rgba(12,20,34,.7);
+    font-size:11px;letter-spacing:.09em;color:var(--dim);text-transform:uppercase;
+  }
+  .chip b{color:var(--ink);font-family:var(--mono);font-size:12.5px;letter-spacing:.04em}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);animation:blink 1.6s infinite}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+  .dot.paused{background:var(--amber);box-shadow:0 0 10px var(--amber)}
+  .dot.kritik{background:var(--red);box-shadow:0 0 10px var(--red)}
+
+  /* ---------- yerleşim ---------- */
+  main{display:grid;grid-template-columns:288px 1fr 336px;gap:12px;padding:12px 14px 14px;min-height:0}
+  .panel{
+    background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    backdrop-filter:blur(14px);display:flex;flex-direction:column;min-height:0;
+    box-shadow:0 18px 40px -30px #000, inset 0 1px 0 rgba(255,255,255,.03);
+  }
+  .panel-head{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--line-soft)}
+  .panel-head h2{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);font-weight:700}
+  .panel-head span{font-size:10px;color:var(--dim-2);font-family:var(--mono)}
+  .panel-body{padding:12px;overflow:auto;min-height:0}
+  .panel-body::-webkit-scrollbar{width:6px}
+  .panel-body::-webkit-scrollbar-thumb{background:#1d2c44;border-radius:3px}
+
+  /* ---------- metrikler ---------- */
+  .metrics{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding:12px}
+  .metric{
+    border:1px solid var(--line-soft);border-radius:11px;padding:10px 11px;
+    background:linear-gradient(160deg, rgba(19,31,50,.8), rgba(9,15,26,.6));
+    position:relative;overflow:hidden;transition:border-color .3s, box-shadow .3s;
+  }
+  .metric::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--accent,var(--cyan));opacity:.65}
+  .metric .k{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim-2)}
+  .metric .v{font-family:var(--mono);font-size:26px;font-weight:600;line-height:1.25;margin-top:4px;color:var(--ink)}
+  .metric .u{font-size:10px;color:var(--dim-2);margin-left:3px}
+  .metric.flash{border-color:rgba(56,225,255,.6);box-shadow:0 0 0 1px rgba(56,225,255,.25), 0 0 25px -6px rgba(56,225,255,.5)}
+  .metric.warn .v{color:var(--amber)}
+  .metric.danger .v{color:var(--red)}
+  .metric.ok .v{color:var(--green)}
+
+  /* ---------- filo ---------- */
+  .fleet{display:flex;flex-direction:column;gap:7px;padding:0 12px 12px}
+  .drone{
+    border:1px solid var(--line-soft);border-radius:10px;padding:8px 10px;
+    background:rgba(13,22,37,.7);position:relative;overflow:hidden;
+    /* NOT: liste 120 ms'de bir yeniden kuruluyor; giriş animasyonu burada olursa
+       kartlar sürekli opacity 0'dan başlar ve boş görünür. Animasyon yok. */
+    transition:border-color .25s;
+  }
+  @keyframes slide{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+  .drone .row{display:flex;align-items:center;gap:8px}
+  .drone .id{font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--ink)}
+  .drone .st{font-size:9px;letter-spacing:.1em;padding:2px 6px;border-radius:5px;text-transform:uppercase;margin-left:auto}
+  .st.idle{background:rgba(53,224,138,.12);color:var(--green)}
+  .st.enroute{background:rgba(56,225,255,.13);color:var(--cyan)}
+  .st.rescuing{background:rgba(255,217,61,.14);color:var(--yellow)}
+  .st.returning{background:rgba(125,143,174,.14);color:var(--dim)}
+  .st.charging{background:rgba(56,225,255,.1);color:#79c7e0}
+  .st.failed{background:rgba(255,59,92,.16);color:var(--red)}
+  .bar{height:5px;border-radius:3px;background:#101d2e;margin-top:7px;overflow:hidden;position:relative}
+  .bar i{display:block;height:100%;border-radius:3px;transition:width .3s linear, background .3s}
+  .meta{display:flex;justify-content:space-between;margin-top:5px;font-size:9.5px;color:var(--dim-2);font-family:var(--mono);letter-spacing:.03em}
+
+  /* ---------- sahne ---------- */
+  .stage{
+    position:relative;border:1px solid var(--line);border-radius:16px;overflow:hidden;
+    background:#04070d;min-height:0;
+    box-shadow:inset 0 0 90px rgba(0,0,0,.9), 0 0 0 1px rgba(56,225,255,.05);
+  }
+  canvas{display:block;width:100%;height:100%;cursor:crosshair}
+  .scan{
+    position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(180deg, transparent 0%, rgba(56,225,255,.045) 45%, transparent 60%);
+    background-size:100% 240px; animation:scan 7s linear infinite; opacity:.7;
+  }
+  @keyframes scan{from{background-position:0 -240px}to{background-position:0 900px}}
+  .corner{position:absolute;width:22px;height:22px;border:1px solid rgba(56,225,255,.5);pointer-events:none}
+  .corner.tl{top:10px;left:10px;border-right:0;border-bottom:0;border-radius:4px 0 0 0}
+  .corner.tr{top:10px;right:10px;border-left:0;border-bottom:0;border-radius:0 4px 0 0}
+  .corner.bl{bottom:10px;left:10px;border-right:0;border-top:0;border-radius:0 0 0 4px}
+  .corner.br{bottom:10px;right:10px;border-left:0;border-top:0;border-radius:0 0 4px 0}
+  .overlay-top{position:absolute;top:14px;left:44px;display:flex;gap:8px;align-items:center;pointer-events:none}
+  .tag{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(139,233,255,.85);
+    background:rgba(6,16,26,.75);border:1px solid rgba(56,225,255,.18);padding:4px 9px;border-radius:6px}
+  .legend{position:absolute;bottom:14px;left:44px;display:flex;gap:14px;flex-wrap:wrap;pointer-events:none}
+  .legend div{display:flex;align-items:center;gap:6px;font-size:9.5px;letter-spacing:.1em;color:var(--dim);text-transform:uppercase}
+  .sw{width:9px;height:9px;border-radius:2px}
+  .toast{
+    position:absolute;left:50%;bottom:26px;transform:translate(-50%,14px);opacity:0;
+    background:rgba(8,16,28,.94);border:1px solid rgba(56,225,255,.35);color:#cdefff;
+    padding:9px 16px;border-radius:10px;font-size:11.5px;letter-spacing:.06em;
+    transition:opacity .3s, transform .3s;pointer-events:none;box-shadow:0 12px 30px -14px #000;
+  }
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+
+  /* ---------- kontroller ---------- */
+  .controls{display:grid;gap:8px;padding:12px;border-top:1px solid var(--line-soft)}
+  .btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  button{
+    font-family:inherit;font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--ink);background:rgba(16,27,44,.9);border:1px solid var(--line);
+    padding:9px 10px;border-radius:9px;cursor:pointer;transition:.16s;
+  }
+  button:hover{border-color:rgba(56,225,255,.45);color:#bfeeff;box-shadow:0 0 18px -8px var(--cyan)}
+  button.primary{background:linear-gradient(180deg,rgba(16,58,74,.95),rgba(9,32,44,.95));border-color:rgba(56,225,255,.4);color:#c8f4ff}
+  .field{display:flex;gap:7px}
+  input[type=number],select{
+    flex:1;background:rgba(8,15,26,.9);border:1px solid var(--line);color:var(--ink);
+    border-radius:8px;padding:8px 10px;font-family:var(--mono);font-size:11.5px;outline:none;min-width:0;
+  }
+  input:focus,select:focus{border-color:rgba(56,225,255,.5)}
+  .lbl{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim-2)}
+  .prio-row{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+  .prio{font-size:9.5px;padding:7px 4px;letter-spacing:.08em}
+  .prio[data-p=red].on{border-color:var(--red);color:#ffd0d8;box-shadow:0 0 18px -6px var(--red)}
+  .prio[data-p=orange].on{border-color:var(--amber);color:#ffe0bb;box-shadow:0 0 18px -6px var(--amber)}
+  .prio[data-p=yellow].on{border-color:var(--yellow);color:#fff3c0;box-shadow:0 0 18px -6px var(--yellow)}
+
+  /* ---------- çağrılar + akış ---------- */
+  .calls{display:flex;flex-direction:column;gap:6px;padding:10px 12px}
+  .call{
+    display:flex;align-items:center;gap:9px;padding:7px 9px;border-radius:9px;
+    background:rgba(13,22,37,.75);border:1px solid var(--line-soft);border-left:2px solid var(--c,#ffd93d);
+    font-size:11px;
+  }
+  .call .cid{font-family:var(--mono);font-size:10.5px;color:var(--dim)}
+  .call .who{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--dim-2)}
+  .call .ppl{font-family:var(--mono);font-size:11px;color:var(--ink)}
+  .call.done{opacity:.4;border-left-color:var(--green)}
+  .call.assigned{opacity:.62}
+  .log{display:flex;flex-direction:column;gap:3px;padding:8px 10px;font-size:11px}
+  .ev{display:flex;gap:8px;padding:5px 7px;border-radius:6px;border-left:2px solid var(--lc,#2a3b55);
+      background:rgba(11,19,32,.5);animation:evIn .35s ease both}
+  @keyframes evIn{from{opacity:0;transform:translateX(8px)}to{opacity:1;transform:none}}
+  .ev .t{font-family:var(--mono);font-size:10px;color:var(--dim-2);flex:none}
+  .ev .x{color:#c3d4e8;line-height:1.35}
+  .ev.warn{border-left-color:var(--red)} .ev.warn .x{color:#ffc2cd}
+  .ev.done{border-left-color:var(--green)} .ev.done .x{color:#b7f5d5}
+  .ev.assign{border-left-color:var(--cyan)}
+  .ev.fault{border-left-color:var(--amber)} .ev.fault .x{color:#ffd9b0}
+  .ev.resc{border-left-color:var(--yellow)}
+  .ev.call{border-left-color:#4b6b96}
+  .empty{color:var(--dim-2);font-size:11px;padding:14px;text-align:center}
+  .hint{font-size:10px;color:var(--dim-2);padding:0 12px 10px;line-height:1.5}
+  .hint b{color:var(--dim)}
+
+  /* ---------- görsel derinlik katmanı ---------- */
+  body::before{
+    content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(700px 380px at 12% 0%, rgba(56,225,255,.06), transparent 65%),
+      radial-gradient(600px 420px at 92% 100%, rgba(255,59,92,.05), transparent 65%);
+  }
+  header,main{position:relative;z-index:1}
+  .panel{position:relative}
+  .panel::after{
+    content:'';position:absolute;inset:0;border-radius:14px;pointer-events:none;
+    background:linear-gradient(145deg, rgba(255,255,255,.06), transparent 32%, transparent 70%, rgba(56,225,255,.05));
+    mix-blend-mode:screen;opacity:.5;
+  }
+  .panel-head h2::before{content:'';display:inline-block;width:4px;height:4px;border-radius:1px;
+    background:var(--cyan);box-shadow:0 0 8px var(--cyan);margin-right:7px;vertical-align:middle;opacity:.8}
+
+  /* drone kartı: durum rengi sol kenarda */
+  .drone.idle{border-left:2px solid rgba(53,224,138,.55)}
+  .drone.enroute{border-left:2px solid rgba(56,225,255,.7)}
+  .drone.rescuing{border-left:2px solid rgba(255,217,61,.75)}
+  .drone.returning{border-left:2px solid rgba(168,184,207,.45)}
+  .drone.charging{border-left:2px solid rgba(121,199,224,.5)}
+  .drone.failed{border-left:2px solid var(--red);background:rgba(40,14,22,.7)}
+
+  /* operasyon yükü */
+  .load{padding:0 12px 12px}
+  .load .top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+  .load .k{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim-2)}
+  .load .v{font-family:var(--mono);font-size:11px;color:var(--ink)}
+  .load .track{height:6px;border-radius:4px;background:#0c1728;overflow:hidden;border:1px solid rgba(56,225,255,.08)}
+  .load .track i{display:block;height:100%;width:0;border-radius:4px;transition:width .4s ease, background .4s ease;
+    background:linear-gradient(90deg,#35e08a,#38e1ff);box-shadow:0 0 12px -2px rgba(56,225,255,.6)}
+
+  /* çağrı satırı detayları */
+  .call .pdot{width:6px;height:6px;border-radius:50%;background:var(--c);box-shadow:0 0 8px var(--c);flex:none}
+  .call .age{font-family:var(--mono);font-size:9.5px;color:var(--dim-2);margin-left:auto}
+  .call .who{margin-left:0;font-family:var(--mono);font-size:10px;color:var(--dim);min-width:44px;text-align:right}
+  .call.assigned .pdot{animation:blink 1.4s infinite}
+
+  /* alt durum şeridi */
+  .statusbar{
+    display:flex;align-items:center;gap:16px;padding:7px 18px;
+    border-top:1px solid var(--line);background:rgba(5,10,18,.85);
+    font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--dim-2);
+    text-transform:uppercase;backdrop-filter:blur(8px);
+  }
+  .statusbar .sep{width:1px;height:12px;background:var(--line)}
+  .statusbar .live{display:flex;align-items:center;gap:7px;color:var(--green);letter-spacing:.16em}
+  .statusbar .live .dot{animation:blink 1.2s infinite}
+  .statusbar .right{margin-left:auto;display:flex;gap:16px;align-items:center}
+  .statusbar b{color:var(--ink);font-weight:600}
+
+  @media (max-width:1180px){
+    main{grid-template-columns:250px 1fr 290px;gap:9px}
+    .metric .v{font-size:21px}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="mark">🚁</div>
+    <div>
+      <h1>NUMEX RESCUE</h1>
+      <p>Otonom Afet Koordinasyon Merkezi</p>
+    </div>
+  </div>
+  <div class="chips">
+    <div class="chip"><span class="dot" id="status-dot"></span><span id="status-text">Çevrimiçi</span></div>
+    <div class="chip">Görev Süresi <b id="sim-time">00:00</b></div>
+    <div class="chip">Seed <b id="seed-view">20261114</b></div>
+  </div>
+</header>
+
+<main>
+  <!-- SOL: telemetri -->
+  <aside class="panel">
+    <div class="panel-head"><h2>Operasyon Telemetrisi</h2><span id="tick-label">t=0.0s</span></div>
+    <div class="metrics">
+      <div class="metric ok" style="--accent:var(--green)" id="m-rescued-card">
+        <div class="k">Kurtarılan</div><div class="v" id="m-rescued">0<span class="u">kişi</span></div>
+      </div>
+      <div class="metric danger" style="--accent:var(--red)" id="m-pending-card">
+        <div class="k">Bekleyen Çağrı</div><div class="v" id="m-pending">0</div>
+      </div>
+      <div class="metric" style="--accent:var(--cyan)"><div class="k">Aktif Drone</div><div class="v" id="m-active">0<span class="u">/ 6</span></div></div>
+      <div class="metric warn" style="--accent:var(--amber)"><div class="k">Tamamlanan</div><div class="v" id="m-done">0</div></div>
+      <div class="metric" style="--accent:#7c8da9"><div class="k">Yasak Bölge</div><div class="v" id="m-nfz">0</div></div>
+      <div class="metric" style="--accent:#7c8da9"><div class="k">Arıza</div><div class="v" id="m-fault">0</div></div>
+    </div>
+    <div class="load">
+      <div class="top"><span class="k">Operasyon Yükü</span><span class="v" id="load-val">0%</span></div>
+      <div class="track"><i id="load-bar"></i></div>
+    </div>
+    <div class="panel-head" style="border-top:1px solid var(--line-soft)"><h2>Filo Durumu</h2><span>6 DRONE</span></div>
+    <div class="fleet" id="fleet"></div>
+  </aside>
+
+  <!-- ORTA: harita -->
+  <section class="stage" id="stage">
+    <canvas id="map"></canvas>
+    <div class="scan"></div>
+    <div class="corner tl"></div><div class="corner tr"></div>
+    <div class="corner bl"></div><div class="corner br"></div>
+    <div class="overlay-top">
+      <div class="tag">Canlı Sektör Haritası</div>
+      <div class="tag" id="tag-nfz">Uçuşa Yasak: 0</div>
+    </div>
+    <div class="legend">
+      <div><span class="sw" style="background:#ff3b5c"></span>Kritik</div>
+      <div><span class="sw" style="background:#ff9f1c"></span>Acİl</div>
+      <div><span class="sw" style="background:#ffd93d"></span>Destek</div>
+      <div><span class="sw" style="background:#35e08a"></span>Hastane</div>
+      <div><span class="sw" style="background:#38e1ff"></span>İstasyon</div>
+      <div><span class="sw" style="background:rgba(255,59,92,.5)"></span>Yasak Bölge</div>
+    </div>
+    <div class="toast" id="toast">Çağrı oluşturuldu</div>
+  </section>
+
+  <!-- SAĞ: çağrılar + akış -->
+  <aside class="panel">
+    <div class="panel-head"><h2>Aktif Çağrı Kuyruğu</h2><span id="call-count">0</span></div>
+    <div class="calls" id="calls" style="max-height:190px;overflow:auto"></div>
+    <div class="panel-head" style="border-top:1px solid var(--line-soft)"><h2>Canlı Olay Akışı</h2><span>LIVE</span></div>
+    <div class="panel-body log" id="log" style="flex:1"></div>
+    <div class="controls">
+      <div class="btns">
+        <button class="primary" id="btn-pause">Duraklat</button>
+        <button id="btn-reset">Sıfırla</button>
+      </div>
+      <div class="field">
+        <input type="number" id="seed" value="20261114" aria-label="Seed" />
+        <button id="btn-seed" style="flex:none">Uygula</button>
+        <select id="speed" aria-label="Hız" style="flex:none;width:78px">
+          <option value="1">1×</option>
+          <option value="2">2×</option>
+          <option value="4">4×</option>
+        </select>
+      </div>
+      <div class="lbl">Tıklama önceliği</div>
+      <div class="prio-row">
+        <button class="prio" data-p="red">Kritik</button>
+        <button class="prio on" data-p="orange">Acİl</button>
+        <button class="prio" data-p="yellow">Destek</button>
+      </div>
+      <div class="hint">Haritaya tıkla → seçili öncelikte çağrı oluşur. <b>Boşluk</b> duraklatır, <b>R</b> sıfırlar.</div>
+    </div>
+  </aside>
+</main>
+
+<footer class="statusbar">
+  <span class="live"><span class="dot" id="sb-dot"></span><span id="sb-state">CANLI</span></span>
+  <span class="sep"></span>
+  <span id="sb-drones">0 havada</span>
+  <span class="sep"></span>
+  <span id="sb-calls">0 çağrı</span>
+  <span class="sep"></span>
+  <span id="sb-nfz">0 yasak bölge</span>
+  <span class="sep"></span>
+  <span id="sb-rescued">0 kurtarılan</span>
+  <span class="right">
+    <span>Sim hızı <b id="sb-speed">1×</b></span>
+    <span class="sep"></span>
+    <span>Seed <b id="sb-seed">20261114</b></span>
+  </span>
+</footer>
+
+<script src="sim.js"></script>
+<script src="fx.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Numex Core — Operasyon Smart Factory</title>
+  <link rel="stylesheet" href="/app.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <div>
+        <strong>NUMEX CORE</strong>
+        <small>Operasyon Smart Factory</small>
+      </div>
+    </div>
+    <div class="clock">
+      <div class="clock-item">
+        <span class="etiket">Gerçek zaman</span>
+        <b id="gercekSaat">--:--:--</b>
+      </div>
+      <div class="clock-item">
+        <span class="etiket">Simülasyon zamanı</span>
+        <b id="simSaat">--:--:--</b>
+        <span class="rozet" id="simHiz">1×</span>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <label class="hiz-secim">
+        <span>Sim hızı</span>
+        <select id="hizSec">
+          <option value="1">1×</option>
+          <option value="10">10×</option>
+          <option value="60" selected>60× (1 sn = 1 dk)</option>
+          <option value="120">120×</option>
+        </select>
+      </label>
+      <button class="btn btn-ghost" id="btnSifirla" title="Tüm veriyi başlangıç durumuna döndür">Veriyi sıfırla</button>
+    </div>
+  </header>
+
+  <div class="durum-seridi" id="durumSeridi" role="status" aria-live="polite"></div>
+
+  <main class="layout">
+    <section class="kpi-grid" id="kpiGrid"></section>
+
+    <div class="sol-yigin">
+    <div class="panel panel-emir">
+      <div class="panel-head">
+        <h2>Aktif üretim emirleri</h2>
+        <div class="filtreler">
+          <input id="emirAra" placeholder="Emir / sipariş / ürün ara" />
+          <select id="emirDurum">
+            <option value="aktif">Aktif (kuyrukta + çalışıyor)</option>
+            <option value="kuyrukta">Kuyrukta</option>
+            <option value="calisiyor">Çalışıyor</option>
+            <option value="tamamlandi">Tamamlandı</option>
+            <option value="iptal">İptal</option>
+            <option value="tumu">Tümü</option>
+          </select>
+        </div>
+      </div>
+      <div class="emir-liste" id="emirListe"></div>
+    </div>
+
+    <div class="panel panel-makine">
+      <div class="panel-head"><h2>İstasyonlar</h2><span class="ipucu">Kapasite = aynı anda işlenebilen parça</span></div>
+      <div class="makine-grid" id="makineGrid"></div>
+    </div>
+    </div>
+
+    <aside class="panel panel-yeni">
+      <div class="panel-head"><h2>Yeni sipariş</h2></div>
+      <form id="siparisForm" class="form">
+        <label>Ürün
+          <select id="urunSec" required></select>
+        </label>
+        <label>Adet
+          <input id="adetGir" type="number" min="1" step="1" value="20" required />
+        </label>
+        <label>Müşteri
+          <input id="musteriGir" type="text" placeholder="Ör. Yılmaz Mobilya" maxlength="80" />
+        </label>
+        <div class="form-actions">
+          <button type="button" class="btn btn-ghost" id="btnPlanla">Planı hesapla</button>
+          <button type="submit" class="btn btn-birincil" id="btnSiparis">Siparişi oluştur</button>
+        </div>
+      </form>
+      <div id="planSonuc" class="plan-sonuc"></div>
+    </aside>
+
+    <section class="panel panel-stok">
+      <div class="panel-head">
+        <h2>Hammadde stoğu</h2>
+        <div class="filtreler">
+          <input id="stokAra" placeholder="Malzeme ara" />
+          <label class="onay"><input type="checkbox" id="sadeceKritik" /> Sadece kritik</label>
+        </div>
+      </div>
+      <div class="tablo-sar">
+        <table class="tablo" id="stokTablo">
+          <thead>
+            <tr>
+              <th>Malzeme</th>
+              <th class="sayi">Stok</th>
+              <th class="sayi">Rezerve</th>
+              <th class="sayi">Kullanılabilir</th>
+              <th class="sayi">Min.</th>
+              <th class="sayi">Birim fiyat</th>
+              <th>İşlem</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel panel-takvim">
+      <div class="panel-head"><h2>Üretim takvimi — son 14 gün</h2></div>
+      <div class="takvim" id="takvim"></div>
+    </section>
+
+    <section class="panel panel-gecmis">
+      <div class="panel-head">
+        <h2>Üretim geçmişi ve stok hareketleri</h2>
+        <select id="hareketFiltre">
+          <option value="tumu">Tümü</option>
+          <option value="giris">Hammadde girişi</option>
+          <option value="cikis">Hammadde çıkışı</option>
+          <option value="uretim">Üretim tamamlama</option>
+          <option value="iptal">İptal</option>
+        </select>
+      </div>
+      <div class="tablo-sar">
+        <table class="tablo" id="hareketTablo">
+          <thead><tr><th>Kayıt</th><th>Tarih / saat</th><th>Tip</th><th class="sayi">Miktar</th><th>Açıklama</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal" id="modal" hidden>
+    <div class="modal-kutu" role="dialog" aria-modal="true" aria-labelledby="modalBaslik">
+      <div class="modal-head">
+        <h3 id="modalBaslik">Başlık</h3>
+        <button class="btn btn-ghost btn-kucuk" id="modalKapat" aria-label="Kapat">Kapat</button>
+      </div>
+      <div class="modal-govde" id="modalGovde"></div>
+      <div class="modal-alt" id="modalAlt"></div>
+    </div>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0a0f18">
+<title>Numex Contraption Lab — Çılgın Makineler Atölyesi</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">
+        <svg viewBox="0 0 48 48" width="30" height="30"><g fill="none" stroke="url(#lg)" stroke-width="2.6">
+          <defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#66e9ff"/><stop offset="1" stop-color="#ffb24d"/></linearGradient></defs>
+          <circle cx="24" cy="24" r="8"/><circle cx="24" cy="24" r="2.4" fill="#66e9ff" stroke="none"/>
+          <g><rect x="21.5" y="1" width="5" height="7" rx="1.5"/><rect x="21.5" y="40" width="5" height="7" rx="1.5"/>
+          <rect x="1" y="21.5" width="7" height="5" rx="1.5"/><rect x="40" y="21.5" width="7" height="5" rx="1.5"/>
+          <rect x="6" y="6" width="5" height="7" rx="1.5" transform="rotate(-45 8.5 9.5)"/>
+          <rect x="37" y="35" width="5" height="7" rx="1.5" transform="rotate(-45 39.5 38.5)"/>
+          <rect x="37" y="6" width="5" height="7" rx="1.5" transform="rotate(45 39.5 9.5)"/>
+          <rect x="6" y="35" width="5" height="7" rx="1.5" transform="rotate(45 8.5 38.5)"/></g>
+        </g></svg>
+      </div>
+      <div class="brand-txt">
+        <h1>CONTRAPTION <span>LAB</span></h1>
+        <p>Çılgın Makineler Atölyesi</p>
+      </div>
+    </div>
+
+    <nav class="topnav" id="topnav">
+      <button class="nav-btn" id="btnLevels"><i>◈</i> Bölümler</button>
+      <button class="nav-btn" id="btnExamples"><i>✦</i> Örnekler</button>
+      <span class="nav-sep"></span>
+      <button class="nav-btn" id="btnSave"><i>⤓</i> Kaydet</button>
+      <button class="nav-btn" id="btnLoad"><i>⤒</i> Yükle</button>
+      <button class="nav-btn" id="btnExport"><i>{ }</i> JSON İndir</button>
+      <button class="nav-btn" id="btnImport"><i>⇪</i> JSON Yükle</button>
+      <input type="file" id="fileImport" accept=".json,application/json" hidden>
+    </nav>
+  </header>
+
+  <aside class="palette" id="palette" aria-label="Parça paleti">
+    <div class="palette-head">
+      <h2>PARÇALAR</h2>
+      <span class="palette-hint">Sürükle ya da dokun</span>
+    </div>
+    <div class="palette-list" id="paletteList"><!-- JS doldurur --></div>
+  </aside>
+
+  <main class="stage" id="stage">
+    <canvas id="scene"></canvas>
+
+    <div class="hud" id="hud">
+      <div class="hud-level">
+        <span class="hud-kicker" id="hudKicker">SERBEST ATÖLYE</span>
+        <strong id="hudTitle">Kendi makinanı kur</strong>
+      </div>
+      <div class="hud-goal" id="hudGoal">Hedef zilini vur, zinciri tamamla.</div>
+    </div>
+
+    <div class="verdict" id="verdict" hidden>
+      <div class="verdict-card">
+        <div class="verdict-icon" id="verdictIcon">✓</div>
+        <div class="verdict-body">
+          <h3 id="verdictTitle">Bölüm tamam!</h3>
+          <p id="verdictText"></p>
+        </div>
+        <div class="verdict-actions">
+          <button class="btn btn-ghost" id="verdictRetry">Sıfırla</button>
+          <button class="btn btn-primary" id="verdictNext">Sonraki Bölüm</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage-bar">
+      <button class="ctl ctl-play" id="btnPlay"><span class="ico" id="playIco">▶</span><span id="playTxt">Başlat</span></button>
+      <button class="ctl" id="btnStop" title="Durdur"><span class="ico">⏸</span>Durdur</button>
+      <button class="ctl" id="btnReset" title="Sıfırla"><span class="ico">↺</span>Sıfırla</button>
+      <button class="ctl ctl-slow" id="btnSlow" title="Yavaş çekim"><span class="ico">🐢</span><span id="slowTxt">1×</span></button>
+      <span class="bar-sep"></span>
+      <button class="ctl ctl-ico" id="btnRotate" title="Seçileni döndür (R)"><span class="ico">⟳</span></button>
+      <button class="ctl ctl-ico" id="btnClone" title="Seçileni çoğalt (Ctrl+D)"><span class="ico">⧉</span></button>
+      <button class="ctl ctl-ico ctl-danger" id="btnDelete" title="Seçileni sil (Del)"><span class="ico">✕</span></button>
+      <span class="bar-sep"></span>
+      <div class="fps" id="fps">60 fps</div>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </main>
+
+  <aside class="inspector" id="inspector">
+    <section class="panel">
+      <h2 class="panel-title">GÖREV</h2>
+      <div class="mission">
+        <div class="mission-name" id="missionName">Serbest Atölye</div>
+        <p class="mission-desc" id="missionDesc">İstediğin gibi kur, çalıştır ve dene.</p>
+        <ul class="mission-goals" id="missionGoals"></ul>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2 class="panel-title">SEÇİLİ PARÇA</h2>
+      <div class="sel-empty" id="selEmpty">Sahnede bir parçaya dokun.</div>
+      <div class="sel-box" id="selBox" hidden>
+        <div class="sel-name" id="selName"></div>
+        <div class="sel-actions">
+          <button class="btn btn-mini" id="selRotL">⟲ 15°</button>
+          <button class="btn btn-mini" id="selRotR">⟳ 15°</button>
+          <button class="btn btn-mini" id="selClone">Çoğalt</button>
+          <button class="btn btn-mini btn-danger" id="selDelete">Sil</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2 class="panel-title">ÖLÇÜM</h2>
+      <div class="stats" id="stats">
+        <div class="stat"><span>Parça</span><b id="stParts">0</b></div>
+        <div class="stat"><span>Devrilen domino</span><b id="stDomino">0</b></div>
+        <div class="stat"><span>Çarpışma</span><b id="stHits">0</b></div>
+        <div class="stat"><span>Sim. süresi</span><b id="stTime">0.0 s</b></div>
+      </div>
+      <p class="engine-note" id="engineNote">Fizik: matter.js 0.20.0 (MIT) · sabit 60 Hz adım</p>
+    </section>
+  </aside>
+</div>
+
+<div class="modal" id="modal" hidden>
+  <div class="modal-card">
+    <header class="modal-head">
+      <h2 id="modalTitle">Başlık</h2>
+      <button class="modal-x" id="modalX" aria-label="Kapat">✕</button>
+    </header>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script src="vendor/matter.min.js"></script>
+<script src="js/physics.js"></script>
+<script src="js/levels.js"></script>
+<script src="js/renderer.js"></script>
+<script src="js/ui.js"></script>
+</body>
+</html>
