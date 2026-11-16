@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Numex Paper World — Kâğıt Dünyası Stüdyosu</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="uygulama">
+
+  <header class="ustbar">
+    <div class="marka">
+      <span class="marka-ikon" aria-hidden="true">
+        <svg viewBox="0 0 40 40" width="34" height="34">
+          <path d="M8 6h18l10 10v18H8Z" fill="#ffd76a"/>
+          <path d="M26 6l10 10H26Z" fill="#ffb3d1"/>
+          <path d="M14 22h14M14 27h10" stroke="#5a6472" stroke-width="2" stroke-linecap="round" opacity=".6"/>
+        </svg>
+      </span>
+      <div class="marka-yazi">
+        <h1>Numex <em>Paper World</em></h1>
+        <p>Kâğıt dünyanı kes, boya, yaşat</p>
+      </div>
+    </div>
+
+    <nav class="atmosferler" id="atmosferler" aria-label="Hazır atmosferler"></nav>
+
+    <div class="ust-eylemler">
+      <button id="btn-geri" class="ikon-btn" title="Geri al (Ctrl+Z)" aria-label="Geri al">↶</button>
+      <button id="btn-yinele" class="ikon-btn" title="Yinele (Ctrl+Shift+Z)" aria-label="Yinele">↷</button>
+      <span class="ayrac"></span>
+      <button id="btn-kaydet" class="kagit-btn" title="Projeyi JSON olarak indir">JSON kaydet</button>
+      <button id="btn-yukle" class="kagit-btn" title="JSON proje yükle">Yükle</button>
+      <button id="btn-png" class="kagit-btn birincil" title="Yüksek çözünürlüklü PNG">PNG</button>
+      <button id="btn-svg" class="kagit-btn" title="Vektör SVG dışa aktar">SVG</button>
+      <input type="file" id="dosya-girdi" accept="application/json,.json" hidden>
+    </div>
+  </header>
+
+  <div class="govde">
+
+    <aside class="panel palet-panel" id="palet-panel">
+      <div class="panel-baslik">
+        <h2>Kâğıt Kütüphanesi</h2>
+        <span class="rozet" id="palet-sayaci">26</span>
+      </div>
+      <div class="palet-filtre" id="palet-filtre"></div>
+      <div class="palet-izgara" id="palet-izgara"></div>
+      <div class="panel-dip">
+        <span class="ipucu-mini">Nesneye tıkla → sahnenin ortasına eklenir</span>
+      </div>
+    </aside>
+
+    <section class="sahne-alani" id="sahne-alani">
+      <div class="dunya" id="dunya">
+        <div class="zemin" id="zemin"></div>
+        <div class="dekor" id="dekor"></div>
+        <div class="katman" id="kat-nesneler"></div>
+      </div>
+
+      <div class="zoom-bar">
+        <button id="zoom-cikar" class="mini-btn" title="Uzaklaştır">−</button>
+        <span id="zoom-yuzde">100%</span>
+        <button id="zoom-ekle" class="mini-btn" title="Yakınlaştır">+</button>
+        <button id="zoom-sigdir" class="mini-btn genis" title="Sahneyi sığdır">Sığdır</button>
+      </div>
+
+      <div class="durum-seridi" id="durum-seridi">
+        <span id="durum-metin">Hazır</span>
+        <span class="nokta"></span>
+        <span id="durum-nesne">0 nesne</span>
+      </div>
+    </section>
+
+    <aside class="panel ozellik-panel" id="ozellik-panel">
+      <div class="panel-baslik">
+        <h2 id="ozellik-baslik">Sahne</h2>
+        <span class="rozet" id="ozellik-rozet">ayar</span>
+      </div>
+
+      <!-- Sahne ayarları (seçim yokken) -->
+      <div id="sahne-ayarlari" class="ozellik-grup">
+        <p class="bolum-ad">Gökyüzü</p>
+        <div class="satir">
+          <label for="gok1">Üst renk</label>
+          <input type="color" id="gok1" value="#c9e9ff">
+        </div>
+        <div class="satir">
+          <label for="gok2">Alt renk</label>
+          <input type="color" id="gok2" value="#f2fbff">
+        </div>
+        <p class="bolum-ad">Zemin</p>
+        <div class="satir">
+          <label for="zemin-renk">Zemin rengi</label>
+          <input type="color" id="zemin-renk" value="#a9e2a0">
+        </div>
+        <div class="swatch-izgara" id="sahne-swatch"></div>
+        <div class="buton-izgara">
+          <button id="btn-temizle" class="kagit-btn tehlike">Sahneyi boşalt</button>
+          <button id="btn-sifirla" class="kagit-btn">Atmosferi geri yükle</button>
+        </div>
+        <p class="yardim">Boş bir alana basıp sürükleyerek sahneyi kaydırabilir, tekerlekle yakınlaşabilirsin.</p>
+      </div>
+
+      <!-- Nesne özellikleri (seçim varken) -->
+      <div id="nesne-ayarlari" class="ozellik-grup" hidden>
+        <div class="secili-kart">
+          <div class="secili-onizleme" id="secili-onizleme"></div>
+          <div class="secili-bilgi">
+            <strong id="secili-ad">Nesne</strong>
+            <span id="secili-konum">0, 0</span>
+          </div>
+        </div>
+
+        <p class="bolum-ad">Renk</p>
+        <div class="satir renk-satir">
+          <input type="color" id="nesne-renk" value="#ff9ec4">
+          <div class="swatch-izgara kucuk" id="nesne-swatch"></div>
+        </div>
+
+        <p class="bolum-ad">Boyut <span class="deger" id="deger-boyut">1.00×</span></p>
+        <input type="range" id="nesne-boyut" min="0.25" max="3" step="0.01" value="1">
+
+        <p class="bolum-ad">Döndürme <span class="deger" id="deger-aci">0°</span></p>
+        <input type="range" id="nesne-aci" min="-180" max="180" step="1" value="0">
+
+        <p class="bolum-ad">Katman</p>
+        <div class="buton-izgara uc">
+          <button id="btn-one" class="kagit-btn mini" title="Öne getir">▲ Öne</button>
+          <button id="btn-arkaya" class="kagit-btn mini" title="Arkaya gönder">▼ Arkaya</button>
+          <button id="btn-orta" class="kagit-btn mini" title="Öne getir (en üst)">⤒ En üst</button>
+        </div>
+
+        <div class="buton-izgara">
+          <button id="btn-cogalt" class="kagit-btn">Çoğalt</button>
+          <button id="btn-sil" class="kagit-btn tehlike">Sil</button>
+        </div>
+
+        <div class="buton-izgara">
+          <button id="btn-aynala" class="kagit-btn mini">⇄ Aynala</button>
+          <button id="btn-ortala" class="kagit-btn mini">⌖ Sahneye ortala</button>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- mobil sekmeler -->
+  <nav class="mobil-sekme" id="mobil-sekme">
+    <button data-hedef="palet-panel">Kâğıtlar</button>
+    <button data-hedef="ozellik-panel">Özellikler</button>
+    <button id="mobil-kapat">Kapat</button>
+  </nav>
+
+  <div class="bildirim" id="bildirim" role="status" aria-live="polite"></div>
+</div>
+
+<script src="kagitlar.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

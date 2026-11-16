@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Numex Floorplan — 2D/3D İç Mekân Planlama</title>
+<link rel="stylesheet" href="css/app.css">
+<link rel="icon" href="data:,">
+</head>
+<body data-theme="dark">
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-mark">NF</div>
+    <div class="brand-txt"><strong>NUMEX FLOORPLAN</strong><span>tasarım stüdyosu</span></div>
+  </div>
+
+  <div class="proj">
+    <label for="projName">PROJE</label>
+    <input id="projName" value="Yeni Proje" spellcheck="false" autocomplete="off">
+  </div>
+
+  <div class="seg" id="modeSeg">
+    <button data-mode="2d" class="active">2D Plan</button>
+    <button data-mode="3d">3D Görünüm</button>
+  </div>
+
+  <div class="top-actions">
+    <button id="btnUndo" class="icon" title="Geri al (Ctrl+Z)">&#8630;</button>
+    <button id="btnRedo" class="icon" title="Yinele (Ctrl+Y)">&#8631;</button>
+    <span class="sep"></span>
+    <button id="btnSave" class="primary">JSON Kaydet</button>
+    <button id="btnOpen">JSON Aç</button>
+    <div class="menu-wrap">
+      <button id="btnExport">Dışa Aktar &#9662;</button>
+      <div class="menu" id="exportMenu">
+        <button data-exp="svg">SVG — 2D plan</button>
+        <button data-exp="png">PNG — 2D plan</button>
+      </div>
+    </div>
+    <button id="btnNew" title="Yeni boş proje">Yeni</button>
+    <button id="btnExam" class="exam-btn" title="Bina sınavı: tahliye, çıkış, erişim, ışık, ıslak hacim">Bina Sınavı</button>
+    <button id="btnTheme" class="icon" title="Açık / koyu tema">&#9681;</button>
+  </div>
+</header>
+
+<main class="workspace">
+  <aside class="panel left">
+    <section class="block">
+      <h2>ARAÇLAR</h2>
+      <div class="tools" id="toolBox">
+        <button data-tool="select" class="tool active" title="Seç / taşı (V)"><span class="ic">&#9654;</span><b>Seç</b><i>V</i></button>
+        <button data-tool="wall" class="tool" title="Duvar çiz (W)"><span class="ic">&#9585;</span><b>Duvar</b><i>W</i></button>
+        <button data-tool="door" class="tool" title="Kapı ekle (D)"><span class="ic">&#9633;</span><b>Kapı</b><i>D</i></button>
+        <button data-tool="window" class="tool" title="Pencere ekle (P)"><span class="ic">&#9634;</span><b>Pencere</b><i>P</i></button>
+      </div>
+    </section>
+
+    <section class="block grow">
+      <h2>MOBİLYA KÜTÜPHANESİ</h2>
+      <div class="palette" id="palette"></div>
+      <p class="hint small">Bir mobilya seçip tuvale tıklayın. <kbd>R</kbd> döndürür, <kbd>Ctrl</kbd>+<kbd>D</kbd> çoğaltır, <kbd>Del</kbd> siler.</p>
+    </section>
+
+    <section class="block">
+      <h2>HAZIR PROJELER</h2>
+      <div class="samples" id="sampleBox"></div>
+    </section>
+  </aside>
+
+  <section class="stage" id="stage">
+    <canvas id="c2d"></canvas>
+    <canvas id="c3d"></canvas>
+    <div class="stage-tag" id="stageTag">2D PLAN</div>
+    <div class="zoombar">
+      <button id="zoomOut" title="Uzaklaş">&minus;</button>
+      <span id="zoomPct">100%</span>
+      <button id="zoomIn" title="Yakınlaş">+</button>
+      <button id="zoomFit" title="Sığdır (F)">Sığdır</button>
+    </div>
+    <div class="exam" id="examPanel" hidden>
+      <header class="exam-head">
+        <div><b>BİNA SINAVI</b><span>canlı ölçüm · 5 senaryo</span></div>
+        <button id="examClose" title="Kapat">&times;</button>
+      </header>
+      <div class="exam-body" id="examBody"></div>
+      <footer class="exam-foot">
+        <button id="examRerun">Yeniden ölç</button>
+        <label><input type="checkbox" id="examPaths" checked> tahliye yolları</label>
+      </footer>
+    </div>
+    <div class="toast" id="toast"></div>
+  </section>
+
+  <aside class="panel right" id="props"></aside>
+</main>
+
+<footer class="statusbar">
+  <span id="stCoord">x 0,00 · y 0,00</span>
+  <span id="stSnap">ızgaraya hizalı</span>
+  <span id="stRooms">0 oda</span>
+  <span id="stArea">0,00 m²</span>
+  <span class="spacer"></span>
+  <span id="stSave" class="save-ok">otomatik kayıt açık</span>
+  <span id="stMode">2D</span>
+</footer>
+
+<input type="file" id="fileOpen" accept="application/json,.json" hidden>
+
+<script src="vendor/three.min.js"></script>
+<script src="js/core.js"></script>
+<script src="js/scenario.js"></script>
+<script src="js/editor2d.js"></script>
+<script src="js/view3d.js"></script>
+<script src="js/exam.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

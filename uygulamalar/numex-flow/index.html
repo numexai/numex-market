@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="tr" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Numex Flow — Görsel Otomasyon Stüdyosu</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">◈</span>
+      <span class="bname">NUMEX <b>FLOW</b></span>
+      <span class="tag">Görsel Otomasyon Stüdyosu</span>
+    </div>
+
+    <div class="tools">
+      <button id="btn-run" class="btn primary" title="Çalıştır (Ctrl+Enter)"><span class="ic">▶</span> Çalıştır</button>
+      <button id="btn-stop" class="btn danger" disabled title="Durdur (Esc)"><span class="ic">■</span> Durdur</button>
+
+      <span class="divider"></span>
+
+      <select id="example-select" class="btn ghost select" title="Hazır örnekler">
+        <option value="">Örnek yükle…</option>
+        <option value="gpa">Not ortalaması &amp; başarı</option>
+        <option value="order">Sipariş toplamı &amp; indirim</option>
+        <option value="filter">Veri filtreleme &amp; rapor</option>
+        <option value="merge">IF/ELSE birleşen dallar</option>
+        <option value="blank">Boş tuval</option>
+      </select>
+
+      <button id="btn-save" class="btn" title="JSON olarak kaydet (Ctrl+S)">💾 Kaydet</button>
+      <button id="btn-load" class="btn" title="JSON dosyasından yükle">📂 Yükle</button>
+      <button id="btn-svg" class="btn" title="SVG dışa aktar">SVG</button>
+      <button id="btn-png" class="btn" title="PNG dışa aktar">PNG</button>
+
+      <span class="divider"></span>
+
+      <button id="btn-undo" class="btn icon" title="Geri al (Ctrl+Z)">↶</button>
+      <button id="btn-redo" class="btn icon" title="Yinele (Ctrl+Y)">↷</button>
+      <button id="btn-theme" class="btn icon" title="Tema değiştir">🌙</button>
+      <button id="btn-clear" class="btn icon" title="Tuvali temizle">🗑</button>
+    </div>
+  </header>
+
+  <main class="workspace">
+
+    <aside class="palette" id="palette">
+      <div class="ptitle">Düğümler</div>
+      <div id="palette-list" class="plist"></div>
+      <div class="pfoot">
+        <div class="tip"><b>İpucu:</b> Porttan sürükle → bağla.<br>Tel üstüne tıkla → seç, <kbd>Del</kbd> ile kopar.</div>
+      </div>
+    </aside>
+
+    <section class="stage" id="stage">
+      <div class="world" id="world">
+        <svg id="wires" class="wires" xmlns="http://www.w3.org/2000/svg"></svg>
+        <div class="nodes" id="nodes"></div>
+      </div>
+
+      <div class="zoombar">
+        <button id="zoom-out" class="btn icon" title="Uzaklaştır">−</button>
+        <span id="zoom-label">100%</span>
+        <button id="zoom-in" class="btn icon" title="Yakınlaştır">+</button>
+        <button id="zoom-fit" class="btn icon" title="Akışı sığdır">⌂</button>
+      </div>
+
+      <div class="hint" id="hint">Düğüm ekle → porttan sürükleyip bağla → <b>▶ Çalıştır</b></div>
+    </section>
+
+    <aside class="inspector" id="inspector"></aside>
+
+  </main>
+
+  <footer class="logpanel" id="logpanel">
+    <div class="loghead">
+      <strong>Canlı Çalışma Kayıtları</strong>
+      <span id="runstat" class="runstat">hazır</span>
+      <span class="spacer"></span>
+      <button id="btn-clearlog" class="btn tiny">Temizle</button>
+      <button id="btn-togglelog" class="btn tiny" title="Paneli daralt">−</button>
+    </div>
+    <div class="logs" id="logs"></div>
+  </footer>
+
+</div>
+
+<input type="file" id="file-input" accept=".json,application/json" hidden>
+<script src="app.js"></script>
+</body>
+</html>

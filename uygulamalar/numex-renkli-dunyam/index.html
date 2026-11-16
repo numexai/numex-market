@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Numex Little Planet — Kendi Küçük Dünyanı Tasarla</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<canvas id="scene" aria-label="Üç boyutlu gezegen sahnesi"></canvas>
+
+<header id="topbar">
+  <div class="brand">
+    <span class="logo" aria-hidden="true">🪐</span>
+    <div class="brand-text">
+      <h1>Numex Little Planet</h1>
+      <p>Kendi minyatür dünyanı tasarla</p>
+    </div>
+  </div>
+
+  <label class="namefield">
+    <span>Gezegen adı</span>
+    <input id="planetName" type="text" maxlength="28" value="Bahar Gezegeni" autocomplete="off">
+  </label>
+
+  <div class="topactions">
+    <button id="btnRotate" class="chip" type="button" title="Gezegenin kendi dönüşünü duraklat">⏸ Dönüşü durdur</button>
+    <button id="btnNight" class="chip" type="button" title="Gece ve gündüz arasında geçiş yap">🌙 Gece</button>
+    <button id="btnPng" class="chip" type="button" title="Gezegeni PNG görseli olarak indir">🖼 PNG indir</button>
+    <button id="btnSave" class="chip" type="button" title="Dünyayı JSON dosyası olarak indir">💾 Kaydet</button>
+    <button id="btnLoad" class="chip" type="button" title="JSON dosyasından dünya yükle">📂 Yükle</button>
+    <button id="btnNew" class="chip chip-soft" type="button" title="Boş yeni bir gezegen aç">✨ Yeni</button>
+    <button id="btnReset" class="chip chip-soft" type="button" title="Her şeyi başlangıç durumuna döndür">↺ Sıfırla</button>
+    <input type="file" id="fileInput" accept=".json,application/json" hidden>
+  </div>
+</header>
+
+<aside id="palette">
+  <div class="palette-head">
+    <h2>Nesne kütüphanesi</h2>
+    <label class="switch" title="Kapalıyken gezegene tıklamak yeni nesne eklemez">
+      <input type="checkbox" id="placeToggle" checked>
+      <span>Yerleştir</span>
+    </label>
+  </div>
+  <p class="hint">Bir nesne seç, sonra gezegene tıkla.</p>
+  <div id="paletteGrid" class="grid"></div>
+  <div class="palette-foot"><span id="objCount">0 / 0 nesne</span></div>
+</aside>
+
+<aside id="side">
+  <section class="card">
+    <h2>Hazır dünyalar</h2>
+    <div id="worldList" class="worlds"></div>
+  </section>
+
+  <section class="card">
+    <h2>Gezegen görünümü</h2>
+    <div class="row">
+      <span class="row-label">Yüzey</span>
+      <div id="surfaceSwatches" class="swatches"></div>
+    </div>
+    <div class="row">
+      <span class="row-label">Atmosfer</span>
+      <div id="atmoSwatches" class="swatches"></div>
+    </div>
+  </section>
+
+  <section class="card" id="selCard" hidden>
+    <h2>Seçili nesne</h2>
+    <div class="selrow">
+      <span id="selName" class="selname">—</span>
+      <button id="btnDel" class="danger" type="button">Sil</button>
+    </div>
+    <label class="row sliderrow">
+      <span class="row-label">Boyut</span>
+      <input id="scaleRange" type="range" min="50" max="200" step="5" value="100">
+      <output id="scaleOut" class="out">%100</output>
+    </label>
+    <div class="row">
+      <span class="row-label">Kendi ekseninde döndür</span>
+      <div class="btnrow">
+        <button id="btnRotL" class="icon" type="button" title="15° sola döndür">↺</button>
+        <button id="btnRotR" class="icon" type="button" title="15° sağa döndür">↻</button>
+      </div>
+    </div>
+  </section>
+</aside>
+
+<footer id="helpbar">
+  <span><b>Sürükle</b> gezegeni döndür</span>
+  <span><b>Tekerlek</b> yakınlaş / uzaklaş</span>
+  <span><b>Tıkla</b> nesne yerleştir ya da seç</span>
+</footer>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<div id="gate" hidden>
+  <div class="gate-box">
+    <div class="gate-icon">🛰️</div>
+    <h2>3B görüntü başlatılamadı</h2>
+    <p id="gateMsg">Tarayıcın WebGL desteğini açamadı. Sayfayı yenilemeyi, donanım hızlandırmayı açmayı ya da güncel bir tarayıcı kullanmayı dene.</p>
+  </div>
+</div>
+
+<div id="loading">
+  <div class="loading-planet"></div>
+  <p>Gezegen hazırlanıyor…</p>
+</div>
+
+<script src="vendor/three.min.js"></script>
+<script src="js/objects.js"></script>
+<script src="js/worlds.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

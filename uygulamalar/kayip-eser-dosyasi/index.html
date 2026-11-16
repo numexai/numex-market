@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kayıp Eser Dosyası — Sarnıç Müzesi</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="oda-isik" aria-hidden="true"></div>
+<div class="doku" aria-hidden="true"></div>
+
+<header class="ustbar">
+  <div class="kimlik">
+    <span class="dosya-no">DOSYA NO. <b id="dosyaNo">114</b></span>
+    <h1 id="vakaBaslik">KAYIP ESER DOSYASI</h1>
+    <p class="altbaslik"><span id="muzeAdi">Sarnıç Müzesi</span> · <span id="eserAdi">Yıldız Küresi</span></p>
+  </div>
+  <div class="gostergeler">
+    <div class="gosterge"><span>Vaka saati</span><strong id="hudSaat">21:30</strong></div>
+    <div class="gosterge"><span>Çıkarım</span><strong id="hudCikarim">0 / 8</strong></div>
+    <div class="gosterge"><span>Geçen süre</span><strong id="hudSure">00:00</strong></div>
+    <button class="dugme sessiz" id="btnSes" type="button" title="Sesleri aç/kapat">Ses: açık</button>
+    <button class="dugme sessiz" id="btnSifirla" type="button">Dosyayı sıfırla</button>
+  </div>
+</header>
+
+<nav class="sekmeler" aria-label="Dosya bölümleri">
+  <button class="sekme aktif" data-gorunum="masa" type="button"><i>01</i> Delil Masası</button>
+  <button class="sekme" data-gorunum="pano" type="button"><i>02</i> Mantar Pano</button>
+  <button class="sekme" data-gorunum="ifade" type="button"><i>03</i> Şüpheli ve Tanık</button>
+  <button class="sekme" data-gorunum="zaman" type="button"><i>04</i> Zaman Çizelgesi</button>
+  <button class="sekme" data-gorunum="suclama" type="button"><i>05</i> Suçlama</button>
+</nav>
+
+<main>
+  <!-- 01 DELİL MASASI -->
+  <section class="gorunum aktif" id="gorunum-masa">
+    <div class="masa-ustu">
+      <div class="masa-baslik">
+        <h2>Delil masası</h2>
+        <p>Her dosyayı aç, bulguları oku. İncelediğin delili panoya asabilirsin.</p>
+      </div>
+      <div class="masa-arac">
+        <span class="sayac" id="sayacIncelenen">0 / 12 incelendi</span>
+        <button class="dugme" id="btnHepsi">Tümünü panoya as</button>
+      </div>
+    </div>
+    <div class="delil-izgara" id="delilIzgara"></div>
+  </section>
+
+  <!-- 02 MANTAR PANO -->
+  <section class="gorunum" id="gorunum-pano">
+    <div class="pano-ust">
+      <div>
+        <h2>Mantar pano</h2>
+        <p>Kartları sürükle. <b>İp bağla</b> modunda iki karta sırayla dokun; doğru çiftler çıkarım açar.</p>
+      </div>
+      <div class="pano-arac">
+        <button class="dugme aktif" id="btnModTasi" type="button">Taşı</button>
+        <button class="dugme" id="btnModIp" type="button">İp bağla</button>
+        <button class="dugme" id="btnPanoyuBosalt" type="button">Panoyu boşalt</button>
+      </div>
+    </div>
+    <div class="pano-govde">
+      <div class="mantar" id="mantar">
+        <svg class="ipler" id="ipler" aria-hidden="true"></svg>
+        <p class="pano-bos" id="panoBos">Pano boş. Delil masasından kart as ya da şüpheli ve tanık ifadelerini buraya taşı.</p>
+      </div>
+      <aside class="cikarim-kutusu">
+        <h3>Çıkarımlar</h3>
+        <ul id="cikarimListe"></ul>
+      </aside>
+    </div>
+  </section>
+
+  <!-- 03 ŞÜPHELİ VE TANIK -->
+  <section class="gorunum" id="gorunum-ifade">
+    <div class="ifade-ust">
+      <h2>Şüpheli ve tanık dosyaları</h2>
+      <p>Şüpheli ifadelerini delillerle karşılaştır. İfade kartlarını panoya asıp delile bağlayabilirsin.</p>
+    </div>
+    <h3 class="ara-baslik">Şüpheliler</h3>
+    <div class="supheli-izgara" id="supheliIzgara"></div>
+    <h3 class="ara-baslik">Tanık ifadeleri</h3>
+    <div class="tanik-izgara" id="tanikIzgara"></div>
+  </section>
+
+  <!-- 04 ZAMAN -->
+  <section class="gorunum" id="gorunum-zaman">
+    <div class="zaman-ust">
+      <h2>Zaman çizelgesi · 14 Kasım</h2>
+      <p>Çıkarım açtıkça çizelgedeki boşluklar dolar. Kilitli satırlar henüz kanıtlanmamış olaylardır.</p>
+    </div>
+    <ol class="zaman-cizgi" id="zamanCizgi"></ol>
+  </section>
+
+  <!-- 05 SUÇLAMA -->
+  <section class="gorunum" id="gorunum-suclama">
+    <div class="suclama-ust">
+      <h2>Suçlama dosyası</h2>
+      <p>Bir şüpheli seç, en fazla üç delil ekle. Dosyayı savcılığa gönderdiğinde geri dönüşü yoktur; ancak dosyayı yeniden açabilirsin.</p>
+      <div class="ilerleme"><div id="hazirlikCubuk"></div></div>
+      <p class="hazirlik-not" id="hazirlikNot"></p>
+    </div>
+    <div class="suclama-govde">
+      <div>
+        <h3 class="ara-baslik">Şüpheli</h3>
+        <div class="supheli-secim" id="supheliSecim"></div>
+      </div>
+      <div>
+        <h3 class="ara-baslik">Dayanak deliller <span id="delilSecimSayaci">(0 / 3)</span></h3>
+        <div class="delil-secim" id="delilSecim"></div>
+        <button class="dugme buyuk" id="btnSucla" type="button">Suçlamayı savcılığa gönder</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- DELİL DOSYASI -->
+<div class="perde" id="perde" hidden>
+  <article class="dosya-kagidi" id="dosyaKagidi" role="dialog" aria-modal="true" aria-labelledby="dkBaslik">
+    <button class="kapat" id="btnKapat" type="button" aria-label="Kapat">×</button>
+    <div class="dk-sol">
+      <div class="foto-plaka" id="dkFoto"></div>
+      <div class="dk-meta" id="dkMeta"></div>
+    </div>
+    <div class="dk-sag">
+      <span class="dk-etiket" id="dkEtiket"></span>
+      <h3 id="dkBaslik"></h3>
+      <p class="dk-ozet" id="dkOzet"></p>
+      <ul class="bulgu-listesi" id="dkBulgular"></ul>
+      <p class="dk-dikkat" id="dkDikkat"></p>
+      <div class="dk-dugmeler">
+        <button class="dugme" id="btnIncele" type="button">İncelemeyi tamamla</button>
+        <button class="dugme buyuk" id="btnAs" type="button">Panoya as</button>
+      </div>
+    </div>
+  </article>
+</div>
+
+<!-- SONUÇ -->
+<div class="perde" id="sonucPerde" hidden>
+  <article class="sonuc-kagidi" role="dialog" aria-modal="true" aria-labelledby="sonucBaslik">
+    <span class="sonuc-damga" id="sonucDamga">DOSYA</span>
+    <h2 id="sonucBaslik"></h2>
+    <div id="sonucMetin"></div>
+    <div class="sonuc-istatistik" id="sonucIstatistik"></div>
+    <div class="dk-dugmeler">
+      <button class="dugme" id="btnSonucKapat" type="button">Dosyaya dön</button>
+      <button class="dugme buyuk" id="btnYeniden" type="button">Vakayı yeniden oyna</button>
+    </div>
+  </article>
+</div>
+
+<div class="bildirim" id="bildirim" role="status" aria-live="polite"></div>
+
+<script src="data.js"></script>
+<script src="game.js"></script>
+</body>
+</html>

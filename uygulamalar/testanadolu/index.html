@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="Anadolu Atölyesi — tarayıcıda çalışan, tamamen vektör tabanlı Anadolu geometrik desen tasarım stüdyosu.">
+<title>Anadolu Atölyesi · Numex Geometrik Desen Stüdyosu</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+
+  <header class="topbar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true">
+        <path d="M20 3 24.5 12 34 7.5 29 17 38 20 29 23 34 32.5 24.5 28 20 37 15.5 28 6 32.5 11 23 2 20 11 17 6 7.5 15.5 12Z" fill="none" stroke="currentColor" stroke-width="1.4"/>
+        <rect x="13.5" y="13.5" width="13" height="13" transform="rotate(45 20 20)" fill="none" stroke="currentColor" stroke-width="1"/>
+      </svg>
+      <div class="brand-text">
+        <strong>Anadolu Atölyesi</strong>
+        <span>Numex · geometrik desen stüdyosu</span>
+      </div>
+    </div>
+
+    <div class="topbar-group" role="group" aria-label="Geçmiş">
+      <button class="btn" id="btnUndo" type="button" title="Geri al (Ctrl+Z)">Geri Al</button>
+      <button class="btn" id="btnRedo" type="button" title="Yinele (Ctrl+Y)">Yinele</button>
+      <button class="btn" id="btnReset" type="button" title="Boş kompozisyon">Sıfırla</button>
+    </div>
+
+    <div class="topbar-group" role="group" aria-label="Proje">
+      <button class="btn" id="btnSamples" type="button">Örnekler</button>
+      <button class="btn" id="btnOpen" type="button">Aç</button>
+      <button class="btn" id="btnSave" type="button">Kaydet</button>
+    </div>
+
+    <div class="topbar-group" role="group" aria-label="Dışa aktarma">
+      <button class="btn primary" id="btnExportSvg" type="button">SVG</button>
+      <button class="btn primary" id="btnExportPng" type="button">PNG</button>
+      <button class="btn" id="btnExportJson" type="button">JSON</button>
+    </div>
+    <input type="file" id="fileInput" accept=".json,application/json" hidden>
+  </header>
+
+  <main class="workspace">
+    <section class="stage-area" aria-label="Çalışma yüzeyi">
+      <div class="stage-head">
+        <h1 id="docTitle" contenteditable="true" spellcheck="false">Adsız kompozisyon</h1>
+        <span class="meta" id="stageMeta">1000 × 1000</span>
+      </div>
+
+      <div class="canvas-holder" id="canvasHolder">
+        <svg id="stage" class="stage-svg" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg" aria-label="Tasarım tuvali">
+          <defs id="stageDefs"></defs>
+          <rect id="bgRect" x="0" y="0" width="1000" height="1000" fill="#f6f3ea"></rect>
+          <g id="artwork"></g>
+          <g id="overlay" class="overlay" pointer-events="none"></g>
+        </svg>
+        <p class="canvas-hint" id="canvasHint">Boş tuval · panelden bir motif ekleyin</p>
+      </div>
+
+      <div class="stage-foot">
+        <div class="zoombox">
+          <button class="btn tiny" id="btnZoomOut" type="button" aria-label="Uzaklaştır">−</button>
+          <span id="zoomLabel">%100</span>
+          <button class="btn tiny" id="btnZoomIn" type="button" aria-label="Yakınlaştır">+</button>
+          <button class="btn tiny" id="btnZoomFit" type="button">Sığdır</button>
+        </div>
+        <p class="status" id="status" role="status">Hazır.</p>
+      </div>
+    </section>
+
+    <aside class="panel" id="panel" aria-label="Düzenleme paneli">
+      <div class="tabs" role="tablist" aria-label="Panel bölümleri">
+        <button class="tab is-active" role="tab" aria-selected="true" aria-controls="tab-desen" id="tabBtn-desen" type="button">Desen</button>
+        <button class="tab" role="tab" aria-selected="false" aria-controls="tab-katman" id="tabBtn-katman" type="button">Katmanlar</button>
+        <button class="tab" role="tab" aria-selected="false" aria-controls="tab-belge" id="tabBtn-belge" type="button">Belge</button>
+      </div>
+      <div class="panel-body" id="panelBody"></div>
+    </aside>
+  </main>
+</div>
+
+<script src="js/patterns.js"></script>
+<script src="js/samples.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

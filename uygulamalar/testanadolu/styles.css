@@ -1,0 +1,434 @@
+/* Anadolu Atölyesi — görsel kimlik
+   Palet: koyu lacivert arayüz, kırık beyaz tuval, turkuaz ve Osmanlı altını vurgular. */
+
+:root {
+  --navy-900: #08121f;
+  --navy-800: #0c1a2b;
+  --navy-700: #122438;
+  --navy-600: #1a3049;
+  --navy-500: #24405e;
+  --line: rgba(224, 236, 245, 0.12);
+  --line-strong: rgba(224, 236, 245, 0.22);
+  --paper: #f6f3ea;
+  --ink: #132234;
+  --ink-soft: #4a5b6d;
+  --text: #e8eef4;
+  --text-dim: #9fb2c4;
+  --turkuaz: #2fb6b0;
+  --turkuaz-soft: rgba(47, 182, 176, 0.16);
+  --altin: #c9a227;
+  --altin-soft: rgba(201, 162, 39, 0.16);
+  --danger: #d1594f;
+  --radius: 10px;
+  --radius-sm: 7px;
+  --shadow: 0 18px 44px rgba(3, 9, 17, 0.45);
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+  --sans: "Segoe UI", Inter, system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: 14px;
+  color: var(--text);
+  background:
+    radial-gradient(1200px 640px at 12% -10%, #16324c 0%, transparent 62%),
+    radial-gradient(900px 520px at 108% 12%, #123a3c 0%, transparent 58%),
+    var(--navy-900);
+  -webkit-font-smoothing: antialiased;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  min-height: 100vh;
+}
+
+/* ---------- Üst çubuk ---------- */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  padding: 10px 18px;
+  background: linear-gradient(180deg, rgba(18, 36, 56, 0.96), rgba(10, 22, 36, 0.96));
+  border-bottom: 1px solid var(--line);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.03) inset;
+}
+
+.brand { display: flex; align-items: center; gap: 10px; margin-right: 4px; }
+.brand-mark { width: 34px; height: 34px; color: var(--altin); flex: 0 0 auto; }
+.brand-text { display: flex; flex-direction: column; line-height: 1.15; }
+.brand-text strong {
+  font-family: var(--serif);
+  font-size: 16px;
+  letter-spacing: 0.02em;
+  color: #f3f7fa;
+}
+.brand-text span { font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-dim); }
+
+.topbar-group { display: flex; gap: 6px; align-items: center; }
+.topbar-group:last-of-type { margin-left: auto; }
+
+/* ---------- Düğmeler ---------- */
+.btn {
+  font: inherit;
+  font-size: 12.5px;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 7px 12px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, transform 0.08s ease;
+  white-space: nowrap;
+}
+.btn:hover { background: rgba(47, 182, 176, 0.14); border-color: rgba(47, 182, 176, 0.45); }
+.btn:active { transform: translateY(1px); }
+.btn:focus-visible { outline: 2px solid var(--turkuaz); outline-offset: 2px; }
+.btn[disabled] { opacity: 0.38; cursor: not-allowed; }
+.btn.primary {
+  background: linear-gradient(180deg, rgba(201, 162, 39, 0.24), rgba(201, 162, 39, 0.12));
+  border-color: rgba(201, 162, 39, 0.55);
+  color: #f6e9c4;
+  font-weight: 600;
+}
+.btn.primary:hover { background: rgba(201, 162, 39, 0.34); }
+.btn.ghost { background: transparent; }
+.btn.tiny { padding: 4px 9px; font-size: 11.5px; }
+.btn.danger:hover { border-color: rgba(209, 89, 79, 0.6); background: rgba(209, 89, 79, 0.18); }
+
+/* ---------- Çalışma alanı ---------- */
+.workspace {
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 336px;
+  min-height: 0;
+}
+
+.stage-area {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  padding: 14px 18px 10px;
+  gap: 10px;
+}
+
+.stage-head { display: flex; align-items: baseline; gap: 12px; }
+.stage-head h1 {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 19px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: #f2f6f9;
+  padding: 2px 6px;
+  border-radius: 5px;
+  border: 1px solid transparent;
+  outline: none;
+}
+.stage-head h1:hover { border-color: var(--line); }
+.stage-head h1:focus { border-color: rgba(47, 182, 176, 0.55); background: rgba(47, 182, 176, 0.08); }
+.stage-head .meta { font-size: 11.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); }
+
+.canvas-holder {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  padding: 10px;
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0)),
+    rgba(4, 12, 22, 0.5);
+  border: 1px solid var(--line);
+  overflow: hidden;
+  touch-action: none;
+}
+
+.stage-svg {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+  border-radius: 4px;
+  box-shadow: var(--shadow), 0 0 0 1px rgba(0, 0, 0, 0.28);
+  /* NUMEX-DÜZELTME (2026-11-16): SVG öğesinin CSS arka planı kırık beyaz olduğu için, dikey/yatay tuvalde viewBox dışında kalan harf kutusu (letterbox) alanları beyaz şerit olarak görünüyordu. Arka plan şeffaf yapıldı; kâğıt rengi zaten bgRect dolgusundan geliyor. */
+  /* Tuvalin kâğıt rengi bgRect'ten gelir; buradaki harf kutusu koyu zeminde kalmalı. */
+  background: transparent;
+  cursor: default;
+}
+.stage-svg.is-grabbing { cursor: grabbing; }
+.stage-svg .hit { cursor: move; }
+
+.canvas-hint {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  font-size: 11.5px;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  background: rgba(8, 18, 31, 0.72);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 12px;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.canvas-hint[hidden] { display: none; }
+
+.stage-foot { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+.zoombox { display: flex; align-items: center; gap: 6px; }
+#zoomLabel { font-family: var(--mono); font-size: 11.5px; color: var(--text-dim); min-width: 46px; text-align: center; }
+.status {
+  margin: 0;
+  font-size: 11.5px;
+  color: var(--text-dim);
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.status.warn { color: var(--altin); }
+
+/* ---------- Panel ---------- */
+.panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: linear-gradient(180deg, rgba(18, 36, 56, 0.9), rgba(9, 20, 33, 0.98));
+  border-left: 1px solid var(--line);
+}
+
+.tabs { display: flex; gap: 2px; padding: 10px 10px 0; border-bottom: 1px solid var(--line); }
+.tab {
+  flex: 1 1 0;
+  font: inherit;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  padding: 9px 4px;
+  cursor: pointer;
+}
+.tab:hover { color: var(--text); }
+.tab.is-active { color: #f4e8c6; border-bottom-color: var(--altin); }
+.tab:focus-visible { outline: 2px solid var(--turkuaz); outline-offset: -2px; }
+
+.panel-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 14px 14px 26px; }
+.panel-body::-webkit-scrollbar { width: 9px; }
+.panel-body::-webkit-scrollbar-thumb { background: rgba(159, 178, 196, 0.28); border-radius: 9px; }
+
+.section { margin-bottom: 18px; }
+.section > h2 {
+  margin: 0 0 9px;
+  font-family: var(--serif);
+  font-size: 12.5px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--altin);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section > h2::after { content: ""; flex: 1 1 auto; height: 1px; background: var(--line); border-right: 2px solid var(--altin); }
+
+.field { margin-bottom: 11px; }
+.field > label { display: flex; justify-content: space-between; gap: 8px; font-size: 11.5px; color: var(--text-dim); margin-bottom: 5px; }
+.field > label b { font-family: var(--mono); font-weight: 500; color: var(--text); }
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 3px;
+  border-radius: 3px;
+  background: rgba(159, 178, 196, 0.3);
+  outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--turkuaz);
+  border: 2px solid var(--navy-900);
+  cursor: pointer;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--turkuaz); border: 2px solid var(--navy-900); cursor: pointer;
+}
+
+select, input[type="number"], input[type="text"] {
+  width: 100%;
+  font: inherit;
+  font-size: 12.5px;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  padding: 7px 9px;
+}
+select:focus, input:focus { outline: 2px solid rgba(47, 182, 176, 0.5); outline-offset: 1px; }
+
+.seg { display: flex; gap: 3px; }
+.seg button {
+  flex: 1 1 0;
+  font: inherit;
+  font-size: 12px;
+  color: var(--text-dim);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 7px 2px;
+  cursor: pointer;
+}
+.seg button:hover { color: var(--text); border-color: var(--line-strong); }
+.seg button.is-active {
+  color: #08131f;
+  background: linear-gradient(180deg, #3fd0c9, var(--turkuaz));
+  border-color: transparent;
+  font-weight: 600;
+}
+
+/* ---------- Palet ---------- */
+.swatches { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.swatch {
+  position: relative;
+  height: 26px;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+  padding: 0;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+}
+.swatch[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--turkuaz), 0 0 0 3px rgba(0, 0, 0, 0.5); }
+.palette-row { display: flex; gap: 6px; margin-bottom: 8px; }
+.palette-row .btn { flex: 1 1 0; }
+
+/* ---------- Katman listesi ---------- */
+.layer-list { display: flex; flex-direction: column; gap: 5px; margin: 0; padding: 0; list-style: none; }
+.layer-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+}
+.layer-item:hover { border-color: var(--line-strong); background: rgba(255, 255, 255, 0.06); }
+.layer-item.is-selected { border-color: var(--turkuaz); background: var(--turkuaz-soft); }
+.layer-item .dot { width: 12px; height: 12px; border-radius: 3px; border: 1px solid rgba(0, 0, 0, 0.45); flex: 0 0 auto; }
+.layer-item .name { flex: 1 1 auto; font-size: 12.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.layer-item .type { font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim); }
+.layer-item .mini {
+  font: inherit;
+  font-size: 13px;
+  line-height: 1;
+  color: var(--text-dim);
+  background: transparent;
+  border: 0;
+  padding: 2px 4px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+.layer-item .mini:hover { color: var(--text); background: rgba(255, 255, 255, 0.1); }
+.layer-item.is-hidden { opacity: 0.45; }
+.empty-note { font-size: 12px; color: var(--text-dim); line-height: 1.5; margin: 0; }
+
+.chip-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip {
+  font: inherit;
+  font-size: 11.5px;
+  color: var(--text-dim);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+.chip:hover { color: var(--text); border-color: rgba(47, 182, 176, 0.5); }
+.chip.is-active { color: #08131f; background: var(--turkuaz); border-color: transparent; }
+
+.help { font-size: 11.5px; line-height: 1.55; color: var(--text-dim); margin: 6px 0 0; }
+.help b { color: var(--text); font-weight: 600; }
+
+/* ---------- Modal ---------- */
+.modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  place-items: center;
+  padding: 20px;
+  background: rgba(4, 10, 18, 0.72);
+  backdrop-filter: blur(3px);
+  z-index: 50;
+}
+.modal.is-open { display: grid; }
+.modal-box {
+  width: min(880px, 100%);
+  max-height: 86vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #14263a, #0b1726);
+  border: 1px solid var(--line-strong);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.modal-head { display: flex; align-items: center; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--line); }
+.modal-head h2 { margin: 0; font-family: var(--serif); font-size: 16px; font-weight: 500; color: #f4e8c6; }
+.modal-head .btn { margin-left: auto; }
+.modal-body { padding: 16px 18px 20px; overflow-y: auto; }
+.sample-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+.sample-card {
+  text-align: left;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 8px;
+  cursor: pointer;
+  color: var(--text);
+  font: inherit;
+}
+.sample-card:hover { border-color: var(--turkuaz); background: var(--turkuaz-soft); }
+.sample-card svg { width: 100%; height: auto; display: block; border-radius: 6px; background: var(--paper); }
+.sample-card strong { display: block; font-size: 12.5px; margin: 8px 2px 2px; }
+.sample-card span { display: block; font-size: 11px; color: var(--text-dim); margin: 0 2px; line-height: 1.4; }
+
+/* ---------- Duyarlı: mobilde panel alttan açılır ---------- */
+@media (max-width: 900px) {
+  .workspace { grid-template-columns: 1fr; grid-template-rows: minmax(0, 1fr) auto; }
+  .stage-area { padding: 10px 10px 6px; }
+  .panel { border-left: 0; border-top: 1px solid var(--line-strong); max-height: 46vh; }
+  .panel-body { padding-bottom: 18px; }
+  .topbar { gap: 10px; padding: 8px 10px; }
+  .topbar-group:last-of-type { margin-left: 0; }
+  .brand-text span { display: none; }
+  .stage-head h1 { font-size: 16px; }
+  .status { max-width: 45vw; }
+}
+
+@media (max-width: 560px) {
+  .brand-text strong { font-size: 14px; }
+  .btn { padding: 6px 9px; font-size: 12px; }
+  .topbar-group { flex-wrap: wrap; }
+}
+

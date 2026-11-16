@@ -1,13 +1,13 @@
 <div align="center">
 
-<img src="gorseller/banner.png" alt="Numex Market — 77 açık kaynak uygulama" width="100%">
+<img src="gorseller/banner.png" alt="Numex Market — 84 açık kaynak uygulama" width="100%">
 
 # 🛍️ Numex Market
 
-### Numex'in kendi yazdığı 77 uygulama — hepsi ücretsiz ve açık kaynak.
+### Numex'in kendi yazdığı 84 uygulama — hepsi ücretsiz ve açık kaynak.
 
 [![Web](https://img.shields.io/badge/market.numexai.com.tr-00C9A7?style=for-the-badge)](https://market.numexai.com.tr)
-[![Uygulama](https://img.shields.io/badge/77-uygulama-0A1628?style=for-the-badge)](https://market.numexai.com.tr)
+[![Uygulama](https://img.shields.io/badge/84-uygulama-0A1628?style=for-the-badge)](https://market.numexai.com.tr)
 [![Dene](https://img.shields.io/badge/canlı_dene-dene.numexai.com.tr-0A1628?style=for-the-badge)](https://dene.numexai.com.tr/cyberbeats/)
 
 </div>
@@ -20,7 +20,7 @@
 > **Numex AI'nın sıfırdan kodladığı uygulamalar — hepsi ücretsiz ve açık kaynak.**
 > İster çalışan halini indir, ister kodunu incele, ister kendine göre değiştir.
 
-| **77** | **8** | **₺0** |
+| **84** | **8** | **₺0** |
 |:---:|:---:|:---:|
 | Uygulama | Kategori | Her zaman ücretsiz |
 
@@ -64,7 +64,7 @@ Market uygulamaları **dene.numexai.com.tr** üzerinde kurulum gerektirmeden can
 | 🔊 **Ses motoru** | Tüm sesler **saf Web Audio API** ile sentezlenir — tek bir ses dosyası yok |
 | 🎨 **Tasarım** | Neon siberpunk arayüz, durum göstergesi (● ÇALIYOR) |
 
-Bir cümlelik istekten çalışan, test edilmiş ve yayınlanmış bir uygulamaya: Market'teki 77
+Bir cümlelik istekten çalışan, test edilmiş ve yayınlanmış bir uygulamaya: Market'teki 84
 uygulamanın her biri bu hattan geçti.
 
 ## Nasıl kullanılır?
@@ -85,7 +85,7 @@ Uygulama kodları **[MIT lisanslı](uygulamalar/LICENSE)** — kullan, değişti
 ```mermaid
 flowchart LR
   CORE[🧠 Core — Beyin<br/>otonom üretim] --> FORGE[(🏗️ Forge<br/>kaynak kod)]
-  FORGE --> MARKET[🛍️ Market<br/>77 uygulama]
+  FORGE --> MARKET[🛍️ Market<br/>84 uygulama]
   MARKET -->|indir| USER[👤 Kullanıcı]
   MARKET -->|çatalla| HUB[📦 Hub]
   HUB -->|düzenle| CODEX[🧩 Codex]
