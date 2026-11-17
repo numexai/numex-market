@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#ffffff" />
+<meta name="description" content="Numex Data Detective — iki dosyayı karşılaştırıp eksik ödeme, çift kayıt, tutar ve tarih uyuşmazlıklarını kaynak satırlarıyla bulan akıllı dedektif." />
+<title>Numex Data Detective — Verilerin İçindeki Gizli Hatalar</title>
+<link rel="stylesheet" href="assets/style.css" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🕵️</text></svg>" />
+</head>
+<body>
+
+<a class="atla-baglantisi" href="#anaPanel">İçeriğe geç</a>
+
+<header class="topbar" id="topbar">
+  <div class="brand">
+    <div class="logo" aria-hidden="true">
+      <svg viewBox="0 0 48 48" width="28" height="28"><circle cx="21" cy="21" r="12.5" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><line x1="30.5" y1="30.5" x2="41" y2="41" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><circle cx="21" cy="21" r="4.6" fill="currentColor" opacity=".4"/></svg>
+    </div>
+    <div class="brand-yazi">
+      <h1>Numex <span>Data Detective</span></h1>
+      <p>Verilerin içindeki gizli hataları bulan akıllı dedektif</p>
+    </div>
+  </div>
+  <div class="top-actions">
+    <div class="menu">
+      <button class="btn btn-hayalet" id="btnOrnek" aria-haspopup="true" aria-expanded="false">
+        <span aria-hidden="true">📁</span> Örnek senaryolar
+      </button>
+      <div class="menu-icerik" id="ornekMenu" role="menu">
+        <button data-senaryo="1" role="menuitem">
+          <strong>Banka &amp; satış mutabakatı</strong>
+          <span>11 satış · 12 banka hareketi</span>
+        </button>
+        <button data-senaryo="2" role="menuitem">
+          <strong>Depo &amp; mağaza stok</strong>
+          <span>8 ürün · adet karşılaştırması</span>
+        </button>
+        <button data-senaryo="3" role="menuitem">
+          <strong>Personel maaş &amp; ödeme</strong>
+          <span>8 personel · 10 ödeme</span>
+        </button>
+      </div>
+    </div>
+    <button class="btn btn-hayalet" id="btnProjeYukle" title="Kaydedilmiş JSON projesini aç">
+      <span aria-hidden="true">📂</span><span class="btn-metin">Proje yükle</span>
+    </button>
+    <input type="file" id="projeGirdi" accept=".json,application/json" hidden />
+    <button class="btn btn-hayalet" id="btnProjeKaydet" title="Çalışmayı JSON olarak indir">
+      <span aria-hidden="true">💾</span><span class="btn-metin">Projeyi kaydet</span>
+    </button>
+    <button class="btn btn-hayalet" id="btnSifirla" title="Her şeyi temizle">
+      <span aria-hidden="true">↺</span><span class="btn-metin">Sıfırla</span>
+    </button>
+  </div>
+</header>
+
+<!-- ===================== GİRİŞ / HERO ===================== -->
+<section class="giris" id="girisHero">
+  <div class="giris-ic">
+    <span class="giris-rozet"><span class="nokta"></span> Tarayıcıda çalışır · dosyalar cihazdan çıkmaz</span>
+    <h2 class="giris-baslik">İki dosyayı yükleyin,<br /><span class="vurgu">hataları satır satır</span> görün.</h2>
+    <p class="giris-metin">Satış kayıtlarınızı banka hareketleriyle, depo sayımınızı mağaza sayımıyla karşılaştırın. Eksik ödemeyi, çift kaydı, kuruş kuruş tutar farkını ve yanlış eşleştirmeyi kaynak satırıyla gösterir.</p>
+    <div class="giris-adimlar">
+      <div class="ga"><span class="ga-no">1</span><strong>Yükleyin</strong><small>CSV veya Excel</small></div>
+      <div class="ga-cizgi" aria-hidden="true"></div>
+      <div class="ga"><span class="ga-no">2</span><strong>Eşleştirin</strong><small>Sütunlar otomatik</small></div>
+      <div class="ga-cizgi" aria-hidden="true"></div>
+      <div class="ga"><span class="ga-no">3</span><strong>İnceleyin</strong><small>Güven + öneri</small></div>
+    </div>
+    <div class="giris-eylem">
+      <button class="btn btn-birincil" id="heroOrnek">Örnek senaryoyla dene</button>
+      <span class="giris-not">veya aşağıdan kendi dosyalarınızı seçin</span>
+    </div>
+  </div>
+  <div class="giris-gorsel" aria-hidden="true">
+    <div class="mini-kart">
+      <div class="mk-ust"><span class="mk-nokta mercan"></span> Tutar uyuşmuyor <span class="mk-guven">%100</span></div>
+      <div class="mk-satir"><span>S-1002 · satış 3</span><b>875,50 TL</b></div>
+      <div class="mk-satir hatali"><span>S-1002 · banka 3</span><b>875,05 TL</b></div>
+      <div class="mk-alt">Fark 0,45 TL · öneri: banka kaydını doğrulayın</div>
+    </div>
+    <div class="mini-kart alt">
+      <div class="mk-ust"><span class="mk-nokta mor"></span> Aynı görünen farklı kimlik</div>
+      <div class="mk-satir"><span>A · S-00123</span><b>3.100,00 TL</b></div>
+      <div class="mk-satir"><span>B · S-123</span><b>3.100,00 TL</b></div>
+      <div class="mk-alt">Onayınız olmadan eşleştirilmedi</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== DOSYA YÖNETİMİ ===================== -->
+<section class="kart dosya-bolumu">
+  <div class="bolum-baslik">
+    <div>
+      <h2><span class="adim">1</span> Dosyaları yükleyin</h2>
+      <p class="alt-yazi">CSV ve Excel (XLSX/XLS) desteklenir. Sütunlar otomatik tanınır; isterseniz değiştirebilirsiniz.</p>
+    </div>
+    <div class="dosya-rozet" id="dosyaRoze">0 / 2 dosya</div>
+  </div>
+
+  <div class="dosya-grid">
+    <div class="dosya-kart" id="kartA" data-taraf="A">
+      <div class="dk-ust">
+        <span class="dk-etiket mor">A · Kaynak</span>
+        <span class="dk-durum" data-durum="A">bekliyor</span>
+      </div>
+      <h3>Satış / kaynak kayıtları</h3>
+      <p class="dk-aciklama">İşletmenin kendi kayıtları: satış, stok, personel listesi…</p>
+      <label class="birak-alani" data-birak="A">
+        <input type="file" accept=".csv,.xlsx,.xls,.xlsm" data-girdi="A" hidden />
+        <span class="ba-ikon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="m7 9 5-5 5 5"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+        </span>
+        <span class="ba-yazi">Dosyayı sürükleyin ya da <u>seçin</u></span>
+        <span class="ba-alt">.csv · .xlsx · .xls</span>
+      </label>
+      <div class="dosya-icerik" data-icerik="A" hidden></div>
+    </div>
+
+    <div class="dosya-kart" id="kartB" data-taraf="B">
+      <div class="dk-ust">
+        <span class="dk-etiket turkuaz">B · Karşılaştırma</span>
+        <span class="dk-durum" data-durum="B">bekliyor</span>
+      </div>
+      <h3>Ödeme / karşılaştırma kayıtları</h3>
+      <p class="dk-aciklama">Banka hareketleri, mağaza sayımı, ödeme listesi…</p>
+      <label class="birak-alani" data-birak="B">
+        <input type="file" accept=".csv,.xlsx,.xls,.xlsm" data-girdi="B" hidden />
+        <span class="ba-ikon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="m7 9 5-5 5 5"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+        </span>
+        <span class="ba-yazi">Dosyayı sürükleyin ya da <u>seçin</u></span>
+        <span class="ba-alt">.csv · .xlsx · .xls</span>
+      </label>
+      <div class="dosya-icerik" data-icerik="B" hidden></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== AYARLAR + ÇALIŞTIR ===================== -->
+<section class="kart arac-bolumu" id="aracBolumu">
+  <div class="bolum-baslik">
+    <div>
+      <h2><span class="adim">2</span> Karşılaştırma ayarları</h2>
+      <p class="alt-yazi">Eşleştirme birebir kimlikle yapılır. Şüpheli benzerlikler onayınıza sunulur.</p>
+    </div>
+  </div>
+  <div class="arac-grid">
+    <label class="alan">
+      <span>Tutar toleransı (kuruş)</span>
+      <input type="number" id="tutarTolerans" value="0" min="0" max="100000" step="1" inputmode="numeric" />
+      <small>0 = kuruşu kuruşuna eşit olmalı</small>
+    </label>
+    <label class="alan">
+      <span>Tarih toleransı (gün)</span>
+      <input type="number" id="tarihTolerans" value="0" min="0" max="365" step="1" inputmode="numeric" />
+      <small>0 = aynı gün olmalı</small>
+    </label>
+    <label class="alan">
+      <span>Benzerlik eşiği</span>
+      <select id="benzerEsik">
+        <option value="0.5">Gevşek (%50) — çok aday çıkarır</option>
+        <option value="0.6" selected>Dengeli (%60)</option>
+        <option value="0.75">Sıkı (%75) — az ama isabetli</option>
+        <option value="0.9">Çok sıkı (%90)</option>
+      </select>
+      <small>Şüpheli eşleşme adayları için</small>
+    </label>
+    <label class="alan">
+      <span>Değer birimi</span>
+      <select id="birimSec">
+        <option value="TL" selected>TL (para)</option>
+        <option value="Adet">Adet (stok)</option>
+        <option value="Puan">Puan</option>
+      </select>
+      <small>Rapor ve ekran yazımı için</small>
+    </label>
+    <div class="alan alan-eylem">
+      <button class="btn btn-birincil" id="btnKarsilastir" disabled>🔍 Karşılaştır</button>
+      <small id="karsilastirIpucu">İki dosyayı da yükleyin</small>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== ÖZET ===================== -->
+<section id="ozetBolumu" hidden>
+  <div class="ozet-grid" id="ozetGrid"></div>
+  <div class="denge-cubugu" id="dengeCubugu"></div>
+</section>
+
+<!-- ===================== SEKMELER ===================== -->
+<nav class="sekmeler" id="sekmeler" hidden aria-label="Bölümler">
+  <button class="sekme aktif" data-sekme="dedektif">🕵️ Dedektif <span class="sayac" id="sayacDedektif">0</span></button>
+  <button class="sekme" data-sekme="eslesmeler">🔗 Eşleşmeler <span class="sayac" id="sayacEslesme">0</span></button>
+  <button class="sekme" data-sekme="gecmis">🕘 Değişiklik geçmişi <span class="sayac" id="sayacGecmis">0</span></button>
+  <button class="sekme" data-sekme="rapor">📄 Rapor &amp; dışa aktarma</button>
+</nav>
+
+<main id="anaPanel" hidden>
+  <!-- DEDEKTİF -->
+  <section class="panel aktif" data-panel="dedektif">
+    <div class="dedektif-grid">
+      <aside class="sorun-listesi">
+        <div class="filtreler" id="filtreler"></div>
+        <div class="liste-kaydir" id="sorunListesi"></div>
+      </aside>
+      <section class="detay-panel" id="detayPanel">
+        <div class="bos-durum">
+          <div class="bos-ikon" aria-hidden="true">🔍</div>
+          <h3>Soldan bir sorun seçin</h3>
+          <p>Hatanın açıklamasını, kaynak satırları, beklenen/mevcut değerleri ve önerilen düzeltmeyi burada yan yana göreceksiniz.</p>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <!-- EŞLEŞMELER -->
+  <section class="panel" data-panel="eslesmeler">
+    <div class="kart">
+      <div class="bolum-baslik">
+        <div>
+          <h2>Eşleşme tablosu</h2>
+          <p class="alt-yazi">Kesin eşleşmeler otomatik, manuel eşleşmeler sizin onayınızla kuruldu. Şüpheli adaylar burada <em>kesin</em> sayılmaz.</p>
+        </div>
+        <div class="mini-istatistik" id="eslesmeIstatistik"></div>
+      </div>
+      <div class="tablo-sarmal"><table class="tablo" id="eslesmeTablosu"></table></div>
+    </div>
+  </section>
+
+  <!-- GEÇMİŞ -->
+  <section class="panel" data-panel="gecmis">
+    <div class="kart">
+      <div class="bolum-baslik">
+        <div><h2>Değişiklik geçmişi</h2><p class="alt-yazi">Her işlem kaydedilir; adım adım geri alabilirsiniz.</p></div>
+        <button class="btn btn-hayalet" id="btnGeriAl">↶ Son işlemi geri al</button>
+      </div>
+      <ol class="gecmis-liste" id="gecmisListe"></ol>
+    </div>
+  </section>
+
+  <!-- RAPOR -->
+  <section class="panel" data-panel="rapor">
+    <div class="rapor-grid">
+      <div class="kart">
+        <h2>Dışa aktarma</h2>
+        <p class="alt-yazi">Rapor, PDF ve CSV olarak indirilebilir; proje JSON olarak saklanıp yeniden açılabilir.</p>
+        <div class="aktarma-listesi">
+          <button class="aktarma" id="btnPdf"><span class="ak-ikon mercan">PDF</span><span><strong>Hata raporunu PDF indir</strong><small>Tüm sorunlar, kaynak satırlar ve öneriler</small></span></button>
+          <button class="aktarma" id="btnCsv"><span class="ak-ikon turkuaz">CSV</span><span><strong>Eşleşme sonuçlarını CSV indir</strong><small>Excel'de açılır (; ayraçlı, UTF-8 BOM)</small></span></button>
+          <button class="aktarma" id="btnJson"><span class="ak-ikon mor">JSON</span><span><strong>Projeyi JSON olarak kaydet</strong><small>Dosyalar, ayarlar, kararlar ve geçmiş dahil</small></span></button>
+          <button class="aktarma" id="btnJsonYukle"><span class="ak-ikon mor">↥</span><span><strong>Projeyi JSON'dan yükle</strong><small>Kaldığınız yerden devam edin</small></span></button>
+        </div>
+      </div>
+      <div class="kart" id="raporOnizleme">
+        <h2>Rapor önizlemesi</h2>
+        <div id="raporMetni" class="rapor-metni"><p class="alt-yazi">Karşılaştırma çalıştırılınca rapor burada görünür.</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="alt-bilgi">
+  <span><strong>Numex Data Detective</strong> · tüm hesaplamalar tarayıcınızda, dosyalarınız cihazınızdan çıkmaz.</span>
+  <span>Para hesapları kuruş bazlı tamsayı ile yapılır · kimlikler birebir eşleştirilir</span>
+</footer>
+
+<!-- mobil alt eylem çubuğu -->
+<div class="mobil-cubuk" id="mobilCubuk" hidden>
+  <div class="mc-bilgi"><span id="mobilOzet">Hazır değil</span></div>
+  <button class="btn btn-birincil" id="btnMobilKarsilastir">Karşılaştır</button>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<div id="pdfRapor" class="pdf-rapor" aria-hidden="true"></div>
+
+<script src="vendor/xlsx.full.min.js"></script>
+<script src="vendor/jspdf.umd.min.js"></script>
+<script src="vendor/html2canvas.min.js"></script>
+<script type="module" src="js/ui.js"></script>
+</body>
+</html>

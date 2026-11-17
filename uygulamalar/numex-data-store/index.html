@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Numex Data Story — Verinin Hikâyesi</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23FF6B5B'/%3E%3Crect x='16' y='16' width='16' height='16' rx='5' fill='%230FC2B4'/%3E%3Ctext x='16' y='22' font-family='sans-serif' font-size='14' font-weight='bold' fill='%23fff' text-anchor='middle'%3EN%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="logo">ND</div>
+    <div class="brand-text">
+      <h1>Numex Data Story</h1>
+      <p id="brandSub">Verini yükle, hikâyeni anlat.</p>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <label class="btn btn-ghost" for="fileInput" title="CSV, XLSX veya JSON">📥 İçe Aktar</label>
+    <input type="file" id="fileInput" accept=".csv,.txt,.xlsx,.xls,.json" hidden>
+    <button class="btn btn-ghost" id="btnSample" title="100 satırlık satış dosyası üret">🧪 Örnek 100 Satır</button>
+    <button class="btn btn-primary" id="btnSave">💾 Kaydet</button>
+    <label class="btn btn-ghost" for="jsonInput" title="Kaydedilmiş .json dosyasını aç">📂 Yükle</label>
+    <input type="file" id="jsonInput" accept=".json" hidden>
+    <button class="btn btn-accent" id="btnPdf">🧾 PDF</button>
+    <button class="btn btn-accent" id="btnCsv">⬇️ CSV</button>
+  </div>
+</header>
+
+<section class="statusbar">
+  <span id="statusText" class="status">Hazır — bir dosya sürükle ya da “Örnek 100 Satır”a bas.</span>
+  <span id="saveState" class="save-state"></span>
+</section>
+
+<section id="dropzone" class="dropzone">
+  <div class="dz-icon">⇪</div>
+  <div class="dz-text"><strong>CSV / XLSX dosyanı buraya bırak</strong><em>ya da başlıktaki “İçe Aktar”ı kullan · 100 satır örnek için “Örnek 100 Satır”</em></div>
+</section>
+
+<nav class="tabs" id="tabs">
+  <button class="tab active" data-view="table">📊 Tablo</button>
+  <button class="tab" data-view="quality">🧹 Kalite <span class="badge" id="badgeQuality">0</span></button>
+  <button class="tab" data-view="charts">📈 Grafikler</button>
+  <button class="tab" data-view="dash">🧩 Rapor Paneli <span class="badge" id="badgeDash">0</span></button>
+  <button class="tab" data-view="kabul">✅ Kabul Testi <span class="badge" id="badgeKabul">–</span></button>
+</nav>
+
+<main>
+
+  <!-- ============ TABLO ============ -->
+  <section class="view active" id="view-table">
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Veri Tablosu</h2>
+        <div class="panel-tools">
+          <input type="search" id="searchInput" placeholder="Ara… (bölge, ürün, kanal)">
+          <button class="btn btn-mini" id="btnAddRow">+ Satır</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table id="dataTable">
+          <thead></thead>
+          <tbody></tbody>
+          <tfoot></tfoot>
+        </table>
+        <div id="tableEmpty" class="empty">Henüz veri yok. Dosya bırak ya da örnek veri üret.</div>
+      </div>
+      <p class="hint">Hücreye tıkla, yaz — tutarlar ve toplamlar anında güncellenir.</p>
+    </div>
+  </section>
+
+  <!-- ============ KALİTE ============ -->
+  <section class="view" id="view-quality">
+    <div class="cards2">
+      <div class="panel">
+        <div class="panel-head"><h2>Eksik Değerler</h2><span class="chip" id="chipMissing">0</span></div>
+        <div id="missingList" class="list"></div>
+        <div class="panel-foot">
+          <button class="btn btn-mini" id="btnFillZero">Sayısal boşlukları 0 yap</button>
+          <button class="btn btn-mini btn-accent" id="btnFillCoklu">Kategorik boşlukları “(belirtilmedi)” yap</button>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><h2>Yinelenen Satırlar</h2><span class="chip" id="chipDup">0</span></div>
+        <div id="dupList" class="list"></div>
+        <div class="panel-foot">
+          <button class="btn btn-mini btn-primary" id="btnDedup">Yinelenenleri sil (ilk kalsın)</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ GRAFİKLER ============ -->
+  <section class="view" id="view-charts">
+    <div class="panel">
+      <div class="panel-head"><h2>Grafik Üret</h2></div>
+      <div class="chart-form">
+        <label>Grafik türü
+          <select id="chartType">
+            <option value="bar">Sütun</option>
+            <option value="line">Çizgi</option>
+            <option value="pie">Pasta</option>
+          </select>
+        </label>
+        <label>Kırılım (X)
+          <select id="chartX"></select>
+        </label>
+        <label>Değer (Y)
+          <select id="chartY"></select>
+        </label>
+        <label>İşlem
+          <select id="chartAgg">
+            <option value="sum">Toplam</option>
+            <option value="avg">Ortalama</option>
+            <option value="count">Kayıt sayısı</option>
+          </select>
+        </label>
+        <button class="btn btn-primary" id="btnAddChart">Panele ekle →</button>
+      </div>
+      <p class="hint" id="chartHint"></p>
+      <div class="chart-preview" id="chartPreview"></div>
+    </div>
+  </section>
+
+  <!-- ============ RAPOR PANELİ ============ -->
+  <section class="view" id="view-dash">
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Rapor Paneli</h2>
+        <span class="hint-inline">Kartları tutup sürükle — yerlerini değiştir, “Kaydet” ile koru.</span>
+      </div>
+      <div class="dash-grid" id="dashGrid"></div>
+      <div id="dashEmpty" class="empty">Panel boş. “Grafikler” sekmesinden grafik ekle.</div>
+    </div>
+  </section>
+
+  <!-- ============ KABUL ============ -->
+  <section class="view" id="view-kabul">
+    <div class="panel">
+      <div class="panel-head">
+        <h2>Kabul Testi — çıktının doğruluğu</h2>
+        <div class="panel-tools">
+          <button class="btn btn-primary" id="btnKabul">▶ Testleri çalıştır</button>
+        </div>
+      </div>
+      <p class="hint">Kabul prompta değil sayıya bağlı: her testte “beklenen” bağımsız hesapla, “çıkan” uygulamanın verdiği değerdir. Uyuşmazsa rapor yayınlanmaz.</p>
+      <div class="kabul-ozet" id="kabulOzet">Henüz çalıştırılmadı.</div>
+      <div class="table-wrap table-wrap-kabul">
+        <table class="kabul-table">
+          <thead><tr><th>#</th><th>Test</th><th class="num">Beklenen</th><th class="num">Çıkan</th><th>Durum</th></tr></thead>
+          <tbody id="kabulList"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div id="toast" class="toast"></div>
+
+<script src="vendor/xlsx.full.min.js"></script>
+<script src="vendor/pdfmake.min.js"></script>
+<script src="vendor/vfs_fonts.js"></script>
+<script src="app.js"></script>
+<script src="kabul.js"></script>
+</body>
+</html>

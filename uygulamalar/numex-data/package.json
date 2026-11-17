@@ -1,0 +1,16 @@
+{
+  "name": "numex-data-detective",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Numex Data Detective — iki dosyayı karşılaştırıp gizli hataları kaynak satırlarıyla bulan dedektif",
+  "scripts": {
+    "basla": "node server.js",
+    "test": "node tests/test.mjs",
+    "test:tarayici": "node tests/tarayici.mjs",
+    "test:arayuz": "node tests/sinif-kontrol.mjs"
+  },
+  "dependencies": {
+    "playwright-core": "^1.65.1"
+  }
+}

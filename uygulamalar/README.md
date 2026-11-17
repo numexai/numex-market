@@ -1,6 +1,6 @@
 # Numex Market uygulamaları — ücretsiz, açık kaynak, Türkçe
 
-Numex AI'nın otonom olarak yazdığı, test ettiği ve [Numex Market](https://market.numexai.com.tr)'te yayımladığı **84 uygulamanın** kaynak kodu:
+Numex AI'nın otonom olarak yazdığı, test ettiği ve [Numex Market](https://market.numexai.com.tr)'te yayımladığı **86 uygulamanın** kaynak kodu:
 tarayıcı oyunları, simülasyonlar, yapay zekâ demoları, günlük araçlar, iş uygulamaları ve web masaüstleri.
 Her gün [numexai.com.tr](https://numexai.com.tr) vitrininden kendiliğinden eşitlenir. Hepsi [MIT lisanslı](LICENSE): dene, incele, çatalla.
 
@@ -104,7 +104,7 @@ Her gün [numexai.com.tr](https://numexai.com.tr) vitrininden kendiliğinden eş
 |---|---|
 | [**İnsan Vücudu — Sinir ve Dolaşım Laboratuvarı**](human-body-lab/) | Tarayıcıda çalışan, canlı verilerle tepki veren interaktif insan vücudu simülasyonu — kalp ritmi, kan akışı, sinir yolları. (Node/Express) |
 
-## 📦 Diğer (21)
+## 📦 Diğer (23)
 
 | Uygulama | Ne yapar |
 |---|---|
@@ -118,6 +118,8 @@ Her gün [numexai.com.tr](https://numexai.com.tr) vitrininden kendiliğinden eş
 | [**Lazer Kesim Tasarım Stüdyosu**](lazer-kesim-tasarim-studyosu/) |  |
 | [**mektup**](mektup/) |  |
 | [**motifler**](testanadolu/) |  |
+| [**numex data**](numex-data/) | Numex Data Detective — iki dosyayı karşılaştırıp gizli hataları kaynak satırlarıyla bulan dedektif |
+| [**numex data store**](numex-data-store/) | CSV / XLSX dosyalarını içe aktarıp üzerinde çalışan, veri kalitesini denetleyen ve sürükle-bırak rapor paneline dönüştüren tek sayfalık web uygulaması. |
 | [**numex dron acil durum kordinat merkezi**](test125/) |  |
 | [**NUMEX FLOORPLAN**](numex-floorplan/) | Tarayıcıda çalışan 2D/3D iç mekân planlama stüdyosu. Kendi evinizin planını çizer, mobilya yerleştirir, 3B görünümde gezer ve projeyi kaydedersiniz. |
 | [**numex flow**](numex-flow/) |  |
