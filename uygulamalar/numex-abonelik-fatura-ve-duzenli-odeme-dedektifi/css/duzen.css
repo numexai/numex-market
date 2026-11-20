@@ -1,0 +1,131 @@
+/* Numex — yerleşim */
+.ust-cubuk {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 12px 22px;
+  background: color-mix(in srgb, var(--zemin) 88%, transparent);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--cizgi);
+  flex-wrap: wrap;
+}
+
+.marka { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.marka-logo {
+  width: 36px; height: 36px;
+  display: grid; place-items: center;
+  border-radius: 11px;
+  color: #04211d;
+  background: linear-gradient(140deg, var(--vurgu-turkuaz), var(--vurgu-yesil));
+  box-shadow: 0 4px 14px rgba(45, 212, 191, .22);
+  flex: 0 0 auto;
+}
+.marka-metin { display: flex; flex-direction: column; line-height: 1.15; min-width: 0; }
+.marka-metin strong { font-size: .98rem; letter-spacing: -.02em; white-space: nowrap; }
+.marka-metin span { font-size: .7rem; color: var(--metin-soluk); letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; }
+
+.sekmeler {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+  background: var(--kart);
+  padding: 4px;
+  border-radius: 11px;
+  border: 1px solid var(--cizgi);
+  overflow-x: auto;
+}
+.ust-islemler { display: flex; gap: 8px; align-items: center; }
+
+.govde {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 20px 22px 90px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.sayfa { display: none; flex-direction: column; gap: 18px; }
+.sayfa.aktif { display: flex; animation: belir 220ms ease; }
+@keyframes belir { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+.ozet-izgara {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 12px;
+}
+.panel-ikili {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  align-items: start;
+}
+
+.analiz-izgara {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 14px;
+}
+.kur-izgara {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+.senaryo-ozet {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+.senaryo-liste { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+
+.alt-bar { display: none; }
+
+/* ---------- Kırılımlar ---------- */
+@media (max-width: 1180px) {
+  .ozet-izgara { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .panel-ikili { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 900px) {
+  .ust-cubuk { padding: 10px 14px; gap: 10px; }
+  .sekmeler { display: none; }
+  .ust-islemler { margin-left: auto; }
+  .marka-metin span { display: none; }
+  .govde { padding: 14px 12px 96px; gap: 14px; }
+  .ozet-izgara { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .alt-bar {
+    display: flex;
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--kart) 96%, transparent);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid var(--cizgi);
+    padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
+    overflow-x: auto;
+  }
+  .alt-sekme {
+    flex: 1 0 auto;
+    min-width: 64px;
+    padding: 9px 6px;
+    border: 0;
+    background: transparent;
+    color: var(--metin-soluk);
+    font: inherit;
+    font-size: .78rem;
+    font-weight: 600;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  .alt-sekme.aktif { color: var(--vurgu-turkuaz); background: var(--secim-arka); }
+}
+
+@media (max-width: 480px) {
+  .ozet-izgara { grid-template-columns: 1fr 1fr; }
+  .marka-metin strong { font-size: .88rem; }
+  .btn-ana span.etiket { display: none; }
+}

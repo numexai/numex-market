@@ -1,0 +1,201 @@
+:root {
+  --sea-900: #04121c;
+  --sea-800: #061a28;
+  --sea-700: #082433;
+  --sea-600: #0c3044;
+  --line: rgba(120, 190, 220, 0.18);
+  --text: #dcecf5;
+  --muted: #8ba9ba;
+  --amber: #e8b04b;
+  --amber-soft: #f6d99b;
+  --ok: #3fae7a;
+  --warn: #d4573f;
+  --accent: #2fa89e;
+  --radius: 12px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  background:
+    /* NUMEX-DÜZELTME (2026-11-20): Geçersiz renk değeri (#0d3category) tüm gövde arka planını bozuyordu; geçerli hex ile değiştirildi. */
+    radial-gradient(1200px 600px at 15% -10%, #0d3346 0%, transparent 60%),
+    linear-gradient(180deg, var(--sea-900), #030c13 70%);
+  color: var(--text);
+  font-family: 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background:
+    radial-gradient(1000px 520px at 12% -8%, rgba(24, 92, 128, 0.35), transparent 62%),
+    radial-gradient(900px 480px at 92% 0%, rgba(232, 176, 75, 0.10), transparent 55%),
+    linear-gradient(180deg, #04121c, #030c13 72%);
+  background-attachment: fixed;
+}
+
+/* ————— Üst bar ————— */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 22px;
+  border-bottom: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(9, 36, 52, 0.92), rgba(5, 20, 30, 0.72));
+  backdrop-filter: blur(6px);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.brand { display: flex; align-items: center; gap: 12px; }
+
+.logo {
+  width: 34px; height: 34px; border-radius: 9px;
+  background: linear-gradient(140deg, var(--amber), #b9761f 60%, #6d3d0d);
+  box-shadow: 0 0 0 1px rgba(255, 214, 150, 0.35), 0 6px 18px rgba(232, 176, 75, 0.22);
+  position: relative;
+}
+.logo::after {
+  content: '';
+  position: absolute; inset: 8px;
+  border: 2px solid rgba(10, 26, 36, 0.85);
+  border-radius: 4px;
+  border-bottom-width: 4px;
+}
+
+.brand h1 {
+  margin: 0;
+  font-size: 18px;
+  letter-spacing: 0.14em;
+  font-weight: 700;
+  color: #f2e4c9;
+}
+.brand p {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+}
+
+.topbar-right { display: flex; align-items: center; gap: 12px; font-variant-numeric: tabular-nums; }
+#clock { font-size: 13px; color: var(--amber-soft); letter-spacing: 0.04em; }
+
+.sim-state {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+}
+.sim-state.paused { color: #f0c58a; border-color: rgba(232, 176, 75, 0.4); background: rgba(232, 176, 75, 0.08); }
+.sim-state.run { color: #b8f0d3; border-color: rgba(63, 174, 122, 0.5); background: rgba(63, 174, 122, 0.12); }
+
+/* ————— Yerleşim ————— */
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 372px;
+  gap: 16px;
+  padding: 16px;
+  align-items: start;
+}
+
+.scene-wrap {
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: linear-gradient(180deg, #061a28, #04121c);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+}
+
+#scene { display: block; width: 100%; cursor: crosshair; touch-action: manipulation; }
+
+.scene-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-top: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(6, 24, 36, 0.95), rgba(4, 16, 24, 0.95));
+}
+
+.btn {
+  appearance: none;
+  border: 1px solid var(--line);
+  background: rgba(14, 46, 64, 0.85);
+  color: var(--text);
+  padding: 8px 14px;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.12s ease, background 0.2s ease, border-color 0.2s ease;
+}
+.btn:hover:not(:disabled) { background: rgba(23, 68, 92, 0.95); border-color: rgba(140, 205, 235, 0.4); }
+.btn:active:not(:disabled) { transform: translateY(1px); }
+.btn:disabled { opacity: 0.42; cursor: not-allowed; }
+.btn.primary { background: linear-gradient(160deg, #2c7d63, #1d5b46); border-color: rgba(80, 200, 160, 0.4); color: #dcf5ea; }
+.btn.warn { background: linear-gradient(160deg, #8d3a2b, #5d2419); border-color: rgba(220, 120, 90, 0.45); color: #ffe0d4; }
+.btn.accent { background: linear-gradient(160deg, #256f7d, #164a55); border-color: rgba(90, 200, 215, 0.4); }
+.btn.sm { padding: 7px 10px; font-size: 12px; }
+.btn.file { display: inline-flex; align-items: center; }
+
+.speed {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--muted);
+}
+.speed input[type='range'] { width: 110px; accent-color: var(--amber); }
+#speed-label { color: var(--amber-soft); min-width: 26px; text-align: right; font-variant-numeric: tabular-nums; }
+
+/* ————— Toast ————— */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 26px;
+  transform: translate(-50%, 24px);
+  max-width: min(560px, 90vw);
+  padding: 11px 18px;
+  border-radius: 10px;
+  background: rgba(10, 36, 52, 0.96);
+  border: 1px solid var(--line);
+  color: var(--text);
+  font-size: 13px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 60;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+.toast.ok { border-color: rgba(63, 174, 122, 0.55); }
+.toast.mid { border-color: rgba(232, 176, 75, 0.55); }
+.toast.err { border-color: rgba(212, 87, 63, 0.6); }
+
+.muted { color: var(--muted); font-size: 12px; margin: 6px 0 0; }
+.err { color: #ffb6a3; }
+
+/* ————— Mobil ————— */
+@media (max-width: 1040px) {
+  .layout { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 720px) {
+  .topbar { flex-direction: column; align-items: flex-start; gap: 8px; padding: 12px 14px; }
+  .layout { padding: 10px; gap: 10px; }
+  .scene-actions { gap: 6px; padding: 8px; }
+  .btn { padding: 9px 11px; font-size: 12px; flex: 1 1 auto; }
+  .speed { margin-left: 0; width: 100%; justify-content: space-between; }
+  .speed input[type='range'] { flex: 1; }
+  .brand h1 { font-size: 16px; }
+}

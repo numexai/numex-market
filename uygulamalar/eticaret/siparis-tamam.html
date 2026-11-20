@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sipariş Tamamlandı — ATELIER</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-page="tamam">
+
+<header class="site-baslik">
+  <div class="site-baslik-ic" style="grid-template-columns:1fr auto 1fr">
+    <a href="index.html" class="logo" style="justify-self:start">ATELIER<small>Yaşamın İnce Detayları</small></a>
+    <nav class="ana-nav" aria-label="Ana menü"><a href="magaza.html">Mağaza</a><a href="panel.html">Panel</a></nav>
+    <div class="ust-araclar"><button class="ikon-btn" data-open-cart aria-label="Sepeti aç"><svg viewBox="0 0 24 24"><path d="M6 7h12l1 13H5L6 7Z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg><span class="cart-sayac sifir" data-cart-count>0</span></button></div>
+  </div>
+</header>
+
+<main><div class="kap" data-tamam></div></main>
+
+<footer class="site-alt">
+  <div class="site-alt-alt" style="margin-top:0;border:none"><span>© <span data-yil>2026</span> ATELIER — Demo mağaza.</span><span>Teşekkürler</span></div>
+</footer>
+
+<div class="cekmec-overlay" data-drawer-overlay></div>
+<aside class="cekmec" data-cart-drawer aria-label="Sepet">
+  <div class="cekmec-bas"><h2>Sepetin</h2><button data-close-cart aria-label="Kapat">×</button></div>
+  <div class="cekmec-govde" data-cart-body></div>
+  <div class="cekmec-alt"><div data-cart-summary></div><a class="birincil-btn geniş" href="sepet.html" data-cart-link>Sepeti Gör</a></div>
+</aside>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

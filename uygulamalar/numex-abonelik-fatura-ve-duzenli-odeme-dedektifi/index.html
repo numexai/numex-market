@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="tr" data-tema="koyu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Numex — Abonelik, Fatura ve Düzenli Ödeme Dedektifi</title>
+<meta name="description" content="Neye ne kadar ödüyorsunuz? Abonelikler, faturalar ve düzenli ödemeler için tamamen yerel çalışan Türkçe gider dedektifi.">
+<link rel="stylesheet" href="css/tema.css">
+<link rel="stylesheet" href="css/duzen.css">
+<link rel="stylesheet" href="css/bilesenler.css">
+</head>
+<body>
+
+<header class="ust-cubuk">
+  <div class="marka">
+    <span class="marka-logo" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="22" height="22"><path d="M4 19V9l8-5 8 5v10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 19v-5h6v5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+    </span>
+    <div class="marka-metin">
+      <strong>Numex Ödeme Dedektifi</strong>
+      <span>Abonelik · Fatura · Düzenli Ödeme</span>
+    </div>
+  </div>
+
+  <nav class="sekmeler" id="sekmeler" role="tablist" aria-label="Bölümler">
+    <button class="sekme aktif" data-sekme="panel" role="tab" aria-selected="true">Panel</button>
+    <button class="sekme" data-sekme="takvim" role="tab" aria-selected="false">Takvim</button>
+    <button class="sekme" data-sekme="liste" role="tab" aria-selected="false">Abonelikler</button>
+    <button class="sekme" data-sekme="analiz" role="tab" aria-selected="false">Analiz</button>
+    <button class="sekme" data-sekme="senaryo" role="tab" aria-selected="false">Senaryo</button>
+  </nav>
+
+  <div class="ust-islemler">
+    <button class="btn btn-ana" data-action="abonelik-ekle">
+      <svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      Abonelik Ekle
+    </button>
+    <button class="btn btn-ikon" data-action="tema-degistir" title="Açık/koyu tema" aria-label="Tema değiştir">
+      <svg viewBox="0 0 24 24" width="18" height="18" class="ikon-ay"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+      <svg viewBox="0 0 24 24" width="18" height="18" class="ikon-gunes"><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M19.1 4.9l-1.8 1.8M6.7 17.3l-1.8 1.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+</header>
+
+<main class="govde" id="govde">
+
+  <!-- ============ PANEL ============ -->
+  <section class="sayfa aktif" id="sayfa-panel" role="tabpanel" aria-label="Panel">
+    <div class="ozet-izgara" id="ozet-izgara"></div>
+
+    <div class="panel-ikili">
+      <div class="kart">
+        <div class="kart-baslik">
+          <h2>Harcama dağılımı</h2>
+          <span class="kart-alt" id="donut-alt">Bu ay · kategori bazında</span>
+        </div>
+        <div class="donut-alan">
+          <div id="donut-kap" class="donut-kap"></div>
+          <ul class="lejant" id="donut-lejant"></ul>
+        </div>
+      </div>
+
+      <div class="kart">
+        <div class="kart-baslik">
+          <h2>12 aylık nakit akışı</h2>
+          <span class="kart-alt">Gerçek ödeme aylarına göre</span>
+        </div>
+        <div id="bar-kap" class="bar-kap"></div>
+      </div>
+    </div>
+
+    <div class="panel-ikili">
+      <div class="kart">
+        <div class="kart-baslik">
+          <h2>Yaklaşan ödemeler</h2>
+          <div class="cips" id="yaklasan-cips">
+            <button class="cip aktif" data-gun="7">7 gün</button>
+            <button class="cip" data-gun="30">30 gün</button>
+          </div>
+        </div>
+        <ul class="odeme-listesi" id="yaklasan-liste"></ul>
+      </div>
+
+      <div class="kart">
+        <div class="kart-baslik">
+          <h2>Gecikmiş kalemler</h2>
+          <span class="kart-alt" id="gecikmis-alt"></span>
+        </div>
+        <ul class="odeme-listesi kaydirmali" id="gecikmis-liste"></ul>
+      </div>
+    </div>
+
+    <div class="kart">
+      <div class="kart-baslik">
+        <h2>Mini takvim</h2>
+        <a href="#" class="baglanti" data-sekme-git="takvim">Tam takvime git →</a>
+      </div>
+      <div id="mini-takvim" class="mini-takvim"></div>
+    </div>
+  </section>
+
+  <!-- ============ TAKVİM ============ -->
+  <section class="sayfa" id="sayfa-takvim" role="tabpanel" aria-label="Takvim">
+    <div class="kart">
+      <div class="kart-baslik takvim-baslik">
+        <div class="takvim-gezinme">
+          <button class="btn btn-ikon" data-action="ay-geri" aria-label="Önceki ay">◀</button>
+          <h2 id="takvim-ay-baslik">—</h2>
+          <button class="btn btn-ikon" data-action="ay-ileri" aria-label="Sonraki ay">▶</button>
+          <button class="btn btn-hayalet" data-action="ay-bugun">Bugün</button>
+        </div>
+        <div class="takvim-ozet" id="takvim-ozet"></div>
+      </div>
+      <div class="takvim" id="takvim-izgara"></div>
+    </div>
+
+    <div class="panel-ikili">
+      <div class="kart">
+        <div class="kart-baslik">
+          <h2 id="secili-gun-baslik">Gün detayı</h2>
+          <span class="kart-alt">Takvimden bir güne tıklayın</span>
+        </div>
+        <ul class="odeme-listesi" id="gun-detay"></ul>
+      </div>
+      <div class="kart">
+        <div class="kart-baslik">
+          <h2>Önümüzdeki 30 gün</h2>
+          <span class="kart-alt" id="otuz-alt"></span>
+        </div>
+        <ul class="odeme-listesi kaydirmali" id="otuz-liste"></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ABONELİKLER ============ -->
+  <section class="sayfa" id="sayfa-liste" role="tabpanel" aria-label="Abonelikler">
+    <div class="kart">
+      <div class="filtre-cubugu">
+        <div class="arama-kap">
+          <svg viewBox="0 0 24 24" width="16" height="16"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16 16l4.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <input type="search" id="filtre-arama" placeholder="Hizmet, kategori veya not ara… (Ctrl+K)" aria-label="Ara">
+        </div>
+        <select id="filtre-kategori" aria-label="Kategori"></select>
+        <select id="filtre-durum" aria-label="Durum">
+          <option value="hepsi">Tüm durumlar</option>
+          <option value="aktif">Aktif</option>
+          <option value="iptal">İptal</option>
+        </select>
+        <select id="filtre-para" aria-label="Para birimi">
+          <option value="hepsi">Tüm para birimleri</option>
+        </select>
+        <label class="onay-kutu">
+          <input type="checkbox" id="filtre-zorunlu"> Yalnız zorunlu
+        </label>
+        <select id="filtre-siralama" aria-label="Sıralama">
+          <option value="yillik-azalan">Yıllık maliyet ↓</option>
+          <option value="yillik-artan">Yıllık maliyet ↑</option>
+          <option value="ad">İsim A-Z</option>
+          <option value="tarih">Yakın ödeme</option>
+        </select>
+        <button class="btn btn-hayalet" data-action="filtre-temizle">Temizle</button>
+      </div>
+      <p class="liste-sayaci" id="liste-sayaci"></p>
+      <div class="tablo-kap">
+        <table class="tablo" id="abonelik-tablo">
+          <thead>
+            <tr>
+              <th>Hizmet</th>
+              <th>Kategori</th>
+              <th class="sag">Tutar</th>
+              <th class="sag">Aylık</th>
+              <th class="sag">Yıllık</th>
+              <th>Sonraki ödeme</th>
+              <th>Durum</th>
+              <th class="sag">İşlem</th>
+            </tr>
+          </thead>
+          <tbody id="abonelik-govde"></tbody>
+        </table>
+      </div>
+      <div class="kart-liste" id="abonelik-kartlar"></div>
+    </div>
+  </section>
+
+  <!-- ============ ANALİZ ============ -->
+  <section class="sayfa" id="sayfa-analiz" role="tabpanel" aria-label="Analiz">
+    <div class="kart karar-notu" id="karar-notu"></div>
+    <div class="analiz-izgara" id="analiz-kap"></div>
+    <div class="kart">
+      <div class="kart-baslik">
+        <h2>Kullanıcı tanımlı kurlar</h2>
+        <span class="kart-alt">Kurları siz girersiniz; sistem kur bilgisi çekmez.</span>
+      </div>
+      <div class="kur-izgara" id="kur-izgara"></div>
+      <p class="ipucu" id="kur-sonuc"></p>
+    </div>
+  </section>
+
+  <!-- ============ SENARYO ============ -->
+  <section class="sayfa" id="sayfa-senaryo" role="tabpanel" aria-label="Senaryo">
+    <div class="kart sim-kutusu">
+      <p class="sim-uyari">
+        <strong>Bu bir simülasyondur.</strong> Buradaki seçimler gerçek kayıtları iptal etmez;
+        yalnızca "iptal etseydim ne olurdu" sorusunun cevabını gösterir.
+      </p>
+      <button class="btn btn-hayalet" data-action="senaryo-sifirla">Senaryoyu sıfırla</button>
+    </div>
+    <div class="senaryo-ozet" id="senaryo-ozet"></div>
+    <div class="kart">
+      <div class="kart-baslik">
+        <h2>Senaryo önizlemesi — önümüzdeki 30 gün</h2>
+        <span class="kart-alt">Seçimlerinize göre yeniden hesaplandı</span>
+      </div>
+      <ul class="odeme-listesi kaydirmali" id="senaryo-takvim"></ul>
+    </div>
+    <div class="kart">
+      <div class="kart-baslik"><h2>Her abonelik için kararınız</h2></div>
+      <div id="senaryo-liste" class="senaryo-liste"></div>
+    </div>
+  </section>
+
+  <!-- ============ VERİ / ARAÇLAR ============ -->
+  <section class="kart arac-kutusu">
+    <div class="arac-metin">
+      <h2>Veriniz sizde kalır</h2>
+      <p>Hesap yok, banka/kredi kartı bilgisi yok, sunucu yok. Her şey tarayıcınızın <code>localStorage</code>'ında tutulur.</p>
+    </div>
+    <div class="arac-butonlar">
+      <button class="btn btn-hayalet" data-action="json-dis">JSON dışa aktar</button>
+      <button class="btn btn-hayalet" data-action="json-ic">JSON içe aktar</button>
+      <button class="btn btn-hayalet" data-action="csv-dis">CSV raporu</button>
+      <button class="btn btn-hayalet" data-action="demo-yukle">Demo veriyi yükle</button>
+      <button class="btn btn-tehlike" data-action="tumunu-sil">Tümünü sil</button>
+      <input type="file" id="dosya-girdi" accept="application/json,.json" hidden>
+    </div>
+  </section>
+</main>
+
+<nav class="alt-bar" id="alt-bar" aria-label="Mobil bölümler">
+  <button class="alt-sekme aktif" data-sekme="panel">Panel</button>
+  <button class="alt-sekme" data-sekme="takvim">Takvim</button>
+  <button class="alt-sekme" data-sekme="liste">Liste</button>
+  <button class="alt-sekme" data-sekme="analiz">Analiz</button>
+  <button class="alt-sekme" data-sekme="senaryo">Senaryo</button>
+</nav>
+
+<!-- ============ MODAL ============ -->
+<div class="modal-arka" id="modal-arka" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-baslik">
+    <div class="modal-baslik-cubuk">
+      <h2 id="modal-baslik">Abonelik ekle</h2>
+      <button class="btn btn-ikon" data-action="form-kapat" aria-label="Kapat">✕</button>
+    </div>
+    <form id="abonelik-form" novalidate>
+      <input type="hidden" id="f-id">
+      <div class="form-izgara">
+        <div class="alan tam">
+          <label for="f-ad">Hizmet adı *</label>
+          <input type="text" id="f-ad" maxlength="80" required placeholder="Örn. BulutDepo Pro">
+          <span class="hata" id="h-ad"></span>
+        </div>
+        <div class="alan">
+          <label for="f-kategori">Kategori *</label>
+          <select id="f-kategori"></select>
+          <span class="hata" id="h-kategori"></span>
+        </div>
+        <div class="alan">
+          <label for="f-tutar">Tutar *</label>
+          <input type="number" id="f-tutar" min="0.01" step="0.01" required placeholder="0,00">
+          <span class="hata" id="h-tutar"></span>
+        </div>
+        <div class="alan">
+          <label for="f-para">Para birimi</label>
+          <select id="f-para"></select>
+        </div>
+        <div class="alan">
+          <label for="f-siklik">Ödeme sıklığı</label>
+          <select id="f-siklik"></select>
+        </div>
+        <div class="alan">
+          <label for="f-tarih">Son / sonraki ödeme tarihi *</label>
+          <input type="date" id="f-tarih" required>
+          <span class="hata" id="h-tarih"></span>
+        </div>
+        <div class="alan">
+          <label for="f-kullanim">Son kullanım tarihi</label>
+          <input type="date" id="f-kullanim">
+        </div>
+        <div class="alan tam onaylar">
+          <label class="onay-kutu"><input type="checkbox" id="f-otomatik" checked> Otomatik yenilenen ödeme</label>
+          <label class="onay-kutu"><input type="checkbox" id="f-zorunlu"> Zorunlu gider</label>
+          <label class="onay-kutu"><input type="checkbox" id="f-iptal"> İptal edildi (gelecek toplamdan çıkar)</label>
+        </div>
+        <div class="alan tam">
+          <label for="f-not">Not</label>
+          <textarea id="f-not" maxlength="200" rows="2" placeholder="En fazla 200 karakter"></textarea>
+        </div>
+      </div>
+      <div class="modal-alt">
+        <span class="ipucu" id="form-ipucu"></span>
+        <div>
+          <button type="button" class="btn btn-hayalet" data-action="form-kapat">Vazgeç</button>
+          <button type="submit" class="btn btn-ana">Kaydet</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="toast-kap" id="toast-kap" aria-live="polite"></div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

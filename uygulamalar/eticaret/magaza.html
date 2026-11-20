@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mağaza — ATELIER</title>
+<meta name="description" content="ATELIER kataloğu: masa lambaları, seramik, mobilya aksesuarları ve yaşam ürünleri.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-page="magaza">
+
+<div class="ust-duyuru">Türkiye'nin her yerine kargo · <b>2.500 TL üzeri ücretsiz</b> · İlk siparişinizde <b>ATELIER10</b></div>
+
+<header class="site-baslik">
+  <div class="site-baslik-ic">
+    <button class="ikon-btn mobil-toggle" data-mobile-toggle aria-label="Menüyü aç" aria-expanded="false">
+      <svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+    <a href="index.html" class="logo" style="justify-self:start">ATELIER<small>Yaşamın İnce Detayları</small></a>
+    <nav class="ana-nav" aria-label="Ana menü">
+      <a href="magaza.html" data-nav="magaza">Mağaza</a>
+      <a href="magaza.html?kategori=lambalar">Lambalar</a>
+      <a href="magaza.html?kategori=seramik">Seramik</a>
+      <a href="magaza.html?kategori=aksesuar">Aksesuar</a>
+      <a href="panel.html" data-nav="panel">Panel</a>
+    </nav>
+    <div class="ust-araclar">
+      <a class="ikon-btn" href="magaza.html" aria-label="Ara">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      </a>
+      <a class="ikon-btn" href="magaza.html?favoriler=1" aria-label="Favoriler">
+        <svg viewBox="0 0 24 24"><path d="M12 20.5 4.7 13.4a4.8 4.8 0 0 1 0-6.9 4.9 4.9 0 0 1 6.9 0l.4.4.4-.4a4.9 4.9 0 0 1 6.9 0 4.8 4.8 0 0 1 0 6.9Z"/></svg>
+      </a>
+      <button class="ikon-btn" data-open-cart aria-label="Sepeti aç">
+        <svg viewBox="0 0 24 24"><path d="M6 7h12l1 13H5L6 7Z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg>
+        <span class="cart-sayac sifir" data-cart-count>0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="mobil-nav" data-mobile-nav>
+  <a href="magaza.html">Mağaza</a>
+  <a href="magaza.html?kategori=lambalar">Masa Lambaları</a>
+  <a href="magaza.html?kategori=seramik">Seramik</a>
+  <a href="magaza.html?kategori=aksesuar">Mobilya Aksesuarları</a>
+  <a href="magaza.html?kategori=yasan">Yaşam Ürünleri</a>
+  <a href="sepet.html">Sepetim</a>
+  <a href="panel.html">Yönetim Paneli</a>
+</div>
+
+<main>
+  <section class="sayfa-bas">
+    <div class="kap">
+      <nav class="kirinti" aria-label="Yol"><a href="index.html">Ana Sayfa</a> / <span>Mağaza</span></nav>
+      <h1>Koleksiyon</h1>
+      <p>Seçilmiş 24 parça. Her biri, bir odanın sessiz cümlesine eklenmek üzere.</p>
+    </div>
+  </section>
+
+  <div class="kap">
+    <div class="katalog-duzen">
+
+      <aside class="filtre-panel" aria-label="Filtreler">
+        <div class="filtre-grup">
+          <h4>Kategori</h4>
+          <button class="kategori-btn aktif" data-kat-btn="tumu">Tümü</button>
+          <button class="kategori-btn" data-kat-btn="lambalar">Masa Lambaları</button>
+          <button class="kategori-btn" data-kat-btn="seramik">Seramik</button>
+          <button class="kategori-btn" data-kat-btn="aksesuar">Mobilya Aksesuarları</button>
+          <button class="kategori-btn" data-kat-btn="yasan">Yaşam Ürünleri</button>
+        </div>
+        <div class="filtre-grup">
+          <h4>Fiyat Aralığı (TL)</h4>
+          <div class="fiyat-alanlari">
+            <input type="number" min="0" placeholder="Min" data-fmin aria-label="En düşük fiyat">
+            <span class="solgun">—</span>
+            <input type="number" min="0" placeholder="Maks" data-fmax aria-label="En yüksek fiyat">
+          </div>
+        </div>
+        <div class="filtre-grup">
+          <h4>Diğer</h4>
+          <button class="kategori-btn" data-favori-filtre>♡ Sadece Favoriler</button>
+          <button class="filtre-temizle" data-filtre-temizle type="button">Filtreleri Temizle</button>
+        </div>
+      </aside>
+
+      <div>
+        <div class="katalog-ust">
+          <div class="katalog-arama">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <label for="katalog-q" class="sr-only" style="position:absolute;left:-9999px">Ürün ara</label>
+            <input id="katalog-q" data-q placeholder="Ürün ara: lamba, vazo, keten…" autocomplete="off">
+          </div>
+          <div class="katalog-sag">
+            <span class="sayac" data-sayac></span>
+            <label for="siralama" class="sr-only" style="position:absolute;left:-9999px">Sıralama</label>
+            <select id="siralama" data-siralama aria-label="Sıralama">
+              <option value="onerilen">Önerilen</option>
+              <option value="artan">Fiyat: Artan</option>
+              <option value="azalan">Fiyat: Azalan</option>
+              <option value="puan">Puan</option>
+              <option value="yeni">Yeniler</option>
+            </select>
+          </div>
+        </div>
+        <div class="urun-izgara" data-urun-liste></div>
+        <div class="bos-durum" data-bos hidden>
+          <h2>Sonuç bulunamadı</h2>
+          <p>Bu filtrelerle eşleşen parça yok. Filtreleri gevşetmeyi dene.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<footer class="site-alt">
+  <div class="site-alt-ic">
+    <div>
+      <a href="index.html" class="logo">ATELIER<small>Yaşamın İnce Detayları</small></a>
+      <p class="aciklama">Ev dekorasyonu, masa lambaları, seramik ve yaşam ürünleri. Seçerek, yavaşça, özenle.</p>
+    </div>
+    <div><h4>Mağaza</h4><ul>
+      <li><a href="magaza.html">Tüm Ürünler</a></li>
+      <li><a href="magaza.html?kategori=lambalar">Masa Lambaları</a></li>
+      <li><a href="magaza.html?kategori=seramik">Seramik</a></li>
+      <li><a href="magaza.html?kategori=aksesuar">Aksesuarlar</a></li>
+      <li><a href="magaza.html?kategori=yasan">Yaşam Ürünleri</a></li>
+    </ul></div>
+    <div><h4>Yardım</h4><ul>
+      <li><a href="sepet.html">Sepetim</a></li>
+      <li><a href="odeme.html">Ödeme</a></li>
+      <li><a href="panel.html">Siparişlerim</a></li>
+    </ul></div>
+    <div><h4>Hakkında</h4><ul>
+      <li><a href="index.html#hikaye">Hikâyemiz</a></li>
+      <li><a href="#">İletişim</a></li>
+      <li><a href="#">Teslimat & İade</a></li>
+      <li><a href="#">Gizlilik</a></li>
+    </ul></div>
+  </div>
+  <div class="site-alt-alt">
+    <span>© <span data-yil>2026</span> ATELIER — Demo mağaza. Tüm ürünler kurgusaldır.</span>
+    <span>Kırık beyaz, kum beji, antrasit, bakır.</span>
+  </div>
+</footer>
+
+<div class="cekmec-overlay" data-drawer-overlay></div>
+<aside class="cekmec" data-cart-drawer aria-label="Sepet">
+  <div class="cekmec-bas"><h2>Sepetin</h2><button data-close-cart aria-label="Kapat">×</button></div>
+  <div class="cekmec-govde" data-cart-body></div>
+  <div class="cekmec-alt"><div data-cart-summary></div><a class="birincil-btn geniş" href="sepet.html" data-cart-link>Sepeti Gör</a></div>
+</aside>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

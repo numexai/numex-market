@@ -1,0 +1,67 @@
+/* Numex Renk Stüdyosu — mikroanimasyonlar */
+
+@keyframes akis {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 300% 50%; }
+}
+
+@keyframes logoDon {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.06); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+@keyframes panelGir {
+  from { opacity: 0; transform: translateY(10px) scale(0.995); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes nefes {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50% { opacity: 0.9; transform: scale(1.14); }
+}
+
+@keyframes parildama {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--vurgu) 60%, transparent); }
+  70% { box-shadow: 0 0 0 14px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+@keyframes kopyalandi {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+.palet-kart.kopyalandi { animation: kopyalandi 380ms cubic-bezier(0.22, 1, 0.36, 1); }
+.dugme.birincil { animation: parildama 3.4s ease-out infinite; }
+
+.hero-nokta {
+  position: absolute;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--p2);
+  animation: nefes 4.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.durak-tutamac.secili { animation: nefes 2.6s ease-in-out infinite; }
+
+.renk-secici-kart { transition: transform var(--gecis), border-color var(--gecis); }
+.renk-secici-kart:hover { border-color: var(--vurgu); }
+
+.gecmis-parca, .favori-renkler > div, .renk-seridi > div { transition: filter var(--gecis); }
+.gecmis-parca:hover { filter: brightness(1.15); }
+
+.durak-satir { transition: border-color var(--gecis), transform var(--gecis); }
+.durak-satir:hover { border-color: var(--vurgu); transform: translateX(2px); }
+
+.kod-kutusu { transition: border-color var(--gecis); }
+.kod-kutusu:hover { border-color: var(--vurgu); }
+
+.tema-kart .onizleme { position: relative; }
+.tema-kart .onizleme::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, transparent 55%, rgba(0, 0, 0, 0.28));
+}

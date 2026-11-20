@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NUMEX PRİZMA — Kabul Testleri</title>
+<!-- NUMEX-DÜZELTME (2026-11-19): T15 doğru teşhis koydu: test.html style.css'i hiç bağlamıyordu, bu yüzden medya sorgusu bulunamıyor ve test kalıyordu. Uygulamanın stil sayfası test sayfasına da bağlandı. -->
+<!-- NUMEX-DÜZELTME: T15 mobil düzen testi style.css'in bağlı olmasını denetliyor; test sayfasına
+     uygulamanın stil sayfası bağlandı (mobil kırılım kuralları bu dosyada tanımlı). -->
+<link rel="stylesheet" href="style.css">
+<style>
+  :root { --vurgu:#5eead4; --iyi:#34d399; --kotu:#f87171; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 24px 18px;
+    background: radial-gradient(900px 500px at 20% -10%, rgba(94,234,212,.09), transparent 60%), #05070f;
+    color: #dbeafe; font-family: "Segoe UI", system-ui, sans-serif; font-size: 14px;
+  }
+  .kap { max-width: 1080px; margin: 0 auto; }
+  h1 { font-size: 18px; letter-spacing: 2px; margin: 0 0 4px;
+       background: linear-gradient(90deg,#e6fffb,var(--vurgu)); -webkit-background-clip:text;
+       background-clip:text; color: transparent; }
+  p.alt { margin: 0 0 18px; color:#8fa3bf; font-size:12px; }
+  .ozet { display:flex; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+  .kutu {
+    background: rgba(15,23,42,.8); border:1px solid rgba(148,163,184,.18);
+    border-radius: 12px; padding: 10px 16px; min-width: 110px;
+  }
+  .kutu span { display:block; font-size: 10.5px; letter-spacing:1.2px; text-transform:uppercase; color:#8fa3bf; }
+  .kutu b { font-size: 22px; font-family: ui-monospace, monospace; }
+  .iyi { color: var(--iyi); } .kotu { color: var(--kotu); }
+  table { width:100%; border-collapse: collapse; background: rgba(15,23,42,.66);
+          border-radius: 12px; overflow: hidden; }
+  th, td { padding: 9px 11px; text-align: left; font-size: 12px; vertical-align: top;
+           border-bottom: 1px solid rgba(148,163,184,.12); }
+  th { background: rgba(30,41,59,.8); font-size: 10.5px; letter-spacing: 1.1px;
+       text-transform: uppercase; color: var(--vurgu); }
+  td.durum { font-weight: 700; white-space: nowrap; }
+  td.beklenen, td.olculen { color:#a7bad4; font-family: ui-monospace, monospace; font-size: 11.5px; }
+  tr:last-child td { border-bottom: 0; }
+  .rozet { display:inline-block; padding: 2px 7px; border-radius: 6px; font-size: 10px; }
+  .rozet.g { background: rgba(52,211,153,.16); color:#6ee7b7; }
+  .rozet.k { background: rgba(248,113,113,.16); color:#fca5a5; }
+  a.geri { color: var(--vurgu); font-size: 12px; text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="kap">
+  <h1>NUMEX PRİZMA — Kabul Testleri</h1>
+  <p class="alt">Optik motorun matematiksel doğruluğu · <a class="geri" href="index.html">← laboratuvara dön</a></p>
+
+  <div class="ozet">
+    <div class="kutu"><span>Toplam</span><b id="sToplam">—</b></div>
+    <div class="kutu"><span>Geçen</span><b id="sGecen" class="iyi">—</b></div>
+    <div class="kutu"><span>Kalan</span><b id="sKalan" class="kotu">—</b></div>
+  </div>
+
+  <table>
+    <thead>
+      <tr><th>#</th><th>Test</th><th>Durum</th><th>Ölçülen</th><th>Beklenen</th><th>Tolerans</th></tr>
+    </thead>
+    <tbody id="govde"><tr><td colspan="6">Testler çalışıyor…</td></tr></tbody>
+  </table>
+</div>
+
+<script type="module">
+  import { tumTestleriCalistir } from './js/validator.js';
+
+  const govde = document.getElementById('govde');
+
+  function kos() {
+    let sonuc;
+    try {
+      sonuc = tumTestleriCalistir();
+    } catch (e) {
+      govde.innerHTML = `<tr><td colspan="6" class="kotu">Testler çalıştırılamadı: ${e.message}</td></tr>`;
+      return;
+    }
+    document.getElementById('sToplam').textContent = sonuc.toplam;
+    document.getElementById('sGecen').textContent = sonuc.gecen;
+    document.getElementById('sKalan').textContent = sonuc.kalan;
+
+    govde.innerHTML = sonuc.detaylar.map((d) => `
+      <tr>
+        <td><b>${d.id}</b></td>
+        <td>${d.ad}${d.not ? `<br><small style="color:#7b8ea8">${d.not}</small>` : ''}</td>
+        <td class="durum"><span class="rozet ${d.gecti ? 'g' : 'k'}">${d.gecti ? 'GEÇTİ' : 'KALDI'}</span></td>
+        <td class="olculen">${d.olculen}</td>
+        <td class="beklenen">${d.beklenen}</td>
+        <td>${d.tolerans}</td>
+      </tr>`).join('');
+  }
+
+  kos();
+</script>
+</body>
+</html>

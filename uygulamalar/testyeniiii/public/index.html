@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kuaför Randevu</title>
+  <style>
+    :root {
+      --zemin: #fbf8f6;
+      --kart: #ffffff;
+      --murekkep: #241a1e;
+      --soluk: #7d6b73;
+      --cizgi: #ecdfe4;
+      --vurgu: #a03a63;
+      --vurgu-koyu: #822c4f;
+      --yesil: #2f7d55;
+      --kirmizi: #b3372f;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: radial-gradient(1200px 500px at 10% -10%, #f4e2e9 0%, var(--zemin) 55%);
+      color: var(--murekkep);
+      min-height: 100vh;
+    }
+    header {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap;
+      padding: 20px clamp(16px, 4vw, 40px);
+    }
+    h1 { font-size: 22px; margin: 0; letter-spacing: -.3px; }
+    h1 span { color: var(--vurgu); }
+    .sekme { display: flex; gap: 6px; background: #fff; border: 1px solid var(--cizgi); border-radius: 999px; padding: 4px; }
+    .sekme button {
+      border: 0; background: transparent; padding: 8px 18px; border-radius: 999px;
+      font: inherit; font-size: 14px; cursor: pointer; color: var(--soluk);
+    }
+    .sekme button[aria-selected="true"] { background: var(--vurgu); color: #fff; }
+    main { padding: 0 clamp(16px, 4vw, 40px) 60px; max-width: 980px; margin: 0 auto; }
+    .kart {
+      background: var(--kart); border: 1px solid var(--cizgi); border-radius: 16px;
+      padding: 22px; box-shadow: 0 10px 30px -24px rgba(36, 26, 30, .5);
+    }
+    .kart + .kart { margin-top: 18px; }
+    .alanlar { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; }
+    label { display: block; font-size: 13px; font-weight: 600; color: var(--soluk); margin-bottom: 6px; }
+    input, select {
+      width: 100%; padding: 10px 12px; font: inherit; font-size: 15px;
+      border: 1px solid var(--cizgi); border-radius: 10px; background: #fffdfd; color: inherit;
+    }
+    input:focus, select:focus { outline: 2px solid #e7bccd; outline-offset: 1px; border-color: var(--vurgu); }
+    .saatler { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+    .saat {
+      padding: 9px 14px; border-radius: 10px; border: 1px solid var(--cizgi);
+      background: #fff; font: inherit; font-size: 14px; cursor: pointer; min-width: 70px;
+      transition: transform .08s ease;
+    }
+    .saat:hover { border-color: var(--vurgu); }
+    .saat:active { transform: scale(.97); }
+    .saat[aria-pressed="true"] { background: var(--vurgu); border-color: var(--vurgu); color: #fff; }
+    .bos-mesaj { color: var(--soluk); font-size: 14px; padding: 6px 0; }
+    .eylem { display: flex; align-items: center; gap: 14px; margin-top: 18px; flex-wrap: wrap; }
+    .birincil {
+      background: var(--vurgu); color: #fff; border: 0; border-radius: 10px;
+      padding: 12px 24px; font: inherit; font-weight: 600; cursor: pointer;
+    }
+    .birincil:hover { background: var(--vurgu-koyu); }
+    .birincil:disabled { opacity: .5; cursor: not-allowed; }
+    .bilgi { font-size: 13px; color: var(--soluk); }
+    .uyari { margin-top: 14px; font-size: 14px; padding: 10px 12px; border-radius: 10px; }
+    .uyari.hata { background: #fdecea; color: var(--kirmizi); }
+    .uyari.basari { background: #e8f5ee; color: var(--yesil); }
+    .uyari:empty { display: none; }
+    .gun-baslik { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+    .gun-baslik h2 { font-size: 17px; margin: 0; }
+    .liste { list-style: none; margin: 0; padding: 0; }
+    .satir {
+      display: grid; grid-template-columns: 76px 1fr auto; gap: 14px; align-items: center;
+      padding: 12px 2px; border-top: 1px solid var(--cizgi);
+    }
+    .satir:first-child { border-top: 0; }
+    .saat-etiket { font-variant-numeric: tabular-nums; font-weight: 700; font-size: 16px; }
+    .saat-etiket small { display: block; font-weight: 400; font-size: 12px; color: var(--soluk); }
+    .satir strong { display: block; font-size: 15px; }
+    .satir .alt { font-size: 13px; color: var(--soluk); }
+    .iptal-btn {
+      border: 1px solid var(--cizgi); background: #fff; color: var(--kirmizi);
+      border-radius: 9px; padding: 8px 14px; font: inherit; font-size: 13px; cursor: pointer;
+    }
+    .iptal-btn:hover { border-color: var(--kirmizi); background: #fdf4f3; }
+    .bos-liste { color: var(--soluk); font-size: 14px; padding: 18px 0; text-align: center; }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Kuaför <span>Randevu</span></h1>
+    <nav class="sekme" aria-label="Ekranlar">
+      <button type="button" id="sekme-randevu" aria-selected="true">Randevu Al</button>
+      <button type="button" id="sekme-yonetici" aria-selected="false">Yönetici</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- MÜŞTERİ -->
+    <section id="ekran-randevu">
+      <div class="kart">
+        <div class="alanlar">
+          <div>
+            <label for="musteri">Adınız Soyadınız</label>
+            <input id="musteri" type="text" autocomplete="name" placeholder="Örn. Elif Yılmaz" maxlength="60" />
+          </div>
+          <div>
+            <label for="telefon">Telefon (isteğe bağlı)</label>
+            <input id="telefon" type="tel" autocomplete="tel" placeholder="05.. ... .. .." maxlength="20" />
+          </div>
+          <div>
+            <label for="hizmet">Hizmet</label>
+            <select id="hizmet"></select>
+          </div>
+          <div>
+            <label for="calisan">Çalışan</label>
+            <select id="calisan"></select>
+          </div>
+          <div>
+            <label for="tarih">Tarih</label>
+            <input id="tarih" type="date" />
+          </div>
+        </div>
+
+        <div style="margin-top:18px">
+          <label>Boş saatler</label>
+          <div class="saatler" id="saatler"></div>
+          <div class="bos-mesaj" id="saat-bos-mesaj" hidden></div>
+        </div>
+
+        <div class="eylem">
+          <button class="birincil" id="onayla" type="button" disabled>Randevuyu Onayla</button>
+          <span class="bilgi" id="ozet"></span>
+        </div>
+        <div class="uyari" id="uyari" role="status" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <!-- YÖNETİCİ -->
+    <section id="ekran-yonetici" hidden>
+      <div class="kart">
+        <div class="gun-baslik">
+          <h2>Günün randevuları</h2>
+          <input id="yonetici-tarih" type="date" style="width:auto" />
+        </div>
+        <ul class="liste" id="yonetici-liste"></ul>
+        <div class="bos-liste" id="yonetici-bos" hidden>Bu gün için randevu yok.</div>
+        <div class="uyari" id="yonetici-uyari" role="status" aria-live="polite"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const durum = { hizmetler: [], calisanlar: [], secilenSaat: null, randevular: [] };
+
+    const yerelTarih = (t = new Date()) => {
+      const p = (n) => String(n).padStart(2, "0");
+      return `${t.getFullYear()}-${p(t.getMonth() + 1)}-${p(t.getDate())}`;
+    };
+    const trTarih = (iso) => {
+      const [y, a, g] = iso.split("-").map(Number);
+      return new Date(y, a - 1, g).toLocaleDateString("tr-TR", {
+        weekday: "long", day: "numeric", month: "long", year: "numeric",
+      });
+    };
+    const saatEkle = (saat, dakika) => {
+      const [s, d] = saat.split(":").map(Number);
+      const t = s * 60 + d + dakika;
+      return `${String(Math.floor(t / 60)).padStart(2, "0")}:${String(t % 60).padStart(2, "0")}`;
+    };
+    const hizmetAdi = (id) => durum.hizmetler.find((h) => h.id === id)?.ad || id;
+    const calisanAdi = (id) => durum.calisanlar.find((c) => c.id === id)?.ad || id;
+
+    async function api(yol, secenek = {}) {
+      const cevap = await fetch(yol, {
+        headers: { "Content-Type": "application/json" },
+        ...secenek,
+      });
+      const veri = await cevap.json().catch(() => ({}));
+      if (!cevap.ok) throw new Error(veri.hata || "İşlem başarısız oldu.");
+      return veri;
+    }
+
+    // kutu: id metni (ör. "yonetici-uyari"); eksikse sessizce yut.
+    function uyari(kutu, mesaj, tur) {
+      const el = document.getElementById(kutu);
+      if (!el) return;
+      el.textContent = mesaj || "";
+      el.className = "uyari" + (tur ? " " + tur : "");
+    }
+
+    function secilenHizmet() {
+      return durum.hizmetler.find((h) => h.id === $("hizmet").value) || durum.hizmetler[0];
+    }
+
+    function saatiSifirla() {
+      durum.secilenSaat = null;
+      $("onayla").disabled = true;
+      $("ozet").textContent = "";
+    }
+
+    async function saatleriYukle() {
+      saatiSifirla();
+      const hizmet = secilenHizmet();
+      const kutu = $("saatler");
+      const bos = $("saat-bos-mesaj");
+      kutu.innerHTML = "";
+      if (!hizmet || !$("tarih").value) {
+        bos.hidden = false;
+        bos.textContent = "Tarih seçin.";
+        return;
+      }
+      const q = new URLSearchParams({
+        calisan: $("calisan").value,
+        tarih: $("tarih").value,
+        hizmet: hizmet.id,
+      });
+      try {
+        const { saatler } = await api("/api/saatler?" + q);
+        bos.hidden = saatler.length > 0;
+        bos.textContent = saatler.length ? "" : "Bu gün bu çalışanda uygun saat kalmadı. Başka gün ya da çalışan deneyin.";
+        for (const saat of saatler) {
+          const b = document.createElement("button");
+          b.type = "button";
+          b.className = "saat";
+          b.textContent = saat;
+          b.setAttribute("aria-pressed", "false");
+          b.addEventListener("click", () => {
+            durum.secilenSaat = saat;
+            [...kutu.children].forEach((x) => x.setAttribute("aria-pressed", "false"));
+            b.setAttribute("aria-pressed", "true");
+            $("onayla").disabled = false;
+            $("ozet").textContent =
+              `${hizmet.ad} · ${calisanAdi($("calisan").value)} · ${trTarih($("tarih").value)} · ` +
+              `${saat}–${saatEkle(saat, hizmet.dakika)} (${hizmet.dakika} dk)`;
+          });
+          kutu.appendChild(b);
+        }
+      } catch (hata) {
+        bos.hidden = false;
+        bos.textContent = hata.message;
+      }
+    }
+
+    async function randevuAl() {
+      const musteri = $("musteri").value.trim();
+      uyari("uyari", "");
+      if (musteri.length < 2) {
+        uyari("uyari", "Adınızı yazın (en az 2 karakter).", "hata");
+        $("musteri").focus();
+        return;
+      }
+      if (!durum.secilenSaat) {
+        uyari("uyari", "Önce bir saat seçin.", "hata");
+        return;
+      }
+      $("onayla").disabled = true;
+      try {
+        const { randevu } = await api("/api/randevu", {
+          method: "POST",
+          body: JSON.stringify({
+            musteri,
+            telefon: $("telefon").value.trim(),
+            calisan: $("calisan").value,
+            hizmet: $("hizmet").value,
+            tarih: $("tarih").value,
+            saat: durum.secilenSaat,
+          }),
+        });
+        uyari("uyari", `Randevunuz alındı: ${randevu.saat}, ${trTarih(randevu.tarih)}. Görüşmek üzere!`, "basari");
+        $("musteri").value = "";
+        $("telefon").value = "";
+        await saatleriYukle();
+      } catch (hata) {
+        uyari("uyari", hata.message, "hata");
+        await saatleriYukle(); // biri bizden önce o saati kaptıysa liste yenilenir
+      } finally {
+        $("onayla").disabled = !durum.secilenSaat;
+      }
+    }
+
+    async function gunListesiYukle() {
+      const tarih = $("yonetici-tarih").value;
+      const liste = $("yonetici-liste");
+      liste.innerHTML = "";
+      uyari("yonetici-uyari", "");
+      try {
+        const veri = await api("/api/randevular?" + new URLSearchParams({ tarih }));
+        durum.randevular = veri.randevular;
+        $("yonetici-bos").hidden = veri.randevular.length > 0;
+        for (const r of veri.randevular) {
+          const li = document.createElement("li");
+          li.className = "satir";
+          li.dataset.id = r.id;
+
+          const saat = document.createElement("div");
+          saat.className = "saat-etiket";
+          saat.textContent = r.saat;
+          const bitis = document.createElement("small");
+          bitis.textContent = saatEkle(r.saat, r.sure);
+          saat.appendChild(bitis);
+
+          const bilgi = document.createElement("div");
+          const ad = document.createElement("strong");
+          ad.textContent = r.musteri;
+          const alt = document.createElement("div");
+          alt.className = "alt";
+          alt.textContent = `${hizmetAdi(r.hizmet)} · ${calisanAdi(r.calisan)}` +
+            (r.telefon ? ` · ${r.telefon}` : "");
+          bilgi.append(ad, alt);
+
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "iptal-btn";
+          btn.textContent = "İptal et";
+          btn.addEventListener("click", () => iptalEt(r));
+
+          li.append(saat, bilgi, btn);
+          liste.appendChild(li);
+        }
+      } catch (hata) {
+        uyari("yonetici-uyari", hata.message, "hata");
+      }
+    }
+
+    async function iptalEt(r) {
+      uyari("yonetici-uyari", "");
+      try {
+        await api("/api/randevu/" + encodeURIComponent(r.id), { method: "DELETE" });
+        // NUMEX-DÜZELTME (2026-11-20): Sunucu DELETE'ten sonra boş liste dönse bile iptal bildirimi ekranda kalmalı; sıra düzeltildi (önce liste yenilenir, sonra bildirim yazılır).
+        await gunListesiYukle();
+        // Bildirim listenin YENİLENMESİNDEN SONRA yazılır (liste yenileme kendi uyarısını temizler).
+        uyari("yonetici-uyari", `${r.musteri} · ${r.saat} randevusu iptal edildi; saat yeniden boş.`, "basari");
+      } catch (hata) {
+        uyari("yonetici-uyari", hata.message, "hata");
+      }
+    }
+
+    function ekranSec(ad) {
+      const randevu = ad === "randevu";
+      $("ekran-randevu").hidden = !randevu;
+      $("ekran-yonetici").hidden = randevu;
+      $("sekme-randevu").setAttribute("aria-selected", String(randevu));
+      $("sekme-yonetici").setAttribute("aria-selected", String(!randevu));
+      history.replaceState(null, "", randevu ? "#" : "#yonetici");
+      if (!randevu) gunListesiYukle();
+    }
+
+    async function baslat() {
+      const bugun = yerelTarih();
+      $("tarih").value = bugun;
+      $("tarih").min = bugun;
+      $("yonetici-tarih").value = bugun;
+      $("yonetici-tarih").min = bugun;
+
+      const veri = await api("/api/hizmetler");
+      durum.hizmetler = veri.hizmetler;
+      durum.calisanlar = veri.calisanlar;
+      for (const h of veri.hizmetler) {
+        $("hizmet").add(new Option(`${h.ad} – ${h.dakika} dk · ${h.fiyat} TL`, h.id));
+      }
+      for (const c of veri.calisanlar) $("calisan").add(new Option(c.ad, c.id));
+
+      $("hizmet").addEventListener("change", saatleriYukle);
+      $("calisan").addEventListener("change", saatleriYukle);
+      $("tarih").addEventListener("change", saatleriYukle);
+      $("onayla").addEventListener("click", randevuAl);
+      $("yonetici-tarih").addEventListener("change", gunListesiYukle);
+      $("sekme-randevu").addEventListener("click", () => ekranSec("randevu"));
+      $("sekme-yonetici").addEventListener("click", () => ekranSec("yonetici"));
+
+      await saatleriYukle();
+      ekranSec(location.hash === "#yonetici" ? "yonetici" : "randevu");
+    }
+
+    baslat().catch((hata) => uyari("uyari", "Uygulama yüklenemedi: " + hata.message, "hata"));
+  </script>
+</body>
+</html>

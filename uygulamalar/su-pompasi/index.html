@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Numex Atlas — Su Şebekesi, Basınç ve Kriz Simülatörü</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="logo">ATLAS</span>
+    <div class="brand-text">
+      <h1>NUMEX ATLAS</h1>
+      <p>Su Şebekesi · Basınç · Kriz Simülatörü <span class="tag">eğitim prototipi</span></p>
+    </div>
+  </div>
+  <div class="top-actions">
+    <select id="scenarioSelect" class="ctrl" title="Hazır senaryo"></select>
+    <button class="btn" id="btnLoadScenario">Senaryoyu Yükle</button>
+    <button class="btn" id="btnNew">Yeni Şebeke</button>
+    <span class="sep"></span>
+    <button class="btn" id="btnSaveJson">JSON Kaydet</button>
+    <button class="btn" id="btnLoadJson">JSON Yükle</button>
+    <button class="btn" id="btnCsv">CSV</button>
+    <button class="btn" id="btnSvg">SVG</button>
+    <button class="btn btn-accent" id="btnPrint">Mühendislik Özeti</button>
+    <input type="file" id="fileInput" accept="application/json,.json" hidden>
+  </div>
+</header>
+
+<main class="layout">
+  <aside class="palette">
+    <h2>Eleman Ekle</h2>
+    <div class="tool-list">
+      <button class="tool" data-mode="add-reservoir"><b>▣</b><span>Su Deposu</span></button>
+      <button class="tool" data-mode="add-junction"><b>●</b><span>Dağıtım Düğümü</span></button>
+      <button class="tool" data-mode="add-neighborhood"><b>▤</b><span>Mahalle</span></button>
+    </div>
+    <h2>Bağla (iki düğüme tıkla)</h2>
+    <div class="tool-list">
+      <button class="tool" data-mode="connect-pipe"><b>―</b><span>Boru Hattı</span></button>
+      <button class="tool" data-mode="connect-pump"><b>Ⓟ</b><span>Pompa</span></button>
+      <button class="tool" data-mode="connect-valve"><b>◆</b><span>Vana</span></button>
+    </div>
+    <h2>Seçim</h2>
+    <button class="tool wide" data-mode="select"><b>✥</b><span>Seç / Taşı</span></button>
+    <button class="tool wide danger" id="btnDelete"><b>✕</b><span>Seçileni Sil (Del)</span></button>
+    <p class="hint">Düğümleri fareyle sürükleyebilirsin. Bir elemanı seçince özellikleri sağ panelde açılır; orada değiştirdiğin her sayı şebekeyi yeniden çözer.</p>
+  </aside>
+
+  <section class="stage">
+    <div class="stage-bar">
+      <span id="netTitle" class="net-title">—</span>
+      <span id="modeHint" class="mode-hint">Seçim modu</span>
+      <div class="stage-btns">
+        <button class="btn small" id="btnSolve">Yeniden Çöz</button>
+        <button class="btn small" id="btnReset">Senaryoyu Geri Yükle</button>
+      </div>
+    </div>
+    <div class="svg-wrap">
+      <svg id="netSvg" viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid meet"></svg>
+    </div>
+    <div class="kpis" id="kpis"></div>
+  </section>
+
+  <aside class="side">
+    <nav class="tabs">
+      <button class="tab active" data-tab="props">Özellikler</button>
+      <button class="tab" data-tab="results">Sonuçlar</button>
+      <button class="tab" data-tab="crisis">Kriz</button>
+      <button class="tab" data-tab="tests">Testler</button>
+    </nav>
+    <div class="tab-panel active" id="panel-props"><p class="empty">Bir eleman seç.</p></div>
+    <div class="tab-panel" id="panel-results"></div>
+    <div class="tab-panel" id="panel-crisis"></div>
+    <div class="tab-panel" id="panel-tests"></div>
+  </aside>
+</main>
+
+<footer class="statusbar">
+  <span id="status">Hazır.</span>
+  <span class="foot-note">Doğrusal iletkenlik modeli (Q = g · Δh) · sahte renk yok, gerçek denklem çözümü · gerçek altyapıya bağlanmaz</span>
+</footer>
+
+<script src="js/network.js"></script>
+<script src="js/hydraulics.js"></script>
+<script src="js/scenarios.js"></script>
+<script src="js/report.js"></script>
+<script src="js/validator.js"></script>
+<script src="js/tests.js"></script>
+<script src="js/ui.js"></script>
+</body>
+</html>

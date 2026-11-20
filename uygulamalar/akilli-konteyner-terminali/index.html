@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Numex Liman — Akıllı Konteyner Terminali</title>
+<link rel="stylesheet" href="styles/main.css" />
+<link rel="stylesheet" href="styles/panel.css" />
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="logo" aria-hidden="true"></span>
+    <div>
+      <h1>NUMEX LİMAN</h1>
+      <p>Akıllı Konteyner Terminali · operasyon &amp; yerleştirme simülatörü</p>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <span id="clock">t = 0 sn</span>
+    <span id="sim-state" class="sim-state paused">DURDURULDU</span>
+  </div>
+</header>
+
+<main class="layout">
+  <section class="scene-wrap">
+    <canvas id="scene" aria-label="Liman sahnesi"></canvas>
+
+    <div class="scene-actions">
+      <button id="btn-start" class="btn primary">▶ Başlat</button>
+      <button id="btn-pause" class="btn" disabled>⏸ Durdur</button>
+      <button id="btn-reset" class="btn">⟲ Sıfırla</button>
+      <button id="btn-urgent" class="btn warn">⚡ Acil Yük</button>
+      <div class="speed">
+        <label for="speed">Hız</label>
+        <input id="speed" type="range" min="0" max="3" step="1" value="1" />
+        <span id="speed-label">1×</span>
+      </div>
+    </div>
+
+    <div id="inspector" class="inspector" aria-live="polite"></div>
+  </section>
+
+  <aside class="panel">
+    <div class="panel-block">
+      <h2>Operasyon</h2>
+      <div id="kpis" class="kpis"></div>
+    </div>
+
+    <div class="panel-block">
+      <h2>Senaryo</h2>
+      <select id="scenario">
+        <option value="A">A — Normal Operasyon</option>
+        <option value="B">B — Vinç Arızası (CR-2)</option>
+        <option value="C">C — Saha Doluluğu (D)</option>
+        <option value="D">D — Acil Yük</option>
+      </select>
+      <p id="scenario-desc" class="muted"></p>
+    </div>
+
+    <div class="panel-block">
+      <h2>Vinçler</h2>
+      <div id="cranes" class="cranes"></div>
+    </div>
+
+    <div class="panel-block">
+      <h2>Saha Araçları</h2>
+      <div id="transports" class="transports"></div>
+    </div>
+
+    <div class="panel-block">
+      <h2>Depolama Bölgeleri</h2>
+      <div id="zones" class="zones"></div>
+    </div>
+
+    <div class="panel-block">
+      <h2>Bekleyen Kuyruk</h2>
+      <div id="queue" class="queue"></div>
+    </div>
+
+    <div class="panel-block">
+      <h2>Dışa Aktar</h2>
+      <div class="exports">
+        <button id="btn-json-save" class="btn sm">JSON Kaydet</button>
+        <label class="btn sm file">JSON Yükle<input id="file-load" type="file" accept=".json,application/json" hidden /></label>
+        <button id="btn-csv" class="btn sm">CSV Liste</button>
+        <button id="btn-png" class="btn sm">PNG Sahne</button>
+        <button id="btn-summary" class="btn sm">Operasyon Özeti</button>
+        <button id="btn-tests" class="btn sm accent">Kabul Testleri</button>
+      </div>
+    </div>
+
+    <p class="disclaimer">Depolama/istif kuralları eğitim amaçlı basitleştirilmiştir; gerçek liman güvenlik planı değildir.</p>
+  </aside>
+</main>
+
+<section id="test-results" class="floating tests-box"></section>
+<section id="summary-box" class="floating summary-box"></section>
+<div id="toast" class="toast"></div>
+
+<script type="module" src="src/main.js"></script>
+</body>
+</html>

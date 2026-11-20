@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Yönetim Paneli (Demo) — ATELIER</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-page="panel">
+
+<div class="ust-duyuru">Demo yönetim paneli · gerçek kimlik doğrulama yok</div>
+<header class="site-baslik">
+  <div class="site-baslik-ic">
+    <button class="ikon-btn mobil-toggle" data-mobile-toggle aria-label="Menüyü aç" aria-expanded="false">
+      <svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+    <a href="index.html" class="logo" style="justify-self:start">ATELIER<small>Yaşamın İnce Detayları</small></a>
+    <nav class="ana-nav" aria-label="Ana menü">
+      <a href="magaza.html" data-nav="magaza">Mağaza</a>
+      <a href="magaza.html?kategori=lambalar">Lambalar</a>
+      <a href="magaza.html?kategori=seramik">Seramik</a>
+      <a href="panel.html" data-nav="panel">Panel</a>
+    </nav>
+    <div class="ust-araclar">
+      <a class="ikon-btn" href="magaza.html" aria-label="Ara"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></a>
+      <button class="ikon-btn" data-open-cart aria-label="Sepeti aç"><svg viewBox="0 0 24 24"><path d="M6 7h12l1 13H5L6 7Z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg><span class="cart-sayac sifir" data-cart-count>0</span></button>
+    </div>
+  </div>
+</header>
+<div class="mobil-nav" data-mobile-nav>
+  <a href="index.html">Ana Sayfa</a><a href="magaza.html">Mağaza</a><a href="sepet.html">Sepetim</a><a href="panel.html">Yönetim Paneli</a>
+</div>
+
+<main>
+  <section class="sayfa-bas">
+    <div class="kap">
+      <nav class="kirinti" aria-label="Yol"><a href="index.html">Ana Sayfa</a> / <span>Panel</span></nav>
+      <h1>Yönetim Paneli <span class="solgun" style="font-size:.5em;font-family:var(--sans);letter-spacing:.1em">DEMO</span></h1>
+      <p>Siparişler, ürün stokları, ürün ekleme ve satış istatistikleri. Bu panel gerçek kimlik doğrulaması içermez.</p>
+    </div>
+  </section>
+  <div class="kap" data-panel style="padding:2rem 1.6rem 5rem"></div>
+</main>
+
+<footer class="site-alt">
+  <div class="site-alt-alt" style="margin-top:0;border:none"><span>© <span data-yil>2026</span> ATELIER — Demo panel.</span><span>Veriler tarayıcıda saklanır</span></div>
+</footer>
+
+<div class="cekmec-overlay" data-drawer-overlay></div>
+<aside class="cekmec" data-cart-drawer aria-label="Sepet">
+  <div class="cekmec-bas"><h2>Sepetin</h2><button data-close-cart aria-label="Kapat">×</button></div>
+  <div class="cekmec-govde" data-cart-body></div>
+  <div class="cekmec-alt"><div data-cart-summary></div><a class="birincil-btn geniş" href="sepet.html" data-cart-link>Sepeti Gör</a></div>
+</aside>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "kuafor-randevu",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Kuaför randevu uygulaması - 15 dakikalık dilimlerle, çakışma korumalı; Node sunucu + tek sayfa arayüz",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test \"test/*.test.js\""
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

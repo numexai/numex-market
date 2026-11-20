@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NUMEX AFET — Akıllı Acil Durum ve Tahliye Simülatörü</title>
+<link rel="stylesheet" href="css/stil.css">
+</head>
+<body>
+<header>
+  <h1>NUMEX <span>AFET</span> — Tahliye Planlama Laboratuvarı</h1>
+  <div class="rozet">Kurgusal veri · Simülasyon</div>
+</header>
+
+<div class="kpi-serit">
+  <div class="kpi"><div class="etiket">Toplam Nüfus</div><div class="deger" id="kpiToplam">0</div></div>
+  <div class="kpi"><div class="etiket">Yerleştirilen</div><div class="deger" id="kpiYerlesen">0</div></div>
+  <div class="kpi"><div class="etiket">Yerleştirilemeyen</div><div class="deger" id="kpiYerlesemeyen">0</div></div>
+  <div class="kpi"><div class="etiket">Kullanılan Alan</div><div class="deger" id="kpiAlan">0</div></div>
+  <div class="kpi"><div class="etiket">Kapalı Yol</div><div class="deger" id="kpiKapali">0</div></div>
+  <div class="kpi"><div class="etiket">Ort. Rota Süresi</div><div class="deger" id="kpiSure">0</div></div>
+  <div class="kpi"><div class="etiket">Yeniden Planlama</div><div class="deger" id="kpiReplan">0</div></div>
+</div>
+
+<div class="duzen">
+  <div class="harita-kap">
+    <div id="uyariAlani"></div>
+    <svg id="harita" viewBox="0 0 760 640" role="img" aria-label="Kurgusal şehir yol ağı"></svg>
+  </div>
+
+  <aside class="panel">
+    <section>
+      <h3>Senaryo</h3>
+      <select id="senaryoSec">
+        <option value="A">A — Normal Durum</option>
+        <option value="B">B — Köprü Kapandı</option>
+        <option value="C">C — Toplanma Alanı Doldu</option>
+        <option value="D">D — Çoklu Yol Kapanması</option>
+      </select>
+      <div class="buton-grup" style="margin-top:8px">
+        <button class="ana" id="btnReplan">Yeniden Planla</button>
+        <button id="btnBaslat">Başlat</button>
+        <button id="btnDurdur">Durdur</button>
+      </div>
+      <label class="ayar" style="margin-top:8px"><span>Hız</span>
+        <select id="hizSec"><option value="0.5">0.5x</option><option value="1" selected>1x</option><option value="2">2x</option><option value="4">4x</option></select>
+      </label>
+    </section>
+
+    <section>
+      <h3>Seçili Yol</h3>
+      <div id="yolDetay"><p class="soluk">Haritadan bir yol seçin.</p></div>
+      <button id="btnYolDegistir" style="margin-top:6px">Kapat / Aç</button>
+    </section>
+
+    <section>
+      <h3>Yerleşim Nüfusu</h3>
+      <div id="nufusAlanlari"></div>
+    </section>
+
+    <section>
+      <h3>Toplanma Kapasitesi</h3>
+      <div id="kapasiteAlanlari"></div>
+    </section>
+
+    <section>
+      <h3>Tahliye Atamaları</h3>
+      <table><thead><tr><th>Bölge</th><th>Alan</th><th>Kişi</th><th>Süre</th></tr></thead>
+      <tbody id="atamaGovde"></tbody></table>
+    </section>
+
+    <section>
+      <h3>Ulaşılamayan / Yerleştirilemeyen</h3>
+      <table><thead><tr><th>Bölge</th><th>Kişi</th><th>Neden</th></tr></thead>
+      <tbody id="ulasilamayanGovde"></tbody></table>
+    </section>
+
+    <section>
+      <h3>Veri</h3>
+      <div class="buton-grup">
+        <button id="btnJsonKaydet">JSON Kaydet</button>
+        <label class="ayar" style="display:inline-flex">JSON Yükle <input type="file" id="jsonYukle" accept=".json" style="width:120px"></label>
+      </div>
+      <div class="buton-grup" style="margin-top:6px">
+        <button id="btnCsv">CSV</button>
+        <button id="btnSvg">SVG</button>
+        <button id="btnRapor">Rapor</button>
+      </div>
+      <p class="soluk" style="font-size:10.5px;margin:8px 0 0">Kurgusal veri. Gerçek afet güvenliği veya resmî acil durum yönetimi için uygun değildir.</p>
+    </section>
+  </aside>
+</div>
+
+<script type="module" src="js/uygulama.js"></script>
+</body>
+</html>

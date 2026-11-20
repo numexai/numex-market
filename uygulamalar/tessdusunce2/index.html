@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+<title>Numex Devre — Akıllı Elektronik Laboratuvarı</title>
+<meta name="description" content="Tarayıcıda çalışan, gerçek elektriksel hesaplama yapan etkileşimli DC devre simülatörü.">
+<link rel="stylesheet" href="stil.css">
+</head>
+<body>
+
+<header class="ustbar">
+  <div class="marka">
+    <span class="logo">⚡</span>
+    <div>
+      <h1>Numex Devre</h1>
+      <p>Akıllı Elektronik Laboratuvarı · DC / sabit durum</p>
+    </div>
+  </div>
+  <div class="ust-eylemler">
+    <select class="btn" id="hazirSecim" title="Hazır devre yükle">
+      <option value="">Hazır devre…</option>
+      <option value="1">1 · 9 V + 330 Ω + LED</option>
+      <option value="2">2 · İki seri direnç</option>
+      <option value="3">3 · İki paralel direnç</option>
+      <option value="4">4 · Açık anahtarlı devre</option>
+      <option value="5">5 · Hatalı bağlantı (kısa devre)</option>
+    </select>
+    <button class="btn" data-eylem="kaydet">💾 JSON Kaydet</button>
+    <button class="btn" data-eylem="yukle">📂 JSON Yükle</button>
+    <button class="btn" data-eylem="svg">🖼 SVG</button>
+    <button class="btn" data-eylem="csv">📊 CSV</button>
+    <button class="btn" data-eylem="yazdir">🖨 Yazdır</button>
+    <button class="btn" data-eylem="testler">✔ Testler</button>
+    <button class="btn" data-eylem="tema" id="temaBtn" title="Tema değiştir">🌙</button>
+  </div>
+</header>
+
+<main>
+  <!-- ---------------------------------------------------------- palet -->
+  <aside class="palet">
+    <h2>Bileşenler</h2>
+    <button class="palet-btn" data-ekle="kaynak"><span class="simge">🔋</span> Pil / Kaynak</button>
+    <button class="palet-btn" data-ekle="direnc"><span class="simge">▭</span> Direnç</button>
+    <button class="palet-btn" data-ekle="led"><span class="simge">💡</span> LED</button>
+    <button class="palet-btn" data-ekle="anahtar"><span class="simge">⏻</span> Anahtar</button>
+    <button class="palet-btn" data-ekle="ampermetre"><span class="simge">🅐</span> Ampermetre</button>
+    <button class="palet-btn" data-ekle="voltmetre"><span class="simge">🅥</span> Voltmetre</button>
+
+    <h2>İşlem</h2>
+    <button class="palet-btn" data-eylem="sil"><span class="simge">🗑</span> Seçileni sil</button>
+    <button class="palet-btn" data-eylem="cevir"><span class="simge">↻</span> 90° döndür</button>
+    <button class="palet-btn" data-eylem="temizle"><span class="simge">✖</span> Tuvali temizle</button>
+    <button class="palet-btn" data-eylem="sigdir"><span class="simge">⤢</span> Ekrana sığdır</button>
+
+    <div class="ipucu">
+      <b>Uç bağlama:</b> Bir bileşenin mavi ucuna dokun, sonra başka bir ucuna dokun — kablo çekilir.<br><br>
+      <b>Taşıma:</b> Bileşeni tutup sürükle.<br>
+      <b>Yakınlaştırma:</b> Fare tekerleği / iki parmak.<br>
+      <b>Kaydırma:</b> Boş alanı tutup sürükle.<br>
+      <b>Silme:</b> Bileşene/kabloya dokun → Delete.
+    </div>
+  </aside>
+
+  <!-- ---------------------------------------------------------- tuval -->
+  <section class="tuval">
+    <svg id="kanvas" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="izgaraKucuk" width="20" height="20" patternUnits="userSpaceOnUse">
+          <path class="izgara-kucuk" d="M 20 0 L 0 0 0 20" fill="none"/>
+        </pattern>
+        <pattern id="izgaraBuyuk" width="100" height="100" patternUnits="userSpaceOnUse">
+          <rect width="100" height="100" fill="url(#izgaraKucuk)"/>
+          <path class="izgara-buyuk" d="M 100 0 L 0 0 0 100" fill="none"/>
+        </pattern>
+      </defs>
+      <rect id="izgaraDolgusu" x="0" y="0" width="100%" height="100%" fill="url(#izgaraBuyuk)"/>
+      <g id="kabloKatmani"></g>
+      <g id="bilesenKatmani"></g>
+      <g id="onizlemeKatmani"></g>
+    </svg>
+    <div class="rozet" id="rozet">Hazır</div>
+    <div class="zoom-kutu">
+      <button data-eylem="zoomCikar" title="Uzaklaştır">−</button>
+      <span id="zoomYazi">100%</span>
+      <button data-eylem="zoomEkle" title="Yakınlaştır">+</button>
+      <button data-eylem="sigdir" title="Ekrana sığdır">⤢</button>
+    </div>
+  </section>
+
+  <!-- ---------------------------------------------------------- panel -->
+  <aside class="panel">
+    <h3>Seçili Bileşen</h3>
+    <div class="kart" id="ozellikKarti">
+      <div class="bos">Bir bileşene dokun ve özelliklerini buradan değiştir.</div>
+    </div>
+
+    <h3>Analiz</h3>
+    <div class="kart" id="analizKarti">
+      <div class="bos">Devre kurulunca sonuçlar burada görünür.</div>
+    </div>
+
+    <h3>Eleman Ölçümleri</h3>
+    <div class="kart" id="olcumKarti">
+      <div class="bos">—</div>
+    </div>
+
+    <h3>Düğüm Gerilimleri</h3>
+    <div class="kart" id="dugumKarti">
+      <div class="bos">—</div>
+    </div>
+
+    <p class="kucuk-not">
+      Hesaplama yöntemi: düğüm gerilimleri (Modified Nodal Analysis) + Kirchhoff yasaları.
+      LED modeli parçalı-doğrusaldır (Vf + Rs) ve <b>yaklaşıktır</b>; gerçek LED'in akım-gerilim
+      eğrisini tam temsil etmez. Bu laboratuvar gerçek donanım kontrolü yapmaz ve fiziksel bir
+      devre kurmak için güvenlik garantisi vermez.
+    </p>
+  </aside>
+</main>
+
+<!-- ------------------------------------------------------------ modal -->
+<div class="modal-arka" id="modalArka">
+  <div class="modal">
+    <header>
+      <h2 id="modalBaslik">Kabul Testleri</h2>
+      <button class="btn" data-eylem="modalKapat">Kapat ✕</button>
+    </header>
+    <div class="icerik" id="modalIcerik"></div>
+  </div>
+</div>
+
+<input type="file" id="dosyaGirdi" accept=".json,application/json" style="display:none">
+
+<script src="devre-motoru.js"></script>
+<script src="uygulama.js"></script>
+</body>
+</html>

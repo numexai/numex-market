@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head><meta charset="UTF-8"><title>Numex Afet — Kabul Testleri</title>
+<style>
+body{background:#15181c;color:#e6edf3;font:14px/1.6 "Segoe UI",system-ui,sans-serif;padding:24px}
+h1{font-size:18px}.gecti{color:#34d399}.kaldi{color:#ef4444}
+li{border-bottom:1px solid #2c343d;padding:5px 0;list-style:none}
+</style></head>
+<body>
+<h1>Numex Afet — Kabul Testleri</h1>
+<p id="ozet">Çalışıyor…</p>
+<ul id="liste"></ul>
+<script type="module">
+import { tumTestleriCalistir } from './test.js';
+const s = tumTestleriCalistir();
+document.getElementById('liste').innerHTML = s.map(t =>
+  `<li class="${t.gecti ? 'gecti' : 'kaldi'}">${t.gecti ? '✔' : '✖'} ${t.ad}${t.hata ? ' — ' + t.hata : ''}</li>`).join('');
+const g = s.filter(x => x.gecti).length;
+document.getElementById('ozet').textContent = `${g} / ${s.length} test geçti.`;
+</script>
+</body></html>

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="tr" data-tema="koyu">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Numex Renk Stüdyosu — Etkileşimli Renk ve Sanat Atölyesi</title>
+<meta name="description" content="Renk karıştırma, akıllı palet üretimi, gradyan tasarımı ve hareketli sanat modları — Numex AI." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%237c5cff'/%3E%3Cstop offset='0.5' stop-color='%23ff5c8a'/%3E%3Cstop offset='1' stop-color='%2321d4a0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Ctext x='32' y='44' font-family='Arial' font-size='34' font-weight='bold' fill='white' text-anchor='middle'%3EN%3C/text%3E%3C/svg%3E" />
+<link rel="stylesheet" href="css/tema.css" />
+<link rel="stylesheet" href="css/duzen.css" />
+<link rel="stylesheet" href="css/animasyon.css" />
+</head>
+<body>
+
+<div class="uygulama">
+
+  <!-- ================= ÜST ÇUBUK ================= -->
+  <header class="ust-cubuk">
+    <div class="marka">
+      <div class="marka-logo">N</div>
+      <div>
+        <div class="marka-ad">Numex Renk Stüdyosu</div>
+        <div class="marka-alt">Renk ve Sanat Atölyesi</div>
+      </div>
+    </div>
+
+    <div class="arac-grubu">
+      <button class="dugme" id="btnGeriAl" title="Geri al (Ctrl+Z)">↶ Geri</button>
+      <button class="dugme" id="btnIleriAl" title="İleri al (Ctrl+Shift+Z)">↷ İleri</button>
+      <button class="dugme" id="btnTema" title="Tema değiştir">🌙 Tema</button>
+      <button class="dugme" id="btnTamEkran" title="Tam ekran (F)">⛶ Tam Ekran</button>
+      <button class="dugme" id="btnPng" title="PNG indir">PNG</button>
+      <button class="dugme" id="btnSvg" title="SVG gradyan indir">SVG</button>
+      <button class="dugme" id="btnCss" title="CSS indir">CSS</button>
+      <button class="dugme" id="btnJson" title="Projeyi JSON olarak kaydet">JSON ↓</button>
+      <button class="dugme" id="btnJsonYukle" title="JSON proje yükle">JSON ↑</button>
+      <input type="file" id="jsonDosya" accept="application/json,.json" class="gizli" />
+    </div>
+  </header>
+
+  <!-- ================= KAHRAMAN: TUVAL ================= -->
+  <section class="kahraman">
+    <div class="kahraman-metin">
+      <div class="rozet-satiri">
+        <span class="rozet">Renk Motoru</span>
+        <span class="rozet">Palet</span>
+        <span class="rozet">Gradyan</span>
+        <span class="rozet">Hareketli Sanat</span>
+      </div>
+      <h1>Renklerin <span>canlı</span> olduğu yer.</h1>
+      <p>Renkleri sürükle, birbirine karıştır, paletler üret, gradyan tasarla. Her değer gerçek formülle hesaplanır — sabit sonuç yok.</p>
+      <div class="arac-grubu">
+        <button class="dugme birincil" id="btnPaletYenile">✦ Paleti Yeniden Üret</button>
+        <button class="dugme" id="btnKaristir">🎨 Renkleri Karıştır</button>
+      </div>
+    </div>
+
+    <div class="tuval-kap" id="tuvalKap">
+      <canvas id="tuval"></canvas>
+      <div class="tuval-ipucu">Noktaları sürükle · fare hareketiyle dalgalanır</div>
+    </div>
+  </section>
+
+  <!-- ================= SEKMELER ================= -->
+  <nav class="sekmeler" role="tablist">
+    <button class="sekme aktif" data-sekme="palet">Palet Üretici</button>
+    <button class="sekme" data-sekme="karistirici">Karıştırma Lab.</button>
+    <button class="sekme" data-sekme="gradyan">Gradyan</button>
+    <button class="sekme" data-sekme="sanat">Hareketli Sanat</button>
+    <button class="sekme" data-sekme="arac">Araçlar</button>
+    <button class="sekme" data-sekme="temalar">Hazır Temalar</button>
+  </nav>
+
+  <!-- ============ PANEL: PALET ============ -->
+  <section class="panel aktif" id="panel-palet">
+    <div class="kart">
+      <div class="kart-baslik">
+        <h2>Akıllı Palet Üretici</h2>
+        <span class="ipucu">Renk tıkla → HEX kopyala · 🔒 kilit</span>
+      </div>
+      <div class="kural-satiri" id="kuralSatiri"></div>
+      <div class="palet-satiri" id="paletSatiri"></div>
+      <div class="kart-baslik" style="margin:14px 0 0">
+        <span class="ipucu" id="kuralAciklama">Analog uyum — komşu tonlar</span>
+        <div class="arac-grubu">
+          <button class="dugme minik" id="btnPaletKopyala">Paleti Kopyala</button>
+          <button class="dugme minik" id="btnFavoriEkle">☆ Favorilere Ekle</button>
+          <button class="dugme minik" id="btnPaletCss">CSS Değişkenleri</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="kart">
+      <div class="kart-baslik"><h2>Seçili Renk Detayı</h2><span class="ipucu">HEX · RGB · HSL · HSV</span></div>
+      <div class="izgara-2" id="seciliDetay"></div>
+    </div>
+  </section>
+
+  <!-- ============ PANEL: KARIŞTIRICI ============ -->
+  <section class="panel" id="panel-karistirici">
+    <div class="kart">
+      <div class="kart-baslik">
+        <h2>Renk Karıştırma Laboratuvarı</h2>
+        <span class="ipucu">RGB ve HSL yolları ayrı ayrı hesaplanır</span>
+      </div>
+      <div class="karistirici-izgara">
+        <div class="renk-secici-kart">
+          <input type="color" id="karistirA" value="#ff6b6b" />
+          <div class="deger-satiri"><span>A · HEX</span><b class="mono" id="aHex">#ff6b6b</b></div>
+          <div class="deger-satiri"><span>RGB</span><b class="mono" id="aRgb">—</b></div>
+          <div class="deger-satiri"><span>HSL</span><b class="mono" id="aHsl">—</b></div>
+          <div class="deger-satiri"><span>HSV</span><b class="mono" id="aHsv">—</b></div>
+        </div>
+        <div class="renk-secici-kart">
+          <input type="color" id="karistirB" value="#48dbfb" />
+          <div class="deger-satiri"><span>B · HEX</span><b class="mono" id="bHex">#48dbfb</b></div>
+          <div class="deger-satiri"><span>RGB</span><b class="mono" id="bRgb">—</b></div>
+          <div class="deger-satiri"><span>HSL</span><b class="mono" id="bHsl">—</b></div>
+          <div class="deger-satiri"><span>HSV</span><b class="mono" id="bHsv">—</b></div>
+        </div>
+      </div>
+
+      <div class="kaydirici-kap" style="margin-top:16px">
+        <div class="deger-satiri"><span>Karışım oranı (t)</span><b class="mono" id="tDeger">0.50</b></div>
+        <input type="range" id="karistirT" min="0" max="100" value="50" />
+      </div>
+
+      <div class="karsilastirma">
+        <div class="karsilastirma-blok">
+          <h4>RGB karışımı</h4>
+          <div class="renk-seridi" id="rgbSerit"></div>
+          <div class="deger-satiri" style="margin-top:10px"><span>Sonuç</span><b class="mono" id="rgbSonuc">—</b></div>
+        </div>
+        <div class="karsilastirma-blok">
+          <h4>HSL karışımı</h4>
+          <div class="renk-seridi" id="hslSerit"></div>
+          <div class="deger-satiri" style="margin-top:10px"><span>Sonuç</span><b class="mono" id="hslSonuc">—</b></div>
+        </div>
+      </div>
+      <div class="arac-grubu" style="margin-top:14px">
+        <button class="dugme minik" id="btnKaristirUygula">Sonucu Palette Uygula</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PANEL: GRADYAN ============ -->
+  <section class="panel" id="panel-gradyan">
+    <div class="kart">
+      <div class="kart-baslik">
+        <h2>Gradyan Tasarımcısı</h2>
+        <span class="ipucu">Durakları sürükle · canlı CSS</span>
+      </div>
+
+      <div class="kural-satiri" id="gradyanTipSatiri">
+        <button class="kural aktif" data-tip="linear">Linear</button>
+        <button class="kural" data-tip="radial">Radial</button>
+        <button class="kural" data-tip="conic">Conic</button>
+      </div>
+
+      <div class="gradyan-onizleme" id="gradyanOnizleme"></div>
+
+      <div class="deger-satiri"><span>Açı</span><b class="mono" id="aciDeger">135°</b></div>
+      <input type="range" id="aciKaydirici" min="0" max="360" value="135" />
+
+      <div class="durak-serit" id="durakSerit"></div>
+      <div class="kart-baslik" style="margin-bottom:8px">
+        <span class="ipucu">Duraklar (en az 2, öneri 5)</span>
+        <div class="arac-grubu">
+          <button class="dugme minik" id="btnDurakEkle">+ Durak</button>
+          <button class="dugme minik" id="btnDurakTemizle">5'lı Sıfırla</button>
+        </div>
+      </div>
+      <div class="durak-liste" id="durakListe"></div>
+
+      <div class="kart-baslik" style="margin-top:16px"><h2>Canlı CSS</h2>
+        <button class="dugme minik" id="btnCssKopyala">Kopyala</button>
+      </div>
+      <pre class="kod-kutusu" id="cssCiktisi"></pre>
+    </div>
+  </section>
+
+  <!-- ============ PANEL: SANAT ============ -->
+  <section class="panel" id="panel-sanat">
+    <div class="kart">
+      <div class="kart-baslik">
+        <h2>Hareketli Sanat Modu</h2>
+        <span class="ipucu">Palet renkleriyle üretilir</span>
+      </div>
+      <div class="sanat-tuval-kap"><canvas id="sanatTuval"></canvas></div>
+
+      <div class="sanat-kontroller" id="modSatiri"></div>
+
+      <div class="izgara-2" style="margin-top:16px">
+        <div class="kaydirici-kap">
+          <div class="deger-satiri"><span>Animasyon hızı</span><b class="mono" id="hizDeger">1.0×</b></div>
+          <input type="range" id="hizKaydirici" min="10" max="300" value="100" />
+        </div>
+        <div class="kaydirici-kap">
+          <div class="deger-satiri"><span>Yoğunluk</span><b class="mono" id="yogunlukDeger">0.60</b></div>
+          <input type="range" id="yogunlukKaydirici" min="5" max="100" value="60" />
+        </div>
+      </div>
+
+      <div class="arac-grubu" style="margin-top:14px">
+        <button class="dugme" id="btnSanatDurdur">⏸ Durdur</button>
+        <button class="dugme" id="btnSanatPng">🖼 Sanatı PNG İndir</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PANEL: ARAÇLAR ============ -->
+  <section class="panel" id="panel-arac">
+    <div class="kart">
+      <div class="kart-baslik"><h2>Renk Geçmişi</h2>
+        <button class="dugme minik" id="btnGecmisTemizle">Temizle</button>
+      </div>
+      <div class="gecmis-serit" id="gecmisSerit"><span class="ipucu">Henüz renk seçilmedi.</span></div>
+    </div>
+
+    <div class="kart">
+      <div class="kart-baslik"><h2>Favori Paletler</h2>
+        <span class="ipucu">localStorage'da saklanır</span>
+      </div>
+      <div id="favoriListe"><span class="ipucu">Henüz favori yok — palet panelinden ekleyin.</span></div>
+    </div>
+
+    <div class="kart">
+      <div class="kart-baslik"><h2>Kontrast Ölçer (WCAG)</h2>
+        <span class="ipucu">0.2126R + 0.7152G + 0.0722B</span>
+      </div>
+      <div class="izgara-2">
+        <div class="renk-secici-kart">
+          <input type="color" id="kontrastA" value="#ffffff" />
+          <div class="deger-satiri"><span>Ön plan</span><b class="mono" id="kontrastAHex">#ffffff</b></div>
+        </div>
+        <div class="renk-secici-kart">
+          <input type="color" id="kontrastB" value="#111111" />
+          <div class="deger-satiri"><span>Arka plan</span><b class="mono" id="kontrastBHex">#111111</b></div>
+        </div>
+      </div>
+      <div class="kontrast-sonuc">
+        <span class="kontrast-oran" id="kontrastOran">21.0:1</span>
+        <span class="wcag-rozet" id="wcagAA">AA</span>
+        <span class="wcag-rozet" id="wcagAAA">AAA</span>
+        <span class="wcag-rozet" id="wcagBuyuk">AA Büyük</span>
+      </div>
+      <div class="kontrast-ornek" id="kontrastOrnek">
+        Numex Renk Stüdyosu — örnek metin. Bu paragraf seçtiğin renklerle boyanır.
+      </div>
+    </div>
+
+    <div class="kart">
+      <div class="kart-baslik"><h2>Dışa Aktarma</h2><span class="ipucu">PNG · SVG · CSS · JSON</span></div>
+      <div class="arac-grubu">
+        <button class="dugme minik" id="btnPng2">PNG (gradyan)</button>
+        <button class="dugme minik" id="btnSvg2">SVG</button>
+        <button class="dugme minik" id="btnCss2">CSS</button>
+        <button class="dugme minik" id="btnJson2">JSON Kaydet</button>
+        <button class="dugme minik" id="btnJsonYukle2">JSON Yükle</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PANEL: TEMALAR ============ -->
+  <section class="panel" id="panel-temalar">
+    <div class="kart">
+      <div class="kart-baslik"><h2>Hazır Koleksiyonlar</h2><span class="ipucu">Tıkla → tüm stüdyo o renge boyanır</span></div>
+      <div class="tema-izgara" id="temaIzgara"></div>
+    </div>
+  </section>
+
+  <div class="alt-bilgi">
+    Numex Renk Stüdyosu · tüm hesaplamalar tarayıcıda, gerçek formüllerle yapılır · verileriniz cihazınızdan çıkmaz (KVKK)
+  </div>
+</div>
+
+<div class="bildirim" id="bildirim" role="status" aria-live="polite"></div>
+
+<script src="js/renk-motoru.js"></script>
+<script src="js/durum.js"></script>
+<script src="js/palet.js"></script>
+<script src="js/gradyan.js"></script>
+<script src="js/sanat.js"></script>
+<script src="js/disa-aktar.js"></script>
+<script src="js/arayuz.js"></script>
+<script src="js/uygulama.js"></script>
+</body>
+</html>

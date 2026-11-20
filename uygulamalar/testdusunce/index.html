@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Numex Çizgi — Akıllı Kesim ve Fire Optimizasyonu</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="app">
+
+  <header class="top">
+    <div class="brand">
+      <div class="logo">NÇ</div>
+      <div>
+        <h1>NUMEX ÇİZGİ <span class="ver">v1.0</span></h1>
+        <p>Akıllı kesim &amp; fire optimizasyonu — gerçek 2B yerleşim motoru</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <label class="minf">
+        <span>Strateji</span>
+        <select id="strategy">
+          <option value="auto">Otomatik (en iyi)</option>
+          <option value="shelf">First Fit Decreasing (raf)</option>
+          <option value="maxrects">MaxRects — BSSF</option>
+          <option value="guillotine">Guillotine — BAF</option>
+        </select>
+      </label>
+      <button id="btn-run" class="btn primary">Optimize Et</button>
+    </div>
+  </header>
+
+  <div class="wrap">
+
+    <!-- ============================ SOL PANEL ============================ -->
+    <aside class="col-left">
+
+      <section class="card">
+        <h2>1 · Stok levha</h2>
+        <div class="fields">
+          <label class="f full"><span>Malzeme</span><input id="st-material" value="MDF" placeholder="MDF, kontrplak, pleksi, sac…"></label>
+          <label class="f"><span>Genişlik (mm)</span><input id="st-width" type="number" min="0" step="1" value="2440"></label>
+          <label class="f"><span>Yükseklik (mm)</span><input id="st-height" type="number" min="0" step="1" value="1220"></label>
+          <label class="f"><span>Adet</span><input id="st-qty" type="number" min="0" step="1" value="4"></label>
+          <label class="f"><span>Levha maliyeti (TL)</span><input id="st-cost" type="number" min="0" step="1" value="850"></label>
+          <label class="f"><span>Kesim payı — kerf (mm)</span><input id="st-kerf" type="number" min="0" step="0.5" value="3"></label>
+          <label class="f"><span>Kenar boşluğu (mm)</span><input id="st-margin" type="number" min="0" step="1" value="10"></label>
+        </div>
+        <p class="hint">Kenar boşluğu dört kenardan da düşülür. Kerf her parçanın sağında ve altında ayrılır — iki parça arasında en az bu kadar malzeme kalır.</p>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <h2>2 · Parçalar</h2>
+          <button id="btn-add-part" class="btn tiny">+ Parça</button>
+        </div>
+        <div class="tbl-wrap">
+          <table class="grid" id="parts-table">
+            <thead>
+              <tr>
+                <th>#</th><th>Ad</th><th>G</th><th>Y</th><th>Adet</th><th title="Döndürmeye izin ver">↻</th><th>Malzeme</th><th></th>
+              </tr>
+            </thead>
+            <tbody id="parts-body"></tbody>
+          </table>
+        </div>
+        <details class="bulk" open>
+          <summary>Toplu ekle (metin)</summary>
+          <p class="hint">Her satır: <code>Ad;Genişlik;Yükseklik;Adet;Döndür(0/1)</code></p>
+          <textarea id="bulk-text" rows="4" placeholder="Raf;868;560;4;1&#10;Kapak;596;715;2;1"></textarea>
+          <button id="btn-bulk" class="btn tiny">Listeyi ekle</button>
+        </details>
+      </section>
+
+      <section class="card">
+        <h2>3 · Hazır senaryolar</h2>
+        <div class="scn">
+          <button class="btn scn-btn" data-scn="A"><b>A · Mobilya</b><small>2440×1220 MDF · 12 parça</small></button>
+          <button class="btn scn-btn" data-scn="B"><b>B · Reklam</b><small>2000×1000 pleksi · 20 parça</small></button>
+          <button class="btn scn-btn" data-scn="C"><b>C · Zor sınav</b><small>sığar gibi görünen, sığmayan</small></button>
+        </div>
+        <div class="row-btns">
+          <button id="btn-reset" class="btn tiny ghost">Sıfırla</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Dışa aktar</h2>
+        <div class="row-btns">
+          <button id="x-svg" class="btn tiny">SVG indir</button>
+          <button id="x-json" class="btn tiny">JSON kaydet</button>
+          <button id="x-csv" class="btn tiny">CSV indir</button>
+          <button id="x-print" class="btn tiny">Yazdır</button>
+          <label class="btn tiny file">JSON yükle<input id="file-json" type="file" accept="application/json,.json" hidden></label>
+        </div>
+      </section>
+
+    </aside>
+
+    <!-- ============================ SAĞ PANEL ============================ -->
+    <main class="col-right">
+
+      <nav class="tabs" id="tabs">
+        <button class="tab active" data-tab="plan">Yerleşim</button>
+        <button class="tab" data-tab="cmp">Karşılaştırma</button>
+        <button class="tab" data-tab="test">Kabul testleri</button>
+        <button class="tab" data-tab="help">Yöntem</button>
+      </nav>
+
+      <!-- ---------------------------- PLAN ---------------------------- -->
+      <section class="pane active" id="pane-plan">
+        <div id="warnings"></div>
+
+        <div class="stats" id="stats">
+          <div class="stat"><span>Kullanılan levha</span><b id="sum-sheets">—</b></div>
+          <div class="stat"><span>Fire</span><b id="sum-waste">—</b></div>
+          <div class="stat"><span>Maliyet</span><b id="sum-cost">—</b></div>
+          <div class="stat"><span>Yerleşen</span><b id="sum-placed">—</b></div>
+          <div class="stat"><span>Parça alanı</span><b id="sum-partsarea">—</b></div>
+          <div class="stat"><span>Stok alanı</span><b id="sum-stockarea">—</b></div>
+        </div>
+
+        <div class="toolbar">
+          <div class="sheetnav">
+            <button id="btn-prev" class="btn tiny">‹</button>
+            <div id="sheet-tabs" class="sheet-tabs"></div>
+            <button id="btn-next" class="btn tiny">›</button>
+          </div>
+          <div class="tools">
+            <label class="chk"><input id="chk-kerf" type="checkbox" checked> Kesim payını göster</label>
+            <label class="zoom">Yakınlaştır <input id="zoom" type="range" min="0.6" max="4" step="0.1" value="1"></label>
+          </div>
+        </div>
+
+        <div class="plan-area">
+          <div id="svg-holder" class="svg-holder"></div>
+          <aside id="detail" class="detail"><p class="hint">Parçaya tıklayınca ayrıntıları burada görünür.</p></aside>
+        </div>
+
+        <div class="two-col">
+          <div class="card flush">
+            <h3>Yerleşmeyen parçalar <span id="unplaced-count" class="pill">0</span></h3>
+            <div id="unplaced"></div>
+          </div>
+          <div class="card flush">
+            <h3>Levha doluluk</h3>
+            <div id="sheet-fill"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ------------------------ KARŞILAŞTIRMA ------------------------ -->
+      <section class="pane" id="pane-cmp">
+        <div class="card flush">
+          <h3>Üç strateji, aynı veri</h3>
+          <div class="tbl-wrap"><table class="grid" id="cmp-table">
+            <thead><tr>
+              <th>Strateji</th><th>Levha</th><th>Yerleşen</th><th>Yerleşmeyen</th><th>Fire %</th><th>Doluluk %</th><th>Maliyet</th>
+            </tr></thead>
+            <tbody id="cmp-body"></tbody>
+          </table></div>
+          <p class="hint" id="cmp-note"></p>
+        </div>
+        <div class="card flush">
+          <h3>Fark ne?</h3>
+          <p class="hint">Aynı parça listesi üç farklı yerleştirme mantığıyla çözülür. <b>Fire %</b> = (kullanılan levha alanı − parçaların gerçek alanı) / kullanılan levha alanı. Yani kesim payı da fireye dahildir. En iyi satır yeşil işaretlidir; istersen üstteki açılır listeden başka bir stratejiyi sabitleyebilirsin.</p>
+        </div>
+      </section>
+
+      <!-- --------------------------- TESTLER --------------------------- -->
+      <section class="pane" id="pane-test">
+        <div class="card flush">
+          <div class="card-head">
+            <h3>Gerçek kabul sınavları <span id="test-summary" class="pill">—</span></h3>
+            <button id="btn-tests" class="btn tiny primary">Testleri çalıştır</button>
+          </div>
+          <p class="hint">Bu testler arayüzden bağımsız olarak motoru sıfırdan çalıştırır: çakışma, kerf etkisi, döndürme kısıtı, stok yetersizliği, taşma, strateji farkı, JSON gidiş-dönüşü ve SVG koordinat tutarlılığı.</p>
+          <div id="test-list" class="tests"></div>
+        </div>
+      </section>
+
+      <!-- ---------------------------- YÖNTEM ---------------------------- -->
+      <section class="pane" id="pane-help">
+        <div class="card flush">
+          <h3>Nasıl hesaplıyor?</h3>
+          <p><b>Ayak izi kuralı.</b> Her parça, yerleşimde <code>(w + kerf) × (h + kerf)</code> büyüklüğünde bir alan kaplar. Böylece iki parça arasında her zaman en az kerf kadar malzeme kalır. Parçanın kendi çizimi <code>w × h</code> olarak ayrı tutulur; çizimde gördüğün dikdörtgen parçanın kendisidir, kırmızı bant kesim payıdır.</p>
+          <p><b>Kenar boşluğu.</b> Levhanın dört kenarından düşülür. Kenar boşluğu = 0 ise parça levha kenarına dayanabilir. Doğrulayıcı, hiçbir parçanın bu sınırın dışına çıkmadığını ayrıca kontrol eder.</p>
+          <p><b>Fire.</b> Fire = kullanılan levha alanı − parçaların gerçek alanı. Bileşenleri ayrı ayrı raporlanır:</p>
+          <ul>
+            <li><b>Kesim payı kaybı</b> = Σ (w+kerf)(h+kerf) − Σ w·h</li>
+            <li><b>Artık alan</b> = kullanılan levha alanı − Σ (w+kerf)(h+kerf) &nbsp;(yani kenar boşlukları + hiç dolmayan köşeler)</li>
+          </ul>
+          <p>Yalnızca fiilen kullanılan levhalar maliyete girer; stokta kalan levhalar maliyete eklenmez, ayrı bilgi olarak gösterilir. Parçalar stok adedine sığmıyorsa sonuç yuvarlanmaz: eksik parçalar “Yerleşmeyen” listesinde gerekçesiyle listelenir (levhaya sığmıyor / stok bitti / malzeme uyuşmuyor / ölçü geçersiz).</p>
+          <p><b>Determinizm.</b> Parçalar toplam bir sıralamayla (eşitlikte kimlik sırası) dizilir; rastgelelik yoktur. Aynı girdi + aynı strateji her zaman aynı yerleşimi verir. Bu yüzden JSON kaydedip geri yüklediğinde aynı plan çıkar.</p>
+          <p class="warn-note">Bu bir üretim prototipidir: kesim planını görselleştirir ve maliyet çıkarır. Endüstriyel CNC/lazer makinesine komut göndermez, makine koduna (G-code) çevirmez.</p>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<div id="print-area"></div>
+
+<script src="js/core.js"></script>
+<script src="js/tests.js"></script>
+<script src="js/ui.js"></script>
+</body>
+</html>

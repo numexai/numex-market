@@ -1,6 +1,6 @@
 # Numex Market uygulamaları — ücretsiz, açık kaynak, Türkçe
 
-Numex AI'nın otonom olarak yazdığı, test ettiği ve [Numex Market](https://market.numexai.com.tr)'te yayımladığı **86 uygulamanın** kaynak kodu:
+Numex AI'nın otonom olarak yazdığı, test ettiği ve [Numex Market](https://market.numexai.com.tr)'te yayımladığı **98 uygulamanın** kaynak kodu:
 tarayıcı oyunları, simülasyonlar, yapay zekâ demoları, günlük araçlar, iş uygulamaları ve web masaüstleri.
 Her gün [numexai.com.tr](https://numexai.com.tr) vitrininden kendiliğinden eşitlenir. Hepsi [MIT lisanslı](LICENSE): dene, incele, çatalla.
 
@@ -104,10 +104,14 @@ Her gün [numexai.com.tr](https://numexai.com.tr) vitrininden kendiliğinden eş
 |---|---|
 | [**İnsan Vücudu — Sinir ve Dolaşım Laboratuvarı**](human-body-lab/) | Tarayıcıda çalışan, canlı verilerle tepki veren interaktif insan vücudu simülasyonu — kalp ritmi, kan akışı, sinir yolları. (Node/Express) |
 
-## 📦 Diğer (23)
+## 📦 Diğer (35)
 
 | Uygulama | Ne yapar |
 |---|---|
+| [**Akıllı Elektronik Laboratuvarı**](tessdusunce2/) |  |
+| [**Akıllı iş ve kaynak planlama motoru**](divanihumayun/) |  |
+| [**Akıllı Kesim ve Fire Optimizasyonu**](testdusunce/) | Levha (stok) ve parça listesinden **gerçek, deterministik bir 2B yerleşim** üreten |
+| [**Akıllı Konteyner Terminali**](akilli-konteyner-terminali/) | Türkçe, tek klasörde çalışan, etkileşimli liman operasyon ve konteyner yerleştirme simülatörü. |
 | [**baglantiSuresiAyarla**](testkosu/) |  |
 | [**Çılgın Makineler Atölyesi**](mutluluk/) | Tarayıcıda çalışan, gerçek zamanlı fizik simülasyonuna dayalı Rube Goldberg makine atölyesi. |
 | [**çizgi roman yapımı**](cizgi-roman/) |  |
@@ -115,19 +119,27 @@ Her gün [numexai.com.tr](https://numexai.com.tr) vitrininden kendiliğinden eş
 | [**interaktif hayal dünyası**](interaktif-jayal-dunyasi/) | Tarayıcıda çalışan, tamamen yerel (model API'si gerektirmeyen) parçacık sanatı uygulaması. |
 | [**ipek yolu**](ipek-yolu/) |  |
 | [**KAYIP ESER DOSYASI**](kayip-eser-dosyasi/) | Sarnıç Müzesi'nin Doğu Salonu'ndan çalınan **Yıldız Küresi** vakasını çözdüğün, tarayıcıda oynanan tek kişilik dedektiflik oyunu. Kurulum, derleme ve sunucu gerekmez. |
+| [**kuaför randevu**](testyeniiii/) | Kuaför randevu uygulaması - 15 dakikalık dilimlerle, çakışma korumalı; Node sunucu + tek sayfa arayüz |
 | [**Lazer Kesim Tasarım Stüdyosu**](lazer-kesim-tasarim-studyosu/) |  |
 | [**mektup**](mektup/) |  |
 | [**motifler**](testanadolu/) |  |
+| [**numex Abonelik, Fatura ve Düzenli Ödeme Dedektifi**](numex-abonelik-fatura-ve-duzenli-odeme-dedektifi/) | "Neye ne kadar ödüyorum?" sorusunu tek ekranda cevaplayan, **tamamen yerel** çalışan Türkçe kişisel gider farkındalık uygulaması. |
 | [**numex data**](numex-data/) | Numex Data Detective — iki dosyayı karşılaştırıp gizli hataları kaynak satırlarıyla bulan dedektif |
 | [**numex data store**](numex-data-store/) | CSV / XLSX dosyalarını içe aktarıp üzerinde çalışan, veri kalitesini denetleyen ve sürükle-bırak rapor paneline dönüştüren tek sayfalık web uygulaması. |
 | [**numex dron acil durum kordinat merkezi**](test125/) |  |
+| [**numex E-ticaret sitesi**](eticaret/) | Türkçe, premium bir e-ticaret vitrini. **Kurulum yok, derleme yok, harici servis yok.** |
+| [**numex Etkileşimli Renk ve Sanat Stüdyosu**](etkilesimli-renk-ve-sanat-studyosu/) | Tek klasörde çalışan, bağımlılığı olmayan renk tasarım uygulaması. `index.html` çift tıklanınca açılır — sunucu, kurulum, internet gerekmez. |
 | [**NUMEX FLOORPLAN**](numex-floorplan/) | Tarayıcıda çalışan 2D/3D iç mekân planlama stüdyosu. Kendi evinizin planını çizer, mobilya yerleştirir, 3B görünümde gezer ve projeyi kaydedersiniz. |
 | [**numex flow**](numex-flow/) |  |
 | [**Numex Minyatür Dünya**](numex-minyatur-dunya/) | Numex Minyatür Dünya - tarayıcıda 3D diorama atölyesi |
 | [**numex nesnelerle zman çizelgesi**](numex-sehir/) | Tarayıcıda çalışan, kod yazmadan animasyon üreten ve düzenleyen tek dosyalık stüdyo. Dış bağımlılık yok: `index.html` içinde HTML + CSS + JavaScript. |
 | [**numex rengareng neşeli**](numex-rengareng-neseli/) |  |
 | [**numex renkli dünyam**](numex-renkli-dunyam/) |  |
+| [**numex Tahliye Simülatörü**](numex-tahliye-simulatoru/) | Kurgusal bir şehirde afet senaryosu ve tahliye planlaması yapan, **tamamen yerel** çalışan statik web uygulaması. |
 | [**numex-studio-x**](numex-studio-x/) |  |
 | [**operasyon merkezi**](operasyon-merkezi/) | Mini Fabrika Yönetim Merkezi - üretim planlama, iş emri, stok ve maliyet motoru |
+| [**optik labaratuvar**](optik-labaratuvar/) |  |
+| [**soy ağacı**](soy-agaci/) | Tek klasörde çalışan, Türkçe, etkileşimli bir aile tarihi ve soyağacı uygulaması. |
+| [**su pompası**](su-pompasi/) | Tek klasörde çalışan, Türkçe, etkileşimli su dağıtım şebekesi simülatörü. |
 | [**test2655yasayan mahelle**](test2655yasayan-mahelle/) |  |
 | [**Yaşayan Şehir**](test126/) |  |

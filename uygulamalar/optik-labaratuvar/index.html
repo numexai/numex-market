@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>NUMEX PRİZMA — Etkileşimli Optik Laboratuvarı</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="ustbar">
+  <div class="marka">
+    <span class="logo">◈</span>
+    <div>
+      <h1>NUMEX PRİZMA</h1>
+      <p>Etkileşimli Optik Laboratuvarı</p>
+    </div>
+  </div>
+
+  <div class="ust-grup">
+    <label class="etiket" for="deneySec">Deney</label>
+    <select id="deneySec" title="Hazır deney seç"></select>
+  </div>
+
+  <div class="ust-grup dugmeler">
+    <button id="btnGeriAl" title="Geri al (Ctrl+Z)">↶ Geri</button>
+    <button id="btnIleriAl" title="İleri al (Ctrl+Y)">↷ İleri</button>
+    <button id="btnSigdir" title="Ekrana sığdır (0)">⤢ Sığdır</button>
+    <button id="btnIz" class="aktif" title="Işın izleri (H)">✦ İz</button>
+    <button id="btnAnim" class="aktif" title="Işın animasyonu">▶ Anim</button>
+  </div>
+
+  <div class="ust-grup dugmeler">
+    <button id="btnKaydet" title="Deneyi JSON olarak indir">⭳ JSON</button>
+    <button id="btnYukle" title="JSON deney yükle">⭱ Yükle</button>
+    <input type="file" id="dosyaGirdi" accept="application/json,.json" hidden>
+    <button id="btnYerel" title="Tarayıcıya kaydet">💾 Yerel</button>
+    <button id="btnSVG" title="SVG sahne çıktısı">SVG</button>
+    <button id="btnPNG" title="PNG ekran görüntüsü">PNG</button>
+    <button id="btnRapor" title="Yazdırılabilir rapor">🖨 Rapor</button>
+    <button id="btnSifirla" class="tehlike" title="Sahneyi temizle">⌫ Sıfırla</button>
+    <a class="baglanti" id="btnTest" href="test.html" target="_blank" title="Matematiksel kabul testleri">✓ Testler</a>
+  </div>
+</header>
+
+<main class="duzen">
+
+  <!-- SOL PALET -->
+  <aside class="palet" id="palet">
+    <h2>Eleman Ekle</h2>
+    <button data-ekle="pointSource"><span class="ikon">●</span>Noktasal Işık</button>
+    <button data-ekle="parallelSource"><span class="ikon">⇉</span>Paralel Işın</button>
+    <div class="ayrac"></div>
+    <button data-ekle="planeMirror"><span class="ikon">▬</span>Düzlem Ayna</button>
+    <button data-ekle="concaveMirror"><span class="ikon">◡</span>İçbükey Ayna</button>
+    <button data-ekle="convexMirror"><span class="ikon">◠</span>Dışbükey Ayna</button>
+    <div class="ayrac"></div>
+    <button data-ekle="convergingLens"><span class="ikon">◐</span>İnce Kenarlı Mercek</button>
+    <button data-ekle="divergingLens"><span class="ikon">◑</span>Kalın Kenarlı Mercek</button>
+    <button data-ekle="prism"><span class="ikon">▲</span>Prizma</button>
+    <div class="ayrac"></div>
+    <button data-ekle="screen"><span class="ikon">▯</span>Ekran</button>
+    <button data-ekle="wall"><span class="ikon">▮</span>Işık Engeli</button>
+
+    <p class="ipucu">
+      <b>Sürükle</b> taşı · <b>Shift+Sürükle</b> döndür · <b>Tekerlek</b> yakınlaştır ·
+      <b>Boş alan</b> kaydır · <b>Delete</b> sil
+    </p>
+  </aside>
+
+  <!-- SAHNE -->
+  <section class="sahne-kap">
+    <canvas id="sahne"></canvas>
+    <div class="serit" id="durum">Hazır</div>
+  </section>
+
+  <!-- SAĞ PANEL -->
+  <aside class="yan">
+
+    <section class="kart">
+      <h2>Ölçüm &amp; Analiz</h2>
+      <ul class="olcum">
+        <li><span>Kaynak ışın sayısı</span><b id="mKaynak">0</b></li>
+        <li><span>Hesaplanan ışın yolu</span><b id="mYol">0</b></li>
+        <li><span>Yansıma</span><b id="mYansima">0</b></li>
+        <li><span>Kırılma</span><b id="mKirilma">0</b></li>
+        <li><span>Tam iç yansıma</span><b id="mTir">0</b></li>
+        <li><span>Sonlanma / engellenme</span><b id="mSonlanma">0</b></li>
+        <li><span>Prizma ayrışma açısı</span><b id="mDispersiyon">—</b></li>
+      </ul>
+    </section>
+
+    <section class="kart">
+      <h2 id="ozellikBaslik">Özellikler</h2>
+      <p class="bos-mesaj" id="panelBos">Sahneden bir eleman seçin.</p>
+      <form id="ozellikForm" style="display:none" onsubmit="return false">
+        <div class="row"><label for="px">X</label><input type="number" id="px" step="1"></div>
+        <div class="row"><label for="py">Y</label><input type="number" id="py" step="1"></div>
+        <div class="row"><label for="pac">Açı (°)</label><input type="number" id="pac" step="1"></div>
+        <div class="row"><label for="plen">Uzunluk</label><input type="number" id="plen" step="5" min="10"></div>
+        <div class="row"><label for="prad">Eğrilik yarıçapı</label><input type="number" id="prad" step="10" min="20"></div>
+        <div class="row"><label for="pf">Odak f (px)</label><input type="number" id="pf" step="10"></div>
+        <div class="row"><label for="papex">Tepe açısı (°)</label><input type="number" id="papex" step="1" min="10" max="150"></div>
+        <div class="row"><label for="psize">Ölçü</label><input type="number" id="psize" step="10" min="20"></div>
+        <div class="row"><label for="prays">Işın sayısı</label><input type="number" id="prays" step="1" min="1" max="241"></div>
+        <div class="row"><label for="pspread">Yayılım (°)</label><input type="number" id="pspread" step="5" min="0" max="360"></div>
+        <div class="row"><label for="pwavelength">Dalga boyu (nm)</label><input type="number" id="pwavelength" step="10" min="0" max="750"><small>0 = beyaz / tüm spektrum</small></div>
+        <div class="row"><label for="pn">Kırılma indisi n</label><input type="number" id="pn" step="0.01" min="1.0001" max="3"></div>
+        <button type="button" id="btnSil" class="sil">Bu elemanı sil</button>
+      </form>
+    </section>
+
+    <section class="kart">
+      <h2>Ortam</h2>
+      <div class="row"><label for="ortamSec">Ortam</label><select id="ortamSec"></select></div>
+      <div class="row"><label for="ortamN">Ortam indisi n</label><input type="number" id="ortamN" step="0.001" min="1.0001" max="3"></div>
+    </section>
+
+    <section class="kart">
+      <h2>Seçili Eleman Detayı</h2>
+      <ul class="olcum" id="seciliDetay">
+        <li class="soluk">Sahneden bir eleman seçin</li>
+      </ul>
+    </section>
+
+    <section class="kart not">
+      <h2>Yaklaşım Notu</h2>
+      <p>Mercekler <b>ince mercek (paraksiyel)</b> yaklaşımıyla hesaplanır: θ₂ = θ₁ − h/f.
+      Küçük açı ve mercek eksenine yakın ışınlarda doğrudur; mercek kenarına yaklaşan ışınlarda
+      küresel sapma gerçek optikte ihmal edilemez. Yansıma ve prizma kırılması tam Snell
+      denklemleriyle, prizma dispersiyonu Cauchy modeliyle (n = n₀·(1 + B(1/λ² − 1/λ₀²))) hesaplanır.
+      Bu araç öğretim amaçlıdır; optik mühendisliği için hassasiyet garantisi vermez.</p>
+    </section>
+  </aside>
+</main>
+
+<script type="module">
+  import { init, kirintiYukleme } from './js/ui.js';
+  window.addEventListener('DOMContentLoaded', () => {
+    init();
+    kirintiYukleme();
+  });
+  // Numex Prizma — hazır
+  console.info('%cNUMEX PRİZMA%c optik laboratuvarı yüklendi', 'color:#5eead4;font-weight:700', 'color:#94a3b8');
+</script>
+</body>
+</html>

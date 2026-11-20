@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Numex Nöbet — Akıllı İş ve Kaynak Planlama</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="logo">N</span>
+    <div>
+      <h1>NUMEX NÖBET</h1>
+      <p>Akıllı iş ve kaynak planlama motoru</p>
+    </div>
+  </div>
+
+  <div class="top-actions">
+    <select id="senaryoSec" title="Hazır senaryo">
+      <option value="A">Senaryo A — Mobilya Atölyesi</option>
+      <option value="B">Senaryo B — Matbaa</option>
+      <option value="C">Senaryo C — Kaos Testi</option>
+    </select>
+    <button id="btnSenaryoYukle" class="btn ghost">Yükle</button>
+
+    <div class="algo-secim">
+      <label><input type="radio" name="algo" value="priority" checked> A · Öncelik</label>
+      <label><input type="radio" name="algo" value="earliest"> B · Erken Bitirme</label>
+    </div>
+
+    <button id="btnPlanla" class="btn primary">Planla</button>
+    <button id="btnAriza" class="btn danger">Makine Arızası</button>
+    <button id="btnAcil" class="btn warn">Acil İş</button>
+  </div>
+</header>
+
+<main class="layout">
+  <!-- SOL PANEL -->
+  <aside class="panel side">
+    <div class="side-tabs">
+      <button class="side-btn active" data-side="isler">İşler</button>
+      <button class="side-btn" data-side="makine">Makineler</button>
+    </div>
+
+    <div id="sideIsler" class="side-body">
+      <form id="isForm" class="mini-form">
+        <input type="hidden" id="isId">
+        <label>İş adı
+          <input id="isAd" placeholder="Örn. Sandalye kesimi" autocomplete="off">
+        </label>
+        <div class="grid2">
+          <label>İşlem türü
+            <input id="isTur" list="turListesi" placeholder="Kesim" autocomplete="off">
+            <datalist id="turListesi"></datalist>
+          </label>
+          <label>Süre (dk)
+            <input id="isSure" type="number" min="1" value="30">
+          </label>
+        </div>
+        <div class="grid2">
+          <label>Öncelik
+            <select id="isOncelik">
+              <option value="5">5 — çok yüksek</option>
+              <option value="4">4 — yüksek</option>
+              <option value="3" selected>3 — normal</option>
+              <option value="2">2 — düşük</option>
+              <option value="1">1 — çok düşük</option>
+            </select>
+          </label>
+          <label>Teslim saati
+            <input id="isTeslim" type="time" value="12:00">
+          </label>
+        </div>
+        <label>Kullanabileceği makineler <small>(boş = tümü)</small>
+          <div class="chips" id="isMakineSec"></div>
+        </label>
+        <label>Ön koşullar <small>(Ctrl ile çoklu seçim)</small>
+          <select id="isOnkosul" multiple size="3"></select>
+        </label>
+        <div class="form-actions">
+          <button type="submit" class="btn primary">Kaydet</button>
+          <button type="button" id="isTemizle" class="btn ghost">Temizle</button>
+        </div>
+      </form>
+
+      <h4 class="side-baslik">İş listesi</h4>
+      <div id="isListesi" class="list"></div>
+    </div>
+
+    <div id="sideMakine" class="side-body gizli">
+      <p class="muted small">Bir makine aynı anda yalnızca bir iş yapar. Bakım/arıza aralığına iş konmaz.</p>
+      <div id="makineListesi"></div>
+    </div>
+  </aside>
+
+  <!-- SAĞ ALAN -->
+  <section class="panel main">
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="gantt">Gantt</button>
+      <button class="tab-btn" data-tab="kars">Karşılaştırma</button>
+      <button class="tab-btn" data-tab="test">Kabul Testleri</button>
+      <div class="tabs-sag">
+        <button id="btnJsonKaydet" class="mini">JSON ↓</button>
+        <button id="btnJsonYukle" class="mini">JSON ↑</button>
+        <button id="btnCsv" class="mini">CSV ↓</button>
+        <button id="btnSvg" class="mini">SVG ↓</button>
+        <button id="btnYazdir" class="mini">Yazdır</button>
+        <button id="btnSifirla" class="mini danger">Sıfırla</button>
+        <input type="file" id="dosyaGirdi" accept=".json" hidden>
+      </div>
+    </div>
+
+    <div id="pane-gantt" class="tab-pane">
+      <div class="gantt-bar">
+        <span id="planEtiket" class="etiket">—</span>
+        <div class="zoom">
+          <button id="zoomOut" class="mini">−</button>
+          <input type="range" id="zoomRange" min="5" max="400" value="60" title="Yakınlaştır">
+          <button id="zoomIn" class="mini">+</button>
+        </div>
+        <label class="chk"><input type="checkbox" id="hayaletChk"> Önceki planı hayalet göster</label>
+        <span id="durumRozet" class="rozetler"></span>
+      </div>
+
+      <div id="gantt" class="gantt"></div>
+      <div id="sonuclar" class="sonuclar"></div>
+    </div>
+
+    <div id="pane-kars" class="tab-pane gizli">
+      <div id="karsIcerik"></div>
+    </div>
+
+    <div id="pane-test" class="tab-pane gizli">
+      <p class="muted small">Bu testler tarayıcıda, gerçek motor ve bağımsız doğrulayıcı üzerinde koşar.</p>
+      <button id="btnTest" class="btn primary">Testleri çalıştır</button>
+      <div id="testler" class="testler"></div>
+    </div>
+  </section>
+</main>
+
+<!-- ARIZA MODALI -->
+<div id="modal" class="modal gizli">
+  <div class="modal-kutu">
+    <h3>Makine Arızası / Bakım</h3>
+    <p class="muted small">Seçilen aralıkta makine devre dışı kalır; plan yeniden hesaplanır ve eski planla karşılaştırılır.</p>
+    <label>Makine <select id="arizaMakine"></select></label>
+    <div class="grid3">
+      <label>Gün
+        <select id="arizaGun">
+          <option value="1" selected>1. gün</option>
+          <option value="2">2. gün</option>
+          <option value="3">3. gün</option>
+        </select>
+      </label>
+      <label>Başlangıç <input id="arizaBas" type="time" value="10:00"></label>
+      <label>Bitiş <input id="arizaBit" type="time" value="12:00"></label>
+    </div>
+    <label>Gerekçe <input id="arizaSebep" value="Makine arızası"></label>
+    <div class="modal-actions">
+      <button id="arizaIptal" class="btn ghost">İptal</button>
+      <button id="arizaUygula" class="btn danger">Uygula ve karşılaştır</button>
+    </div>
+  </div>
+</div>
+
+<div id="detay" class="detay gizli"></div>
+<div id="tost" class="tost"></div>
+<div id="yazdirma" class="yazdirma"></div>
+
+<script src="js/scheduler.js"></script>
+<script src="js/validator.js"></script>
+<script src="js/scenarios.js"></script>
+<script src="js/tests.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
