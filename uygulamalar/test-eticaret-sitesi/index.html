@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ATELIER — Yaşamın İnce Detayları</title>
+<meta name="description" content="ATELIER: el işçiliğiyle üretilmiş aydınlatma, seramik, tekstil ve yaşam objeleri. Yaşamın ince detayları için sakin bir koleksiyon.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=20261122">
+</head>
+<body>
+
+<div class="announce"><span>2.500 TL üzeri siparişlerde ücretsiz kargo · ATELIER10 koduyla %10 indirim</span></div>
+
+<header class="header">
+  <div class="wrap header__inner">
+    <div class="header__nav">
+      <a href="index.html" class="is-active">Ana Sayfa</a>
+      <a href="magaza.html">Koleksiyon</a>
+      <a href="magaza.html?kategori=aydinlatma">Aydınlatma</a>
+      <a href="magaza.html?kategori=seramik">Seramik</a>
+    </div>
+    <a href="index.html" class="brand">Atelier</a>
+    <div class="header__actions">
+      <a href="magaza.html" class="icon-btn" aria-label="Ürün ara">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      </a>
+      <a href="hesap.html" class="icon-btn" aria-label="Demo yönetim paneli">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.2-3.7 4-5.5 7.5-5.5s6.3 1.8 7.5 5.5"/></svg>
+      </a>
+      <button class="icon-btn" data-open-cart aria-label="Sepeti aç">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span class="badge" data-cart-badge>0</span>
+      </button>
+      <button class="icon-btn menu-toggle" id="menuToggle" aria-label="Menüyü aç" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M3 7h18M3 12h18M3 17h12"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<aside class="drawer-nav" id="drawerNav" aria-label="Mobil menü">
+  <div class="drawer-nav__top">
+    <span class="brand" style="font-size:1.1rem">Atelier</span>
+    <button class="icon-btn" id="drawerNavClose" aria-label="Menüyü kapat">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+  </div>
+  <a class="navlink" href="index.html">Ana Sayfa</a>
+  <a class="navlink" href="magaza.html">Koleksiyon</a>
+  <a class="navlink" href="magaza.html?kategori=aydinlatma">Aydınlatma</a>
+  <a class="navlink" href="magaza.html?kategori=seramik">Seramik &amp; Sofra</a>
+  <a class="navlink" href="magaza.html?kategori=tekstil">Tekstil</a>
+  <a class="navlink" href="magaza.html?kategori=koku">Koku</a>
+  <a class="navlink" href="hesap.html">Panel (demo)</a>
+  <div class="drawer-nav__foot">
+    <p style="margin-bottom:10px">info@atelier.example</p>
+    <p>İstanbul · Türkiye</p>
+  </div>
+</aside>
+
+<main>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero__media">
+      <img src="assets/img/hero.jpg" alt="ATELIER koleksiyonundan sıcak tonlarda döşenmiş bir salon" width="2000" height="1125" fetchpriority="high">
+    </div>
+    <div class="hero__content">
+      <div class="wrap">
+        <div class="hero__inner">
+          <span class="eyebrow">Sonbahar / Kış Koleksiyonu 2026</span>
+          <h1 class="display">Yaşamın<br><em>ince detayları</em></h1>
+          <p class="lede">El işçiliğiyle üretilmiş aydınlatma, seramik ve tekstil. Evinize acele etmeyen bir zarafet getiren parçalar.</p>
+          <div class="hero__cta">
+            <a href="magaza.html" class="btn btn--light">Koleksiyonu keşfet</a>
+            <a href="#hikaye" class="btn btn--ghost" style="color:var(--ivory);border-color:rgba(250,247,242,.5)">Marka hikâyesi</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="hero__aside">Aşağı kaydırın</div>
+  </section>
+
+  <!-- DEĞERLER -->
+  <section class="values">
+    <div class="wrap">
+      <div class="values__grid">
+        <div class="values__item"><strong>El işçiliği</strong><span>Anadolu atölyeleri</span></div>
+        <div class="values__item"><strong>Ücretsiz kargo</strong><span>2.500 TL ve üzeri</span></div>
+        <div class="values__item"><strong>30 gün iade</strong><span>Koşulsuz</span></div>
+        <div class="values__item"><strong>Güvenli ödeme</strong><span>3D Secure altyapısı</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KOLEKSİYONLAR -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <span class="eyebrow">Koleksiyonlar</span>
+          <h2 class="display" style="margin-top:12px">Mekânın ruhunu değiştiren seçkiler</h2>
+        </div>
+        <a href="magaza.html" class="link-u">Tüm koleksiyon <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="coll-grid">
+        <a class="coll-card reveal" href="magaza.html?kategori=aydinlatma">
+          <img src="assets/img/p-lamp-brass.jpg" alt="Pirinç aplik koleksiyonu" loading="lazy">
+          <span class="coll-card__arrow"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M7 17 17 7M9 7h8v8"/></svg></span>
+          <div class="coll-card__body">
+            <span class="eyebrow">01 — Işığın hâli</span>
+            <h3 class="display">Aydınlatma</h3>
+            <span>Masa · Zemin · Sarkıt</span>
+          </div>
+        </a>
+        <a class="coll-card reveal" href="magaza.html?kategori=seramik">
+          <img src="assets/img/p-vase-cer.jpg" alt="Seramik vazo koleksiyonu" loading="lazy">
+          <div class="coll-card__body">
+            <span class="eyebrow">02 — Toprağın izi</span>
+            <h3 class="display">Seramik</h3>
+            <span>Vazo · Kâse · Sofra</span>
+          </div>
+        </a>
+        <a class="coll-card reveal" href="magaza.html?kategori=tekstil">
+          <img src="assets/img/p-cushion2.jpg" alt="Keten tekstil koleksiyonu" loading="lazy">
+          <div class="coll-card__body">
+            <span class="eyebrow">03 — Dokunun sadeliği</span>
+            <h3 class="display">Tekstil</h3>
+            <span>Keten · Yün · Pamuk</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEZONUN SEÇKİLERİ -->
+  <section class="section section--sand">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <span class="eyebrow">Sezonun seçkileri</span>
+          <h2 class="display" style="margin-top:12px">Bu mevsimin favorileri</h2>
+          <p style="margin-top:14px">Atölyemizden bu ay çıkan, elde üretilmiş ve sınırlı sayıda parçalar.</p>
+        </div>
+        <a href="magaza.html?sirala=yeni" class="link-u">Tümünü gör</a>
+      </div>
+      <div class="prod-grid" id="featuredGrid"></div>
+    </div>
+  </section>
+
+  <!-- EDİTORYAL BANT -->
+  <section class="section--tight">
+    <div class="wrap">
+      <div class="editorial-band reveal">
+        <figure class="editorial-band__item">
+          <img src="assets/img/editorial-2.jpg" alt="Sarkıt lambalarla aydınlatılmış sıcak bir salon" loading="lazy">
+          <figcaption>Işığın doğru açısı, bir odayı ev yapar.</figcaption>
+        </figure>
+        <figure class="editorial-band__item">
+          <img src="assets/img/p-chair.jpg" alt="Krem kumaşlı hasır berjer" loading="lazy">
+          <figcaption>Doğal malzeme, zamansız bir zarafet.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- POPÜLER -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div>
+          <span class="eyebrow">Popüler ürünler</span>
+          <h2 class="display" style="margin-top:12px">En çok sevilenler</h2>
+        </div>
+        <a href="magaza.html?sirala=populer" class="link-u">Tümünü gör</a>
+      </div>
+      <div class="prod-grid" id="popularGrid"></div>
+    </div>
+  </section>
+
+  <!-- HİKÂYE -->
+  <section class="section section--sand" id="hikaye">
+    <div class="wrap">
+      <div class="story">
+        <div class="story__media reveal">
+          <img src="assets/img/editorial-story.jpg" alt="ATELIER tasarım dilini yansıtan sıcak tonlarda bir iç mekân" loading="lazy">
+        </div>
+        <div class="story__text reveal">
+          <span class="eyebrow">Hikâyemiz</span>
+          <h2 class="display">Acele etmeyen<br>bir zanaat</h2>
+          <p class="lede">ATELIER, 2019’da İstanbul’da küçük bir seramik atölyesinde doğdu. Amacımız basitti: evde her gün dokunulan eşyanın, bir sergi salonundaki kadar özenli olması gerektiğine inanıyoruz.</p>
+          <p>Her parçamız, onu üreten ellerin imzasını taşır. Toprak çömlek tezgâhında değil, sabırla şekillenir; keten ilk yıkamada değil, yıllar içinde güzelleşir. Bu yüzden üretim sayılarımızı sınırlı tutuyoruz: az sayıda, ama doğru parça.</p>
+          <p class="story__sign">— Atelier Tasarım Atölyesi</p>
+          <div class="story__stats">
+            <div><strong>2019</strong><span>Kuruluş</span></div>
+            <div><strong>12</strong><span>Atölye ortağı</span></div>
+            <div><strong>%92</strong><span>Yerli üretim</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ALINTI -->
+  <section class="section">
+    <div class="wrap">
+      <div class="quote reveal">
+        <span class="eyebrow" style="display:block;margin-bottom:26px">Günün notu</span>
+        <blockquote>“Güzellik, <em>gösterişte değil</em>; doğru ölçüde, doğru malzemede ve doğru ışıkta saklıdır.”</blockquote>
+        <cite>Atelier Tasarım Notları, No. 12</cite>
+      </div>
+    </div>
+  </section>
+
+  <!-- BÜLTEN -->
+  <section class="newsletter">
+    <div class="wrap newsletter__inner">
+      <div>
+        <span class="eyebrow" style="color:var(--copper-light)">Bülten</span>
+        <h2 class="display" style="margin-top:14px">Yeni sezonu<br>ilk siz öğrenin</h2>
+        <p>Ayın seçkisi, atölye notları ve özel davetler. Ayda en fazla iki e-posta; sıkıcı olmayacağız.</p>
+      </div>
+      <div>
+        <form id="newsletterForm" novalidate>
+          <label class="sr-only" for="nlEmail">E-posta adresiniz</label>
+          <input type="email" id="nlEmail" name="email" placeholder="e-posta adresiniz" autocomplete="email" required>
+          <button type="submit">Kaydol</button>
+        </form>
+        <p class="form-note" id="nlNote" aria-live="polite">Kayıt olarak gizlilik politikamızı kabul etmiş olursunuz.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div>
+        <span class="brand">Atelier</span>
+        <p>Yaşamın ince detayları. El işçiliğiyle üretilmiş aydınlatma, seramik, tekstil ve yaşam objeleri.</p>
+        <div class="footer__social" style="margin-top:20px">
+          <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/></svg></a>
+          <a href="#" aria-label="Pinterest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="9.5"/><path d="M9 20c1-3 1.6-5.4 2-7.5"/><path d="M8.5 11.5c-.6-2.6 1-4.6 3.7-4.6 2.4 0 3.8 1.4 3.8 3.6 0 2.6-1.4 4.6-3.4 4.6-1 0-1.8-.8-1.6-1.8"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <h4>Alışveriş</h4>
+        <ul>
+          <li><a href="magaza.html">Tüm ürünler</a></li>
+          <li><a href="magaza.html?kategori=aydinlatma">Aydınlatma</a></li>
+          <li><a href="magaza.html?kategori=seramik">Seramik &amp; Sofra</a></li>
+          <li><a href="magaza.html?kategori=tekstil">Tekstil</a></li>
+          <li><a href="magaza.html?kategori=mobilya">Mobilya Aksesuarı</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Yardım</h4>
+        <ul>
+          <li><a href="sepet.html">Sepetim</a></li>
+          <li><a href="odeme.html">Ödeme</a></li>
+          <li><a href="hesap.html">Demo panel</a></li>
+          <li><a href="#hikaye">Hakkımızda</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>İletişim</h4>
+        <ul>
+          <li><a href="mailto:info@atelier.example">info@atelier.example</a></li>
+          <li><a href="tel:+902120000000">+90 212 000 00 00</a></li>
+          <li><span style="font-size:.86rem;color:var(--muted)">Karaköy, İstanbul</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© 2026 ATELIER · Demo mağaza. Ürünler ve fiyatlar örnek veridir.</span>
+      <span>Bu proje bir demoodur; gerçek ödeme alınmaz, kişisel veri sunucuya gönderilmez.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/products.js?v=20261122"></script>
+<script src="assets/js/store.js?v=20261122"></script>
+<script src="assets/js/ui.js?v=20261122"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Sezonun seçkileri
+    const featured = PRODUCTS.filter(p => p.featured).slice(0, 4);
+    $('#featuredGrid').innerHTML = featured.map(productCard).join('');
+
+    // Popüler: değerlendirme sayısına göre
+    const popular = PRODUCTS.slice().sort((a, b) => b.reviews - a.reviews).slice(0, 4);
+    $('#popularGrid').innerHTML = popular.map(productCard).join('');
+
+    observeReveals();
+
+    // Bülten (demo — veri dışarı gitmez)
+    const form = $('#newsletterForm');
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const input = $('#nlEmail');
+      const note = $('#nlNote');
+      const val = input.value.trim();
+      const ok = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val);
+      if (!ok) {
+        note.textContent = 'Geçerli bir e-posta adresi giriniz.';
+        note.className = 'form-note';
+        input.focus();
+        return;
+      }
+      note.textContent = 'Teşekkürler — kaydınız bu tarayıcıda tutuldu (demo).';
+      note.className = 'form-note ok';
+      input.value = '';
+      toast('Bültene kaydoldunuz.');
+    });
+  });
+</script>
+</body>
+</html>

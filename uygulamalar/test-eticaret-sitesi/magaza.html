@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Koleksiyon — ATELIER</title>
+<meta name="description" content="ATELIER koleksiyonu: aydınlatma, seramik, tekstil, mobilya aksesuarı ve koku ürünleri. Kategori, fiyat ve arama ile filtreleyin.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=20261122">
+</head>
+<body>
+
+<div class="announce"><span>2.500 TL üzeri siparişlerde ücretsiz kargo · ATELIER10 koduyla %10 indirim</span></div>
+
+<header class="header">
+  <div class="wrap header__inner">
+    <div class="header__nav">
+      <a href="index.html">Ana Sayfa</a>
+      <a href="magaza.html" class="is-active">Koleksiyon</a>
+      <a href="magaza.html?kategori=aydinlatma">Aydınlatma</a>
+      <a href="magaza.html?kategori=seramik">Seramik</a>
+    </div>
+    <a href="index.html" class="brand">Atelier</a>
+    <div class="header__actions">
+      <a href="#arama" class="icon-btn" aria-label="Ürün ara">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      </a>
+      <a href="hesap.html" class="icon-btn" aria-label="Demo yönetim paneli">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.2-3.7 4-5.5 7.5-5.5s6.3 1.8 7.5 5.5"/></svg>
+      </a>
+      <button class="icon-btn" data-open-cart aria-label="Sepeti aç">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span class="badge" data-cart-badge>0</span>
+      </button>
+      <button class="icon-btn menu-toggle" id="menuToggle" aria-label="Menüyü aç">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M3 7h18M3 12h18M3 17h12"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<aside class="drawer-nav" id="drawerNav" aria-label="Mobil menü">
+  <div class="drawer-nav__top">
+    <span class="brand" style="font-size:1.1rem">Atelier</span>
+    <button class="icon-btn" id="drawerNavClose" aria-label="Menüyü kapat">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+  </div>
+  <a class="navlink" href="index.html">Ana Sayfa</a>
+  <a class="navlink" href="magaza.html">Koleksiyon</a>
+  <a class="navlink" href="magaza.html?kategori=aydinlatma">Aydınlatma</a>
+  <a class="navlink" href="magaza.html?kategori=seramik">Seramik &amp; Sofra</a>
+  <a class="navlink" href="magaza.html?kategori=tekstil">Tekstil</a>
+  <a class="navlink" href="magaza.html?kategori=koku">Koku</a>
+  <a class="navlink" href="hesap.html">Panel (demo)</a>
+</aside>
+
+<main>
+  <div class="wrap page-head">
+    <nav class="crumbs" aria-label="Sayfa yolu">
+      <a href="index.html">Ana Sayfa</a> <span>/</span> <span>Koleksiyon</span>
+    </nav>
+    <span class="eyebrow">24 parça · El işçiliği</span>
+    <h1 class="display" id="shopTitle" style="margin-top:12px">Koleksiyon</h1>
+    <p id="shopDesc">Aydınlatmadan seramiğe, dokunun ve ışığın sakin zarafeti. Tüm parçalar atölyemizde elde üretilir.</p>
+  </div>
+
+  <div class="wrap shop-layout">
+    <!-- FİLTRELER -->
+    <aside class="filters" id="filters" aria-label="Ürün filtreleri">
+      <div class="filter-block" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0;padding-bottom:18px">
+        <h4 style="margin:0;letter-spacing:.2em">Filtreler</h4>
+        <button class="icon-btn" id="filtersClose" style="display:none" aria-label="Filtreleri kapat">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+
+      <div class="filter-block">
+        <h4>Kategori</h4>
+        <div class="filter-list" id="catList"></div>
+      </div>
+
+      <div class="filter-block">
+        <h4>Fiyat aralığı</h4>
+        <div class="price-range">
+          <input type="range" id="priceMax" min="400" max="14000" step="100" value="14000" aria-label="Azami fiyat">
+          <div class="price-range__labels"><span>400 TL</span><span id="priceLabel">14.000 TL</span></div>
+        </div>
+      </div>
+
+      <div class="filter-block">
+        <h4>Stok durumu</h4>
+        <div class="chip-row" id="stockFilter">
+          <button class="chip is-active" data-stock="all">Tümü</button>
+          <button class="chip" data-stock="in">Stokta var</button>
+          <button class="chip" data-stock="sale">İndirimli</button>
+        </div>
+      </div>
+
+      <div class="filter-block">
+        <h4>Sıralama</h4>
+        <div class="filter-list" id="sortList">
+          <button data-sort="onerilen" class="is-active">Önerilen</button>
+          <button data-sort="artan">Fiyat: Artan</button>
+          <button data-sort="azalan">Fiyat: Azalan</button>
+          <button data-sort="populer">En çok değerlendirilen</button>
+          <button data-sort="yeni">En yeni</button>
+        </div>
+      </div>
+
+      <button class="btn btn--ghost btn--sm btn--block" id="clearFilters">Filtreleri temizle</button>
+      <button class="btn btn--block" id="applyFilters" style="margin-top:10px;display:none">Sonuçları göster</button>
+    </aside>
+
+    <!-- ÜRÜNLER -->
+    <div>
+      <div class="shop-toolbar" id="arama">
+        <div class="search-field">
+          <label class="sr-only" for="searchInput">Ürün ara</label>
+          <input type="search" id="searchInput" placeholder="Ürün, kategori ya da malzeme ara…" autocomplete="off">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        </div>
+        <div class="toolbar-right">
+          <span class="result-count" id="resultCount"></span>
+          <button class="btn btn--ghost btn--sm filter-toggle" id="filtersOpen">Filtreler</button>
+        </div>
+      </div>
+
+      <div class="active-filters" id="activeFilters"></div>
+      <div class="prod-grid prod-grid--3" id="productGrid" aria-live="polite"></div>
+      <div class="empty" id="noResult" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <h4>Sonuç bulunamadı</h4>
+        <p>Aradığınız ölçütlerle eşleşen ürün yok. Filtreleri gevşetmeyi deneyin.</p>
+        <button class="btn btn--ghost btn--sm" id="resetFromEmpty">Filtreleri temizle</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div>
+        <span class="brand">Atelier</span>
+        <p>Yaşamın ince detayları. El işçiliğiyle üretilmiş aydınlatma, seramik, tekstil ve yaşam objeleri.</p>
+      </div>
+      <div>
+        <h4>Alışveriş</h4>
+        <ul>
+          <li><a href="magaza.html">Tüm ürünler</a></li>
+          <li><a href="magaza.html?kategori=aydinlatma">Aydınlatma</a></li>
+          <li><a href="magaza.html?kategori=seramik">Seramik &amp; Sofra</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Yardım</h4>
+        <ul>
+          <li><a href="sepet.html">Sepetim</a></li>
+          <li><a href="odeme.html">Ödeme</a></li>
+          <li><a href="hesap.html">Demo panel</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>İletişim</h4>
+        <ul>
+          <li><a href="mailto:info@atelier.example">info@atelier.example</a></li>
+          <li><span style="font-size:.86rem;color:var(--muted)">Karaköy, İstanbul</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© 2026 ATELIER · Demo mağaza.</span>
+      <span>Gerçek ödeme alınmaz; veri sunucuya gönderilmez.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/products.js?v=20261122"></script>
+<script src="assets/js/store.js?v=20261122"></script>
+<script src="assets/js/ui.js?v=20261122"></script>
+<script>
+(() => {
+  const params = new URLSearchParams(location.search);
+
+  const state = {
+    category: params.get('kategori') || 'all',
+    search: params.get('q') || '',
+    priceMax: Number(params.get('max')) || 14000,
+    stock: params.get('stok') || 'all',
+    sort: params.get('sirala') || 'onerilen'
+  };
+
+  const PRICE_MIN = 400, PRICE_MAX = 14000;
+
+  /* --- Kategori listesi --- */
+  function renderCategories() {
+    const counts = {};
+    PRODUCTS.forEach(p => counts[p.category] = (counts[p.category] || 0) + 1);
+    let html = `<button data-cat="all" class="${state.category === 'all' ? 'is-active' : ''}">
+        <span>Tüm ürünler</span><span class="count">${PRODUCTS.length}</span></button>`;
+    html += CATEGORIES.map(c => `
+      <button data-cat="${c.id}" class="${state.category === c.id ? 'is-active' : ''}">
+        <span>${c.name}</span><span class="count">${counts[c.id] || 0}</span>
+      </button>`).join('');
+    $('#catList').innerHTML = html;
+    $$('#catList button').forEach(b => b.onclick = () => {
+      state.category = b.dataset.cat;
+      renderCategories(); apply(); closeFiltersOnMobile();
+    });
+  }
+
+  /* --- Sıralama --- */
+  function renderSort() {
+    $$('#sortList button').forEach(b => {
+      b.classList.toggle('is-active', b.dataset.sort === state.sort);
+      b.onclick = () => { state.sort = b.dataset.sort; renderSort(); apply(); };
+    });
+  }
+
+  /* --- Fiyat --- */
+  const priceInput = $('#priceMax');
+  priceInput.min = PRICE_MIN; priceInput.max = PRICE_MAX;
+  priceInput.value = state.priceMax;
+  function renderPrice() {
+    $('#priceLabel').textContent = formatTL(state.priceMax);
+    priceInput.value = state.priceMax;
+  }
+  priceInput.addEventListener('input', () => {
+    state.priceMax = Number(priceInput.value);
+    $('#priceLabel').textContent = formatTL(state.priceMax);
+    apply();
+  });
+
+  /* --- Stok --- */
+  $$('#stockFilter .chip').forEach(b => b.onclick = () => {
+    state.stock = b.dataset.stock;
+    $$('#stockFilter .chip').forEach(x => x.classList.toggle('is-active', x === b));
+    apply();
+  });
+
+  /* --- Arama --- */
+  const searchInput = $('#searchInput');
+  searchInput.value = state.search;
+  let searchTimer;
+  searchInput.addEventListener('input', () => {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => { state.search = searchInput.value.trim(); apply(); }, 160);
+  });
+
+  /* --- Filtre --- */
+  function apply() {
+    let list = PRODUCTS.slice();
+
+    if (state.category !== 'all') list = list.filter(p => p.category === state.category);
+    if (state.search) {
+      const q = state.search.toLowerCase();
+      list = list.filter(p =>
+        p.name.toLowerCase().includes(q) ||
+        getCategory(p.category).name.toLowerCase().includes(q) ||
+        p.short.toLowerCase().includes(q) ||
+        (p.material || '').toLowerCase().includes(q)
+      );
+    }
+    list = list.filter(p => p.price <= state.priceMax);
+    if (state.stock === 'in') list = list.filter(p => variantTotalStock(p) > 0);
+    if (state.stock === 'sale') list = list.filter(p => p.oldPrice);
+
+    switch (state.sort) {
+      case 'artan': list.sort((a, b) => a.price - b.price); break;
+      case 'azalan': list.sort((a, b) => b.price - a.price); break;
+      case 'populer': list.sort((a, b) => b.reviews - a.reviews); break;
+      case 'yeni': list.sort((a, b) => b.id.localeCompare(a.id)); break;
+      default: list.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+    }
+
+    $('#productGrid').innerHTML = list.map(productCard).join('');
+    $('#resultCount').textContent = `${list.length} ürün`;
+    $('#noResult').hidden = list.length > 0;
+    $('#productGrid').hidden = list.length === 0;
+
+    // Başlık
+    const cat = state.category !== 'all' ? getCategory(state.category) : null;
+    $('#shopTitle').textContent = cat ? cat.name : 'Koleksiyon';
+    $('#shopDesc').textContent = cat ? cat.desc : 'Aydınlatmadan seramiğe, dokunun ve ışığın sakin zarafeti. Tüm parçalar atölyemizde elde üretilir.';
+
+    renderActive();
+    observeReveals();
+    syncURL();
+  }
+
+  function renderActive() {
+    const chips = [];
+    if (state.search) chips.push(`<button class="chip" data-clear="search">“${esc(state.search)}” <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg></button>`);
+    if (state.category !== 'all') chips.push(`<button class="chip" data-clear="cat">${esc(getCategory(state.category).name)} <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg></button>`);
+    if (state.priceMax < PRICE_MAX) chips.push(`<button class="chip" data-clear="price">≤ ${formatTL(state.priceMax)} <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg></button>`);
+    if (state.stock !== 'all') chips.push(`<button class="chip" data-clear="stock">${state.stock === 'in' ? 'Stokta var' : 'İndirimli'} <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg></button>`);
+
+    const box = $('#activeFilters');
+    box.innerHTML = chips.join('');
+    box.querySelectorAll('[data-clear]').forEach(b => b.onclick = () => {
+      const k = b.dataset.clear;
+      if (k === 'search') { state.search = ''; searchInput.value = ''; }
+      if (k === 'cat') state.category = 'all';
+      if (k === 'price') { state.priceMax = PRICE_MAX; }
+      if (k === 'stock') { state.stock = 'all'; $$('#stockFilter .chip').forEach((x, i) => x.classList.toggle('is-active', i === 0)); }
+      renderCategories(); renderPrice(); apply();
+    });
+  }
+
+  function syncURL() {
+    const p = new URLSearchParams();
+    if (state.category !== 'all') p.set('kategori', state.category);
+    if (state.search) p.set('q', state.search);
+    if (state.priceMax < PRICE_MAX) p.set('max', state.priceMax);
+    if (state.stock !== 'all') p.set('stok', state.stock);
+    if (state.sort !== 'onerilen') p.set('sirala', state.sort);
+    const qs = p.toString();
+    history.replaceState(null, '', qs ? `?${qs}` : location.pathname);
+  }
+
+  function resetAll() {
+    state.category = 'all'; state.search = ''; state.priceMax = PRICE_MAX; state.stock = 'all'; state.sort = 'onerilen';
+    searchInput.value = '';
+    $$('#stockFilter .chip').forEach((x, i) => x.classList.toggle('is-active', i === 0));
+    renderCategories(); renderSort(); renderPrice(); apply();
+  }
+
+  $('#clearFilters').onclick = resetAll;
+  $('#resetFromEmpty').onclick = resetAll;
+
+  /* --- Mobil filtre çekmecesi --- */
+  const filtersEl = $('#filters');
+  const applyBtn = $('#applyFilters');
+  function isMobile() { return window.matchMedia('(max-width: 900px)').matches; }
+  function closeFiltersOnMobile() { if (isMobile()) { filtersEl.classList.remove('is-open'); document.body.classList.remove('no-scroll'); } }
+  $('#filtersOpen').onclick = () => { filtersEl.classList.add('is-open'); document.body.classList.add('no-scroll'); };
+  $('#filtersClose').onclick = closeFiltersOnMobile;
+  applyBtn.onclick = closeFiltersOnMobile;
+  function syncMobileUI() {
+    const m = isMobile();
+    applyBtn.style.display = m ? 'block' : 'none';
+    $('#filtersClose').style.display = m ? 'grid' : 'none';
+  }
+  window.addEventListener('resize', syncMobileUI);
+
+  /* --- Başlat --- */
+  renderCategories(); renderSort(); renderPrice(); syncMobileUI();
+  $$('#stockFilter .chip').forEach(x => x.classList.toggle('is-active', x.dataset.stock === state.stock));
+  apply();
+})();
+</script>
+</body>
+</html>

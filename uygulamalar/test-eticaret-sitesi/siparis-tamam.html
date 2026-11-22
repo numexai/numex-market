@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sipariş alındı — ATELIER</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=20261122">
+</head>
+<body>
+
+<header class="header">
+  <div class="wrap header__inner">
+    <div class="header__nav"><a href="index.html">Ana Sayfa</a><a href="magaza.html">Koleksiyon</a></div>
+    <a href="index.html" class="brand">Atelier</a>
+    <div class="header__actions">
+      <button class="icon-btn" data-open-cart aria-label="Sepeti aç">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span class="badge" data-cart-badge>0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap" id="doneRoot"></main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__bottom" style="margin-top:0;border-top:0">
+      <span>© 2026 ATELIER · Demo mağaza.</span>
+      <span>Bu sipariş örnek veridir; gerçek kargo yapılmaz.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/products.js?v=20261122"></script>
+<script src="assets/js/store.js?v=20261122"></script>
+<script src="assets/js/ui.js?v=20261122"></script>
+<script>
+(() => {
+  const no = new URLSearchParams(location.search).get('no');
+  const order = no ? Store.getOrder(no) : Store.getOrders()[0];
+
+  if (!order) {
+    $('#doneRoot').innerHTML = `
+      <div class="empty" style="padding:100px 20px">
+        <h4>Sipariş bulunamadı</h4>
+        <p>Bu numarayla kayıtlı bir demo sipariş yok.</p>
+        <a href="magaza.html" class="btn">Koleksiyona dön</a>
+      </div>`;
+    return;
+  }
+
+  document.title = `${order.id} · Sipariş alındı — ATELIER`;
+  const d = new Date(order.createdAt);
+  const tarih = d.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+  const adres = `${order.customer.address}, ${order.customer.district} / ${order.customer.city} ${order.customer.postcode}`;
+
+  $('#doneRoot').innerHTML = `
+    <div class="done">
+      <div class="done__icon">
+        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"><path d="m4 12.5 5 5L20 6.5"/></svg>
+      </div>
+      <span class="eyebrow">Teşekkürler</span>
+      <h1 class="display" style="margin-top:14px">Siparişiniz alındı</h1>
+      <p>${esc(order.customer.name)} ${esc(order.customer.surname)}, seçtiğiniz parçalar atölyemizde hazırlanmaya başlıyor. Bu bir demo siparişidir; hiçbir ödeme alınmadı.</p>
+
+      <div class="order-no">${esc(order.id)}</div>
+
+      <div class="done__facts">
+        <div><span>Sipariş tarihi</span><strong>${tarih}</strong></div>
+        <div><span>Kargo</span><strong>${esc(order.shippingLabel)} · ${order.shipping === 0 ? 'Ücretsiz' : formatTL(order.shipping)}</strong></div>
+        <div><span>Toplam</span><strong>${formatTL(order.total)}</strong></div>
+      </div>
+
+      <div class="table-wrap" style="text-align:left;margin-bottom:34px">
+        <table class="data">
+          <thead><tr><th>Ürün</th><th>Seçenek</th><th>Adet</th><th>Toplam</th></tr></thead>
+          <tbody>
+            ${order.items.map(it => `
+              <tr>
+                <td><div class="cell-prod"><img class="row-thumb" src="${it.image}" alt=""><span class="cell-prod__name">${esc(it.name)}</span></div></td>
+                <td>${it.variantLabel ? esc(it.variantLabel) : '—'}</td>
+                <td>${it.qty}</td>
+                <td>${formatTL(it.lineTotal)}</td>
+              </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+
+      <div style="text-align:left;border-top:1px solid var(--line-soft);padding-top:20px">
+        <div class="sum-row"><span>Ürün toplamı</span><span>${formatTL(order.subtotal)}</span></div>
+        ${order.discount ? `<div class="sum-row sum-row--discount"><span>İndirim (${esc(order.coupon)})</span><span>−${formatTL(order.discount)}</span></div>` : ''}
+        <div class="sum-row"><span>Kargo</span><span>${order.shipping === 0 ? 'Ücretsiz' : formatTL(order.shipping)}</span></div>
+        <div class="sum-row sum-row--total"><span>Toplam</span><strong>${formatTL(order.total)}</strong></div>
+      </div>
+
+      <div style="text-align:left;border-top:1px solid var(--line-soft);margin-top:26px;padding-top:22px">
+        <span class="eyebrow eyebrow--muted">Teslimat adresi</span>
+        <p style="color:var(--anthracite-soft);font-size:.9rem;margin-top:8px;max-width:none">
+          ${esc(order.customer.name)} ${esc(order.customer.surname)}<br>
+          ${esc(adres)}<br>
+          <span style="color:var(--muted)">${esc(order.customer.email)} · ${esc(order.customer.phone)}</span>
+        </p>
+      </div>
+
+      <div class="done__cta" style="margin-top:34px">
+        <a href="hesap.html" class="btn">Siparişi panelde gör</a>
+        <a href="magaza.html" class="btn btn--ghost">Alışverişe devam et</a>
+      </div>
+    </div>`;
+})();
+</script>
+</body>
+</html>

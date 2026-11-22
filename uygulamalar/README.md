@@ -1,6 +1,6 @@
 # Numex Market uygulamaları — ücretsiz, açık kaynak, Türkçe
 
-Numex AI'nın otonom olarak yazdığı, test ettiği ve [Numex Market](https://market.numexai.com.tr)'te yayımladığı **98 uygulamanın** kaynak kodu:
+Numex AI'nın otonom olarak yazdığı, test ettiği ve [Numex Market](https://market.numexai.com.tr)'te yayımladığı **101 uygulamanın** kaynak kodu:
 tarayıcı oyunları, simülasyonlar, yapay zekâ demoları, günlük araçlar, iş uygulamaları ve web masaüstleri.
 Her gün [numexai.com.tr](https://numexai.com.tr) vitrininden kendiliğinden eşitlenir. Hepsi [MIT lisanslı](LICENSE): dene, incele, çatalla.
 
@@ -104,10 +104,11 @@ Her gün [numexai.com.tr](https://numexai.com.tr) vitrininden kendiliğinden eş
 |---|---|
 | [**İnsan Vücudu — Sinir ve Dolaşım Laboratuvarı**](human-body-lab/) | Tarayıcıda çalışan, canlı verilerle tepki veren interaktif insan vücudu simülasyonu — kalp ritmi, kan akışı, sinir yolları. (Node/Express) |
 
-## 📦 Diğer (35)
+## 📦 Diğer (38)
 
 | Uygulama | Ne yapar |
 |---|---|
+| [**2225 test eticaret sitesi**](test-eticaret-sitesi/) | Türkçe, tam çalışan bir demo e-ticaret mağazası. Kurulum yok, sunucu yok, veritabanı yok: |
 | [**Akıllı Elektronik Laboratuvarı**](tessdusunce2/) |  |
 | [**Akıllı iş ve kaynak planlama motoru**](divanihumayun/) |  |
 | [**Akıllı Kesim ve Fire Optimizasyonu**](testdusunce/) | Levha (stok) ve parça listesinden **gerçek, deterministik bir 2B yerleşim** üreten |
@@ -116,6 +117,7 @@ Her gün [numexai.com.tr](https://numexai.com.tr) vitrininden kendiliğinden eş
 | [**Çılgın Makineler Atölyesi**](mutluluk/) | Tarayıcıda çalışan, gerçek zamanlı fizik simülasyonuna dayalı Rube Goldberg makine atölyesi. |
 | [**çizgi roman yapımı**](cizgi-roman/) |  |
 | [**Dijital Olay Dedektifi**](dijital-olay-dedektifi/) | Sıfırdan yazılmış, tarayıcıda çalışan olay analizi ve kök neden araştırma platformu. |
+| [**fatih bayraktar şiir sitesi**](bana-yeni-uygulama/) | Numex AI ile geliştirilmiş, üç boyutlu dijital şiir kitabı. |
 | [**interaktif hayal dünyası**](interaktif-jayal-dunyasi/) | Tarayıcıda çalışan, tamamen yerel (model API'si gerektirmeyen) parçacık sanatı uygulaması. |
 | [**ipek yolu**](ipek-yolu/) |  |
 | [**KAYIP ESER DOSYASI**](kayip-eser-dosyasi/) | Sarnıç Müzesi'nin Doğu Salonu'ndan çalınan **Yıldız Küresi** vakasını çözdüğün, tarayıcıda oynanan tek kişilik dedektiflik oyunu. Kurulum, derleme ve sunucu gerekmez. |
@@ -135,6 +137,7 @@ Her gün [numexai.com.tr](https://numexai.com.tr) vitrininden kendiliğinden eş
 | [**numex nesnelerle zman çizelgesi**](numex-sehir/) | Tarayıcıda çalışan, kod yazmadan animasyon üreten ve düzenleyen tek dosyalık stüdyo. Dış bağımlılık yok: `index.html` içinde HTML + CSS + JavaScript. |
 | [**numex rengareng neşeli**](numex-rengareng-neseli/) |  |
 | [**numex renkli dünyam**](numex-renkli-dunyam/) |  |
+| [**NUMEX SOFT ID — 3D NEUMORPHIC AUTH EXPERIENCE**](3d-sablon/) |  |
 | [**numex Tahliye Simülatörü**](numex-tahliye-simulatoru/) | Kurgusal bir şehirde afet senaryosu ve tahliye planlaması yapan, **tamamen yerel** çalışan statik web uygulaması. |
 | [**numex-studio-x**](numex-studio-x/) |  |
 | [**operasyon merkezi**](operasyon-merkezi/) | Mini Fabrika Yönetim Merkezi - üretim planlama, iş emri, stok ve maliyet motoru |

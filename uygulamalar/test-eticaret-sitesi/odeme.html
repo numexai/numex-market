@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ödeme — ATELIER</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=20261122">
+</head>
+<body>
+
+<div class="announce"><span>Demo mağaza · Kart bilgisi istenmez, gerçek ödeme alınmaz</span></div>
+
+<header class="header">
+  <div class="wrap header__inner">
+    <div class="header__nav">
+      <a href="index.html">Ana Sayfa</a>
+      <a href="magaza.html">Koleksiyon</a>
+    </div>
+    <a href="index.html" class="brand">Atelier</a>
+    <div class="header__actions">
+      <a href="sepet.html" class="icon-btn" aria-label="Sepete dön">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M15 5 8 12l7 7"/></svg>
+      </a>
+      <button class="icon-btn" data-open-cart aria-label="Sepeti aç">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span class="badge" data-cart-badge>0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page-head">
+    <nav class="crumbs" aria-label="Sayfa yolu">
+      <a href="index.html">Ana Sayfa</a> <span>/</span> <a href="sepet.html">Sepetim</a> <span>/</span> <span>Ödeme</span>
+    </nav>
+    <h1 class="display">Ödeme</h1>
+  </div>
+
+  <div class="steps" id="steps">
+    <div class="step is-active"><span class="step__num">1</span><span class="step__txt">Teslimat bilgileri</span></div>
+    <div class="step"><span class="step__num">2</span><span class="step__txt">Kargo yöntemi</span></div>
+    <div class="step"><span class="step__num">3</span><span class="step__txt">Sipariş onayı</span></div>
+  </div>
+
+  <div id="checkoutRoot"></div>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__bottom" style="margin-top:0;border-top:0">
+      <span>© 2026 ATELIER · Demo mağaza.</span>
+      <span>Bu sayfada gerçek ödeme alınmaz, kart bilgisi istenmez ve saklanmaz.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/products.js?v=20261122"></script>
+<script src="assets/js/store.js?v=20261122"></script>
+<script src="assets/js/ui.js?v=20261122"></script>
+<script>
+(() => {
+  let shippingMethod = 'standard';
+
+  function formHTML() {
+    return `
+      <form id="checkoutForm" novalidate>
+        <div class="form-block">
+          <h3>1 · Teslimat bilgileri</h3>
+          <div class="field-row">
+            <div class="field">
+              <label for="fName">Ad *</label>
+              <input id="fName" name="name" autocomplete="given-name" required minlength="2" placeholder="Adınız">
+              <span class="err" data-err="fName"></span>
+            </div>
+            <div class="field">
+              <label for="fSurname">Soyad *</label>
+              <input id="fSurname" name="surname" autocomplete="family-name" required minlength="2" placeholder="Soyadınız">
+              <span class="err" data-err="fSurname"></span>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="fEmail">E-posta *</label>
+              <input id="fEmail" name="email" type="email" autocomplete="email" required placeholder="ornek@eposta.com">
+              <span class="err" data-err="fEmail"></span>
+            </div>
+            <div class="field">
+              <label for="fPhone">Telefon *</label>
+              <input id="fPhone" name="phone" type="tel" autocomplete="tel" required placeholder="05XX XXX XX XX">
+              <span class="err" data-err="fPhone"></span>
+            </div>
+          </div>
+          <div class="field">
+            <label for="fAddress">Açık adres *</label>
+            <textarea id="fAddress" name="address" rows="3" required minlength="10" autocomplete="street-address" placeholder="Mahalle, sokak, bina no, daire"></textarea>
+            <span class="err" data-err="fAddress"></span>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="fCity">İl *</label>
+              <input id="fCity" name="city" required autocomplete="address-level1" placeholder="İstanbul">
+              <span class="err" data-err="fCity"></span>
+            </div>
+            <div class="field">
+              <label for="fDistrict">İlçe *</label>
+              <input id="fDistrict" name="district" required autocomplete="address-level2" placeholder="Kadıköy">
+              <span class="err" data-err="fDistrict"></span>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="fPostcode">Posta kodu *</label>
+              <input id="fPostcode" name="postcode" required inputmode="numeric" autocomplete="postal-code" placeholder="34000" maxlength="5">
+              <span class="err" data-err="fPostcode"></span>
+            </div>
+            <div class="field">
+              <label for="fNote">Sipariş notu</label>
+              <input id="fNote" name="note" placeholder="Kapıcıya bırakılabilir">
+              <span class="err" data-err="fNote"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-block">
+          <h3>2 · Kargo yöntemi</h3>
+          <label class="radio-card ${shippingMethod === 'standard' ? 'is-selected' : ''}" data-ship="standard">
+            <input type="radio" name="ship" value="standard" ${shippingMethod === 'standard' ? 'checked' : ''}>
+            <div class="radio-card__body">
+              <div class="radio-card__title"><strong>Standart Kargo</strong><span>${shipLabel('standard')}</span></div>
+              <div class="radio-card__sub">${SHIPPING.standardDays} · Takip numaralı gönderim</div>
+            </div>
+          </label>
+          <label class="radio-card ${shippingMethod === 'express' ? 'is-selected' : ''}" data-ship="express">
+            <input type="radio" name="ship" value="express" ${shippingMethod === 'express' ? 'checked' : ''}>
+            <div class="radio-card__body">
+              <div class="radio-card__title"><strong>Hızlı Kargo</strong><span>${shipLabel('express')}</span></div>
+              <div class="radio-card__sub">${SHIPPING.expressDays} · Öncelikli hazırlık</div>
+            </div>
+          </label>
+          <p class="form-block__hint">2.500 TL ve üzeri siparişlerde standart kargo ücretsizdir.</p>
+        </div>
+
+        <div class="form-block">
+          <h3>3 · Ödeme</h3>
+          <p class="form-block__hint">
+            Bu bir ödeme simülasyonudur. <strong style="font-weight:400;color:var(--anthracite)">Kredi kartı bilgisi istenmez, saklanmaz ve hiçbir bankaya gönderilmez.</strong>
+          </p>
+          <label class="radio-card is-selected">
+            <input type="radio" name="pay" value="demo" checked>
+            <div class="radio-card__body">
+              <div class="radio-card__title"><strong>Demo ödeme onayı</strong><span>Ücretsiz</span></div>
+              <div class="radio-card__sub">Sipariş örnek olarak oluşturulur ve tarayıcınızda saklanır.</div>
+            </div>
+          </label>
+          <label class="checkline" style="margin-top:16px">
+            <input type="checkbox" id="fTerms" required>
+            <span>Ön bilgilendirme formunu ve mesafeli satış sözleşmesini okudum, onaylıyorum. (Demo metni.)</span>
+          </label>
+          <span class="err" data-err="fTerms" style="display:block;margin-top:6px"></span>
+        </div>
+
+        <button type="submit" class="btn btn--block" id="payBtn">Siparişi tamamla · <span id="payTotal"></span></button>
+        <p class="small" style="text-align:center;margin-top:12px">Siparişi tamamladığınızda stoklar demo olarak düşülür.</p>
+      </form>`;
+  }
+
+  function shipLabel(method) {
+    const c = Store.shippingCost(method);
+    return c === 0 ? 'Ücretsiz' : formatTL(c);
+  }
+
+  function summaryHTML() {
+    const lines = Store.cartLines();
+    const sub = Store.subtotal();
+    const disc = Store.discountAmount();
+    const ship = Store.shippingCost(shippingMethod);
+    const total = Store.total(shippingMethod);
+    const coupon = Store.getCoupon();
+    const remaining = Store.freeShippingRemaining();
+
+    return `
+      <aside class="order-summary" aria-label="Sipariş özeti">
+        <h3>Sipariş özeti</h3>
+        <div class="order-summary__items">
+          ${lines.map(l => `
+            <div class="os-item">
+              <img src="${l.product.images[0]}" alt="${esc(l.product.name)}">
+              <div>
+                <div class="os-item__name">${esc(l.product.name)}</div>
+                <div class="os-item__var">${l.variant ? esc(l.variant.label) : 'Tek seçenek'} · ${l.qty} adet</div>
+              </div>
+              <span class="os-item__price">${formatTL(l.lineTotal)}</span>
+            </div>`).join('')}
+        </div>
+
+        <div class="sum-row"><span>Ürün toplamı</span><span>${formatTL(sub)}</span></div>
+        ${disc > 0 ? `<div class="sum-row sum-row--discount"><span>İndirim (${esc(coupon.code)})</span><span>−${formatTL(disc)}</span></div>
+          <p class="small" style="margin-top:2px">İndirim <strong style="font-weight:400">ürün toplamı</strong> üzerinden hesaplanır.</p>` : ''}
+        <div class="sum-row"><span>Kargo (${shippingMethod === 'express' ? 'Hızlı' : 'Standart'})</span><span>${ship === 0 ? 'Ücretsiz' : formatTL(ship)}</span></div>
+        <div class="sum-row sum-row--total"><span>Toplam</span><strong>${formatTL(total)}</strong></div>
+        <p class="ship-note">${remaining > 0 ? `Ücretsiz kargo için <b>${formatTL(remaining)}</b> daha.` : '<b>Kargonuz ücretsiz.</b>'}</p>
+        <a href="sepet.html" class="link-u" style="margin-top:16px">Sepeti düzenle</a>
+      </aside>`;
+  }
+
+  // --- Sepet boşsa yönlendir
+  function guard() {
+    if (Store.cartCount() === 0) {
+      $('#checkoutRoot').innerHTML = `
+        <div class="empty" style="padding:80px 20px">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M5 7h14l-1.2 13.2a1.5 1.5 0 0 1-1.5 1.3H7.7a1.5 1.5 0 0 1-1.5-1.3z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>
+          <h4>Ödeme için sepetinizde ürün olmalı</h4>
+          <p>Sepetiniz boş görünüyor. Koleksiyondan bir parça seçin.</p>
+          <a href="magaza.html" class="btn">Koleksiyona git</a>
+        </div>`;
+      return false;
+    }
+    return true;
+  }
+
+  function render() {
+    if (!guard()) return;
+    $('#checkoutRoot').innerHTML = `
+      <div class="checkout">
+        <div>${formHTML()}</div>
+        ${summaryHTML()}
+      </div>`;
+    $('#payTotal').textContent = formatTL(Store.total(shippingMethod));
+    bind();
+  }
+
+  function setErr(id, msg) {
+    const el = document.querySelector(`[data-err="${id}"]`);
+    const input = document.getElementById(id);
+    if (el) el.textContent = msg || '';
+    if (input) input.setAttribute('aria-invalid', msg ? 'true' : 'false');
+  }
+
+  function validate() {
+    let ok = true;
+    const v = (id) => document.getElementById(id).value.trim();
+
+    const rules = [
+      ['fName', v('fName').length >= 2, 'Adınızı giriniz (en az 2 karakter).'],
+      ['fSurname', v('fSurname').length >= 2, 'Soyadınızı giriniz (en az 2 karakter).'],
+      ['fEmail', /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v('fEmail')), 'Geçerli bir e-posta adresi giriniz.'],
+      ['fPhone', /^[0-9\s()+-]{10,}$/.test(v('fPhone')), 'Geçerli bir telefon numarası giriniz.'],
+      ['fAddress', v('fAddress').length >= 10, 'Açık adres en az 10 karakter olmalıdır.'],
+      ['fCity', v('fCity').length >= 2, 'İl bilgisini giriniz.'],
+      ['fDistrict', v('fDistrict').length >= 2, 'İlçe bilgisini giriniz.'],
+      ['fPostcode', /^[0-9]{5}$/.test(v('fPostcode')), 'Posta kodu 5 haneli olmalıdır.']
+    ];
+
+    rules.forEach(([id, pass, msg]) => {
+      setErr(id, pass ? '' : msg);
+      if (!pass) ok = false;
+    });
+
+    const terms = document.getElementById('fTerms');
+    setErr('fTerms', terms.checked ? '' : 'Devam etmek için sözleşmeyi onaylamalısınız.');
+    if (!terms.checked) ok = false;
+
+    if (!ok) {
+      const firstBad = document.querySelector('[aria-invalid="true"]') || terms;
+      firstBad.focus();
+      firstBad.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      toast('Lütfen işaretli alanları kontrol edin.', 'bad');
+    }
+    return ok;
+  }
+
+  function bind() {
+    document.querySelectorAll('[data-ship]').forEach(card => {
+      card.addEventListener('click', () => {
+        shippingMethod = card.dataset.ship;
+        document.querySelectorAll('[data-ship]').forEach(c => c.classList.toggle('is-selected', c === card));
+        // özeti yenile (form yeniden çizilmesin, değerler korunsun)
+        const aside = document.querySelector('.order-summary');
+        if (aside) aside.outerHTML = summaryHTML();
+        $('#payTotal').textContent = formatTL(Store.total(shippingMethod));
+        // kargo etiketleri
+        document.querySelectorAll('[data-ship]').forEach(c => {
+          const key = c.dataset.ship;
+          const span = c.querySelector('.radio-card__title span');
+          if (span) span.textContent = shipLabel(key);
+        });
+      });
+    });
+
+    $('#checkoutForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!validate()) return;
+
+      const btn = $('#payBtn');
+      btn.disabled = true;
+      btn.textContent = 'Sipariş oluşturuluyor…';
+
+      setTimeout(() => {
+        const customer = {
+          name: document.getElementById('fName').value.trim(),
+          surname: document.getElementById('fSurname').value.trim(),
+          email: document.getElementById('fEmail').value.trim(),
+          phone: document.getElementById('fPhone').value.trim(),
+          address: document.getElementById('fAddress').value.trim(),
+          city: document.getElementById('fCity').value.trim(),
+          district: document.getElementById('fDistrict').value.trim(),
+          postcode: document.getElementById('fPostcode').value.trim(),
+          note: document.getElementById('fNote').value.trim()
+        };
+        const res = Store.createOrder(customer, shippingMethod);
+        if (!res.ok) {
+          toast(res.message, 'bad');
+          btn.disabled = false;
+          btn.textContent = 'Siparişi tamamla';
+          return;
+        }
+        location.href = `siparis-tamam.html?no=${encodeURIComponent(res.order.id)}`;
+      }, 700);
+    });
+
+    // canlı doğrulama: hata varsa alan düzeltildikçe temizle
+    document.querySelectorAll('#checkoutForm input, #checkoutForm textarea').forEach(inp => {
+      inp.addEventListener('input', () => {
+        if (inp.id) setErr(inp.id, '');
+      });
+    });
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>

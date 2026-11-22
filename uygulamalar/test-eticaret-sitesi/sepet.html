@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sepetim — ATELIER</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=20261122">
+</head>
+<body>
+
+<div class="announce"><span>2.500 TL üzeri siparişlerde ücretsiz kargo · ATELIER10 koduyla %10 indirim</span></div>
+
+<header class="header">
+  <div class="wrap header__inner">
+    <div class="header__nav">
+      <a href="index.html">Ana Sayfa</a>
+      <a href="magaza.html">Koleksiyon</a>
+      <a href="magaza.html?kategori=aydinlatma">Aydınlatma</a>
+      <a href="magaza.html?kategori=seramik">Seramik</a>
+    </div>
+    <a href="index.html" class="brand">Atelier</a>
+    <div class="header__actions">
+      <a href="magaza.html" class="icon-btn" aria-label="Ürün ara">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      </a>
+      <a href="hesap.html" class="icon-btn" aria-label="Demo yönetim paneli">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.2-3.7 4-5.5 7.5-5.5s6.3 1.8 7.5 5.5"/></svg>
+      </a>
+      <button class="icon-btn" data-open-cart aria-label="Sepeti aç">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span class="badge" data-cart-badge>0</span>
+      </button>
+      <button class="icon-btn menu-toggle" id="menuToggle" aria-label="Menüyü aç">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M3 7h18M3 12h18M3 17h12"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<aside class="drawer-nav" id="drawerNav" aria-label="Mobil menü">
+  <div class="drawer-nav__top">
+    <span class="brand" style="font-size:1.1rem">Atelier</span>
+    <button class="icon-btn" id="drawerNavClose" aria-label="Menüyü kapat">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+  </div>
+  <a class="navlink" href="index.html">Ana Sayfa</a>
+  <a class="navlink" href="magaza.html">Koleksiyon</a>
+  <a class="navlink" href="magaza.html?kategori=aydinlatma">Aydınlatma</a>
+  <a class="navlink" href="magaza.html?kategori=seramik">Seramik &amp; Sofra</a>
+  <a class="navlink" href="magaza.html?kategori=tekstil">Tekstil</a>
+  <a class="navlink" href="magaza.html?kategori=koku">Koku</a>
+  <a class="navlink" href="hesap.html">Panel (demo)</a>
+</aside>
+
+<main class="wrap">
+  <div class="page-head">
+    <nav class="crumbs" aria-label="Sayfa yolu">
+      <a href="index.html">Ana Sayfa</a> <span>/</span> <span>Sepetim</span>
+    </nav>
+    <h1 class="display">Sepetim</h1>
+    <p id="cartSummaryLine">Seçtiğiniz parçaları gözden geçirin.</p>
+  </div>
+
+  <div id="cartRoot" style="padding-bottom:90px"></div>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div>
+        <span class="brand">Atelier</span>
+        <p>Yaşamın ince detayları. El işçiliğiyle üretilmiş aydınlatma, seramik, tekstil ve yaşam objeleri.</p>
+      </div>
+      <div>
+        <h4>Alışveriş</h4>
+        <ul>
+          <li><a href="magaza.html">Tüm ürünler</a></li>
+          <li><a href="magaza.html?kategori=aydinlatma">Aydınlatma</a></li>
+          <li><a href="magaza.html?kategori=seramik">Seramik &amp; Sofra</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Yardım</h4>
+        <ul>
+          <li><a href="sepet.html">Sepetim</a></li>
+          <li><a href="odeme.html">Ödeme</a></li>
+          <li><a href="hesap.html">Demo panel</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>İletişim</h4>
+        <ul>
+          <li><a href="mailto:info@atelier.example">info@atelier.example</a></li>
+          <li><span style="font-size:.86rem;color:var(--muted)">Karaköy, İstanbul</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© 2026 ATELIER · Demo mağaza.</span>
+      <span>Gerçek ödeme alınmaz; veri sunucuya gönderilmez.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/products.js?v=20261122"></script>
+<script src="assets/js/store.js?v=20261122"></script>
+<script src="assets/js/ui.js?v=20261122"></script>
+<script>
+(() => {
+  function render() {
+    const lines = Store.cartLines();
+    const root = $('#cartRoot');
+
+    if (!lines.length) {
+      $('#cartSummaryLine').textContent = 'Sepetinizde ürün bulunmuyor.';
+      root.innerHTML = `
+        <div class="empty" style="padding:80px 20px">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M5 7h14l-1.2 13.2a1.5 1.5 0 0 1-1.5 1.3H7.7a1.5 1.5 0 0 1-1.5-1.3z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>
+          <h4>Sepetiniz boş</h4>
+          <p>Koleksiyonumuza göz atın; sıcak bir lamba, bir vazo ya da battaniye iyi gelir.</p>
+          <a href="magaza.html" class="btn">Koleksiyona git</a>
+        </div>`;
+      return;
+    }
+
+    $('#cartSummaryLine').textContent = `${Store.cartCount()} ürün · ${lines.length} farklı seçenek`;
+
+    const sub = Store.subtotal();
+    const disc = Store.discountAmount();
+    const ship = Store.shippingCost('standard');
+    const total = Store.total('standard');
+    const remaining = Store.freeShippingRemaining();
+    const coupon = Store.getCoupon();
+
+    root.innerHTML = `
+      <div class="checkout">
+        <div>
+          <div class="table-wrap" style="margin-bottom:26px">
+            <table class="data" style="min-width:0">
+              <thead>
+                <tr><th>Ürün</th><th>Birim fiyat</th><th>Adet</th><th>Toplam</th><th><span class="sr-only">Kaldır</span></th></tr>
+              </thead>
+              <tbody>
+                ${lines.map(l => `
+                  <tr>
+                    <td>
+                      <div class="cell-prod">
+                        <a href="urun.html?id=${l.pid}"><img class="row-thumb" style="width:64px" src="${l.product.images[0]}" alt="${esc(l.product.name)}"></a>
+                        <div>
+                          <a href="urun.html?id=${l.pid}" class="cell-prod__name">${esc(l.product.name)}</a>
+                          <div class="cell-prod__cat">${l.variant ? esc(l.variant.label) : 'Tek seçenek'}</div>
+                          ${l.qty >= l.stock ? `<div class="cell-prod__cat" style="color:var(--copper)">Stok sınırı: ${l.stock}</div>` : ''}
+                        </div>
+                      </div>
+                    </td>
+                    <td>${formatTL(l.unit)}</td>
+                    <td>
+                      <div class="qty">
+                        <button data-dec="${l.id}" aria-label="Azalt">−</button>
+                        <span>${l.qty}</span>
+                        <button data-inc="${l.id}" aria-label="Artır" ${l.qty >= l.stock ? 'disabled' : ''}>+</button>
+                      </div>
+                    </td>
+                    <td><strong style="font-weight:400">${formatTL(l.lineTotal)}</strong></td>
+                    <td>
+                      <button class="cart-line__remove" data-remove="${l.id}" aria-label="${esc(l.product.name)} ürününü kaldır">Kaldır</button>
+                    </td>
+                  </tr>`).join('')}
+              </tbody>
+            </table>
+          </div>
+          <a href="magaza.html" class="link-u">← Alışverişe devam et</a>
+        </div>
+
+        <aside class="order-summary" aria-label="Sipariş özeti">
+          <h3>Sipariş özeti</h3>
+          <div class="sum-row"><span>Ürün toplamı</span><span id="sSub">${formatTL(sub)}</span></div>
+          ${disc > 0 ? `<div class="sum-row sum-row--discount"><span>İndirim (${esc(coupon.code)})</span><span id="sDisc">−${formatTL(disc)}</span></div>
+            <p class="small" style="margin-top:2px">İndirim, <strong style="font-weight:400">ürün toplamı</strong> üzerinden hesaplandı.</p>` : ''}
+          <div class="sum-row"><span>Kargo</span><span id="sShip">${ship === 0 ? 'Ücretsiz' : formatTL(ship)}</span></div>
+          <p class="ship-note">${remaining > 0 ? `Ücretsiz kargo için <b>${formatTL(remaining)}</b> daha ekleyin.` : '<b>Kargonuz ücretsiz.</b>'}</p>
+
+          <div class="coupon-row">
+            <label class="sr-only" for="couponInput">İndirim kodu</label>
+            <input id="couponInput" placeholder="İndirim kodu" value="${coupon ? esc(coupon.code) : ''}" autocomplete="off">
+            <button class="btn btn--sm btn--ghost" id="couponBtn">${coupon ? 'Kaldır' : 'Uygula'}</button>
+          </div>
+          <p class="coupon-msg ${coupon ? 'ok' : ''}" id="couponMsg">${coupon ? `“${esc(coupon.code)}” uygulandı — ${esc(coupon.label)}.` : 'ATELIER10 kodunu deneyin.'}</p>
+
+          <div class="sum-row sum-row--total"><span>Toplam</span><strong id="sTotal">${formatTL(total)}</strong></div>
+          <a href="odeme.html" class="btn btn--block" style="margin-top:18px">Ödemeye geç</a>
+          <p class="small" style="margin-top:12px;text-align:center">Bu bir demo mağazadır — gerçek ödeme alınmaz.</p>
+        </aside>
+      </div>`;
+
+    root.querySelectorAll('[data-inc]').forEach(b => b.onclick = () => {
+      const r = Store.incLine(b.dataset.inc);
+      if (!r.ok && r.reason) toast(r.reason, 'bad');
+    });
+    root.querySelectorAll('[data-dec]').forEach(b => b.onclick = () => Store.decLine(b.dataset.dec));
+    root.querySelectorAll('[data-remove]').forEach(b => b.onclick = () => {
+      Store.removeLine(b.dataset.remove);
+      toast('Ürün sepetten kaldırıldı.');
+    });
+
+    const couponBtn = $('#couponBtn');
+    const couponInput = $('#couponInput');
+    couponBtn.onclick = () => {
+      if (Store.getCoupon()) {
+        Store.removeCoupon();
+        toast('İndirim kodu kaldırıldı.');
+        return;
+      }
+      const r = Store.applyCoupon(couponInput.value);
+      const msg = $('#couponMsg');
+      if (r.ok) { toast(r.message); }
+      else { msg.textContent = r.message; msg.className = 'coupon-msg bad'; }
+    };
+    couponInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') couponBtn.click(); });
+  }
+
+  render();
+  Store.onChange(render);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ürün — ATELIER</title>
+<meta name="description" content="ATELIER ürün detayı: malzeme, ölçü ve renk seçenekleri, teslimat ve iade bilgisi.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=20261122">
+</head>
+<body>
+
+<div class="announce"><span>2.500 TL üzeri siparişlerde ücretsiz kargo · ATELIER10 koduyla %10 indirim</span></div>
+
+<header class="header">
+  <div class="wrap header__inner">
+    <div class="header__nav">
+      <a href="index.html">Ana Sayfa</a>
+      <a href="magaza.html">Koleksiyon</a>
+      <a href="magaza.html?kategori=aydinlatma">Aydınlatma</a>
+      <a href="magaza.html?kategori=seramik">Seramik</a>
+    </div>
+    <a href="index.html" class="brand">Atelier</a>
+    <div class="header__actions">
+      <a href="magaza.html" class="icon-btn" aria-label="Ürün ara">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      </a>
+      <a href="hesap.html" class="icon-btn" aria-label="Demo yönetim paneli">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.2-3.7 4-5.5 7.5-5.5s6.3 1.8 7.5 5.5"/></svg>
+      </a>
+      <button class="icon-btn" data-open-cart aria-label="Sepeti aç">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span class="badge" data-cart-badge>0</span>
+      </button>
+      <button class="icon-btn menu-toggle" id="menuToggle" aria-label="Menüyü aç">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M3 7h18M3 12h18M3 17h12"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<aside class="drawer-nav" id="drawerNav" aria-label="Mobil menü">
+  <div class="drawer-nav__top">
+    <span class="brand" style="font-size:1.1rem">Atelier</span>
+    <button class="icon-btn" id="drawerNavClose" aria-label="Menüyü kapat">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+  </div>
+  <a class="navlink" href="index.html">Ana Sayfa</a>
+  <a class="navlink" href="magaza.html">Koleksiyon</a>
+  <a class="navlink" href="magaza.html?kategori=aydinlatma">Aydınlatma</a>
+  <a class="navlink" href="magaza.html?kategori=seramik">Seramik &amp; Sofra</a>
+  <a class="navlink" href="magaza.html?kategori=tekstil">Tekstil</a>
+  <a class="navlink" href="magaza.html?kategori=koku">Koku</a>
+  <a class="navlink" href="hesap.html">Panel (demo)</a>
+</aside>
+
+<main class="wrap">
+  <nav class="crumbs" style="padding-top:26px" aria-label="Sayfa yolu">
+    <a href="index.html">Ana Sayfa</a> <span>/</span>
+    <a href="magaza.html" id="crumbCatRoot">Koleksiyon</a> <span>/</span>
+    <span id="crumbName">Ürün</span>
+  </nav>
+
+  <div id="pdpRoot"></div>
+
+  <section class="section" id="relatedSection">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Bunlarla iyi gider</span>
+        <h2 class="display" style="margin-top:12px">İlgili ürünler</h2>
+      </div>
+      <a href="magaza.html" class="link-u">Koleksiyon</a>
+    </div>
+    <div class="prod-grid" id="relatedGrid"></div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div>
+        <span class="brand">Atelier</span>
+        <p>Yaşamın ince detayları. El işçiliğiyle üretilmiş aydınlatma, seramik, tekstil ve yaşam objeleri.</p>
+      </div>
+      <div>
+        <h4>Alışveriş</h4>
+        <ul>
+          <li><a href="magaza.html">Tüm ürünler</a></li>
+          <li><a href="magaza.html?kategori=aydinlatma">Aydınlatma</a></li>
+          <li><a href="magaza.html?kategori=seramik">Seramik &amp; Sofra</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Yardım</h4>
+        <ul>
+          <li><a href="sepet.html">Sepetim</a></li>
+          <li><a href="odeme.html">Ödeme</a></li>
+          <li><a href="hesap.html">Demo panel</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>İletişim</h4>
+        <ul>
+          <li><a href="mailto:info@atelier.example">info@atelier.example</a></li>
+          <li><span style="font-size:.86rem;color:var(--muted)">Karaköy, İstanbul</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© 2026 ATELIER · Demo mağaza.</span>
+      <span>Gerçek ödeme alınmaz; veri sunucuya gönderilmez.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/products.js?v=20261122"></script>
+<script src="assets/js/store.js?v=20261122"></script>
+<script src="assets/js/ui.js?v=20261122"></script>
+<script>
+(() => {
+  const id = new URLSearchParams(location.search).get('id');
+  const product = getProduct(id);
+
+  if (!product) {
+    $('#pdpRoot').innerHTML = `
+      <div class="empty" style="padding:100px 0">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="9.5"/><path d="M12 8v5M12 16v.2"/></svg>
+        <h4>Ürün bulunamadı</h4>
+        <p>Aradığınız ürün koleksiyonda yok ya da adres hatalı.</p>
+        <a href="magaza.html" class="btn btn--ghost btn--sm">Koleksiyona dön</a>
+      </div>`;
+    return;
+  }
+
+  document.title = `${product.name} — ATELIER`;
+  $('#crumbName').textContent = product.name;
+  const cat = getCategory(product.category);
+  const crumbCat = $('#crumbCatRoot');
+  crumbCat.textContent = cat.name;
+  crumbCat.href = `magaza.html?kategori=${cat.id}`;
+
+  // Varyant durumu
+  let selectedVariant = (product.variants || []).length ? product.variants[0].id : null;
+  let qty = 1;
+  let activeImage = 0;
+
+  const hasVariants = (product.variants || []).length > 0;
+
+  function currentPrice() { return priceFor(product, selectedVariant); }
+  function currentStock() { return Store.getStock(product.id, selectedVariant); }
+
+  function renderGallery() {
+    const imgs = product.images;
+    return `
+      <div class="gallery">
+        <div class="gallery__thumbs" role="tablist" aria-label="Ürün görselleri">
+          ${imgs.map((src, i) => `
+            <button class="gallery__thumb ${i === activeImage ? 'is-active' : ''}" data-img="${i}"
+              role="tab" aria-selected="${i === activeImage}" aria-label="Görsel ${i + 1}">
+              <img src="${src}" alt="" loading="lazy">
+            </button>`).join('')}
+        </div>
+        <div class="gallery__main">
+          ${variantTotalStock(product) === 0 ? '<span class="tag tag--out">Tükendi</span>'
+            : product.oldPrice ? `<span class="tag tag--copper">%${Math.round((1 - product.price / product.oldPrice) * 100)} indirim</span>`
+            : product.bestseller ? '<span class="tag">Çok satan</span>' : ''}
+          <img src="${imgs[activeImage]}" alt="${esc(product.name)}" id="mainImage" width="800" height="1000">
+        </div>
+      </div>`;
+  }
+
+  function renderVariants() {
+    if (!hasVariants) return '';
+    const label = product.variantType === 'color' ? 'Renk' : 'Boyut';
+    const chosen = product.variants.find(v => v.id === selectedVariant);
+
+    if (product.variantType === 'color') {
+      return `
+        <div class="variant-group">
+          <div class="variant-group__head">
+            <span class="variant-group__label">${label}</span>
+            <span class="variant-group__value" id="variantLabel">${esc(chosen.label)}</span>
+          </div>
+          <div class="swatches" id="variantBtns">
+            ${product.variants.map(v => `
+              <button class="swatch ${v.id === selectedVariant ? 'is-active' : ''}"
+                data-variant="${v.id}" style="background:${v.color}"
+                aria-label="${esc(v.label)}${v.stock === 0 ? ' (stokta yok)' : ''}"
+                aria-pressed="${v.id === selectedVariant}"
+                title="${esc(v.label)}${v.stock === 0 ? ' — tükendi' : ''}"></button>`).join('')}
+          </div>
+        </div>`;
+    }
+    return `
+      <div class="variant-group">
+        <div class="variant-group__head">
+          <span class="variant-group__label">${label}</span>
+          <span class="variant-group__value" id="variantLabel">${esc(chosen.label)}</span>
+        </div>
+        <div class="swatches" id="variantBtns">
+          ${product.variants.map(v => `
+            <button class="size-btn ${v.id === selectedVariant ? 'is-active' : ''}"
+              data-variant="${v.id}" ${v.stock === 0 ? 'disabled' : ''}
+              aria-pressed="${v.id === selectedVariant}">${esc(v.label)}</button>`).join('')}
+        </div>
+      </div>`;
+  }
+
+  function stockBadge() {
+    const s = currentStock();
+    if (s === 0) return '<span class="dot dot--out"></span><span>Tükendi — yeniden stok bekleniyor</span>';
+    if (s <= 5) return `<span class="dot dot--low"></span><span>Son ${s} adet</span>`;
+    return `<span class="dot"></span><span>Stokta var · ${s} adet</span>`;
+  }
+
+  function render() {
+    const price = currentPrice();
+    const stock = currentStock();
+    const fav = Store.isFav(product.id);
+    const oldPrice = product.oldPrice ? product.oldPrice + (price - product.price) : null;
+
+    $('#pdpRoot').innerHTML = `
+      <div class="pdp">
+        ${renderGallery()}
+        <div class="pdp-info">
+          <span class="eyebrow">${esc(cat.name)}</span>
+          <h1>${esc(product.name)}</h1>
+          <div class="pdp-rating">${starsHTML(product.rating, product.reviews)}</div>
+
+          <div class="pdp-price">
+            <strong id="pdpPrice">${formatTL(price)}</strong>
+            ${oldPrice ? `<s>${formatTL(oldPrice)}</s><span class="off">İndirim</span>` : ''}
+          </div>
+          <p class="small">KDV dahil · Tek çekim fiyatı</p>
+
+          <p class="pdp-desc">${esc(product.description)}</p>
+
+          ${renderVariants()}
+
+          <div class="stock-line" id="stockLine">${stockBadge()}</div>
+
+          <div class="pdp-buy">
+            <div class="qty">
+              <button id="qtyMinus" aria-label="Adet azalt" ${stock === 0 ? 'disabled' : ''}>
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M5 12h14"/></svg>
+              </button>
+              <span id="qtyVal" aria-live="polite">1</span>
+              <button id="qtyPlus" aria-label="Adet artır" ${stock === 0 ? 'disabled' : ''}>
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 5v14M5 12h14"/></svg>
+              </button>
+            </div>
+            <button class="btn" id="addToCart" ${stock === 0 ? 'disabled' : ''}>
+              ${stock === 0 ? 'Stokta yok' : 'Sepete ekle'}
+            </button>
+          </div>
+          <button class="btn btn--ghost btn--block btn--sm" id="favBtn" aria-pressed="${fav}">
+            ${fav ? 'Favorilerde' : 'Favorilere ekle'}
+          </button>
+
+          <ul class="trust-list">
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M1 3h13v13H1z"/><path d="M14 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="1.8"/><circle cx="17.5" cy="18.5" r="1.8"/></svg>
+              <span><strong style="font-weight:400;color:var(--anthracite)">Teslimat:</strong> Standart 2–4 iş günü (${SHIPPING.standard} TL, ${formatTL(SHIPPING.freeThreshold)} üzeri ücretsiz). Hızlı kargo: ${SHIPPING.express} TL.</span>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M3 12a9 9 0 0 1 15.5-6.2L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16"/><path d="M3 21v-5h5"/></svg>
+              <span><strong style="font-weight:400;color:var(--anthracite)">İade:</strong> Teslimattan itibaren 30 gün içinde koşulsuz iade. Kullanılmamış ürünlerde ücretsiz kargo.</span>
+            </li>
+            <li>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M12 2 4 6v6c0 5 3.5 8.7 8 10 4.5-1.3 8-5 8-10V6z"/><path d="m8.5 12 2.5 2.5 4.5-4.5"/></svg>
+              <span><strong style="font-weight:400;color:var(--anthracite)">Güvenli ödeme:</strong> Bu demo mağazada ödeme simüle edilir; kart bilgisi istenmez ve saklanmaz.</span>
+            </li>
+          </ul>
+
+          <div class="accordion">
+            <div class="accordion__item">
+              <button class="accordion__btn" aria-expanded="false">
+                Ürün özellikleri
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 5v14M5 12h14"/></svg>
+              </button>
+              <div class="accordion__panel"><div>
+                <ul>
+                  <li><strong>Malzeme:</strong> ${esc(product.material)}</li>
+                  <li><strong>Ölçüler:</strong> ${esc(product.dimensions)}</li>
+                  <li><strong>Bakım:</strong> ${esc(product.care)}</li>
+                </ul>
+              </div></div>
+            </div>
+            <div class="accordion__item">
+              <button class="accordion__btn" aria-expanded="false">
+                Teslimat &amp; iade
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 5v14M5 12h14"/></svg>
+              </button>
+              <div class="accordion__panel"><div>
+                Siparişiniz 1 iş günü içinde hazırlanır. Standart teslimat ${SHIPPING.standardDays}, hızlı teslimat ${SHIPPING.expressDays} içinde yapılır.
+                32 ilde aynı gün kurye imkânı bulunur. Ambalajı açılmamış ürünlerde 30 gün içinde koşulsuz iade hakkınız vardır.
+                <em>(Demo mağaza — gerçek kargo gönderimi yapılmaz.)</em>
+              </div></div>
+            </div>
+            <div class="accordion__item">
+              <button class="accordion__btn" aria-expanded="false">
+                Zanaat notu
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 5v14M5 12h14"/></svg>
+              </button>
+              <div class="accordion__panel"><div>
+                Her parça atölyemizde tek tek üretilir. Bu nedenle ton, doku ve ölçüde küçük farklılıklar görülebilir;
+                bu farklılıklar el işçiliğinin doğal imzasıdır ve kusur sayılmaz.
+              </div></div>
+            </div>
+          </div>
+        </div>
+      </div>`;
+
+    bind();
+    observeReveals();
+
+    // İlgili ürünler: aynı kategori, sonra benzer fiyat
+    let related = PRODUCTS.filter(p => p.id !== product.id && p.category === product.category);
+    if (related.length < 4) {
+      related = related.concat(PRODUCTS.filter(p => p.id !== product.id && p.category !== product.category)
+        .sort((a, b) => Math.abs(a.price - product.price) - Math.abs(b.price - product.price)));
+    }
+    $('#relatedGrid').innerHTML = related.slice(0, 4).map(productCard).join('');
+  }
+
+  function bind() {
+    // Galeri
+    $$('[data-img]').forEach(b => b.onclick = () => {
+      activeImage = Number(b.dataset.img);
+      $('#mainImage').src = product.images[activeImage];
+      $$('.gallery__thumb').forEach(t => {
+        const on = t.dataset.img === String(activeImage);
+        t.classList.toggle('is-active', on);
+        t.setAttribute('aria-selected', String(on));
+      });
+    });
+
+    // Varyant
+    $$('[data-variant]').forEach(b => b.onclick = () => {
+      selectedVariant = b.dataset.variant;
+      qty = 1;
+      render();
+      const stock = currentStock();
+      if (stock === 0) toast('Bu seçenek şu anda stokta yok.', 'bad');
+    });
+
+    // Adet
+    const qtyVal = $('#qtyVal');
+    $('#qtyMinus').onclick = () => {
+      if (qty > 1) { qty--; qtyVal.textContent = qty; }
+    };
+    $('#qtyPlus').onclick = () => {
+      const s = currentStock();
+      if (qty >= s) { toast(`Stok sınırı: en fazla ${s} adet.`, 'bad'); return; }
+      qty++; qtyVal.textContent = qty;
+    };
+
+    // Sepete ekle
+    const addBtn = $('#addToCart');
+    if (addBtn) addBtn.onclick = () => {
+      const r = Store.addToCart(product.id, selectedVariant, qty);
+      if (r.ok) {
+        openCart();
+        toast(r.partial ? `${product.name} — stok kadar (${r.added}) eklendi.` : `${product.name} sepete eklendi.`);
+      } else {
+        toast(r.reason, 'bad');
+      }
+    };
+
+    // Favori
+    $('#favBtn').onclick = (e) => {
+      const on = Store.toggleFav(product.id);
+      e.currentTarget.textContent = on ? 'Favorilerde' : 'Favorilere ekle';
+      e.currentTarget.setAttribute('aria-pressed', String(on));
+      toast(on ? 'Favorilere eklendi.' : 'Favorilerden çıkarıldı.');
+    };
+
+    // Akordeon
+    $$('.accordion__btn').forEach(btn => btn.onclick = () => {
+      const item = btn.closest('.accordion__item');
+      const panel = item.querySelector('.accordion__panel');
+      const open = item.classList.toggle('is-open');
+      btn.setAttribute('aria-expanded', String(open));
+      panel.style.maxHeight = open ? panel.scrollHeight + 'px' : '0';
+    });
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>

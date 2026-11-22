@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Yönetim Paneli (Demo) — ATELIER</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=20261122">
+</head>
+<body>
+
+<div class="announce"><span>Demo yönetim paneli · Gerçek yönetici kimlik doğrulaması yoktur</span></div>
+
+<header class="header">
+  <div class="wrap header__inner">
+    <div class="header__nav">
+      <a href="index.html">Mağaza</a>
+      <a href="magaza.html">Koleksiyon</a>
+      <a href="hesap.html" class="is-active">Panel</a>
+    </div>
+    <a href="index.html" class="brand">Atelier</a>
+    <div class="header__actions">
+      <button class="icon-btn" data-open-cart aria-label="Sepeti aç">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span class="badge" data-cart-badge>0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap admin">
+  <div class="page-head" style="padding-top:8px;border:0">
+    <nav class="crumbs" aria-label="Sayfa yolu">
+      <a href="index.html">Ana Sayfa</a> <span>/</span> <span>Panel</span>
+    </nav>
+    <h1 class="display">Yönetim Paneli</h1>
+    <p>Siparişler, stoklar ve satış istatistikleri. Tüm veriler yalnızca bu tarayıcıda tutulur.</p>
+  </div>
+
+  <div class="admin-notice">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v6M12 7.6v.2"/></svg>
+    <div>
+      <strong style="font-weight:400">DEMO PANEL —</strong> Bu panelde gerçek yönetici kimlik doğrulaması bulunmaz.
+      Herkes erişebilir ve tüm veriler yalnızca bu tarayıcının localStorage alanında saklanır.
+      Gerçek bir yayında mutlaka sunucu taraflı kimlik doğrulama ve yetkilendirme gerekir.
+    </div>
+  </div>
+
+  <div class="stats" id="statsRow"></div>
+
+  <div class="admin-tabs" role="tablist">
+    <button class="is-active" data-tab="siparisler" role="tab">Siparişler <span id="tabOrderCount"></span></button>
+    <button data-tab="urunler" role="tab">Ürünler &amp; Stok</button>
+    <button data-tab="veri" role="tab">Veri &amp; Dışa Aktarma</button>
+  </div>
+
+  <section id="panel-siparisler">
+    <div class="admin-toolbar">
+      <div class="search-field">
+        <label class="sr-only" for="orderSearch">Sipariş ara</label>
+        <input id="orderSearch" placeholder="Sipariş no, müşteri veya e-posta ara…">
+      </div>
+      <div class="spacer"></div>
+      <label class="small" for="statusFilter" style="letter-spacing:.1em">Durum</label>
+      <select class="select" id="statusFilter">
+        <option value="all">Tümü</option>
+        <option value="yeni">Yeni</option>
+        <option value="hazirlaniyor">Hazırlanıyor</option>
+        <option value="kargoda">Kargoda</option>
+        <option value="teslim">Teslim edildi</option>
+        <option value="iptal">İptal</option>
+      </select>
+    </div>
+    <div class="table-wrap" id="ordersTableWrap"></div>
+  </section>
+
+  <section id="panel-urunler" hidden>
+    <div class="admin-toolbar">
+      <div class="search-field">
+        <label class="sr-only" for="prodSearch">Ürün ara</label>
+        <input id="prodSearch" placeholder="Ürün adı veya kategori ara…">
+      </div>
+      <div class="spacer"></div>
+      <button class="btn btn--sm btn--ghost" id="newProductBtn">+ Yeni ürün</button>
+    </div>
+    <div class="table-wrap" id="productsTableWrap"></div>
+  </section>
+
+  <section id="panel-veri" hidden>
+    <div class="table-wrap" style="padding:26px">
+      <h3 class="display" style="font-size:1.5rem;margin-bottom:10px">Veri yönetimi</h3>
+      <p class="small" style="max-width:62ch;margin-bottom:22px">
+        Sepet, siparişler, favoriler ve stok düzeltmeleri tarayıcınızın localStorage alanında saklanır.
+        Hiçbir kişisel veri harici bir sunucuya gönderilmez.
+      </p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn--sm" id="exportBtn">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 3v12M7 11l5 5 5-5"/><path d="M4 20h16"/></svg>
+          JSON dışa aktar (ürün + sipariş)
+        </button>
+        <button class="btn btn--sm btn--ghost" id="exportOrdersBtn">Yalnız siparişleri aktar</button>
+        <a href="magaza.html" class="btn btn--sm btn--ghost">Mağazayı görüntüle</a>
+      </div>
+
+      <div class="danger-zone">
+        <h4>Örnek verileri sıfırla</h4>
+        <p>Bu işlem sepeti, tüm demo siparişlerini, favorileri ve stok düzeltmelerini siler; başlangıç durumuna döner. Geri alınamaz.</p>
+        <button class="btn btn--sm btn--danger" id="resetBtn">Tüm demo verilerini sıfırla</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- Ürün modalı -->
+<div class="modal" id="productModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal__box">
+    <div class="modal__head">
+      <h3 id="modalTitle">Yeni ürün</h3>
+      <button class="icon-btn" id="modalClose" aria-label="Kapat">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+    <form id="productForm" novalidate>
+      <input type="hidden" id="pEditId">
+      <div class="field">
+        <label for="pName">Ürün adı *</label>
+        <input id="pName" required placeholder="Örn. Sarnıç Masa Lambası">
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="pCategory">Kategori *</label>
+          <select id="pCategory" required>
+            ${''}
+          </select>
+        </div>
+        <div class="field">
+          <label for="pMaterial">Malzeme</label>
+          <input id="pMaterial" placeholder="Örn. Stoneware kil">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="pPrice">Fiyat (TL) *</label>
+          <input id="pPrice" type="number" min="1" step="1" required placeholder="2400">
+        </div>
+        <div class="field">
+          <label for="pStock">Stok *</label>
+          <input id="pStock" type="number" min="0" step="1" required placeholder="12">
+        </div>
+      </div>
+      <div class="field">
+        <label for="pImage">Görsel yolu</label>
+        <input id="pImage" placeholder="assets/img/p-lamp-ceramic.jpg">
+      </div>
+      <div class="field">
+        <label for="pShort">Kısa açıklama</label>
+        <input id="pShort" placeholder="Tek satırlık tanıtım">
+      </div>
+      <div class="field">
+        <label for="pDesc">Açıklama</label>
+        <textarea id="pDesc" rows="3" placeholder="Ürün hikâyesi…"></textarea>
+      </div>
+      <div class="modal__foot">
+        <button type="button" class="btn btn--ghost btn--sm" id="modalCancel">Vazgeç</button>
+        <button type="submit" class="btn btn--sm" id="modalSave">Kaydet</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Sipariş detay modalı -->
+<div class="modal" id="orderModal" role="dialog" aria-modal="true" aria-labelledby="orderModalTitle">
+  <div class="modal__box">
+    <div class="modal__head">
+      <h3 id="orderModalTitle">Sipariş</h3>
+      <button class="icon-btn" id="orderModalClose" aria-label="Kapat">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+    <div id="orderModalBody"></div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__bottom" style="margin-top:0;border-top:0">
+      <span>© 2026 ATELIER · Demo yönetim paneli.</span>
+      <span>Gerçek kimlik doğrulama yoktur · Veriler yalnızca bu tarayıcıda.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/products.js?v=20261122"></script>
+<script src="assets/js/store.js?v=20261122"></script>
+<script src="assets/js/ui.js?v=20261122"></script>
+<script>
+(() => {
+  /* ---------- Sekmeler ---------- */
+  $$('.admin-tabs button').forEach(b => b.onclick = () => {
+    $$('.admin-tabs button').forEach(x => x.classList.toggle('is-active', x === b));
+    ['siparisler', 'urunler', 'veri'].forEach(t => $('#panel-' + t).hidden = (t !== b.dataset.tab));
+  });
+
+  /* ---------- İstatistik ---------- */
+  function renderStats() {
+    const orders = Store.getOrders().filter(o => o.status !== 'iptal');
+    const revenue = orders.reduce((s, o) => s + o.total, 0);
+    const items = orders.reduce((s, o) => s + o.items.reduce((a, i) => a + i.qty, 0), 0);
+    const open = Store.getOrders().filter(o => ['yeni', 'hazirlaniyor', 'kargoda'].includes(o.status)).length;
+    const low = [];
+    // NUMEX-DÜZELTME (2026-11-22): Düşük stok eşiği <=3 tüm varyantları sayıyordu ve 24 ürünün 15'i 'düşük' çıkıyordu — uyarı anlamını yitiriyordu. Eşik 1–5 olarak daraltıldı, tükenmiş (0) seçenekler ayrı tutuldu; kart altına en kritik 3 seçenek yazılacak.
+    // "Düşük stok" yalnız gerçekten az kalan ve hâlâ satılabilir seçenekleri sayar:
+    // stok 1–5 arası. 0 (tükendi) ve 6+ (rahat) sayılmaz — aksi hâlde uyarı işe yaramaz.
+    PRODUCTS.forEach(p => {
+      const opts = (p.variants || []).length
+        ? p.variants.map(v => ({ id: v.id, label: v.label }))
+        : [{ id: null, label: 'Tek seçenek' }];
+      opts.forEach(o => {
+        const s = Store.getStock(p.id, o.id);
+        if (s >= 1 && s <= 5) low.push({ p, v: o, stock: s });
+      });
+    });
+
+    $('#statsRow').innerHTML = `
+      <div class="stat-card"><span>Toplam ciro (demo)</span><strong>${formatTL(revenue)}</strong><small>İptal hariç ${orders.length} sipariş</small></div>
+      <div class="stat-card"><span>Satılan ürün</span><strong>${items}</strong><small>Toplam adet</small></div>
+      <div class="stat-card"><span>Açık sipariş</span><strong>${open}</strong><small class="warn">Hazırlık bekleyen</small></div>
+      <div class="stat-card">
+        <span>Düşük stok</span><strong>${low.length}</strong>
+        <small class="warn" title="${low.slice(0, 3).map(l => `${esc(l.p.name)} — ${esc(l.v.label)}: ${l.stock}`).join(' · ')}">
+          ${low.length ? 'en kritik: ' + low.sort((a, b) => a.stock - b.stock).slice(0, 3).map(l => `${esc(l.p.name.split(' ')[0])} (${l.stock})`).join(' · ') : 'tümü rahat'}
+        </small>
+      </div>`;
+  }
+
+  /* ---------- Sipariş tablosu ---------- */
+  let orderQuery = '', orderStatus = 'all';
+
+  function renderOrders() {
+    let list = Store.getOrders();
+    if (orderStatus !== 'all') list = list.filter(o => o.status === orderStatus);
+    if (orderQuery) {
+      const q = orderQuery.toLowerCase();
+      list = list.filter(o =>
+        o.id.toLowerCase().includes(q) ||
+        `${o.customer.name} ${o.customer.surname}`.toLowerCase().includes(q) ||
+        o.customer.email.toLowerCase().includes(q)
+      );
+    }
+
+    $('#tabOrderCount').textContent = Store.getOrders().length ? `(${Store.getOrders().length})` : '';
+
+    if (!list.length) {
+      $('#ordersTableWrap').innerHTML = `<div class="empty">
+        <h4>${Store.getOrders().length ? 'Bu filtreyle sipariş yok' : 'Henüz sipariş yok'}</h4>
+        <p>${Store.getOrders().length ? 'Arama veya durum filtresini değiştirin.' : 'Mağazadan bir demo sipariş oluşturduğunuzda burada görünür.'}</p>
+        <a href="magaza.html" class="btn btn--ghost btn--sm">Mağazaya git</a>
+      </div>`;
+      return;
+    }
+
+    $('#ordersTableWrap').innerHTML = `
+      <table class="data">
+        <thead>
+          <tr><th>Sipariş</th><th>Müşteri</th><th>Tarih</th><th>Ürün</th><th>Toplam</th><th>Durum</th><th></th></tr>
+        </thead>
+        <tbody>
+          ${list.map(o => {
+            const d = new Date(o.createdAt).toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            const qty = o.items.reduce((a, i) => a + i.qty, 0);
+            return `<tr>
+              <td class="mono">${esc(o.id)}</td>
+              <td>
+                <div style="line-height:1.3">${esc(o.customer.name)} ${esc(o.customer.surname)}</div>
+                <div class="cell-prod__cat">${esc(o.customer.email)}</div>
+              </td>
+              <td>${d}</td>
+              <td>${qty} adet</td>
+              <td>${formatTL(o.total)}</td>
+              <td>
+                <select class="status-select" data-ostatus="${o.id}" aria-label="${esc(o.id)} durumu">
+                  ${Object.entries(Store.STATUS).map(([k, v]) =>
+                    `<option value="${k}" ${o.status === k ? 'selected' : ''}>${v}</option>`).join('')}
+                </select>
+              </td>
+              <td><button class="cart-line__remove" data-oview="${o.id}">Detay</button></td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>`;
+
+    $$('[data-ostatus]').forEach(sel => sel.onchange = () => {
+      Store.setOrderStatus(sel.dataset.ostatus, sel.value);
+      toast(`${sel.dataset.ostatus} → ${Store.STATUS[sel.value]}`);
+      renderStats(); renderProducts();
+    });
+    $$('[data-oview]').forEach(b => b.onclick = () => openOrder(b.dataset.oview));
+  }
+
+  function openOrder(id) {
+    const o = Store.getOrder(id);
+    if (!o) return;
+    $('#orderModalTitle').textContent = `${o.id} · ${Store.STATUS[o.status]}`;
+    $('#orderModalBody').innerHTML = `
+      <div class="small" style="margin-bottom:16px">
+        ${new Date(o.createdAt).toLocaleString('tr-TR')} · ${esc(o.shippingLabel)}
+      </div>
+      <div style="border:1px solid var(--line-soft);padding:16px;margin-bottom:18px">
+        <span class="eyebrow eyebrow--muted">Müşteri</span>
+        <p style="margin-top:6px;font-size:.9rem">
+          ${esc(o.customer.name)} ${esc(o.customer.surname)}<br>
+          ${esc(o.customer.address)}<br>
+          ${esc(o.customer.district)} / ${esc(o.customer.city)} ${esc(o.customer.postcode)}<br>
+          <span style="color:var(--muted)">${esc(o.customer.email)} · ${esc(o.customer.phone)}</span>
+        </p>
+        ${o.customer.note ? `<p class="small" style="margin-top:8px">Not: ${esc(o.customer.note)}</p>` : ''}
+      </div>
+      <table class="data" style="min-width:0">
+        <thead><tr><th>Ürün</th><th>Seçenek</th><th>Adet</th><th>Toplam</th></tr></thead>
+        <tbody>
+          ${o.items.map(it => `<tr>
+            <td>${esc(it.name)}</td>
+            <td>${it.variantLabel ? esc(it.variantLabel) : '—'}</td>
+            <td>${it.qty}</td>
+            <td>${formatTL(it.lineTotal)}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+      <div style="margin-top:16px">
+        <div class="sum-row"><span>Ürün toplamı</span><span>${formatTL(o.subtotal)}</span></div>
+        ${o.discount ? `<div class="sum-row sum-row--discount"><span>İndirim (${esc(o.coupon)})</span><span>−${formatTL(o.discount)}</span></div>` : ''}
+        <div class="sum-row"><span>Kargo</span><span>${o.shipping === 0 ? 'Ücretsiz' : formatTL(o.shipping)}</span></div>
+        <div class="sum-row sum-row--total"><span>Toplam</span><strong>${formatTL(o.total)}</strong></div>
+      </div>`;
+    $('#orderModal').classList.add('is-open');
+  }
+
+  $('#orderSearch').addEventListener('input', (e) => { orderQuery = e.target.value.trim(); renderOrders(); });
+  $('#statusFilter').addEventListener('change', (e) => { orderStatus = e.target.value; renderOrders(); });
+
+  /* ---------- Ürün tablosu ---------- */
+  let prodQuery = '';
+
+  function renderProducts() {
+    let list = PRODUCTS.slice();
+    if (prodQuery) {
+      const q = prodQuery.toLowerCase();
+      list = list.filter(p => p.name.toLowerCase().includes(q) || getCategory(p.category).name.toLowerCase().includes(q));
+    }
+
+    $('#productsTableWrap').innerHTML = `
+      <table class="data">
+        <thead>
+          <tr><th>Ürün</th><th>Kategori</th><th>Fiyat</th><th>Stok</th><th>Durum</th><th></th></tr>
+        </thead>
+        <tbody>
+          ${list.map(p => {
+            const total = (p.variants || []).length
+              ? p.variants.reduce((s, v) => s + Store.getStock(p.id, v.id), 0)
+              : Store.getStock(p.id, null);
+            const status = total === 0 ? '<span class="status-pill st-iptal">Tükendi</span>'
+              : total <= 5 ? '<span class="status-pill st-hazirlaniyor">Az stok</span>'
+              : '<span class="status-pill st-yeni">Stokta</span>';
+            return `<tr>
+              <td>
+                <div class="cell-prod">
+                  <img class="row-thumb" src="${p.images[0]}" alt="">
+                  <div>
+                    <div class="cell-prod__name">${esc(p.name)}</div>
+                    <div class="cell-prod__cat">${(p.variants || []).length ? (p.variants.length + ' seçenek') : 'Tek seçenek'} · ${esc(p.id)}</div>
+                  </div>
+                </div>
+              </td>
+              <td>${esc(getCategory(p.category).name)}</td>
+              <td>${formatTL(p.price)}</td>
+              <td>
+                <input type="number" min="0" value="${total}" data-stockinput="${p.id}"
+                  aria-label="${esc(p.name)} stok" style="width:84px;padding:6px 8px;border:1px solid var(--line);background:var(--ivory);font-size:.82rem">
+              </td>
+              <td>${status}</td>
+              <td style="white-space:nowrap">
+                <button class="cart-line__remove" data-pedit="${p.id}">Düzenle</button>
+                <a class="cart-line__remove" href="urun.html?id=${p.id}" style="margin-left:10px">Gör</a>
+              </td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>`;
+
+    // Stok güncelleme: tek varyantlı üründe doğrudan; çoklu varyantta stok dağıtılmaz → uyarı
+    $$('[data-stockinput]').forEach(inp => {
+      inp.addEventListener('change', () => {
+        const p = getProduct(inp.dataset.stockinput);
+        const val = Math.max(0, Number(inp.value) || 0);
+        if ((p.variants || []).length) {
+          // Varyantlı üründe toplam stok, ilk varyanta yazılır; diğerleri 0
+          p.variants.forEach((v, i) => Store.setStock(p.id, v.id, i === 0 ? val : 0));
+          toast(`${p.name}: toplam stok ${val} (ilk seçeneğe atandı — varyant bazlı düzenleme ürün formundan).`, 'bad');
+        } else {
+          Store.setStock(p.id, null, val);
+          toast(`${p.name}: stok ${val} olarak güncellendi.`);
+        }
+        renderStats(); renderProducts();
+      });
+    });
+
+    $$('[data-pedit]').forEach(b => b.onclick = () => openProductModal(b.dataset.pedit));
+  }
+
+  $('#prodSearch').addEventListener('input', (e) => { prodQuery = e.target.value.trim(); renderProducts(); });
+
+  /* ---------- Ürün modalı ---------- */
+  const catSelect = $('#pCategory');
+  catSelect.innerHTML = CATEGORIES.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
+
+  function openProductModal(pid) {
+    const isNew = !pid;
+    $('#modalTitle').textContent = isNew ? 'Yeni ürün' : 'Ürünü düzenle';
+    $('#pEditId').value = pid || '';
+    if (isNew) {
+      $('#pName').value = ''; $('#pPrice').value = ''; $('#pStock').value = '10';
+      $('#pImage').value = 'assets/img/p-vase-cer.jpg'; $('#pShort').value = '';
+      $('#pDesc').value = ''; $('#pMaterial').value = ''; $('#pCategory').value = 'dekor';
+    } else {
+      const p = getProduct(pid);
+      $('#pName').value = p.name;
+      $('#pCategory').value = p.category;
+      $('#pPrice').value = p.price;
+      $('#pStock').value = (p.variants || []).length
+        ? p.variants.reduce((s, v) => s + Store.getStock(p.id, v.id), 0)
+        : Store.getStock(p.id, null);
+      $('#pImage').value = (p.images && p.images[0]) || '';
+      $('#pShort').value = p.short || '';
+      $('#pDesc').value = p.description || '';
+      $('#pMaterial').value = p.material || '';
+    }
+    $('#productModal').classList.add('is-open');
+    setTimeout(() => $('#pName').focus(), 100);
+  }
+
+  $('#newProductBtn').onclick = () => openProductModal(null);
+  $('#modalClose').onclick = $('#modalCancel').onclick = () => $('#productModal').classList.remove('is-open');
+  $('#orderModalClose').onclick = () => $('#orderModal').classList.remove('is-open');
+  $$('.modal').forEach(m => m.addEventListener('click', (e) => { if (e.target === m) m.classList.remove('is-open'); }));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') $$('.modal').forEach(m => m.classList.remove('is-open'));
+  });
+
+  $('#productForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = $('#pName').value.trim();
+    const price = Number($('#pPrice').value);
+    const stock = Number($('#pStock').value);
+
+    if (name.length < 2) { toast('Ürün adı en az 2 karakter olmalı.', 'bad'); $('#pName').focus(); return; }
+    if (!price || price <= 0) { toast('Geçerli bir fiyat giriniz.', 'bad'); $('#pPrice').focus(); return; }
+    if (isNaN(stock) || stock < 0) { toast('Geçerli bir stok giriniz.', 'bad'); $('#pStock').focus(); return; }
+
+    const editId = $('#pEditId').value;
+    let pid = editId;
+
+    if (editId) {
+      // Mevcut ürün: ad/fiyat/stok düzenlenebilir (stok tek varyantsa)
+      const p = getProduct(editId);
+      p.name = name;
+      p.price = price;
+      p.category = $('#pCategory').value;
+      p.short = $('#pShort').value.trim();
+      p.description = $('#pDesc').value.trim() || p.description;
+      if ($('#pImage').value.trim()) p.images = [ $('#pImage').value.trim(), ...p.images.slice(1) ];
+      if ((p.variants || []).length) {
+        p.variants.forEach((v, i) => Store.setStock(p.id, v.id, i === 0 ? stock : 0));
+      } else {
+        Store.setStock(p.id, null, stock);
+      }
+      toast('Ürün güncellendi.');
+    } else {
+      pid = 'atl-' + String(PRODUCTS.length + 1).padStart(3, '0');
+      const img = $('#pImage').value.trim() || 'assets/img/p-vase-cer.jpg';
+      const catId = $('#pCategory').value;
+      PRODUCTS.unshift({
+        id: pid,
+        name,
+        category: catId,
+        price,
+        stock,
+        rating: 4.5,
+        reviews: 0,
+        short: $('#pShort').value.trim() || 'Atölyemizden yeni bir parça.',
+        description: $('#pDesc').value.trim() || 'Bu ürün demo panelinde oluşturulmuştur.',
+        images: [img],
+        variantType: null,
+        variants: [],
+        material: $('#pMaterial').value.trim() || '—',
+        dimensions: '—',
+        care: '—'
+      });
+      Store.setStock(pid, null, stock);
+      toast('Yeni ürün eklendi.');
+    }
+
+    $('#productModal').classList.remove('is-open');
+    renderStats(); renderProducts();
+  });
+
+  /* ---------- Dışa aktarma / sıfırlama ---------- */
+  $('#exportBtn').onclick = () => {
+    downloadJSON(Store.exportJSON(), `atelier-veri-${new Date().toISOString().slice(0, 10)}.json`);
+    toast('JSON dosyası indirildi.');
+  };
+  $('#exportOrdersBtn').onclick = () => {
+    downloadJSON({ marka: 'ATELIER', siparisler: Store.getOrders() }, `atelier-siparisler-${new Date().toISOString().slice(0, 10)}.json`);
+    toast('Siparişler indirildi.');
+  };
+  $('#resetBtn').onclick = () => {
+    if (!confirm('Tüm demo verileri silinsin mi? Bu işlem geri alınamaz.')) return;
+    Store.resetAll();
+    toast('Demo verileri sıfırlandı.');
+    renderStats(); renderOrders(); renderProducts();
+  };
+
+  /* ---------- Başlat ---------- */
+  renderStats(); renderOrders(); renderProducts();
+})();
+</script>
+</body>
+</html>

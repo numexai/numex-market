@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fatih Bayraktar — Şiirin Sessiz Dünyası</title>
+<meta name="description" content="Fatih Bayraktar'ın şiirlerine açılan üç boyutlu dijital kitap: sayfaları çevrilen, aranabilen, favorilere eklenebilen şiir dünyası." />
+<meta name="theme-color" content="#e6eef6" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="css/stil.css" />
+</head>
+<body>
+
+<!-- ============================ ARKA PLAN SAHNESİ ============================ -->
+<div class="sahne" aria-hidden="true">
+  <div class="sek s1" data-derinlik="0.55"></div>
+  <div class="sek s2" data-derinlik="1.15"></div>
+  <div class="sek s3" data-derinlik="0.8"></div>
+  <div class="sek s4" data-derinlik="1.6"></div>
+  <div class="sek s5" data-derinlik="2.1"></div>
+  <div class="sek s6" data-derinlik="0.45"></div>
+</div>
+
+<!-- ================================ ÜST BAR ================================= -->
+<header class="ustbar" id="ustbar">
+  <a class="marka" href="#kapak">
+    <span class="muhur" aria-hidden="true">FB</span>
+    <span>
+      <b>Fatih Bayraktar</b>
+      <small>Şiirin Sessiz Dünyası</small>
+    </span>
+  </a>
+
+  <nav class="ustnav" aria-label="Site bölümleri">
+    <a href="#kapak">Kitap</a>
+    <a href="#koleksiyon">Koleksiyon</a>
+    <a href="#hakkinda">Hakkında</a>
+  </nav>
+
+  <div class="ustarac">
+    <button class="ikon-btn" id="btnTema" type="button" aria-label="Gece / gündüz modu" title="Gece / gündüz modu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/>
+      </svg>
+    </button>
+
+    <button class="ikon-btn" id="btnFavoriler" type="button" aria-label="Favori şiirler" title="Favorilerim">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 20s-7-4.6-7-9.4A4.1 4.1 0 0 1 12 7.6a4.1 4.1 0 0 1 7 3C19 15.4 12 20 12 20Z"/>
+      </svg>
+      <span class="rozet" id="favoriRozet" hidden>0</span>
+    </button>
+  </div>
+</header>
+
+<!-- =============================== ANA KAPAK ================================ -->
+<main id="kapak" class="kapak-bolum">
+
+  <div class="kitap-sahne" id="kitapSahne">
+    <div class="kitap-golge" aria-hidden="true"></div>
+
+    <div class="kitap-egim" id="kitapEgim">
+      <div class="kitap3d" id="kitap3d" role="button" tabindex="0"
+           aria-label="Kitabı aç ve şiir dünyasına gir">
+        <div class="kapak-yuz">
+          <div class="kapak-ust">
+            <span class="kapak-etiket">Şiirler</span>
+          </div>
+
+          <div>
+            <h1>Fatih<br />Bayraktar</h1>
+            <span class="altbaslik">Şiirin Sessiz Dünyası</span>
+          </div>
+
+          <div class="kapak-alt">
+            <p class="slogan">“Bazen bir kelime, bir ömrün sustuklarını anlatır.”</p>
+            <span class="slogan-not" id="sloganNot">Demo tasarım metni — şaire ait alıntı değildir</span>
+            <span class="ac-ipucu" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M4 6h9M4 12h9M4 18h6"/><path d="m17 9 3 3-3 3"/></svg>
+              Kitabı aç
+            </span>
+          </div>
+        </div>
+
+        <div class="sirt-yuz" aria-hidden="true"></div>
+        <div class="sayfa-yuz" aria-hidden="true"></div>
+      </div>
+    </div>
+  </div>
+
+  <p class="sayfa ipucu-mobil" style="background:none;box-shadow:none;padding:0;font-size:12.5px;color:var(--ink-mute);letter-spacing:.14em;text-transform:uppercase;">
+    Fareyi gezdir, kitap seninle eğilsin · Açmak için dokun
+  </p>
+</main>
+
+<!-- ============================== KOLEKSİYON ================================ -->
+<section class="blok" id="koleksiyon">
+  <div class="blok-baslik ortaya">
+    <span class="ust-yazi">Şiir Koleksiyonu</span>
+    <h2>Kelimelerin Odaları</h2>
+    <p>Her kategori bir oda; her şiir o odanın içinde bekleyen bir ses. Aşağıdan arayabilir, süzebilir ve okumaya başlayabilirsin.</p>
+  </div>
+
+  <div class="arama-kutu ortaya" role="search">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true">
+      <circle cx="11" cy="11" r="7"/><path d="m20 20-3.4-3.4"/>
+    </svg>
+    <input id="aramaInput" type="search" placeholder="Şiir adı ya da dizesinde ara…" aria-label="Şiir ara" autocomplete="off" />
+  </div>
+
+  <div class="filtreler ortaya" id="filtreler" role="group" aria-label="Kategori filtresi"></div>
+
+  <div class="kart-izgara" id="kartIzgara" aria-live="polite"></div>
+  <p class="bos-durum" id="bosDurum" hidden>Bu odada henüz ses yok… Başka bir kelime dene.</p>
+</section>
+
+<!-- =============================== HAKKINDA ================================= -->
+<section class="blok" id="hakkinda">
+  <div class="hakkinda-izgara">
+    <figure class="foto-cerceve ortaya" style="margin:0">
+      <div class="foto-ic">
+        <img id="sairFoto" alt="Fatih Bayraktar portresi" loading="lazy" />
+      </div>
+      <figcaption class="foto-not" id="fotoNot">Portre fotoğrafı eklenecek.</figcaption>
+    </figure>
+
+    <div class="hakkinda-metin ortaya">
+      <span class="ust-yazi" style="font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--ink-mute);display:block;margin-bottom:12px;">Şair Hakkında</span>
+      <h2 id="sairAd">Fatih Bayraktar</h2>
+      <p class="giris" id="sairGiris">
+        Bu sayfa, şairin yaşam öyküsü ve eser bilgileri için hazırlanmış bir alandır.
+        Doğrulanmış bilgi eklenene kadar burada uydurma bir biyografi yer almaz.
+      </p>
+
+      <dl class="bilgi-listesi">
+        <div class="bilgi-satir"><dt>Doğum</dt><dd class="bekliyor" id="bilgiDogum">Bilgi eklenecek</dd></div>
+        <div class="bilgi-satir"><dt>Eserler</dt><dd class="bekliyor" id="bilgiEserler">Bilgi eklenecek</dd></div>
+        <div class="bilgi-satir"><dt>Şiirler</dt><dd id="bilgiSiirSayisi">—</dd></div>
+      </dl>
+
+      <div class="biyografi-kutu" id="biyografiKutu">
+        <b>Not:</b> Bu sitedeki şiir metinleri, gerçek bir şaire ait değildir; tasarımı göstermek için
+        yazılmış <b>örnek metinlerdir</b> ve arayüzde de böyle etiketlenir. Gerçek şiirler geldiğinde yalnızca
+        <code>veri/siirler.js</code> dosyasındaki veriler değiştirilir — tasarıma dokunmak gerekmez.
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="altbilgi">
+  <b>Fatih Bayraktar — Şiirin Sessiz Dünyası</b><br />
+  Dijital şiir kitabı · Demo içerik · <span id="yil"></span>
+</footer>
+
+<!-- ============================== OKUYUCU (KİTAP) =========================== -->
+<div class="okuyucu" id="okuyucu" role="dialog" aria-modal="true" aria-label="Şiir kitabı" hidden>
+  <div class="okuyucu-ust">
+    <div class="baslik-alani">
+      <b id="okuyucuBaslik">Şiirin Sessiz Dünyası</b>
+      <span id="okuyucuAlt">Fatih Bayraktar · örnek metinler</span>
+    </div>
+
+    <div class="yazi-ayar" role="group" aria-label="Yazı boyutu">
+      <button type="button" id="yaziKucult" aria-label="Yazıyı küçült" title="Yazıyı küçült">A−</button>
+      <button type="button" id="yaziBuyult" aria-label="Yazıyı büyüt" title="Yazıyı büyüt">A+</button>
+    </div>
+
+    <button class="ikon-btn" id="btnTemaOkuyucu" type="button" aria-label="Gece / gündüz modu" title="Gece / gündüz modu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/>
+      </svg>
+    </button>
+
+    <button class="ikon-btn" id="btnKapatOkuyucu" type="button" aria-label="Kitabı kapat" title="Kitabı kapat (Esc)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true">
+        <path d="M6 6l12 12M18 6 6 18"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="kitap-alani">
+    <div class="defter" id="defter">
+      <!-- Sol sayfa: şiir başlığı, meta, aksiyonlar -->
+      <article class="sayfa sayfa-sol" id="sayfaSol">
+        <div class="sayfa-meta" id="metaSol"></div>
+        <h2 id="baslikSol">—</h2>
+        <div class="ince"></div>
+        <div class="siir-metni" id="metinSol"></div>
+        <p class="siir-altbilgi" id="altBilgiSol"></p>
+      </article>
+
+      <!-- Sağ sayfa: kopya/okuma akışı (kitap hissi için ikinci yüz) -->
+      <article class="sayfa sayfa-sag" id="sayfaSag">
+        <div class="sayfa-meta" id="metaSag"></div>
+        <h2 id="baslikSag">—</h2>
+        <div class="ince"></div>
+        <div class="siir-metni" id="metinSag"></div>
+        <p class="siir-altbilgi" id="altBilgiSag"></p>
+      </article>
+
+      <div class="yaprak" id="yaprak" aria-hidden="true">
+        <div class="on" id="yaprakOn"></div>
+        <div class="arka" id="yaprakArka"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="okuyucu-alt">
+    <button class="buton" id="btnOnceki" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 5-7 7 7 7"/></svg>
+      <span class="yazi">Önceki</span>
+    </button>
+    <button class="buton" id="btnSonraki" type="button">
+      <span class="yazi">Sonraki</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg>
+    </button>
+
+    <button class="buton kucuk" id="btnFavori" type="button" aria-pressed="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.6-7-9.4A4.1 4.1 0 0 1 12 7.6a4.1 4.1 0 0 1 7 3C19 15.4 12 20 12 20Z"/></svg>
+      <span class="yazi">Favori</span>
+    </button>
+
+    <button class="buton kucuk" id="btnKopyala" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M15 6.5V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h.5"/></svg>
+      <span class="yazi">Kopyala</span>
+    </button>
+
+    <button class="buton kucuk" id="btnPaylas" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5.5" r="2.6"/><circle cx="6" cy="12" r="2.6"/><circle cx="18" cy="18.5" r="2.6"/><path d="m8.4 10.7 7.2-3.9M8.4 13.3l7.2 3.9"/></svg>
+      <span class="yazi">Paylaş</span>
+    </button>
+
+    <span class="sayfa-gostergesi" id="sayfaGostergesi">1 / 1</span>
+  </div>
+</div>
+
+<!-- ============================= FAVORİLER PANELİ =========================== -->
+<div class="panel-arka" id="panelArka"></div>
+<aside class="panel" id="favoriPanel" aria-label="Favori şiirler" aria-hidden="true">
+  <div class="panel-ust">
+    <h3>Favorilerim</h3>
+    <button class="ikon-btn" id="btnPanelKapat" type="button" aria-label="Paneli kapat">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+  </div>
+  <div class="panel-liste" id="favoriListe"></div>
+  <p class="bos-durum" id="favoriBos" style="padding:36px 10px;font-size:16px;">Henüz favori şiir yok.<br />Okurken kalp ikonuna dokun.</p>
+</aside>
+
+<!-- ================================= BİLDİRİM =============================== -->
+<div class="bildirim" id="bildirim" role="status" aria-live="polite"></div>
+
+<script src="veri/siirler.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
