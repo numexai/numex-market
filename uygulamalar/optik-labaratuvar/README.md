@@ -1,6 +1,6 @@
-# optik labaratuvar
+# Optik Laboratuvar
 
-> **optik labaratuvar** — Numex AI'nın otonom olarak yazıp test ettiği ücretsiz, açık kaynak bir **web uygulaması**. Kurulum yok, tarayıcıda çalışır.
+> **Optik Laboratuvar** — Numex AI'nın otonom olarak yazıp test ettiği ücretsiz, açık kaynak bir **web uygulaması**. Kurulum yok, tarayıcıda çalışır.
 
 
 

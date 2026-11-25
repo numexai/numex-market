@@ -108,7 +108,6 @@ Her gün [numexai.com.tr](https://numexai.com.tr) vitrininden kendiliğinden eş
 
 | Uygulama | Ne yapar |
 |---|---|
-| [**2225 test eticaret sitesi**](test-eticaret-sitesi/) | Türkçe, tam çalışan bir demo e-ticaret mağazası. Kurulum yok, sunucu yok, veritabanı yok: |
 | [**Akıllı Elektronik Laboratuvarı**](tessdusunce2/) |  |
 | [**Akıllı iş ve kaynak planlama motoru**](divanihumayun/) |  |
 | [**Akıllı Kesim ve Fire Optimizasyonu**](testdusunce/) | Levha (stok) ve parça listesinden **gerçek, deterministik bir 2B yerleşim** üreten |
@@ -116,8 +115,8 @@ Her gün [numexai.com.tr](https://numexai.com.tr) vitrininden kendiliğinden eş
 | [**baglantiSuresiAyarla**](testkosu/) |  |
 | [**Çılgın Makineler Atölyesi**](mutluluk/) | Tarayıcıda çalışan, gerçek zamanlı fizik simülasyonuna dayalı Rube Goldberg makine atölyesi. |
 | [**çizgi roman yapımı**](cizgi-roman/) |  |
+| [**Demo E-Ticaret Mağazası**](test-eticaret-sitesi/) | Türkçe, tam çalışan bir demo e-ticaret mağazası. Kurulum yok, sunucu yok, veritabanı yok: |
 | [**Dijital Olay Dedektifi**](dijital-olay-dedektifi/) | Sıfırdan yazılmış, tarayıcıda çalışan olay analizi ve kök neden araştırma platformu. |
-| [**fatih bayraktar şiir sitesi**](bana-yeni-uygulama/) | Numex AI ile geliştirilmiş, üç boyutlu dijital şiir kitabı. |
 | [**interaktif hayal dünyası**](interaktif-jayal-dunyasi/) | Tarayıcıda çalışan, tamamen yerel (model API'si gerektirmeyen) parçacık sanatı uygulaması. |
 | [**ipek yolu**](ipek-yolu/) |  |
 | [**KAYIP ESER DOSYASI**](kayip-eser-dosyasi/) | Sarnıç Müzesi'nin Doğu Salonu'ndan çalınan **Yıldız Küresi** vakasını çözdüğün, tarayıcıda oynanan tek kişilik dedektiflik oyunu. Kurulum, derleme ve sunucu gerekmez. |
@@ -141,8 +140,9 @@ Her gün [numexai.com.tr](https://numexai.com.tr) vitrininden kendiliğinden eş
 | [**numex Tahliye Simülatörü**](numex-tahliye-simulatoru/) | Kurgusal bir şehirde afet senaryosu ve tahliye planlaması yapan, **tamamen yerel** çalışan statik web uygulaması. |
 | [**numex-studio-x**](numex-studio-x/) |  |
 | [**operasyon merkezi**](operasyon-merkezi/) | Mini Fabrika Yönetim Merkezi - üretim planlama, iş emri, stok ve maliyet motoru |
-| [**optik labaratuvar**](optik-labaratuvar/) |  |
+| [**Optik Laboratuvar**](optik-labaratuvar/) |  |
+| [**Ozan Şiir Sitesi**](bana-yeni-uygulama/) | Numex AI ile geliştirilmiş, üç boyutlu dijital şiir kitabı. |
 | [**soy ağacı**](soy-agaci/) | Tek klasörde çalışan, Türkçe, etkileşimli bir aile tarihi ve soyağacı uygulaması. |
 | [**su pompası**](su-pompasi/) | Tek klasörde çalışan, Türkçe, etkileşimli su dağıtım şebekesi simülatörü. |
-| [**test2655yasayan mahelle**](test2655yasayan-mahelle/) |  |
+| [**Yaşayan Mahalle**](test2655yasayan-mahelle/) |  |
 | [**Yaşayan Şehir**](test126/) |  |

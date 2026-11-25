@@ -1,6 +1,6 @@
-# test2655yasayan mahelle
+# Yaşayan Mahalle
 
-> **test2655yasayan mahelle** — Numex AI'nın otonom olarak yazıp test ettiği ücretsiz, açık kaynak bir **web uygulaması**. Kurulum yok, tarayıcıda çalışır.
+> **Yaşayan Mahalle** — Numex AI'nın otonom olarak yazıp test ettiği ücretsiz, açık kaynak bir **web uygulaması**. Kurulum yok, tarayıcıda çalışır.
 
 
 
