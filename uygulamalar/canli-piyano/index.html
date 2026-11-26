@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ada Lune — Piyanist</title>
+<meta name="description" content="Ada Lune: gece yarısı piyanisti. Tuşlara dokun, müziği hisset.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..600;1,6..96,400..500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<script>
+(function(){var d=document.documentElement;d.classList.add('js');var c;try{var s=localStorage.getItem('al-calm');c=s===null?matchMedia('(prefers-reduced-motion: reduce)').matches:s==='1'}catch(e){c=matchMedia('(prefers-reduced-motion: reduce)').matches}if(c)d.classList.add('calm')})();
+</script>
+<style>
+/* VOICE   hushed occasion: a luxury pianist's own site, night recital
+   IDEA    a printed recital programme on black paper, lit by one spotlight
+   PICTURE a lacquered grand, lid raised, under a gold beam; its keys are the real instrument
+   COLOUR  near-black stage, ivory ink, champagne gold light, lacquer reflections
+   TYPE    Bodoni Moda (display, italic for voice) + Jost light (text)
+   LAYOUT  laptop: title row over a centred piano filling the stage; phone: title, piano cropped to its keys, sheet card, intro */
+:root{color-scheme:dark;--bg:#08070a;--bg2:#0d0b0e;--ink:#ece6da;--soft:#b3ab9e;--gold:#d8b878;--gold2:#a8833f;--line:rgba(216,184,120,.22);--serif:"Bodoni Moda","Bodoni 72",Didot,Georgia,serif;--sans:Jost,Futura,"Century Gothic",system-ui,sans-serif;--mx:0;--my:0}
+:root[data-theme=light],:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html{scroll-padding-top:72px;background:var(--bg)}
+html:not(.calm){scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:300 17px/1.65 var(--sans);overflow-x:clip;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:4px}
+.skip{position:absolute;left:-999px;top:8px;background:var(--ink);color:#000;padding:8px 14px;z-index:50}
+.skip:focus{left:12px}
+
+/* header */
+.top{position:fixed;inset:0 0 auto;z-index:20;display:flex;align-items:center;gap:20px;height:68px;padding:0 max(4vw,16px);transition:background .5s,border-color .5s;border-bottom:1px solid transparent}
+.top.solid{background:rgba(8,7,10,.84);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-color:rgba(216,184,120,.12)}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;margin-right:auto}
+.brand svg{width:26px;height:26px;flex:none}
+.brand b{font:400 23px/1 var(--serif);letter-spacing:.01em}
+.brand b i{font-style:italic;color:var(--gold)}
+.nav{display:flex;gap:4px}
+.nav a{text-decoration:none;font-size:15px;color:var(--soft);padding:10px 12px;border-radius:999px;transition:color .3s}
+.nav a:hover,.nav a[aria-current=true]{color:var(--ink)}
+.nav a[aria-current=true]{background:rgba(216,184,120,.08)}
+.ctl{display:flex;gap:6px}
+.pill{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px;border-radius:999px;border:1px solid rgba(216,184,120,.28);background:transparent;cursor:pointer;font-size:14px;color:var(--ink);transition:border-color .3s,background .3s}
+.pill:hover{border-color:var(--gold);background:rgba(216,184,120,.07)}
+.pill svg{width:18px;height:18px;flex:none}
+.pill .x{display:none}
+.pill.off .x{display:inline}
+.pill.off .w{display:none}
+.menu-btn{display:none}
+
+/* stage */
+.stage{position:relative;min-height:100svh;padding:96px max(4vw,16px) 28px;overflow:hidden;isolation:isolate;
+ background:
+  radial-gradient(60% 46% at 50% 64%,rgba(70,52,30,.32),transparent 70%),
+  repeating-linear-gradient(90deg,rgba(255,255,255,.012) 0 2px,transparent 2px 46px,rgba(0,0,0,.25) 46px 70px,transparent 70px 120px),
+  linear-gradient(#060507,#0c0a0d 62%,#121014 78%,#08070a)}
+.stage::before{content:"";position:absolute;inset:auto 0 0;height:30%;background:linear-gradient(transparent,rgba(0,0,0,.65));z-index:-1}
+.wall{position:absolute;inset:-4%;z-index:-2;background:radial-gradient(40% 60% at 50% 30%,rgba(216,184,120,.05),transparent 70%);transform:translate(calc(var(--mx)*-10px),calc(var(--my)*-6px))}
+#light{position:absolute;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
+.curtain{position:absolute;inset:0;background:#000;z-index:6;pointer-events:none;opacity:0}
+.hero{position:relative;max-width:1240px;margin:0 auto;display:grid;grid-template-areas:"copy" "piano" "now" "foot"}
+.copy{grid-area:copy;display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:24px 56px;align-items:end;margin-bottom:clamp(8px,2vh,24px);transform:translate(calc(var(--mx)*-5px),0)}
+h1{font:400 clamp(32px,4.1vw,56px)/1.06 var(--serif);letter-spacing:-.02em;margin:0;text-wrap:balance}
+h1 .wd{display:inline-block}
+.intro{margin:0;color:var(--soft);max-width:44ch;font-size:17px}
+.intro strong{font-weight:400;color:var(--ink)}
+
+/* piano */
+.pwrap{grid-area:piano;position:relative;width:max(600px,min(1120px,94vw,calc((100svh - 260px) * 1.935)));margin:0 auto}
+.piano{position:relative;width:100%;aspect-ratio:1200/620}
+.piano>svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.lid-glint{transform:translateX(calc(var(--mx) * 46px))}
+.rail-glint{transform:translateX(calc(var(--mx) * 70px))}
+#kb{position:absolute;left:17.0833%;top:54.84%;width:65.8333%;height:18.06%;display:flex;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;background:#050505}
+#kb::before{content:"";position:absolute;inset:0 0 auto;height:16%;background:linear-gradient(rgba(0,0,0,.75),transparent);z-index:3;pointer-events:none}
+#kb::after{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;background:linear-gradient(90deg,rgba(0,0,0,.42),transparent 22%,rgba(255,226,170,.05) 50%,transparent 78%,rgba(0,0,0,.42))}
+.key{position:relative;border:0;margin:0;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;display:flex;flex-direction:column;justify-content:flex-end;align-items:center}
+.key.w{flex:1;height:100%;border-radius:0 0 4px 4px;background:linear-gradient(#ddd5c4,#f5f0e5 22%,#efe8da 80%,#e2d9c7);box-shadow:inset -1px 0 0 rgba(40,30,20,.35),inset 0 -7px 0 #c9bca3,inset 0 -8px 0 rgba(0,0,0,.25),0 2px 3px rgba(0,0,0,.7);transition:transform 60ms ease-out,box-shadow 90ms,background 120ms}
+.key.b{position:absolute;top:0;left:var(--x);z-index:2;width:calc(100% / var(--whites) * .58);height:62%;transform:translateX(-50%);border-radius:0 0 3px 3px;background:linear-gradient(90deg,#0a0909,#252321 45%,#0d0c0c),#141313;box-shadow:inset 0 -10px 0 #262421,inset 0 -11px 0 rgba(255,255,255,.06),inset 0 1px 0 rgba(255,255,255,.08),0 3px 5px rgba(0,0,0,.75);transition:transform 60ms ease-out,box-shadow 90ms}
+.key::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .45s ease-out}
+.key.w::after{background:radial-gradient(90% 60% at 50% 70%,rgba(226,182,98,.55),transparent 75%)}
+.key.b::after{background:linear-gradient(transparent 30%,rgba(226,190,120,.35));box-shadow:0 0 14px 2px rgba(216,184,120,.35)}
+.key.on::after{opacity:1;transition:opacity 40ms}
+.key.w.on{transform:translateY(2px);background:linear-gradient(#d2c6ae,#ece2cd 22%,#e6dac2 80%,#d9cbb0);box-shadow:inset -1px 0 0 rgba(40,30,20,.35),inset 0 -4px 0 #bba987,inset 0 -5px 0 rgba(0,0,0,.25),0 1px 1px rgba(0,0,0,.7)}
+.key.b.on{transform:translateX(-50%) translateY(2px);box-shadow:inset 0 -6px 0 #2e2a25,inset 0 -7px 0 rgba(255,255,255,.05),0 1px 2px rgba(0,0,0,.75)}
+.calm .key.w.on{transform:none}
+.calm .key.b.on{transform:translateX(-50%)}
+.kl,.kn{pointer-events:none;font:400 12px/1 var(--sans);margin-bottom:14px;display:none}
+.key.b .kl{color:rgba(255,255,255,.4);margin-bottom:16px}
+.key.w .kl{color:rgba(40,30,20,.45)}
+.kn{display:block;color:rgba(120,90,40,.75);font-size:12px;margin-bottom:12px}
+.live .kn{display:none}
+@media (hover:hover) and (min-width:900px){.live .kl{display:block}}
+#glints{position:absolute;left:17.0833%;top:48.4%;width:65.8333%;height:6.5%;pointer-events:none;overflow:visible}
+.glint{position:absolute;bottom:0;width:7%;height:180%;transform:translateX(-50%);background:radial-gradient(50% 50% at 50% 70%,rgba(242,208,140,.55),rgba(216,184,120,.12) 55%,transparent 72%);mix-blend-mode:screen;opacity:0}
+
+/* sheet on the music desk */
+.sheet{position:absolute;left:35.5%;top:26.6%;width:29%;height:20.2%;display:grid;align-content:center;justify-items:center;gap:6px;padding:8px 12px;text-align:center;color:#2a2117;border-radius:2px;
+ background:repeating-linear-gradient(transparent 0 13px,rgba(60,40,20,.13) 13px 14px,transparent 14px 28px) 0 50%/100% 70% no-repeat,linear-gradient(#f2ead9,#e6dcc6);box-shadow:0 10px 24px rgba(0,0,0,.55),inset 0 0 0 1px rgba(120,90,50,.18);z-index:4}
+.sheet p{margin:0;font:italic 400 clamp(14px,1.45vw,19px)/1.15 var(--serif)}
+.sheet small{font-size:13px;color:#5b4a35;line-height:1.3}
+.go{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 20px;border-radius:999px;border:0;cursor:pointer;background:#0d0c0e;color:var(--gold);font:400 15px/1 var(--sans);letter-spacing:.01em;box-shadow:0 0 0 1px rgba(216,184,120,.5),0 4px 14px rgba(0,0,0,.35);transition:transform .2s,box-shadow .3s}
+.go:hover{box-shadow:0 0 0 1px var(--gold),0 0 22px rgba(216,184,120,.35)}
+.go:active{transform:translateY(1px)}
+.go svg{width:16px;height:16px}
+.go.nudge{animation:nudge 1s ease}
+@keyframes nudge{0%,100%{box-shadow:0 0 0 1px rgba(216,184,120,.5)}35%{box-shadow:0 0 0 6px rgba(216,184,120,.35),0 0 30px rgba(216,184,120,.5)}}
+.live .go{display:none}
+.sheet .after{display:none}
+.live .sheet .after{display:block}
+.live .sheet .before{display:none}
+.sfoot{grid-area:foot;display:flex;flex-wrap:wrap;justify-content:center;gap:10px 28px;align-items:center;color:var(--soft);font-size:14px;margin-top:clamp(4px,1.5vh,16px)}
+.sfoot kbd{font:400 13px/1 var(--sans);border:1px solid rgba(216,184,120,.3);border-radius:4px;padding:3px 6px;color:var(--ink)}
+/* otomatik çalma */
+.auto-btn .ico-stop{display:none}
+.auto-btn[aria-pressed=true]{color:var(--gold);border-color:rgba(216,184,120,.65);background:rgba(216,184,120,.10);box-shadow:0 0 18px rgba(216,184,120,.18)}
+.auto-btn[aria-pressed=true] .ico-play{display:none}
+.auto-btn[aria-pressed=true] .ico-stop{display:inline}
+.auto-btn[aria-pressed=true] svg{animation:tick 1.1s ease-in-out infinite}
+@keyframes tick{0%,100%{opacity:1}50%{opacity:.45}}
+/* otomatik çalma göstergesi: piyanonun altında KENDİ şeridinde — ipucu satırıyla asla çakışmaz */
+.now{grid-area:now;display:none;flex-direction:column;align-items:center;gap:5px;pointer-events:none;text-align:center;color:var(--gold);height:52px;padding-top:clamp(6px,1.1vh,12px);box-sizing:border-box;overflow:hidden}
+.now .lbl-w{font:400 10px/1 var(--sans);letter-spacing:.3em;text-transform:uppercase;color:var(--soft);opacity:.85}
+.now .txt{font:italic 400 clamp(16px,1.6vw,20px)/1.2 var(--serif)}
+body.auto .now{display:flex}
+.now .txt{transition:opacity .18s;text-shadow:0 2px 14px rgba(0,0,0,.85)}
+.now .txt.flip{opacity:0}
+@media (max-width:760px){.now{margin-top:10px}.now .txt{font-size:17px}}
+.hint-kbd{display:none}
+@media (hover:hover){.hint-kbd{display:inline}}
+
+/* sections */
+.band{padding:clamp(72px,10vw,140px) max(5vw,16px);position:relative}
+.inner{max-width:1240px;margin:0 auto}
+.band+.band{border-top:1px solid rgba(216,184,120,.1)}
+h2{font:400 clamp(32px,3.6vw,48px)/1.06 var(--serif);letter-spacing:-.02em;margin:0 0 20px;text-wrap:balance}
+.lede{color:var(--soft);max-width:60ch;margin:0}
+.story{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(32px,6vw,96px);align-items:center}
+.story-art{position:relative}
+.story-art svg{width:100%;height:auto;display:block}
+.quote{font:italic 400 clamp(24px,2.4vw,32px)/1.25 var(--serif);color:var(--ink);margin:28px 0 0;max-width:24ch}
+.story-text p{margin:0 0 18px;max-width:58ch}
+.story-text p:first-of-type::first-letter{font:400 3.4em/0.8 var(--serif);float:left;margin:6px 10px 0 0;color:var(--gold)}
+.note{font-size:15px;color:var(--soft)}
+.prog-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px 64px;align-items:end;margin-bottom:clamp(36px,5vw,64px)}
+.programme{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:0 clamp(24px,4vw,56px);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:clamp(28px,4vw,48px) 0}
+.part h3{font:italic 400 20px/1.2 var(--serif);color:var(--gold);margin:0 0 18px}
+.part ol{list-style:none;margin:0;padding:0}
+.part li{padding:18px 0;border-top:1px solid rgba(216,184,120,.1)}
+.part li:first-child{border-top:0;padding-top:0}
+.comp{font:400 23px/1.2 var(--serif);display:block}
+.work{display:block;color:var(--ink);margin-top:2px}
+.mood{display:block;color:var(--soft);font-size:15px;margin-top:4px}
+.interval{display:grid;place-items:center;align-content:center;gap:10px;color:var(--soft);font:italic 400 18px/1 var(--serif)}
+.interval::before,.interval::after{content:"";width:1px;height:70px;background:var(--line)}
+.night-head{max-width:720px;margin-bottom:clamp(36px,5vw,64px)}
+.ritual{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(20px,3vw,40px);position:relative}
+.ritual::before{content:"";position:absolute;left:0;right:0;top:38px;height:1px;background:linear-gradient(90deg,transparent,var(--line) 8%,var(--line) 92%,transparent)}
+.step{position:relative}
+.step svg{width:76px;height:76px;display:block;margin-bottom:22px;background:var(--bg);border-radius:50%;outline:1px solid var(--line);outline-offset:0;padding:14px;overflow:visible}
+.step h3{font:400 22px/1.2 var(--serif);margin:0 0 8px}
+.step p{margin:0;color:var(--soft);font-size:16px}
+.close{text-align:center;padding:clamp(96px,14vw,180px) max(5vw,16px);background:radial-gradient(50% 70% at 50% 0%,rgba(216,184,120,.10),transparent 70%),var(--bg);border-top:1px solid rgba(216,184,120,.1)}
+.close h2{font-size:clamp(36px,5vw,64px);margin:0 auto 18px;max-width:14ch}
+.close p{color:var(--soft);margin:0 auto 32px;max-width:46ch}
+.close .row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+/* Numex anlatımı — sayfanın en sonunda */
+.numex-band{padding:clamp(64px,9vw,120px) max(5vw,16px);border-top:1px solid rgba(216,184,120,.1);background:radial-gradient(60% 60% at 50% 0%,rgba(216,184,120,.07),transparent 70%),var(--bg)}
+.numex-band h2{text-align:center;margin:0 auto 16px;max-width:18ch}
+.numex-band .lede{text-align:center;margin:0 auto clamp(30px,4vw,48px);max-width:60ch}
+.numex-cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(20px,3vw,36px);border-top:1px solid var(--line);padding-top:clamp(26px,3vw,40px)}
+.numex-cols h3{font:italic 400 20px/1.2 var(--serif);color:var(--gold);margin:0 0 8px}
+.numex-cols p{margin:0;color:var(--soft);font-size:16px}
+.numex-band .foot-line{text-align:center;margin:clamp(28px,4vw,42px) auto 0;color:var(--soft);font-size:15px;max-width:62ch}
+.numex-band .foot-line b{font-weight:400;color:var(--ink)}
+@media (max-width:760px){.numex-cols{grid-template-columns:minmax(0,1fr);gap:24px}}
+.ghost{display:inline-flex;align-items:center;min-height:44px;padding:0 20px;border-radius:999px;border:1px solid rgba(216,184,120,.35);text-decoration:none;font-size:15px}
+.ghost:hover{border-color:var(--gold)}
+footer{padding:40px max(5vw,16px) 34px;border-top:1px solid rgba(216,184,120,.12);color:var(--soft);font-size:14px}
+footer .inner{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:16px 40px;align-items:start}
+footer nav{display:flex;flex-wrap:wrap;gap:4px 18px}
+footer nav a{text-decoration:none}
+footer nav a:hover{color:var(--ink)}
+footer p{margin:0 0 6px;max-width:64ch}
+footer .sig{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:34px;padding-top:22px;border-top:1px solid rgba(216,184,120,.1);font:300 11px/1 var(--sans);letter-spacing:.22em;text-transform:uppercase;color:var(--soft);opacity:.78;text-align:center}
+footer .sig::before,footer .sig::after{content:"";width:clamp(18px,7vw,54px);height:1px;background:linear-gradient(90deg,transparent,rgba(216,184,120,.45))}
+footer .sig::after{background:linear-gradient(270deg,transparent,rgba(216,184,120,.45))}
+footer .sig b{font-weight:400;color:var(--gold);letter-spacing:.26em}
+
+/* intro + reveal (only with JS, never under reduced motion) */
+.js:not(.calm) .curtain{animation:lift 2.8s .1s cubic-bezier(.4,0,.2,1) both}
+@keyframes lift{0%{opacity:1}35%{opacity:.86}100%{opacity:0}}
+.js:not(.calm) #light{animation:fadein 3.2s .5s ease both}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+.js:not(.calm) h1 .wd{animation:word 1.3s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(1.1s + var(--d) * 90ms)}
+@keyframes word{from{opacity:0;transform:translateY(.35em)}to{opacity:1;transform:none}}
+.js:not(.calm) .intro,.js:not(.calm) .sheet,.js:not(.calm) .sfoot{animation:rise 1.4s cubic-bezier(.2,.7,.2,1) both}
+.js:not(.calm) .intro{animation-delay:2s}
+.js:not(.calm) .sheet{animation-delay:2.5s}
+.js:not(.calm) .sfoot{animation-delay:2.9s}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.js:not(.calm) .reveal{opacity:0;transform:translateY(24px);transition:opacity 1.1s ease,transform 1.3s cubic-bezier(.2,.7,.2,1)}
+.js:not(.calm) .reveal.in{opacity:1;transform:none}
+.calm .wall,.calm .copy{transform:none}
+.calm .lid-glint,.calm .rail-glint{transform:none}
+
+@media (max-width:900px){
+ .nav a{padding:10px 8px}
+ .pill .lbl{display:none}
+ .pill{padding:0 12px}
+ .auto-btn .lbl{display:none}
+ .auto-btn{padding:0 14px}
+}
+@media (max-width:760px){
+ .menu-btn{display:inline-flex}
+ .nav{display:none;position:absolute;top:68px;left:0;right:0;flex-direction:column;padding:8px max(4vw,16px) 16px;background:rgba(8,7,10,.96);border-bottom:1px solid rgba(216,184,120,.15)}
+ .nav.open{display:flex}
+ .nav a{font-size:17px;padding:12px 4px}
+ .copy{grid-template-columns:minmax(0,1fr);gap:16px}
+ .hero{grid-template-areas:"copy" "piano" "sheet" "now" "foot"}
+ .copy .intro{display:none}
+ .pwrap{width:100%}
+ .piano{width:144vw;margin-left:calc(50% - 72vw)}
+ .sheet{position:static;grid-area:sheet;width:100%;max-width:440px;height:auto;margin:14px auto 0;padding:16px;gap:10px}
+ .sheet p{font-size:20px}
+ .intro-m{display:block!important;grid-area:foot}
+ .sfoot{display:none}
+ .kn{display:none}
+ .story,.prog-head{grid-template-columns:minmax(0,1fr)}
+ .programme{grid-template-columns:minmax(0,1fr)}
+ .interval{grid-auto-flow:column;padding:24px 0}
+ .interval::before,.interval::after{width:60px;height:1px}
+ .ritual{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .ritual::before{display:none}
+ footer .inner{grid-template-columns:minmax(0,1fr)}
+}
+.intro-m{display:none;margin:20px auto 0;max-width:440px;color:var(--soft);font-size:16px;text-align:center}
+@media (max-width:460px){
+ .ritual{grid-template-columns:minmax(0,1fr)}
+ .brand b{font-size:21px}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#hikaye">İçeriğe geç</a>
+
+<header class="top" id="top">
+  <a class="brand" href="#sahne" aria-label="Ada Lune, ana sayfa">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><defs><mask id="cres"><rect width="32" height="32" fill="#fff"/><circle cx="21" cy="12" r="11" fill="#000"/></mask></defs><circle cx="16" cy="16" r="13" fill="#d8b878" mask="url(#cres)"/></svg>
+    <b>Ada <i>Lune</i></b>
+  </a>
+  <nav class="nav" id="nav" aria-label="Ana menü">
+    <a href="#sahne">Sahne</a>
+    <a href="#hikaye">Hikâye</a>
+    <a href="#repertuvar">Repertuvar</a>
+    <a href="#gece">Gece</a>
+  </nav>
+  <div class="ctl">
+    <button class="pill mute-btn off" type="button" aria-label="Sesi aç">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path class="w" d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/><path class="x" d="M16 9.5l5 5M21 9.5l-5 5"/></svg>
+      <span class="lbl">Ses kapalı</span>
+    </button>
+    <button class="pill" id="calm" type="button" aria-pressed="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M3 12c3-5 6-5 9 0s6 5 9 0"/></svg>
+      <span class="lbl">Hareketi azalt</span>
+    </button>
+    <button class="pill menu-btn" id="menu" type="button" aria-expanded="false" aria-controls="nav" aria-label="Menü">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M4 8h16M4 16h16"/></svg>
+    </button>
+  </div>
+</header>
+
+<main>
+<section class="stage" id="sahne" aria-label="Sahne">
+  <div class="wall" aria-hidden="true"></div>
+  <canvas id="light" aria-hidden="true"></canvas>
+  <div class="hero">
+    <div class="copy">
+      <h1 id="title">Bazı hikâyeler kelimelerle değil, notalarla anlatılır.</h1>
+      <p class="intro"><strong>Ada Lune</strong>, salonun ışıkları kısıldığında çalan bir piyanist. Noktürnlerden izlenimci minyatürlere uzanan bir gece repertuvarını, o akşamın sessizliğinden doğan doğaçlamalarla buluşturuyor.</p>
+    </div>
+
+    <div class="pwrap">
+      <div class="piano" id="piano">
+        <svg viewBox="0 0 1200 620" aria-hidden="true">
+          <defs>
+            <linearGradient id="lac" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1d1b1f"/><stop offset=".45" stop-color="#08080a"/><stop offset="1" stop-color="#0f0e11"/></linearGradient>
+            <linearGradient id="lacH" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#050506"/><stop offset=".5" stop-color="#1a181c"/><stop offset="1" stop-color="#050506"/></linearGradient>
+            <linearGradient id="lidG" x1="0" y1="1" x2=".8" y2="0"><stop offset="0" stop-color="#040405"/><stop offset=".55" stop-color="#0e0d10"/><stop offset="1" stop-color="#1c1a1e"/></linearGradient>
+            <linearGradient id="hi" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffe9c4" stop-opacity="0"/><stop offset=".5" stop-color="#ffe9c4" stop-opacity=".7"/><stop offset="1" stop-color="#ffe9c4" stop-opacity="0"/></linearGradient>
+            <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f0dba8"/><stop offset="1" stop-color="#a8833f"/></linearGradient>
+            <linearGradient id="glintG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff2d8" stop-opacity="0"/><stop offset=".5" stop-color="#fff2d8" stop-opacity=".16"/><stop offset="1" stop-color="#fff2d8" stop-opacity="0"/></linearGradient>
+            <radialGradient id="pool" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffe2a8" stop-opacity=".22"/><stop offset=".6" stop-color="#ffe2a8" stop-opacity=".06"/><stop offset="1" stop-color="#ffe2a8" stop-opacity="0"/></radialGradient>
+            <radialGradient id="shade" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#000" stop-opacity=".9"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+            <radialGradient id="warm" cx=".7" cy=".6" r=".6"><stop offset="0" stop-color="#d8b878" stop-opacity=".12"/><stop offset="1" stop-color="#d8b878" stop-opacity="0"/></radialGradient>
+            <clipPath id="lidClip"><path d="M172 292 L1016 62 C1034 57 1047 68 1047 88 L1040 292 Z"/></clipPath>
+            <clipPath id="railClip"><rect x="168" y="452" width="864" height="22"/></clipPath>
+            <clipPath id="fallClip"><rect x="205" y="300" width="790" height="40"/></clipPath>
+          </defs>
+          <!-- floor -->
+          <ellipse cx="600" cy="598" rx="560" ry="52" fill="url(#pool)"/>
+          <ellipse cx="600" cy="594" rx="470" ry="18" fill="url(#shade)"/>
+          <!-- back leg + lyre -->
+          <!-- NUMEX-DÜZELTME (2026-11-26): Arka bacak gövdenin arkasında y=556'da bitiyordu ama ön ayaklar (ve zemin gölgesi) y=586-598'de. Yani bacak 30 birim havada asılı kalıyordu; eklenen tekerlek de havada duruyordu. Bacak yere kadar uzatıldı (586), tekerlek ön ayaklarla aynı hizaya indi. -->
+          <path d="M506 480 L532 480 L529 586 L510 586 Z" fill="#09090a"/>
+          <path d="M508 482 L512 586" stroke="#ffe9c4" stroke-opacity=".1"/>
+          <g fill="url(#lac)"><rect x="586" y="490" width="8" height="74"/><rect x="606" y="490" width="8" height="74"/><path d="M574 492 Q600 520 626 492 L626 500 Q600 528 574 500 Z"/></g>
+          <rect x="558" y="560" width="84" height="15" rx="3" fill="url(#lac)" stroke="rgba(255,233,196,.12)"/>
+          <g fill="url(#gold)"><ellipse cx="582" cy="581" rx="7" ry="3"/><ellipse cx="600" cy="582" rx="7" ry="3"/><ellipse cx="618" cy="581" rx="7" ry="3"/></g>
+          <!-- lid -->
+          <path d="M172 292 L1016 62 C1034 57 1047 68 1047 88 L1040 292 Z" fill="url(#lidG)"/>
+          <path d="M172 292 L1016 62 C1034 57 1047 68 1047 88 L1040 292 Z" fill="url(#warm)"/>
+          <g clip-path="url(#lidClip)"><path class="lid-glint" d="M560 300 L700 300 L1020 40 L900 40 Z" fill="url(#glintG)"/><path class="lid-glint" d="M760 300 L790 300 L1060 60 L1030 60 Z" fill="url(#glintG)" opacity=".7"/></g>
+          <path d="M172 292 L1016 62 C1034 57 1047 68 1047 88" fill="none" stroke="#f3dcae" stroke-opacity=".55" stroke-width="1.6"/>
+          <path d="M180 296 L1012 70" fill="none" stroke="#000" stroke-opacity=".6" stroke-width="3"/>
+          <!-- prop stick -->
+          <path d="M996 292 L986 106" stroke="#1d1b1e" stroke-width="7" stroke-linecap="round"/>
+          <path d="M993 290 L983.5 108" stroke="#f3dcae" stroke-opacity=".35" stroke-width="1.2"/>
+          <!-- music desk -->
+          <path d="M404 296 L416 156 Q418 148 428 148 L772 148 Q782 148 784 156 L796 296 Z" fill="url(#lac)"/>
+          <path d="M404 296 L416 156 Q418 148 428 148 L772 148 Q782 148 784 156 L796 296" fill="none" stroke="#d8b878" stroke-opacity=".28"/>
+          <path d="M428 160 L772 160" stroke="#ffe9c4" stroke-opacity=".25"/>
+          <rect x="398" y="290" width="404" height="9" rx="2" fill="#141316"/>
+          <rect x="398" y="290" width="404" height="1.2" fill="url(#hi)" opacity=".7"/>
+          <!-- case rim -->
+          <rect x="166" y="286" width="868" height="14" rx="3" fill="url(#lac)"/>
+          <rect x="166" y="286.5" width="868" height="1.4" fill="url(#hi)" opacity=".8"/>
+          <!-- fallboard -->
+          <rect x="205" y="300" width="790" height="40" fill="url(#lac)"/>
+          <g clip-path="url(#fallClip)"><rect class="rail-glint" x="420" y="300" width="360" height="40" fill="url(#glintG)"/></g>
+          <text x="600" y="327" text-anchor="middle" fill="url(#gold)" font-family="Bodoni Moda, Didot, Georgia, serif" font-style="italic" font-size="16" letter-spacing=".5">Ada Lune</text>
+          <!-- cheeks -->
+          <path d="M166 324 Q166 308 180 306 L205 306 L205 474 L166 474 Z" fill="url(#lac)"/>
+          <path d="M1034 324 Q1034 308 1020 306 L995 306 L995 474 L1034 474 Z" fill="url(#lac)"/>
+          <path d="M168 322 Q168 309 180 308 L204 308" fill="none" stroke="#ffe9c4" stroke-opacity=".3"/>
+          <path d="M1032 322 Q1032 309 1020 308 L996 308" fill="none" stroke="#ffe9c4" stroke-opacity=".3"/>
+          <rect x="205" y="338" width="790" height="116" fill="#050505"/>
+          <!-- key slip + keybed -->
+          <rect x="166" y="452" width="868" height="22" rx="2" fill="url(#lac)"/>
+          <rect x="166" y="452.5" width="868" height="1.3" fill="url(#hi)" opacity=".85"/>
+          <g clip-path="url(#railClip)"><rect class="rail-glint" x="380" y="452" width="440" height="22" fill="url(#glintG)"/></g>
+          <path d="M172 474 L1028 474 L1012 496 L188 496 Z" fill="#060607"/>
+          <!-- front legs -->
+          <g fill="url(#lacH)"><path d="M194 492 L238 492 L230 522 L225 586 L209 586 L203 522 Z"/><path d="M1006 492 L962 492 L970 522 L975 586 L991 586 L997 522 Z"/></g>
+          <path d="M197 494 L205 522 L210 584" fill="none" stroke="#ffe9c4" stroke-opacity=".22"/>
+          <path d="M1003 494 L995 522 L990 584" fill="none" stroke="#ffe9c4" stroke-opacity=".22"/>
+          <!-- NUMEX-DÜZELTME (2026-11-26): Arka ayağın tekeri (altın başlık) hiç çizilmemişti, ayrıca teker arka bacağın y=556'da biten ucuna konmuştu; ön ayaklar yere 586/598'de basarken arka ayak havada kalıyordu. Tekerlek ön tekerlerle aynı hizaya (cy 592) indirildi, arka bacak da yere (586) kadar uzatıldı. -->
+          <g fill="url(#gold)"><ellipse cx="217" cy="591" rx="13" ry="5"/><ellipse cx="983" cy="591" rx="13" ry="5"/><ellipse cx="519" cy="592" rx="11" ry="4.5"/></g>
+          <g fill="#0a0806"><ellipse cx="217" cy="598" rx="9" ry="3"/><ellipse cx="983" cy="598" rx="9" ry="3"/></g>
+        </svg>
+        <div id="glints" aria-hidden="true"></div>
+        <div id="kb" role="group" aria-label="Piyano klavyesi, C3 ile C5 arası iki oktav"></div>
+      </div>
+      <div class="sheet" id="sheet">
+        <p>Tuşlara dokun. Müziği hisset.</p>
+        <button class="go" id="activate" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M9 18V6l10-2v12"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="16.5" cy="16" r="2.5"/></svg>
+          Piyanoyu Etkinleştir
+        </button>
+        <small class="after"><span class="hint-kbd">Fareyle tuşların üzerinde gezin ya da tıklayın.</span><span class="hint-touch">Tuşlara dokunarak çal; birkaç parmak birlikte de çalar.</span></small>
+      </div>
+    </div>
+    <div class="now" id="now" aria-live="polite" aria-atomic="true"><span class="lbl-w">Nurullah Şahin'den</span><span class="txt" id="nowTxt">Nu·mex</span></div>
+    <p class="intro-m"><strong>Ada Lune</strong>, salonun ışıkları kısıldığında çalan bir piyanist. Gece repertuvarını, o akşamın sessizliğinden doğan doğaçlamalarla buluşturuyor.</p>
+    <div class="sfoot">
+      <button class="pill auto-btn" id="auto" type="button" aria-pressed="false">
+        <svg class="ico-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>
+        <svg class="ico-stop" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="7" y="7" width="10" height="10" rx="1.5"/></svg>
+        <span class="lbl" id="autoLbl">Otomatik çal</span>
+      </button>
+      <span>Sesler tarayıcıda Web Audio ile sentezlenir; kayıt değildir.</span>
+      <span class="hint-kbd">Klavyeden: <kbd>Z</kbd>–<kbd>M</kbd> alt oktav, <kbd>Q</kbd>–<kbd>I</kbd> üst oktav, siyah tuşlar üst sırada</span>
+    </div>
+  </div>
+  <div class="curtain" aria-hidden="true"></div>
+</section>
+
+<section class="band" id="hikaye">
+  <div class="inner story">
+    <div class="story-art reveal">
+      <svg viewBox="0 0 520 300" role="img" aria-label="Hilal ay ve tek bir porte üzerinde birkaç nota">
+        <defs><mask id="moon"><rect width="520" height="300" fill="#fff"/><circle cx="428" cy="78" r="50" fill="#000"/></mask>
+        <radialGradient id="halo"><stop offset="0" stop-color="#d8b878" stop-opacity=".22"/><stop offset="1" stop-color="#d8b878" stop-opacity="0"/></radialGradient></defs>
+        <circle cx="400" cy="96" r="120" fill="url(#halo)"/>
+        <circle cx="404" cy="96" r="54" fill="#d8b878" mask="url(#moon)"/>
+        <g stroke="#d8b878" stroke-opacity=".45" stroke-width="1"><path d="M10 170H510M10 186H510M10 202H510M10 218H510M10 234H510"/></g>
+        <path d="M30 252 C22 220 54 196 48 170 C44 152 34 160 40 182 C46 214 62 232 50 252 C44 262 30 258 34 246" fill="none" stroke="#d8b878" stroke-width="2"/>
+        <g fill="#ece6da">
+          <ellipse cx="128" cy="218" rx="9" ry="6.5" transform="rotate(-20 128 218)"/><path d="M136 216V164" stroke="#ece6da" stroke-width="2"/>
+          <ellipse cx="186" cy="202" rx="9" ry="6.5" transform="rotate(-20 186 202)"/><path d="M194 200V148" stroke="#ece6da" stroke-width="2"/>
+          <path d="M136 164 Q166 150 194 148" fill="none" stroke="#ece6da" stroke-width="5"/>
+          <ellipse cx="262" cy="186" rx="9" ry="6.5" transform="rotate(-20 262 186)" fill="none" stroke="#ece6da" stroke-width="2.4"/><path d="M270 184V132" stroke="#ece6da" stroke-width="2"/>
+          <ellipse cx="350" cy="210" rx="9" ry="6.5" transform="rotate(-20 350 210)"/><path d="M358 208V156" stroke="#ece6da" stroke-width="2"/>
+          <path d="M358 156 q14 10 6 30" fill="none" stroke="#ece6da" stroke-width="2"/>
+        </g>
+        <path d="M440 168 Q470 150 500 168" fill="none" stroke="#d8b878" stroke-width="2"/><circle cx="470" cy="163" r="3" fill="#d8b878"/>
+      </svg>
+      <p class="quote">“Bir notanın kendisinden çok, ondan önceki nefesi dinlerim.”</p>
+    </div>
+    <div class="story-text reveal">
+      <h2>Karanlık bir odada başlayan bir dinleme alışkanlığı</h2>
+      <p>Ada için piyano, çocukluğunda evin en sessiz odasında duran siyah bir sırdı. Herkes uyuduğunda kapağını kaldırır, tuşlara ses çıkarmayacak kadar hafif dokunurdu. Müziği önce duymadan, parmaklarının altındaki ağırlıktan öğrendi.</p>
+      <p>Bugün de çalarken aynı şeyi arıyor: acele etmeyen bir tempo, iki akor arasında bırakılan boşluk, dinleyicinin kendi hikâyesini yerleştirebileceği kadar sessizlik. Salonu karanlıkta tutmayı sevmesi bundan; ışık yalnızca piyanoya düşer, gerisi hayal gücüne kalır.</p>
+      <p class="note">Lune, Fransızcada ay demek. Sahne adı, gece yarısından sonra çalınan müziğe duyduğu bağlılığın küçük bir itirafı.</p>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="repertuvar">
+  <div class="inner">
+    <div class="prog-head reveal">
+      <h2>Bir gecenin programı</h2>
+      <p class="lede">Repertuvar, gece yarısının ağırlığına uyan eserlerden seçilir: yavaş açılan, sessizliği seven, sonunda nefes bırakan müzikler. Aşağıdaki dizilim örnek bir gecedir; eserler salona ve akşama göre değişir.</p>
+    </div>
+    <div class="programme reveal">
+      <div class="part">
+        <h3>Birinci bölüm</h3>
+        <ol>
+          <li><span class="comp">Frédéric Chopin</span><span class="work">Noktürn, Op. 9 No. 2</span><span class="mood">Gecenin ilk ışığı; şarkı söyler gibi çalan bir sağ el.</span></li>
+          <li><span class="comp">Numex Debussy</span><span class="work">Clair de lune, Suite bergamasque</span><span class="mood">Ay ışığının suya düşmesi kadar yavaş ve parlak.</span></li>
+          <li><span class="comp">Erik Satie</span><span class="work">Gymnopédie No. 1</span><span class="mood">Az notayla bırakılan geniş bir boşluk.</span></li>
+        </ol>
+      </div>
+      <div class="interval" aria-label="Ara">Ara</div>
+      <div class="part">
+        <h3>İkinci bölüm</h3>
+        <ol>
+          <li><span class="comp">Robert Schumann</span><span class="work">Träumerei, Kinderszenen Op. 15</span><span class="mood">Hatırlanan bir rüyanın sıcaklığı.</span></li>
+          <li><span class="comp">Maurice Ravel</span><span class="work">Pavane pour une infante défunte</span><span class="mood">Ağır, zarif ve biraz hüzünlü bir veda dansı.</span></li>
+          <li><span class="comp">Ada Lune</span><span class="work">Gece yarısı doğaçlaması</span><span class="mood">Her gece yeniden; salonun o anki sessizliğinden doğar.</span></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="gece">
+  <div class="inner">
+    <div class="night-head reveal">
+      <h2>Bir konser gecesi, ilk notadan önce başlar</h2>
+      <p class="lede">Ada Lune resitalleri küçük bir ritüelle ilerler. Amaç gösteri değil, dinlemek için ortak bir karanlık kurmak.</p>
+    </div>
+    <div class="ritual">
+      <div class="step reveal">
+        <svg viewBox="0 0 48 48" fill="none" stroke="#d8b878" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M18 8h12l-2 8h-8z"/><path d="M20 16 10 42M28 16l10 26" stroke-opacity=".45"/><path d="M14 42h20" stroke-opacity=".45"/></svg>
+        <h3>Işıklar kısılır</h3>
+        <p>Salon kararır, yalnızca piyanonun üzerindeki spot yanık kalır. Gözler alışırken kulaklar açılır.</p>
+      </div>
+      <div class="step reveal">
+        <svg viewBox="0 0 48 48" fill="none" stroke="#d8b878" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="24" cy="24" r="4"/><path d="M14 14a14 14 0 0 0 0 20M34 14a14 14 0 0 1 0 20" stroke-opacity=".55"/><path d="M8 8a22 22 0 0 0 0 32M40 8a22 22 0 0 1 0 32" stroke-opacity=".25"/></svg>
+        <h3>Salon susar</h3>
+        <p>İlk notadan önce birkaç saniye beklenir. Bu bekleyiş de programın bir parçasıdır.</p>
+      </div>
+      <div class="step reveal">
+        <svg viewBox="0 0 48 48" fill="none" stroke="#d8b878" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><ellipse cx="19" cy="35" rx="6" ry="4.5" transform="rotate(-20 19 35)" fill="#d8b878"/><path d="M25 33V8c4 3 9 5 9 12"/></svg>
+        <h3>İlk nota</h3>
+        <p>Çoğu zaman yumuşak, neredeyse fısıltı. Gece oradan yavaşça büyür.</p>
+      </div>
+      <div class="step reveal">
+        <svg viewBox="0 0 48 48" fill="none" stroke="#d8b878" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M8 32a16 16 0 0 1 32 0"/><circle cx="24" cy="29" r="2.6" fill="#d8b878" stroke="none"/></svg>
+        <h3>Fermata</h3>
+        <p>Son akor bittiğinde alkıştan önce bir an daha susulur. O an, dinleyiciyle birlikte tutulan nefestir.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="close" id="kapanis">
+  <div class="reveal">
+    <h2>Işıklar söner. Müzik kalır.</h2>
+    <p>Gecenin son akoru artık senin elinde. Bir dokunuş yeter.</p>
+    <div class="row">
+      <button class="go" id="finale" type="button">Son akoru çal</button>
+      <a class="ghost" href="#sahne">Sahneye dön</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<section class="band numex-band" id="numex">
+  <div class="inner">
+    <h2>Numex nedir?</h2>
+    <p class="lede">Numex AI, Türkiye'de geliştirilen yerli bir yapay zekâ asistanı. Kodu yalnız üretmez; yazdığını doğrular, çalıştırır, denetler ve gerekirse yeniden geliştirir.</p>
+    <div class="numex-cols">
+      <div>
+        <h3>Kendi kendini denetler</h3>
+        <p>Ürettiği işi kendi yürütür ve sınar. Bir cevabın doğruluğundan şüphe ederse ikinci bir motorla bağımsız olarak kontrol ettirir.</p>
+      </div>
+      <div>
+        <h3>Türkçe konuşur</h3>
+        <p>Dili çeviri gibi değil, ana dil gibi kullanır. Türkçe şive, deyim ve kısaltmayı tanır; yazdığı metin çeviri kokmaz.</p>
+      </div>
+      <div>
+        <h3>Tek hesapla bir ekosistem</h3>
+        <p>Sohbet, kod editörü, terminal asistanı, eğitim araçları ve yazılımcı platformu aynı hesapta. Ayrı ayrı abonelik yok.</p>
+      </div>
+    </div>
+    <p class="foot-line">Bu sayfadaki piyano, tuşları ve sesi <b>Numex Codex</b> tarafından kodlandı. Sesler kayıt değil; Web Audio ile notanın içindeki nefesle birlikte saniye saniye sentezleniyor.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="inner">
+    <a class="brand" href="#sahne" aria-label="Ada Lune, başa dön">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="13" fill="#d8b878" mask="url(#cres)"/></svg>
+      <b>Ada <i>Lune</i></b>
+    </a>
+    <div>
+      <p>Piyano sesleri tarayıcıda Web Audio API ile gerçek zamanlı sentezlenir; kayıt ya da örnek dosya kullanılmaz.</p>
+      <p>Sanatçı kimliği ve metinler bu site için hazırlanmış örnek içeriktir.</p>
+    </div>
+    <nav aria-label="Alt menü"><a href="#sahne">Sahne</a><a href="#hikaye">Hikâye</a><a href="#repertuvar">Repertuvar</a><a href="#gece">Gece</a></nav>
+  </div>
+  <p class="sig">Powered by <b>Numex Codex</b></p>
+</footer>
+
+<script>
+/* ---------- Ada Lune · piyano sentezi + klavye ----------
+   Ses: Web Audio ile gerçek zamanlı sentez (örnek dosya yok).
+   Her nota: inharmonik kısmi tonlar, iki aşamalı sönüm, hafif
+   akort farkı (tel vuruşu), çekiç gürültüsü, salon yankısı. */
+
+function makeSynth(ctx, out) {
+  const master = ctx.createGain();
+  const comp = ctx.createDynamicsCompressor();
+  comp.threshold.value = -16; comp.knee.value = 12; comp.ratio.value = 3;
+  comp.attack.value = 0.003; comp.release.value = 0.25;
+  master.connect(out);
+  comp.connect(master);
+
+  // gövde rengi
+  const low = ctx.createBiquadFilter(); low.type = 'lowshelf'; low.frequency.value = 180; low.gain.value = 3;
+  const mid = ctx.createBiquadFilter(); mid.type = 'peaking'; mid.frequency.value = 2600; mid.Q.value = 0.9; mid.gain.value = -2.5;
+  const hi = ctx.createBiquadFilter(); hi.type = 'highshelf'; hi.frequency.value = 6500; hi.gain.value = -5;
+  const bus = ctx.createGain();
+  bus.connect(low); low.connect(mid); mid.connect(hi);
+
+  const dry = ctx.createGain(); dry.gain.value = 0.9;
+  const send = ctx.createGain(); send.gain.value = 0.3;
+  const verb = ctx.createConvolver();
+  verb.buffer = hallIR(ctx, 2.6);
+  hi.connect(dry); dry.connect(comp);
+  hi.connect(send); send.connect(verb); verb.connect(comp);
+
+  const sr = ctx.sampleRate;
+  const noise = ctx.createBuffer(1, Math.floor(sr * 0.25), sr);
+  { const d = noise.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; }
+
+  const voices = [];
+  const MAXV = 28;
+  const hasPan = typeof ctx.createStereoPanner === 'function';
+
+  function fade(v, t, tau) {
+    const g = v.out.gain;
+    if (g.cancelAndHoldAtTime) g.cancelAndHoldAtTime(t);
+    else { g.cancelScheduledValues(t); g.setValueAtTime(g.value, t); }
+    g.setTargetAtTime(0, t, tau);
+    const end = t + tau * 7;
+    v.nodes.forEach(n => { try { n.stop(end); } catch (e) {} });
+    v.dead = true;
+  }
+
+  function strike(midi, vel = 0.7, t = ctx.currentTime) {
+    vel = Math.max(0.05, Math.min(1, vel));
+    const f = 440 * Math.pow(2, (midi - 69) / 12);
+
+    // aynı tel yeniden vurulunca eski titreşim kısa sürede söner
+    voices.forEach(v => { if (v.midi === midi && !v.dead) fade(v, t, 0.04); });
+    const alive = voices.filter(v => !v.dead);
+    if (alive.length >= MAXV) fade(alive[0], t, 0.03);
+
+    const vg = ctx.createGain();
+    const level = Math.pow(vel, 1.5) * 0.3 * Math.pow(f / 261.6, 0.5);
+    vg.gain.value = level;
+    let node = vg;
+    if (hasPan) { const p = ctx.createStereoPanner(); p.pan.value = Math.max(-0.6, Math.min(0.6, (midi - 60) / 30)); vg.connect(p); node = p; }
+    node.connect(bus);
+
+    const B = 0.00025 * Math.pow(2, (midi - 60) / 20);           // tel sertliği
+    const tau2 = Math.min(5, Math.max(0.8, 3.2 * Math.pow(220 / f, 0.6)));
+    const tau1 = 0.13 * Math.pow(220 / f, 0.3);
+    const atk = 0.002 + 0.005 * (1 - vel);
+    const N = Math.min(12, Math.floor(9000 / f));
+    const tilt = 1.45 - 0.65 * vel;                              // sert vuruş = parlak
+    const nodes = [];
+    let longest = 0;
+
+    for (let n = 1; n <= N; n++) {
+      const fn = n * f * Math.sqrt(1 + B * n * n);
+      let a = Math.abs(Math.sin(Math.PI * n * 0.12)) / Math.pow(n, tilt);
+      if (n === 1) a *= 1.7;
+      a *= 1 / (1 + Math.pow(fn / 4500, 2));
+      if (a < 0.004) continue;
+      const g = ctx.createGain();
+      const t2 = tau2 / (1 + 0.3 * (n - 1));
+      const t1 = tau1 / (1 + 0.15 * (n - 1));
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(a, t + atk);
+      g.gain.setTargetAtTime(a * 0.38, t + atk, t1);
+      g.gain.setTargetAtTime(0, t + atk + t1 * 2.5, t2);
+      g.connect(vg);
+      const pair = n <= 4 ? 2 : 1;
+      for (let k = 0; k < pair; k++) {
+        const o = ctx.createOscillator();
+        o.type = 'sine';
+        o.frequency.value = fn;
+        if (pair === 2) o.detune.value = (k ? 1 : -1) * (0.5 + Math.random() * 1.1);
+        o.connect(g);
+        o.start(t);
+        nodes.push(o);
+      }
+      longest = Math.max(longest, atk + t1 * 2.5 + t2 * 5);
+    }
+
+    // çekiç: kısa keçe darbesi
+    const hn = ctx.createBufferSource(); hn.buffer = noise;
+    const bp = ctx.createBiquadFilter(); bp.type = 'bandpass';
+    bp.frequency.value = Math.min(5200, f * 5 + 900 * vel); bp.Q.value = 0.8;
+    const hg = ctx.createGain();
+    hg.gain.setValueAtTime(0, t);
+    hg.gain.linearRampToValueAtTime(0.09 * vel * vel, t + 0.001);
+    hg.gain.setTargetAtTime(0, t + 0.001, 0.011);
+    hn.connect(bp); bp.connect(hg); hg.connect(vg);
+    const th = ctx.createBufferSource(); th.buffer = noise;
+    const lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 260;
+    const tg = ctx.createGain();
+    tg.gain.setValueAtTime(0, t);
+    tg.gain.linearRampToValueAtTime(0.25 * vel, t + 0.002);
+    tg.gain.setTargetAtTime(0, t + 0.002, 0.018);
+    th.connect(lp); lp.connect(tg); tg.connect(vg);
+    hn.start(t); hn.stop(t + 0.2); th.start(t); th.stop(t + 0.2);
+
+    const end = t + Math.min(9, longest);
+    vg.gain.setValueAtTime(level, end - 0.6);
+    vg.gain.setTargetAtTime(0, end - 0.6, 0.12);
+    nodes.forEach(o => o.stop(end));
+
+    const v = { midi, out: vg, nodes, t, dead: false };
+    voices.push(v);
+    nodes[0].onended = () => {
+      const i = voices.indexOf(v); if (i >= 0) voices.splice(i, 1);
+      try { vg.disconnect(); } catch (e) {}
+    };
+    return v;
+  }
+
+  // susturucu (bilgisayar klavyesinde tuş bırakılınca)
+  function damp(midi, t = ctx.currentTime) {
+    voices.forEach(v => { if (v.midi === midi && !v.dead) fade(v, t, f0(midi) < 200 ? 0.14 : 0.09); });
+  }
+  const f0 = m => 440 * Math.pow(2, (m - 69) / 12);
+
+  return { strike, damp, master, voices };
+}
+
+function hallIR(ctx, secs) {
+  const sr = ctx.sampleRate, len = Math.floor(sr * secs), pre = Math.floor(sr * 0.018);
+  const buf = ctx.createBuffer(2, len, sr);
+  for (let c = 0; c < 2; c++) {
+    const d = buf.getChannelData(c);
+    let lp = 0;
+    for (let i = pre; i < len; i++) {
+      const t = (i - pre) / sr;
+      const k = 0.15 + 0.8 * Math.min(1, t / secs);              // zamanla koyulaşan yankı
+      lp += (Math.random() * 2 - 1 - lp) * (1 - k);
+      d[i] = lp * Math.exp(-t / 0.55) * (t < 0.08 ? 0.6 + Math.random() * 0.8 : 1);
+    }
+  }
+  return buf;
+}
+
+/* ---------- klavye ---------- */
+const NOTE = ['C', 'C♯', 'D', 'D♯', 'E', 'F', 'F♯', 'G', 'G♯', 'A', 'A♯', 'B'];
+const SOLFEJ = ['Do', 'Do diyez', 'Re', 'Re diyez', 'Mi', 'Fa', 'Fa diyez', 'Sol', 'Sol diyez', 'La', 'La diyez', 'Si'];
+const BLACK_OFF = { 1: -0.1, 3: 0.1, 6: -0.13, 8: 0, 10: 0.13 };
+const LOW = 48, HIGH = 72; // C3 – C5: iki oktav + üst Do
+const KEYMAP = {
+  KeyZ: 48, KeyS: 49, KeyX: 50, KeyD: 51, KeyC: 52, KeyV: 53, KeyG: 54, KeyB: 55, KeyH: 56, KeyN: 57, KeyJ: 58, KeyM: 59,
+  KeyQ: 60, Digit2: 61, KeyW: 62, Digit3: 63, KeyE: 64, KeyR: 65, Digit5: 66, KeyT: 67, Digit6: 68, KeyY: 69, Digit7: 70, KeyU: 71, KeyI: 72
+};
+const KEYLABEL = {};
+Object.entries(KEYMAP).forEach(([c, m]) => { KEYLABEL[m] = c.replace('Key', '').replace('Digit', ''); });
+
+function buildKeyboard(root) {
+  const whites = [];
+  for (let m = LOW; m <= HIGH; m++) if (![1, 3, 6, 8, 10].includes(m % 12)) whites.push(m);
+  const W = whites.length;
+  root.style.setProperty('--whites', W);
+  let html = '';
+  let wi = 0;
+  for (let m = LOW; m <= HIGH; m++) {
+    const pc = m % 12, oct = Math.floor(m / 12) - 1;
+    const black = pc in BLACK_OFF;
+    const name = SOLFEJ[pc] + ' ' + oct;
+    const lbl = `<span class="kl">${KEYLABEL[m] || ''}</span>`;
+    if (black) {
+      const center = (wi + BLACK_OFF[pc]) / W * 100;
+      html += `<button type="button" class="key b" data-m="${m}" style="--x:${center}%" aria-label="${name}" tabindex="-1">${lbl}</button>`;
+    } else {
+      html += `<button type="button" class="key w" data-m="${m}" style="--i:${wi}" aria-label="${name}" tabindex="-1">${pc === 0 ? `<span class="kn">C${oct}</span>` : ''}${lbl}</button>`;
+      wi++;
+    }
+  }
+  root.innerHTML = html;
+  const byMidi = {};
+  root.querySelectorAll('.key').forEach(k => { byMidi[k.dataset.m] = k; });
+  return byMidi;
+}
+
+function createPiano({ keyboard, onNote, onReadyChange }) {
+  const byMidi = buildKeyboard(keyboard);
+  let ctx = null, synth = null, ready = false, muted = false;
+  const log = [];
+  const held = new Map();          // pointerId -> key element
+  const kbHeld = new Map();        // code -> midi
+  const timers = new Map();
+  let lastMove = { x: 0, t: 0 };
+
+  function init() {
+    if (ctx) { if (ctx.state !== 'running') ctx.resume(); return Promise.resolve(); }
+    const AC = window.AudioContext || window.webkitAudioContext;
+    ctx = new AC({ latencyHint: 'interactive' });
+    try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
+    synth = makeSynth(ctx, ctx.destination);
+    synth.master.gain.value = muted ? 0 : 1;
+    return ctx.resume().then(() => { ready = true; onReadyChange && onReadyChange(true); });
+  }
+
+  function setMuted(m) {
+    muted = m;
+    if (synth) synth.master.gain.setTargetAtTime(m ? 0 : 1, ctx.currentTime, 0.03);
+  }
+
+  function down(el) { el.classList.add('on'); clearTimeout(timers.get(el)); }
+  function up(el, delay = 0) {
+    clearTimeout(timers.get(el));
+    if (!delay) { el.classList.remove('on'); return; }
+    timers.set(el, setTimeout(() => el.classList.remove('on'), delay));
+  }
+
+  function play(midi, vel, src) {
+    if (!ready) return false;
+    if (ctx.state !== 'running') ctx.resume();
+    synth.strike(midi, vel);
+    log.push({ midi, src, t: performance.now() });
+    if (log.length > 400) log.shift();
+    onNote && onNote(midi, vel, byMidi[midi]);
+    return true;
+  }
+
+  const keyAt = (x, y) => {
+    const el = document.elementFromPoint(x, y);
+    const k = el && el.closest ? el.closest('.key') : null;
+    return k && keyboard.contains(k) ? k : null;
+  };
+
+  keyboard.addEventListener('pointerdown', e => {
+    const k = keyAt(e.clientX, e.clientY);
+    if (!k) return;
+    e.preventDefault();
+    if (!ready) { keyboard.dispatchEvent(new CustomEvent('needsaudio', { bubbles: true })); return; }
+    const vel = e.pointerType === 'mouse' ? 0.82 : 0.78;
+    const prev = held.get(e.pointerId);
+    if (prev && prev !== k) up(prev);
+    held.set(e.pointerId, k);
+    k.dataset.press = '1';
+    down(k);
+    play(+k.dataset.m, vel, 'down');
+  });
+
+  keyboard.addEventListener('pointermove', e => {
+    if (!ready) return;
+    const isMouse = e.pointerType === 'mouse';
+    if (!isMouse && !held.has(e.pointerId)) return;
+    const k = keyAt(e.clientX, e.clientY);
+    const prev = held.get(e.pointerId) || null;
+    if (k === prev) return;                       // aynı tuşta beklerken tekrar yok
+    if (prev) { delete prev.dataset.press; up(prev, isMouse ? 0 : 0); }
+    held.set(e.pointerId, k);
+    if (!k) return;
+    const now = performance.now();
+    const speed = Math.abs(e.clientX - lastMove.x) / Math.max(1, now - lastMove.t);
+    lastMove = { x: e.clientX, t: now };
+    const buttons = e.buttons & 1;
+    const vel = buttons || !isMouse ? 0.74 : Math.min(0.72, 0.46 + speed * 0.06);
+    down(k);
+    if (isMouse && !buttons) up(k, 200); else k.dataset.press = '1';
+    play(+k.dataset.m, vel, 'hover');
+  });
+
+  const endPointer = e => {
+    const k = held.get(e.pointerId);
+    if (k) { delete k.dataset.press; up(k, 60); }
+    if (e.pointerType === 'mouse' && e.type === 'pointerup') return; // fare tuşun üstünde kalır
+    held.delete(e.pointerId);
+  };
+  keyboard.addEventListener('pointerup', endPointer);
+  keyboard.addEventListener('pointercancel', endPointer);
+  keyboard.addEventListener('pointerleave', e => {
+    if (e.pointerType === 'mouse') { const k = held.get(e.pointerId); if (k) up(k, 60); held.delete(e.pointerId); }
+  });
+  keyboard.addEventListener('contextmenu', e => e.preventDefault());
+
+  window.addEventListener('keydown', e => {
+    if (e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
+    const tag = (e.target && e.target.tagName) || '';
+    if (/INPUT|TEXTAREA|SELECT/.test(tag)) return;
+    const m = KEYMAP[e.code];
+    if (m === undefined) return;
+    if (!ready) { keyboard.dispatchEvent(new CustomEvent('needsaudio', { bubbles: true })); return; }
+    e.preventDefault();
+    kbHeld.set(e.code, m);
+    down(byMidi[m]);
+    play(m, 0.74, 'key');
+  });
+  window.addEventListener('keyup', e => {
+    const m = kbHeld.get(e.code);
+    if (m === undefined) return;
+    kbHeld.delete(e.code);
+    up(byMidi[m]);
+    if (synth) synth.damp(m);
+  });
+  window.addEventListener('blur', () => {
+    kbHeld.forEach(m => { up(byMidi[m]); synth && synth.damp(m); });
+    kbHeld.clear();
+  });
+
+  function demo(seq, gap = 120, vel = 0.4) {
+    seq.forEach((m, i) => setTimeout(() => {
+      const el = byMidi[m];
+      if (play(m, vel, 'demo') && el) { down(el); up(el, 260); }
+    }, i * gap));
+  }
+
+  return {
+    init, setMuted, demo, play, log, byMidi,
+    get ready() { return ready; }, get muted() { return muted; },
+    get ctx() { return ctx; }, get synth() { return synth; }
+  };
+}
+
+</script>
+<script>
+{
+const $ = s => document.querySelector(s);
+const root = document.documentElement;
+const body = document.body;
+const pianoEl = $('#piano');
+const kb = $('#kb');
+const glints = $('#glints');
+const act = $('#activate');
+const muteBtns = [...document.querySelectorAll('.mute-btn')];
+const calmBtn = $('#calm');
+let calm = root.classList.contains('calm');
+
+/* başlık kelimeleri */
+const h1 = $('#title');
+h1.innerHTML = h1.textContent.split(' ').map((w, i) => `<span class="wd" style="--d:${i}">${w}</span>`).join(' ');
+
+/* dokunmatik / fare ipuçları */
+const touchOnly = matchMedia('(hover: none)').matches;
+document.querySelectorAll(touchOnly ? '.hint-kbd' : '.hint-touch').forEach(e => e.remove());
+
+/* ışık ve duman */
+const light = (() => {
+  const cv = $('#light'), cx = cv.getContext('2d'), stage = $('#sahne');
+  const cone = document.createElement('canvas');
+  let W = 0, H = 0, dpr = 1, geo = { x: 0, bot: 0, half: 0 }, pulse = 0, mx = 0, my = 0, tx = 0, ty = 0, visible = true, last = 0;
+  let seed = 11; const rnd = () => (seed = seed * 16807 % 2147483647) / 2147483647;
+  const puff = document.createElement('canvas'); puff.width = puff.height = 256;
+  { const g = puff.getContext('2d'); for (let i = 0; i < 42; i++) { const x = 128 + (rnd() - .5) * 130, y = 128 + (rnd() - .5) * 80, r = 26 + rnd() * 60; const gr = g.createRadialGradient(x, y, 0, x, y, r); gr.addColorStop(0, 'rgba(214,202,184,.11)'); gr.addColorStop(1, 'rgba(214,202,184,0)'); g.fillStyle = gr; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill(); } }
+  const puffs = Array.from({ length: 10 }, () => ({ u: rnd(), v: .25 + rnd() * .75, s: .8 + rnd() * 1.4, vx: (rnd() - .5) * 0.010, a: .5 + rnd() * .5, ph: rnd() * 6 }));
+  const motes = Array.from({ length: 46 }, () => ({ u: rnd() * 2 - 1, v: rnd(), r: .6 + rnd() * 1.1, sp: .004 + rnd() * .01, ph: rnd() * 6 }));
+
+  function size() {
+    dpr = Math.min(1.5, devicePixelRatio || 1);
+    W = stage.clientWidth; H = stage.clientHeight;
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    const sr = stage.getBoundingClientRect(), pr = pianoEl.getBoundingClientRect();
+    geo = { x: pr.left - sr.left + pr.width / 2, bot: pr.top - sr.top + pr.height * .96, half: Math.min(pr.width, W) * .42 };
+    cone.width = cv.width; cone.height = cv.height;
+    const g = cone.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    for (let i = 0; i < 10; i++) {
+      const k = i / 9, wt = 18 + k * 60, wb = geo.half * (.62 + k * .6);
+      const gr = g.createLinearGradient(0, -40, 0, geo.bot);
+      gr.addColorStop(0, `rgba(255,228,178,${.034 * (1 - k * .6)})`);
+      gr.addColorStop(.75, `rgba(255,222,168,${.016 * (1 - k * .5)})`);
+      gr.addColorStop(1, 'rgba(255,222,168,0)');
+      g.fillStyle = gr; g.beginPath();
+      g.moveTo(geo.x - wt, -40); g.lineTo(geo.x + wt, -40); g.lineTo(geo.x + wb, geo.bot); g.lineTo(geo.x - wb, geo.bot); g.closePath(); g.fill();
+    }
+    draw(performance.now() / 1000, 0);
+  }
+
+  function draw(t, dt) {
+    mx += (tx - mx) * (calm ? 1 : .05); my += (ty - my) * (calm ? 1 : .05);
+    if (!calm) { root.style.setProperty('--mx', mx.toFixed(3)); root.style.setProperty('--my', my.toFixed(3)); }
+    pulse *= Math.pow(.04, dt);
+    cx.setTransform(1, 0, 0, 1, 0, 0); cx.clearRect(0, 0, cv.width, cv.height);
+    const breathe = calm ? 1 : .88 + .12 * Math.sin(t * .45);
+    const sway = calm ? 0 : (mx * 12 + Math.sin(t * .07) * 6) * dpr;
+    cx.globalAlpha = Math.min(1, breathe * (1 + pulse * .35));
+    cx.drawImage(cone, sway, 0);
+    cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    // duman
+    for (const p of puffs) {
+      if (!calm) p.u = (p.u + p.vx * dt + 1.2) % 1.2 - .1;
+      const x = p.u * W - mx * 26, y = p.v * H - my * 10, r = 260 * p.s;
+      const near = Math.exp(-(((x - geo.x) / (geo.half * 1.1)) ** 2));
+      cx.globalAlpha = p.a * (.18 + .5 * near) * (W < 760 ? .45 : .75) * (calm ? .8 : .8 + .2 * Math.sin(t * .2 + p.ph));
+      cx.drawImage(puff, x - r, y - r * .6, r * 2, r * 1.2);
+    }
+    // ışık huzmesindeki toz
+    cx.fillStyle = '#ffe6bd';
+    for (const m of motes) {
+      if (!calm) { m.v -= m.sp * dt * 4; if (m.v < 0) { m.v = 1; m.u = rnd() * 2 - 1; } }
+      const y = m.v * geo.bot, spread = 30 + (geo.half * .9) * (y / geo.bot);
+      const x = geo.x + m.u * spread + Math.sin(t * .6 + m.ph) * 6 - mx * 14;
+      cx.globalAlpha = (.25 + .5 * Math.abs(Math.sin(t * .8 + m.ph))) * (1 - m.v * .5) * .7;
+      cx.beginPath(); cx.arc(x, y, m.r, 0, 7); cx.fill();
+    }
+    cx.globalAlpha = 1;
+  }
+
+  function loop(t) {
+    requestAnimationFrame(loop);
+    if (calm || !visible || document.hidden) return;
+    if (t - last < 33) return;
+    const dt = Math.min(.1, (t - last) / 1000); last = t;
+    draw(t / 1000, dt);
+  }
+  const ro = new ResizeObserver(size); ro.observe(stage);
+  const io = new IntersectionObserver(es => { visible = es[0].isIntersecting; }); io.observe(stage);
+  stage.addEventListener('pointermove', e => { if (e.pointerType !== 'mouse') return; tx = e.clientX / innerWidth * 2 - 1; ty = e.clientY / innerHeight * 2 - 1; });
+  requestAnimationFrame(loop);
+  return { pulse(v) { pulse = Math.min(1.5, pulse + v * .5); if (calm) draw(performance.now() / 1000, 0); }, redraw: size };
+})();
+
+/* piyano */
+function glow(el, vel) {
+  light.pulse(vel);
+  if (!el) return;
+  const pr = pianoEl.getBoundingClientRect(), r = el.getBoundingClientRect(), gr = glints.getBoundingClientRect();
+  const g = document.createElement('i');
+  g.className = 'glint';
+  g.style.left = ((r.left + r.width / 2 - gr.left) / gr.width * 100) + '%';
+  if (glints.childElementCount > 18) glints.firstElementChild.remove();
+  glints.appendChild(g);
+  const peak = .45 + vel * .55;
+  const a = g.animate(calm
+    ? [{ opacity: 0 }, { opacity: peak, offset: .15 }, { opacity: 0 }]
+    : [{ opacity: 0, transform: 'translateX(-50%) scale(.7)' }, { opacity: peak, offset: .12 }, { opacity: 0, transform: 'translateX(-50%) translateY(-10%) scale(1.15)' }],
+    { duration: 1100, easing: 'ease-out' });
+  a.onfinish = () => g.remove();
+}
+
+const piano = createPiano({ keyboard: kb, onNote: (m, v, el) => glow(el, v) });
+window.__adaLune = piano;
+
+function syncMute() {
+  const on = piano.ready && !piano.muted;
+  muteBtns.forEach(b => {
+    b.classList.toggle('off', !on);
+    b.setAttribute('aria-label', on ? 'Sesi kapat' : 'Sesi aç');
+    const l = b.querySelector('.lbl'); if (l) l.textContent = on ? 'Ses açık' : 'Ses kapalı';
+  });
+}
+
+function start() {
+  return piano.init().then(() => {
+    body.classList.add('live');
+    piano.setMuted(false);
+    syncMute();
+  }).catch(() => {
+    const s = $('#sheet small'); if (s) s.textContent = 'Ses başlatılamadı. Tarayıcının sesi engellemediğinden emin olup yeniden dene.';
+  });
+}
+
+act.addEventListener('click', () => {
+  start().then(() => { if (piano.ready) piano.demo([55, 60, 64, 67, 71, 72], 115, .34); });
+});
+muteBtns.forEach(b => b.addEventListener('click', () => {
+  if (!piano.ready) { start(); return; }
+  piano.setMuted(!piano.muted); syncMute();
+}));
+kb.addEventListener('needsaudio', () => {
+  act.classList.remove('nudge'); void act.offsetWidth; act.classList.add('nudge');
+});
+$('#finale').addEventListener('click', () => {
+  const p = piano.ready ? Promise.resolve() : start();
+  p.then(() => { if (piano.ready) { if (piano.muted) { piano.setMuted(false); syncMute(); } piano.demo([48, 55, 62, 64, 71], 95, .5); } });
+});
+
+/* otomatik çalma: "Nu-mex, Nu-mex Co-dex, Nu-mex O-kul" — her hece bir nota.
+   Bölüm 1 alt oktav, bölüm 2 üst oktav; dizinin sonunda kısa bir nefes, sonra tekrar. */
+const AUTO_PHRASES = [
+  { ad: 'Nu·mex',          notalar: [48, 52] },
+  { ad: 'Nu·mex Co·dex',   notalar: [48, 52, 55, 59] },
+  { ad: 'Nu·mex O·kul',    notalar: [48, 52, 55, 60] },
+  { ad: 'Nu·mex',          notalar: [60, 64] },
+  { ad: 'Nu·mex Co·dex',   notalar: [60, 64, 67, 71] },
+  { ad: 'Nu·mex O·kul',    notalar: [60, 64, 67, 72] }
+];
+const AUTO_STEP = 230, AUTO_TAIL = 900;
+const autoBtn = $('#auto'), autoLbl = $('#autoLbl'), nowEl = $('#now'), nowTxt = $('#nowTxt');
+let autoOn = false, autoTimer = null, autoIdx = 0;
+
+function autoSay(text) {
+  nowTxt.classList.remove('flip'); void nowTxt.offsetWidth; nowTxt.textContent = text;
+}
+function autoStop() {
+  autoOn = false; clearTimeout(autoTimer); autoTimer = null; autoIdx = 0;
+  body.classList.remove('auto');
+  autoBtn.setAttribute('aria-pressed', 'false');
+  autoBtn.setAttribute('aria-label', 'Otomatik çal, aç');
+  autoLbl.textContent = 'Otomatik çal';
+}
+function autoPlayPhrase() {
+  const ph = AUTO_PHRASES[autoIdx % AUTO_PHRASES.length];
+  autoSay(ph.ad);
+  ph.notalar.forEach((m, i) => setTimeout(() => {
+    const el = piano.byMidi[m];
+    if (piano.play(m, i === 0 ? .5 : .42, 'auto') && el) { el.classList.add('on'); setTimeout(() => el.classList.remove('on'), 240); }
+  }, i * AUTO_STEP));
+  const dur = ph.notalar.length * AUTO_STEP + AUTO_TAIL;
+  autoTimer = setTimeout(() => {
+    if (!autoOn) return;
+    autoIdx++;
+    if (autoIdx % AUTO_PHRASES.length === 0) { nowTxt.classList.add('flip'); autoTimer = setTimeout(autoPlayPhrase, 420); return; }
+    autoPlayPhrase();
+  }, dur);
+}
+async function autoStart() {
+  if (!piano.ready) await start();
+  if (!piano.ready) return;                 // ses başlatılamadı, sessizce çık
+  if (piano.muted) { piano.setMuted(false); syncMute(); }
+  autoOn = true; autoIdx = 0;
+  body.classList.add('auto');
+  autoBtn.setAttribute('aria-pressed', 'true');
+  autoBtn.setAttribute('aria-label', 'Otomatik çalmayı durdur');
+  autoLbl.textContent = 'Otomatik çalıyor';
+  autoPlayPhrase();
+}
+autoBtn.addEventListener('click', () => { if (autoOn) autoStop(); else autoStart(); });
+/* kullanıcı kendisi çalmaya başlarsa otomatik susar (el her zaman önde) */
+window.addEventListener('keydown', e => { if (autoOn && KEYMAP[e.code] !== undefined) autoStop(); }, true);
+kb.addEventListener('pointerdown', () => { if (autoOn) autoStop(); });
+document.addEventListener('visibilitychange', () => { if (document.hidden && autoOn) autoStop(); });
+
+/* hareket azaltma */
+function applyCalm() {
+  root.classList.toggle('calm', calm);
+  calmBtn.setAttribute('aria-pressed', String(calm));
+  calmBtn.querySelector('.lbl').textContent = calm ? 'Hareket azaltıldı' : 'Hareketi azalt';
+  if (calm) { root.style.setProperty('--mx', 0); root.style.setProperty('--my', 0); document.querySelectorAll('.reveal').forEach(e => e.classList.add('in')); }
+  light.redraw();
+}
+calmBtn.addEventListener('click', () => { calm = !calm; try { localStorage.setItem('al-calm', calm ? '1' : '0'); } catch (e) {} applyCalm(); });
+applyCalm();
+
+/* başlık, menü, aktif bölüm */
+const top = $('#top'), nav = $('#nav'), menu = $('#menu');
+const onScroll = () => top.classList.toggle('solid', scrollY > 40);
+addEventListener('scroll', onScroll, { passive: true }); onScroll();
+menu.addEventListener('click', () => { const o = nav.classList.toggle('open'); menu.setAttribute('aria-expanded', String(o)); });
+nav.addEventListener('click', e => { if (e.target.closest('a')) { nav.classList.remove('open'); menu.setAttribute('aria-expanded', 'false'); } });
+const links = [...nav.querySelectorAll('a')];
+const spy = new IntersectionObserver(es => {
+  es.forEach(e => { if (e.isIntersecting) links.forEach(a => a.setAttribute('aria-current', String(a.getAttribute('href') === '#' + e.target.id))); });
+}, { rootMargin: '-45% 0px -50% 0px' });
+['sahne', 'hikaye', 'repertuvar', 'gece'].forEach(id => spy.observe(document.getElementById(id)));
+
+/* kaydırınca beliren içerik */
+if ('IntersectionObserver' in window) {
+  const rev = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); rev.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px', threshold: .08 });
+  document.querySelectorAll('.reveal').forEach((e, i) => { e.style.transitionDelay = (e.classList.contains('step') ? (i % 4) * 120 : 0) + 'ms'; rev.observe(e); });
+} else document.querySelectorAll('.reveal').forEach(e => e.classList.add('in'));
+}
+</script>
+</body>
+</html>

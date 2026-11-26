@@ -1,0 +1,691 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Numex Çekirdek — Seninle düşünen yapay zekâ</title>
+<meta name="description" content="Numex Çekirdek: Türkçe düşünen yazılım ortağı. Dört uzman modül — Numex AI, CLI, Codex ve SDK — tek bir çekirdekte.">
+<meta name="theme-color" content="#05080c">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#05080c;--fg:#eef2f7;--mut:#8391a7;--line:rgba(255,255,255,.09);--acc:#2dd4bf}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--fg);font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body.loading{overflow:hidden}
+a{color:inherit;text-decoration:none}
+#gl{position:fixed;inset:0;width:100%;height:100%;z-index:0;display:block}
+body.nogl #gl{display:none}
+body.nogl{background:radial-gradient(ellipse at 50% 70%,color-mix(in srgb,var(--acc) 22%,transparent),var(--bg) 60%) fixed}
+.scrim{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:0;
+  background:linear-gradient(90deg,rgba(5,8,12,.94) 0%,rgba(5,8,12,.7) 30%,rgba(5,8,12,0) 58%)}
+main{position:relative;z-index:2}
+#callouts{position:fixed;inset:0;z-index:3;pointer-events:none;overflow:hidden}
+#progress{position:fixed;top:0;left:0;height:2px;width:0;background:var(--acc);z-index:20;box-shadow:0 0 12px var(--acc)}
+
+/* loader */
+#loader{position:fixed;inset:0;z-index:50;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;transition:opacity .7s ease,visibility .7s}
+#loader.done{opacity:0;visibility:hidden}
+.ld-logo{font-family:'Inter Tight';font-weight:700;font-size:34px;letter-spacing:-.04em}
+.ld-logo span{color:var(--acc)}
+.ld-bar{width:180px;height:1px;background:var(--line);overflow:hidden}
+.ld-bar i{display:block;height:100%;width:0;background:var(--acc)}
+.ld-num{font-family:'JetBrains Mono';font-size:12px;color:var(--mut);letter-spacing:.2em}
+
+/* nav */
+header.nav{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:20px clamp(20px,4vw,48px);transition:background .3s,backdrop-filter .3s}
+header.nav.solid{background:rgba(5,8,12,.55);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.brand{display:flex;align-items:center;gap:10px;font-family:'Inter Tight';font-weight:700;font-size:21px;letter-spacing:-.03em}
+.brand svg{width:26px;height:26px}
+.brand b{color:var(--acc);font-weight:700}
+header nav{display:flex;gap:30px;font-size:13.5px;color:var(--mut)}
+header nav a{transition:color .2s}
+header nav a:hover,header nav a.on{color:var(--fg)}
+.btn-pill{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:999px;font-size:13.5px;font-weight:600;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.04);transition:transform .2s,background .2s,box-shadow .2s;cursor:pointer;color:var(--fg);font-family:inherit}
+.btn-pill:hover{transform:translateY(-1px);background:rgba(255,255,255,.09)}
+.btn-pill.solid{background:var(--fg);color:#05080c;border-color:transparent}
+.btn-pill.solid:hover{background:#fff;box-shadow:0 0 0 6px color-mix(in srgb,var(--acc) 22%,transparent)}
+.btn-pill.acc{background:var(--acc);color:#04110e;border-color:transparent}
+
+/* typography */
+.eyebrow{font-family:'JetBrains Mono';font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--acc);margin-bottom:22px}
+h1,h2,h3{font-family:'Inter Tight';font-weight:700;letter-spacing:-.045em;line-height:.95}
+h1{font-size:clamp(46px,7.4vw,116px)}
+h2{font-size:clamp(40px,5.2vw,78px);margin-bottom:24px}
+h3{font-size:clamp(32px,3.6vw,52px);margin-bottom:18px}
+h1 em,h2 em,h3 em{font-style:normal;color:var(--acc)}
+.lede{font-size:clamp(15px,1.25vw,18px);line-height:1.6;color:#b4bfcd;max-width:520px}
+
+/* hero */
+.hero{height:100vh;min-height:640px;position:relative;text-align:center}
+.hero-in{padding-top:max(120px,15vh);display:flex;flex-direction:column;align-items:center}
+.hero .lede{margin:24px auto 0;max-width:560px}
+.hero-cta{position:absolute;left:0;right:0;bottom:6.5vh;display:flex;flex-direction:column;align-items:center;gap:14px}
+.hint{font-size:12px;color:var(--mut);letter-spacing:.04em}
+.hero .rv{opacity:0;transform:translateY(18px);transition:opacity 1s ease,transform 1s cubic-bezier(.2,.7,.2,1)}
+body.ready .hero .rv{opacity:1;transform:none}
+body.ready .hero .rv:nth-child(2){transition-delay:.12s}
+body.ready .hero .rv:nth-child(3){transition-delay:.24s}
+
+/* sections */
+.mk{position:absolute;left:0;top:50%;width:1px;height:1px}
+.sec{position:relative}
+.stick{position:sticky;top:0;height:100vh;display:flex;align-items:center;padding:0 clamp(22px,7vw,110px)}
+.panel{max-width:480px}
+.fx{opacity:0;transform:translateY(26px);transition:opacity .9s ease,transform .9s cubic-bezier(.2,.7,.2,1)}
+.fx.in{opacity:1;transform:none}
+.stats{display:flex;gap:34px;margin-top:38px;padding-top:26px;border-top:1px solid var(--line)}
+.stats div{font-family:'Inter Tight';font-size:34px;font-weight:600;letter-spacing:-.03em}
+.stats small{display:block;font-family:'Inter';font-size:12px;color:var(--mut);letter-spacing:0;font-weight:400;margin-top:4px}
+
+#genel{height:150vh}
+#icinde{height:170vh}
+#yakin{height:160vh}
+
+.mod{height:100vh;position:relative;display:flex;align-items:center;padding:0 clamp(22px,7vw,110px)}
+.mod .num{font-family:'JetBrains Mono';font-size:12px;color:var(--mut);letter-spacing:.18em;margin-bottom:20px;display:flex;align-items:center;gap:12px}
+.mod .num i{display:inline-block;width:10px;height:10px;border-radius:3px;background:var(--acc);box-shadow:0 0 14px var(--acc)}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}
+.tags span{font-family:'JetBrains Mono';font-size:11.5px;padding:6px 10px;border:1px solid var(--line);border-radius:999px;color:#b4bfcd;background:rgba(255,255,255,.02)}
+.mods-head{position:relative;height:60vh;display:flex;align-items:flex-end;padding:0 clamp(22px,7vw,110px)}
+
+/* specs */
+#ozellikler{padding:22vh clamp(22px,7vw,110px) 18vh;position:relative}
+#ozellikler .head{max-width:640px;margin-bottom:56px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:18px;overflow:hidden;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.cell{background:rgba(7,11,16,.78);padding:30px 28px 34px;min-height:180px}
+.cell .k{font-family:'JetBrains Mono';font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--mut);margin-bottom:18px}
+.cell .v{font-family:'Inter Tight';font-size:30px;font-weight:600;letter-spacing:-.03em;margin-bottom:10px}
+.cell .v em{font-style:normal;color:var(--acc)}
+.cell p{font-size:14px;line-height:1.55;color:#9aa6b6}
+
+/* final */
+#erisim{height:130vh;position:relative}
+#erisim .stick{justify-content:center;text-align:center;align-items:flex-start;padding-top:16vh}
+#erisim .panel{max-width:760px;display:flex;flex-direction:column;align-items:center}
+form.join{margin-top:34px;display:flex;gap:8px;padding:6px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(5,8,12,.6);backdrop-filter:blur(12px);width:min(460px,100%)}
+form.join input{flex:1;min-width:0;background:transparent;border:0;outline:0;color:var(--fg);font:inherit;font-size:15px;padding:0 16px}
+form.join input::placeholder{color:#6b7789}
+.ok{margin-top:16px;font-size:13.5px;color:var(--acc);min-height:20px}
+footer{position:relative;z-index:2;border-top:1px solid var(--line);padding:28px clamp(22px,4vw,48px);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:12.5px;color:var(--mut);background:rgba(5,8,12,.85)}
+
+/* callouts */
+.co{position:absolute;left:0;top:0;display:flex;align-items:center;opacity:0;will-change:transform,opacity}
+.co .dot{flex:none;width:9px;height:9px;margin-left:-4.5px;border-radius:50%;background:var(--acc);box-shadow:0 0 0 4px color-mix(in srgb,var(--acc) 22%,transparent),0 0 18px var(--acc)}
+.co .ln{flex:none;width:64px;height:1px;background:linear-gradient(90deg,var(--acc),rgba(255,255,255,.28))}
+.co .tx{padding-left:12px;white-space:nowrap}
+.co b{font-family:'Inter Tight';font-size:15px;font-weight:600;letter-spacing:-.01em;display:block}
+.co small{display:block;color:var(--mut);font-size:12.5px;margin-top:3px}
+
+/* theme */
+.theme{position:fixed;left:clamp(20px,4vw,48px);bottom:24px;z-index:10;display:flex;align-items:center;gap:10px;font-family:'JetBrains Mono';font-size:11px;color:var(--mut);letter-spacing:.1em;padding:8px 12px;border-radius:999px;background:rgba(5,8,12,.55);border:1px solid var(--line);backdrop-filter:blur(10px)}
+.theme button{width:14px;height:14px;border-radius:50%;border:0;cursor:pointer;outline:2px solid transparent;outline-offset:2px;transition:outline-color .2s}
+.theme button.on{outline-color:rgba(255,255,255,.7)}
+
+@media (max-width:860px){
+  header nav{display:none}
+  .grid{grid-template-columns:1fr}
+  .scrim{background:linear-gradient(180deg,rgba(5,8,12,.1) 0%,rgba(5,8,12,.88) 55%)}
+  .stick,.mod{align-items:flex-end;padding-bottom:12vh}
+  .co .tx small{display:none}
+  .co .ln{width:30px}
+  .theme span{display:none}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.fx,.hero .rv{transition:none}}
+</style>
+</head>
+<body class="loading">
+
+<div id="loader">
+  <div class="ld-logo">numex<span>.</span></div>
+  <div class="ld-bar"><i id="ldBar"></i></div>
+  <div class="ld-num" id="ldNum">000</div>
+</div>
+<div id="progress"></div>
+<canvas id="gl"></canvas>
+<div class="scrim" id="scrim"></div>
+<div id="callouts"></div>
+
+<header class="nav" id="nav">
+  <a class="brand" href="#top" aria-label="Numex ana sayfa">
+    <svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><rect x="1.5" y="1.5" width="29" height="29" rx="8" stroke="currentColor" stroke-opacity=".35"/><path d="M9 23V9l14 14V9" stroke="var(--acc)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    numex<b>.</b>
+  </a>
+  <nav id="navlinks">
+    <a href="#genel">Genel bakış</a>
+    <a href="#icinde">Katmanlar</a>
+    <a href="#moduller">Modüller</a>
+    <a href="#ozellikler">Özellikler</a>
+  </nav>
+  <a class="btn-pill solid" href="#erisim">Erken erişim</a>
+</header>
+
+<main>
+  <section class="hero" id="top">
+    <span class="mk" data-state="hero" style="top:50vh"></span>
+    <div class="hero-in">
+      <p class="eyebrow rv">Numex Çekirdek · N1</p>
+      <h1 class="rv">Kodlayan değil.<br><em>Seninle düşünen.</em></h1>
+      <p class="lede rv">Türkçe düşünen bir yazılım ortağı: kodunu okur, sana sorar, onayınla dokunur. Dört uzman modül, tek bir çekirdekte.</p>
+    </div>
+    <div class="hero-cta rv">
+      <a class="btn-pill solid" href="#erisim">Erken erişim · Ücretsiz</a>
+      <span class="hint">Kaydır, içine bak ↓</span>
+    </div>
+  </section>
+
+  <section class="sec" id="genel">
+    <span class="mk" data-state="tek"></span>
+    <div class="stick">
+      <div class="panel fx">
+        <p class="eyebrow">01 — Genel bakış</p>
+        <h2>Tek çekirdek.<br><em>Dört akıl.</em></h2>
+        <p class="lede">Numex bir kod üreticisi değil, kıdemli bir ortak. Akıl yürüten çekirdek, terminalde çalışan ajan, editörünün içindeki yol arkadaşı ve kendi ajanını kurman için bir SDK — hepsi aynı bağlamı paylaşır.</p>
+        <div class="stats">
+          <div>4<small>uzman modül</small></div>
+          <div>1<small>ortak bağlam</small></div>
+          <div>TR<small>önce Türkçe</small></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="icinde">
+    <span class="mk" data-state="katman"></span>
+    <div class="stick">
+      <div class="panel fx">
+        <p class="eyebrow">02 — Katmanlar</p>
+        <h2>Beş katman.<br><em>Tek amaç.</em></h2>
+        <p class="lede">Çekirdeği aç, içini gör. Her katman tek bir işi kusursuz yapar: senin onayını korur, depoyu hatırlar, değişikliği cerrahi hassasiyetle uygular.</p>
+      </div>
+    </div>
+  </section>
+
+  <div id="moduller">
+    <div class="mods-head">
+      <div class="panel fx">
+        <p class="eyebrow">03 — Modül sırası</p>
+        <h2>Dört tuş.<br><em>Dört uzman.</em></h2>
+      </div>
+    </div>
+    <section class="mod">
+      <span class="mk" data-state="m0"></span>
+      <div class="panel fx">
+        <p class="num"><i></i>01 / 04 · NUMEX AI</p>
+        <h3>Akıl yürüten <em>çekirdek.</em></h3>
+        <p class="lede">Graph-RAG ile en büyük depoda bile anlamsal arama. Niyetini dinler, Web, masaüstü ya da oyun — sana uygun yolu önerir.</p>
+        <div class="tags"><span>Graph-RAG</span><span>Scale-RAG</span><span>Niyet algılama</span></div>
+      </div>
+    </section>
+    <section class="mod">
+      <span class="mk" data-state="m1"></span>
+      <div class="panel fx">
+        <p class="num"><i></i>02 / 04 · NUMEX CLI</p>
+        <h3>Cerrahi <em>terminal ajanı.</em></h3>
+        <p class="lede">Dosyayı yeniden yazmaz; satır aralığına neşter atar. Hatalı süreci canlı izler, durdurur ve kendini onarır — ilerlemeyi adım adım ağaç olarak gösterir.</p>
+        <div class="tags"><span>Fast-patch</span><span>Canlı izleme</span><span>İlerleme ağacı</span></div>
+      </div>
+    </section>
+    <section class="mod">
+      <span class="mk" data-state="m2"></span>
+      <div class="panel fx">
+        <p class="num"><i></i>03 / 04 · NUMEX CODEX</p>
+        <h3>Editöründeki <em>yol arkadaşı.</em></h3>
+        <p class="lede">VS Code ve VSCodium için. Açıklar, onay ister, sonra yazar. Gömülü sunucu ve tarayıcı konsolu ile yaptığını canlı doğrular.</p>
+        <div class="tags"><span>VS Code</span><span>VSCodium</span><span>Canlı doğrulama</span></div>
+      </div>
+    </section>
+    <section class="mod">
+      <span class="mk" data-state="m3"></span>
+      <div class="panel fx">
+        <p class="num"><i></i>04 / 04 · NUMEX SDK</p>
+        <h3>Kendi ajanını <em>kur.</em></h3>
+        <p class="lede">Numex altyapısını kendi ürününe bağla. API bağlayıcıları ve ajan kitleri ile otonom iş akışlarını dakikalar içinde ayağa kaldır.</p>
+        <div class="tags"><span>Agentic SDK</span><span>API bağlayıcıları</span><span>Açık taban</span></div>
+      </div>
+    </section>
+  </div>
+
+  <section class="sec" id="yakin">
+    <span class="mk" data-state="codex"></span>
+    <div class="stick">
+      <div class="panel fx">
+        <p class="eyebrow">04 — Yakın plan</p>
+        <h2>Kapağı<br><em>kaldır.</em></h2>
+        <p class="lede">Codex modülünü parçalarına ayır: önce ne yapacağını anlatan kapak, sonra her değişikliği test eden doğrulama çekirdeği, en altta editörünle tek gövde olan bağlam tabanı.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="ozellikler">
+    <span class="mk" data-state="specs"></span>
+    <div class="head fx">
+      <p class="eyebrow">05 — Özellikler</p>
+      <h2>Detayda <em>güçlü.</em></h2>
+      <p class="lede">Gösteriş için değil, her gün kullanmak için tasarlandı.</p>
+    </div>
+    <div class="grid fx">
+      <div class="cell"><div class="k">Dil</div><div class="v">Önce <em>Türkçe</em></div><p>Türkçe düşünür, Türkçe açıklar; teknik terimi zorla çevirmez.</p></div>
+      <div class="cell"><div class="k">Bellek</div><div class="v">Graph-RAG</div><p>Deponun tamamını ilişkileriyle hatırlar; doğru dosyayı tahmin etmez, bilir.</p></div>
+      <div class="cell"><div class="k">Hız</div><div class="v">RAM önbellek</div><p>Bellek içi mikro önbellek, ayrıştırma ve disk beklemesini ortadan kaldırır.</p></div>
+      <div class="cell"><div class="k">Düzenleme</div><div class="v">Cerrahi yama</div><p>Unified diff ve satır aralığıyla yalnızca gereken yeri değiştirir.</p></div>
+      <div class="cell"><div class="k">Güven</div><div class="v">Onay <em>önce</em></div><p>Ne yapacağını anlatır, sen onaylamadan dosyaya dokunmaz.</p></div>
+      <div class="cell"><div class="k">Platform</div><div class="v">Web · EXE · Oyun</div><p>Terminal, VS Code, VSCodium ve kendi uygulamanda SDK ile.</p></div>
+    </div>
+  </section>
+
+  <section class="sec" id="erisim">
+    <span class="mk" data-state="final"></span>
+    <div class="stick">
+      <div class="panel fx">
+        <p class="eyebrow">Erken erişim</p>
+        <h2 style="font-size:clamp(46px,7vw,108px)">Kur. Konuş.<br><em>İnşa et.</em></h2>
+        <p class="lede">İlk kullanıcılar arasında ol. Çekirdek açıldığında ilk sen haberdar ol.</p>
+        <form class="join" id="join">
+          <input type="email" required placeholder="e-posta adresin" aria-label="E-posta adresi">
+          <button class="btn-pill acc" type="submit">Listeye katıl</button>
+        </form>
+        <p class="ok" id="ok"></p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span>© 2026 Numex AI · Türkiye</span>
+  <span>Numex Çekirdek N1 · Numex AI · CLI · Codex · SDK</span>
+</footer>
+
+<div class="theme" id="theme">
+  <span>GÖRÜNÜM</span>
+  <button class="on" data-c="#2dd4bf" style="background:#2dd4bf" aria-label="Turkuaz"></button>
+  <button data-c="#ff8a3d" style="background:#ff8a3d" aria-label="Kehribar"></button>
+  <button data-c="#8b7bff" style="background:#8b7bff" aria-label="Mor"></button>
+  <button data-c="#7dd3fc" style="background:#7dd3fc" aria-label="Buz"></button>
+</div>
+
+<script>
+/* güvenlik ağı: 3D kütüphanesi yüklenemezse sayfa yine açılır */
+setTimeout(function(){var l=document.getElementById('loader');if(l&&!l.classList.contains('done')){l.classList.add('done');document.body.classList.remove('loading');document.body.classList.add('nogl','ready');document.querySelectorAll('.fx').forEach(function(e){e.classList.add('in')});}},9000);
+</script>
+<script type="importmap">
+{"imports":{"three":"https://unpkg.com/three@0.170.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.170.0/examples/jsm/"}}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const smooth = t => t * t * (3 - 2 * t);
+const ease = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+const bounce = t => { const n = 7.5625, d = 2.75;
+  if (t < 1 / d) return n * t * t; if (t < 2 / d) return n * (t -= 1.5 / d) * t + .75;
+  if (t < 2.5 / d) return n * (t -= 2.25 / d) * t + .9375; return n * (t -= 2.625 / d) * t + .984375; };
+
+/* ---------- UI (works with or without WebGL) ---------- */
+const io = new IntersectionObserver(es => es.forEach(e => e.isIntersecting && e.target.classList.add('in')), { threshold: .25 });
+document.querySelectorAll('.fx').forEach(el => io.observe(el));
+document.getElementById('join').addEventListener('submit', e => {
+  e.preventDefault();
+  document.getElementById('ok').textContent = 'Listedesin. Çekirdek açıldığında ilk sana yazacağız.';
+  e.target.reset();
+});
+const nav = document.getElementById('nav'), prog = document.getElementById('progress');
+const navLinks = [...document.querySelectorAll('#navlinks a')];
+function onScrollUI() {
+  const max = document.documentElement.scrollHeight - innerHeight;
+  prog.style.width = (scrollY / Math.max(1, max) * 100) + '%';
+  nav.classList.toggle('solid', scrollY > 40);
+  let cur = null;
+  navLinks.forEach(a => { const s = document.querySelector(a.getAttribute('href')); if (s && s.getBoundingClientRect().top < innerHeight * .5) cur = a; });
+  navLinks.forEach(a => a.classList.toggle('on', a === cur));
+}
+addEventListener('scroll', onScrollUI, { passive: true }); onScrollUI();
+
+const ACC = new THREE.Color('#2dd4bf');
+document.querySelectorAll('#theme button').forEach(b => b.addEventListener('click', () => {
+  document.querySelectorAll('#theme button').forEach(x => x.classList.toggle('on', x === b));
+  document.documentElement.style.setProperty('--acc', b.dataset.c);
+  ACC.set(b.dataset.c);
+}));
+
+/* ---------- loader ---------- */
+const loader = document.getElementById('loader');
+let introStart = -1;
+function runLoader(onDone) {
+  const bar = document.getElementById('ldBar'), num = document.getElementById('ldNum');
+  const t0 = performance.now(), dur = reduce ? 200 : 1100;
+  (function tick(now) {
+    const p = clamp((now - t0) / dur);
+    bar.style.width = (p * 100) + '%';
+    num.textContent = String(Math.round(ease(p) * 100)).padStart(3, '0');
+    if (p < 1) requestAnimationFrame(tick);
+    else { loader.classList.add('done'); document.body.classList.remove('loading'); onDone(); }
+  })(t0);
+}
+
+/* ---------- WebGL ---------- */
+let renderer;
+try {
+  renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('gl'), antialias: true, powerPreference: 'high-performance' });
+} catch (e) {
+  document.body.classList.add('nogl');
+  runLoader(() => document.body.classList.add('ready'));
+}
+
+if (renderer) {
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setSize(innerWidth, innerHeight);
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.05;
+
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x05080c);
+  scene.fog = new THREE.Fog(0x05080c, 10, 24);
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+  scene.environmentIntensity = 0.45;
+
+  const camera = new THREE.PerspectiveCamera(32, innerWidth / innerHeight, 0.1, 100);
+  const key = new THREE.DirectionalLight(0xffffff, 1.4); key.position.set(3, 6, 4); scene.add(key);
+  const rim = new THREE.DirectionalLight(0x9fb4ff, .6); rim.position.set(-5, 2, -4); scene.add(rim);
+  const glowLight = new THREE.PointLight(ACC, 6, 6, 1.6); glowLight.position.set(0, 1.1, 0); scene.add(glowLight);
+
+  const chip = new THREE.Group(); scene.add(chip);
+  const L = {}; ['substrate', 'traces', 'cells', 'modules', 'glass'].forEach(k => { L[k] = new THREE.Group(); chip.add(L[k]); });
+  const EXPLODE = { substrate: -0.85, traces: -0.3, cells: 0.35, modules: 0.95, glass: 1.7 };
+
+  /* floor reflection-ish glow */
+  const floorTex = (() => { const c = document.createElement('canvas'); c.width = c.height = 256; const g = c.getContext('2d');
+    const gr = g.createRadialGradient(128, 128, 0, 128, 128, 128); gr.addColorStop(0, 'rgba(255,255,255,.55)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+    g.fillStyle = gr; g.fillRect(0, 0, 256, 256); return new THREE.CanvasTexture(c); })();
+  const floorMat = new THREE.MeshBasicMaterial({ map: floorTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, color: ACC.clone().multiplyScalar(.25) });
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(9, 7), floorMat); floor.rotation.x = -Math.PI / 2; floor.position.y = -0.35; scene.add(floor);
+
+  /* substrate */
+  const subMat = new THREE.MeshStandardMaterial({ color: 0x0a0f15, metalness: .55, roughness: .42 });
+  const sub = new THREE.Mesh(new RoundedBoxGeometry(4.7, 0.14, 3.4, 4, 0.06), subMat); L.substrate.add(sub);
+  const edgeMat = new THREE.MeshStandardMaterial({ color: 0x1a222c, metalness: .8, roughness: .3 });
+  const rimMesh = new THREE.Mesh(new RoundedBoxGeometry(4.78, 0.05, 3.48, 4, 0.025), edgeMat); rimMesh.position.y = -0.055; L.substrate.add(rimMesh);
+  const padMat = new THREE.MeshStandardMaterial({ color: 0xc9a45c, metalness: 1, roughness: .28 });
+  const padPos = [];
+  for (let x = -2.05; x <= 2.06; x += 0.15) { padPos.push([x, 1.6, 0]); padPos.push([x, -1.6, 0]); }
+  for (let z = -1.35; z <= 1.36; z += 0.15) { padPos.push([2.26, z, 1]); padPos.push([-2.26, z, 1]); }
+  const pads = new THREE.InstancedMesh(new THREE.BoxGeometry(0.07, 0.016, 0.13), padMat, padPos.length);
+  const dm = new THREE.Object3D();
+  padPos.forEach((p, i) => { const side = p[2]; dm.position.set(side ? p[0] : p[0], 0.077, side ? p[1] : p[1]); dm.rotation.set(0, side ? Math.PI / 2 : 0, 0); dm.updateMatrix(); pads.setMatrixAt(i, dm.matrix); });
+  L.substrate.add(pads);
+  const capMat = new THREE.MeshStandardMaterial({ color: 0x2a2f36, metalness: .6, roughness: .35 });
+  [[-2.0, -1.3], [-1.82, -1.3], [2.0, 1.3], [1.82, 1.3], [2.0, -1.3], [-2.0, 1.3]].forEach(([x, z]) => {
+    const c = new THREE.Mesh(new RoundedBoxGeometry(0.1, 0.07, 0.16, 2, 0.015), capMat); c.position.set(x, 0.105, z); L.substrate.add(c); });
+
+  /* traces (circuit layer) */
+  const traceTex = (() => {
+    const c = document.createElement('canvas'); c.width = 1410; c.height = 1020; const g = c.getContext('2d');
+    g.strokeStyle = 'rgba(255,255,255,.55)'; g.fillStyle = 'rgba(255,255,255,.9)'; g.lineCap = 'round'; g.lineJoin = 'round';
+    let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    const dirs = [[1, 0], [0, 1], [-1, 0], [0, -1], [.707, .707], [-.707, .707], [.707, -.707], [-.707, -.707]];
+    for (let i = 0; i < 190; i++) {
+      let x = rnd() * c.width, y = rnd() * c.height, d = dirs[Math.floor(rnd() * 4)];
+      g.lineWidth = rnd() < .2 ? 3 : 1.6; g.beginPath(); g.moveTo(x, y);
+      const segs = 2 + Math.floor(rnd() * 4);
+      for (let s = 0; s < segs; s++) { const len = 30 + rnd() * 150; x += d[0] * len; y += d[1] * len; g.lineTo(x, y); d = dirs[Math.floor(rnd() * 8)]; }
+      g.stroke(); g.beginPath(); g.arc(x, y, 3.4, 0, Math.PI * 2); g.fill();
+    }
+    g.globalCompositeOperation = 'destination-in';
+    const gr = g.createRadialGradient(c.width / 2, c.height / 2, 100, c.width / 2, c.height / 2, c.width * .62);
+    gr.addColorStop(0, 'rgba(0,0,0,1)'); gr.addColorStop(1, 'rgba(0,0,0,.15)'); g.fillStyle = gr; g.fillRect(0, 0, c.width, c.height);
+    const t = new THREE.CanvasTexture(c); t.anisotropy = 8; return t;
+  })();
+  const traceMat = new THREE.MeshBasicMaterial({ map: traceTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, toneMapped: false });
+  const traces = new THREE.Mesh(new THREE.PlaneGeometry(4.6, 3.32), traceMat); traces.rotation.x = -Math.PI / 2; traces.position.y = 0.072; L.traces.add(traces);
+
+  /* cells */
+  const P = 0.34, cellsData = [];
+  for (let r = 0; r < 8; r++) for (let c = 0; c < 12; c++) {
+    if (c >= 4 && c <= 7 && r >= 2 && r <= 5) continue;
+    cellsData.push({ x: (c - 5.5) * P, z: (r - 3.5) * P, r, c, lift: 0, delay: .12 + Math.random() * .42 });
+  }
+  const cellMat = new THREE.MeshStandardMaterial({ color: 0x121a23, metalness: .35, roughness: .45 });
+  const cells = new THREE.InstancedMesh(new RoundedBoxGeometry(0.28, 0.08, 0.28, 2, 0.025), cellMat, cellsData.length);
+  const topGeo = new THREE.PlaneGeometry(0.19, 0.19); topGeo.rotateX(-Math.PI / 2);
+  const tops = new THREE.InstancedMesh(topGeo, new THREE.MeshBasicMaterial({ toneMapped: false }), cellsData.length);
+  const tmpC = new THREE.Color();
+  cellsData.forEach((d, i) => tops.setColorAt(i, tmpC.setRGB(.05, .07, .09)));
+  L.cells.add(cells, tops);
+
+  /* modules */
+  const MOD = [
+    { name: 'AI', sub: 'ÇEKİRDEK', n: '01', x: -P, z: -P },
+    { name: 'CLI', sub: 'TERMİNAL', n: '02', x: P, z: -P },
+    { name: 'CODEX', sub: 'EDİTÖR', n: '03', x: -P, z: P },
+    { name: 'SDK', sub: 'GELİŞTİRİCİ', n: '04', x: P, z: P },
+  ];
+  const labelTex = m => {
+    const c = document.createElement('canvas'); c.width = c.height = 256; const g = c.getContext('2d');
+    g.strokeStyle = 'rgba(255,255,255,.5)'; g.lineWidth = 3; g.beginPath(); g.roundRect(14, 14, 228, 228, 26); g.stroke();
+    g.fillStyle = '#fff'; g.font = '500 22px "JetBrains Mono", monospace'; g.fillText(m.n, 34, 56);
+    g.font = '700 ' + (m.name.length > 3 ? 54 : 74) + 'px "Inter Tight", sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.fillText(m.name, 128, 134);
+    g.font = '500 17px "JetBrains Mono", monospace'; g.globalAlpha = .7; g.fillText(m.sub, 128, 196);
+    const t = new THREE.CanvasTexture(c); t.anisotropy = 8; return t;
+  };
+  const baseMat = new THREE.MeshStandardMaterial({ color: 0x161d26, metalness: .7, roughness: .3 });
+  const capMat2 = new THREE.MeshPhysicalMaterial({ color: 0x0b1218, metalness: .1, roughness: .15, clearcoat: 1, transparent: true, opacity: .6 });
+  MOD.forEach(m => {
+    const g = new THREE.Group(); g.position.set(m.x, 0, m.z);
+    m.base = new THREE.Mesh(new RoundedBoxGeometry(0.62, 0.06, 0.62, 3, 0.02), baseMat); m.base.position.y = 0.10;
+    m.coreMat = new THREE.MeshBasicMaterial({ toneMapped: false });
+    m.core = new THREE.Mesh(new RoundedBoxGeometry(0.5, 0.04, 0.5, 2, 0.015), m.coreMat); m.core.position.y = 0.15;
+    m.cap = new THREE.Group(); m.cap.position.y = 0.2;
+    m.cap.add(new THREE.Mesh(new RoundedBoxGeometry(0.64, 0.06, 0.64, 3, 0.022), capMat2));
+    m.labelMat = new THREE.MeshBasicMaterial({ transparent: true, toneMapped: false, depthWrite: false });
+    const lab = new THREE.Mesh(new THREE.PlaneGeometry(0.58, 0.58), m.labelMat); lab.rotation.x = -Math.PI / 2; lab.position.y = 0.032; m.cap.add(lab);
+    g.add(m.base, m.core, m.cap); m.group = g; L.modules.add(g);
+  });
+  const drawLabels = () => MOD.forEach(m => { if (m.labelMat.map) m.labelMat.map.dispose(); m.labelMat.map = labelTex(m); m.labelMat.needsUpdate = true; });
+  drawLabels(); document.fonts && document.fonts.ready.then(drawLabels);
+
+  /* glass shield */
+  const glassMat = new THREE.MeshPhysicalMaterial({ color: 0xffffff, metalness: 0, roughness: .06, clearcoat: 1, transparent: true, opacity: .07, depthWrite: false });
+  const glass = new THREE.Mesh(new RoundedBoxGeometry(4.5, 0.04, 3.2, 4, 0.02), glassMat); L.glass.add(glass);
+  const frameMat = new THREE.MeshStandardMaterial({ color: 0x2a333e, metalness: .9, roughness: .25 });
+  [[0, 1.6, 4.5, .05], [0, -1.6, 4.5, .05], [2.25, 0, .05, 3.2], [-2.25, 0, .05, 3.2]].forEach(([x, z, w, d]) => {
+    const f = new THREE.Mesh(new THREE.BoxGeometry(w, 0.05, d), frameMat); f.position.set(x, 0, z); L.glass.add(f); });
+  const brandTex = (() => { const c = document.createElement('canvas'); c.width = 512; c.height = 64; const g = c.getContext('2d');
+    g.fillStyle = 'rgba(255,255,255,.75)'; g.font = '500 26px "JetBrains Mono", monospace'; g.fillText('NUMEX · ÇEKİRDEK N1', 6, 40); return new THREE.CanvasTexture(c); })();
+  const brand = new THREE.Mesh(new THREE.PlaneGeometry(1.4, 0.175), new THREE.MeshBasicMaterial({ map: brandTex, transparent: true, depthWrite: false, opacity: .8 }));
+  brand.rotation.x = -Math.PI / 2; brand.position.set(-1.38, 0.023, 1.42); L.glass.add(brand);
+  const GLASS_Y = 0.42;
+
+  /* post */
+  const composer = new EffectComposer(renderer);
+  composer.addPass(new RenderPass(scene, camera));
+  const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), .85, .55, .82);
+  composer.addPass(bloom); composer.addPass(new OutputPass());
+
+  /* ---------- states ---------- */
+  const N = 17;
+  const S = o => { const a = new Float32Array(N); const l = o.l ?? [.22, .22, .22, .22];
+    a.set([...o.cam, ...o.tgt, o.rot ?? 0, o.ex ?? 0, ...l, o.focus ?? 0, o.flood ?? 0, o.hover ?? 0, o.spin ?? 0, o.dim ?? 0]); return a; };
+  const STATES = {
+    hero:   S({ cam: [0, 4.3, 7.4], tgt: [0, 1.25, 0], hover: 1 }),
+    tek:    S({ cam: [4.6, 2.6, 4.9], tgt: [-1.1, 0.25, 0.1], rot: -.2, ex: .1, l: [.35, .35, .35, .35] }),
+    katman: S({ cam: [8.4, 3.9, 9.8], tgt: [-1.9, 0.45, 0], rot: -.35, ex: 1, l: [.5, .5, .5, .5] }),
+    m0:     S({ cam: [-1.7, 7.8, 4.6], tgt: [-1.8, 0, 0.3], ex: .05, l: [1, .1, .1, .1] }),
+    m1:     S({ cam: [-1.7, 7.8, 4.6], tgt: [-1.8, 0, 0.3], ex: .05, l: [.4, 1, .1, .1] }),
+    m2:     S({ cam: [-1.7, 7.8, 4.6], tgt: [-1.8, 0, 0.3], ex: .05, l: [.4, .4, 1, .1] }),
+    m3:     S({ cam: [-1.7, 7.8, 4.6], tgt: [-1.8, 0, 0.3], ex: .05, l: [.4, .4, .4, 1] }),
+    codex:  S({ cam: [1.3, 2.0, 2.9], tgt: [-1.05, 0.4, 0.25], focus: 1, l: [.08, .08, 1, .08] }),
+    specs:  S({ cam: [0, 8.2, 4.4], tgt: [0, -0.8, 0], ex: .35, spin: 1, dim: .5, l: [.5, .5, .5, .5] }),
+    final:  S({ cam: [0, 3.0, 5.9], tgt: [0, 0.55, 0], flood: 1, l: [1, 1, 1, 1] }),
+  };
+  let stops = [];
+  function measure() {
+    stops = [...document.querySelectorAll('[data-state]')].map(el => {
+      const r = el.getBoundingClientRect(); return { name: el.dataset.state, pos: r.top + scrollY - innerHeight / 2 };
+    }).sort((a, b) => a.pos - b.pos);
+    stops[0].pos = Math.min(stops[0].pos, 0);
+  }
+  const target = new Float32Array(N), cur = new Float32Array(N), W = {};
+  function sample(y) {
+    for (const k in STATES) W[k] = 0;
+    let i = 0; while (i < stops.length - 2 && y > stops[i + 1].pos) i++;
+    const a = stops[i], b = stops[i + 1];
+    let t = clamp((y - a.pos) / (b.pos - a.pos));
+    t = ease(clamp((t - .12) / .76));
+    const A = STATES[a.name], B = STATES[b.name];
+    for (let k = 0; k < N; k++) target[k] = A[k] + (B[k] - A[k]) * t;
+    W[a.name] += 1 - t; W[b.name] += t;
+  }
+  measure(); sample(scrollY); cur.set(target);
+  const Wd = {}; for (const k in STATES) Wd[k] = W[k];
+
+  /* ---------- callouts ---------- */
+  const coRoot = document.getElementById('callouts');
+  const mkCo = (title, desc) => { const d = document.createElement('div'); d.className = 'co';
+    d.innerHTML = `<i class="dot"></i><span class="ln"></span><div class="tx"><b>${title}</b><small>${desc}</small></div>`; coRoot.appendChild(d); return d; };
+  const layerCO = [
+    { layer: 'glass', y: 0, el: mkCo('Onay kalkanı', 'Senin onayın olmadan tek satıra dokunmaz.') },
+    { layer: 'modules', y: 0.2, el: mkCo('Uzman modüller', 'AI · CLI · Codex · SDK') },
+    { layer: 'cells', y: 0.12, el: mkCo('Bellek hücreleri', 'Graph-RAG: depoyu ilişkileriyle hatırlar.') },
+    { layer: 'traces', y: 0.07, el: mkCo('Devre katmanı', 'RAM önbellek motoru, sıfır I/O beklemesi.') },
+    { layer: 'substrate', y: 0, el: mkCo('Açık taban', 'SDK ile kendi ajanını bu tabana kur.') },
+  ];
+  const codexCO = [
+    { part: 'cap', el: mkCo('Kapak', 'Ne yapacağını önce sana anlatır.') },
+    { part: 'core', el: mkCo('Doğrulama çekirdeği', 'Gömülü sunucu + tarayıcı konsolu ile canlı test.') },
+    { part: 'base', el: mkCo('Bağlam tabanı', 'VS Code / VSCodium ile tek gövde.') },
+  ];
+  const v3 = new THREE.Vector3();
+  function place(el, local, op) {
+    if (op < .01) { el.style.opacity = 0; return; }
+    v3.copy(local); chip.localToWorld(v3); v3.project(camera);
+    const x = (v3.x * .5 + .5) * innerWidth, y = (-v3.y * .5 + .5) * innerHeight;
+    el.style.opacity = op; el.style.transform = `translate(${x}px,${y}px) translateY(-50%)`;
+  }
+
+  /* ---------- input ---------- */
+  const mouse = new THREE.Vector2(9, 9), mSmooth = new THREE.Vector2();
+  addEventListener('pointermove', e => { mouse.set(e.clientX / innerWidth * 2 - 1, -(e.clientY / innerHeight) * 2 + 1); });
+  document.addEventListener('pointerleave', () => mouse.set(9, 9));
+  const ray = new THREE.Raycaster(), plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0), hit = new THREE.Vector3();
+  addEventListener('resize', () => {
+    renderer.setSize(innerWidth, innerHeight); composer.setSize(innerWidth, innerHeight);
+    camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); measure();
+  });
+  addEventListener('load', measure);
+
+  /* ---------- intro path ---------- */
+  const introCam = new THREE.CatmullRomCurve3([[-3.6, .42, 1.7], [-1.4, .48, .55], [1.2, .62, -.35], [3.5, 1.9, 1.5], [0, 4.3, 7.4]].map(p => new THREE.Vector3(...p)));
+  const introTgt = new THREE.CatmullRomCurve3([[-.8, .18, .5], [1.2, .2, .1], [2.4, .25, -.6], [.6, .4, 0], [0, 1.25, 0]].map(p => new THREE.Vector3(...p)));
+  const INTRO = reduce ? 0.001 : 3.8;
+
+  /* ---------- loop ---------- */
+  const clock = new THREE.Clock(); let time = 0;
+  const camPos = new THREE.Vector3(), camTgt = new THREE.Vector3(), sp = new THREE.Vector3(), st = new THREE.Vector3();
+  const coreCol = new THREE.Color(), white = new THREE.Color(1, 1, 1), baseTop = new THREE.Color(.05, .07, .09);
+  runLoader(() => { introStart = performance.now() / 1000; });
+
+  function frame() {
+    const rawDt = Math.min(.5, clock.getDelta()), dt = Math.min(.05, rawDt); time += dt;
+    sample(scrollY);
+    const k = 1 - Math.exp(-rawDt * 5);
+    for (let i = 0; i < N; i++) cur[i] += (target[i] - cur[i]) * k;
+    for (const n in W) Wd[n] += (W[n] - Wd[n]) * (1 - Math.exp(-rawDt * 7));
+    mSmooth.lerp(mouse.x > 5 ? new THREE.Vector2() : mouse, 1 - Math.exp(-dt * 4));
+
+    const iT = introStart < 0 ? 0 : clamp((performance.now() / 1000 - introStart) / INTRO);
+    if (iT > .62) document.body.classList.add('ready');
+
+    /* camera */
+    sp.set(cur[0], cur[1], cur[2]); st.set(cur[3], cur[4], cur[5]);
+    if (camera.aspect < 1) { st.x *= .15; sp.sub(st).multiplyScalar(1.75).add(st); st.y -= .5; }
+    else if (camera.aspect < 1.7) { sp.sub(st).multiplyScalar(1.7 / camera.aspect).add(st); }
+    sp.x += mSmooth.x * .35; sp.y += mSmooth.y * .2;
+    const ie = ease(iT);
+    introCam.getPoint(ie, camPos); introTgt.getPoint(ie, camTgt);
+    const blend = smooth(clamp((iT - .72) / .28));
+    camPos.lerp(sp, blend); camTgt.lerp(st, blend);
+    camera.position.copy(camPos); camera.lookAt(camTgt);
+
+    /* chip pose */
+    chip.rotation.y = cur[6] + cur[15] * Math.sin(time * .25) * .5;
+    chip.position.y = Math.sin(time * .8) * .025;
+    const ex = cur[7];
+    L.substrate.position.y = EXPLODE.substrate * ex;
+    L.traces.position.y = EXPLODE.traces * ex;
+    L.cells.position.y = EXPLODE.cells * ex;
+    L.modules.position.y = EXPLODE.modules * ex;
+    L.glass.position.y = GLASS_Y + EXPLODE.glass * ex + (1 - smooth(clamp((iT - .7) / .3))) * 2.5;
+    glassMat.opacity = .07 + ex * .05;
+    renderer.toneMappingExposure = 1.05 - cur[16] * .35;
+
+    const flood = cur[13], wake = smooth(clamp(iT / .45));
+    traceMat.color.copy(ACC).multiplyScalar((.25 + .5 * flood + .25 * ex) * wake + .02);
+    floorMat.color.copy(ACC).multiplyScalar(.12 + .35 * flood);
+    glowLight.color.copy(ACC); glowLight.intensity = (3 + 8 * flood + 4 * (cur[8] + cur[9] + cur[10] + cur[11]) / 4) * wake;
+
+    /* hover ray */
+    let hx = 99, hz = 99;
+    if (mouse.x < 5 && cur[14] > .02) {
+      ray.setFromCamera(mouse, camera);
+      plane.constant = -(chip.position.y + L.cells.position.y + .15);
+      if (ray.ray.intersectPlane(plane, hit)) { chip.worldToLocal(hit); hx = hit.x; hz = hit.z; }
+    }
+
+    /* cells */
+    const hv = cur[14];
+    cellsData.forEach((d, i) => {
+      const dist = Math.hypot(d.x - hx, d.z - hz);
+      let tl = Math.max(0, 1 - dist / .8); tl = tl * tl * hv;
+      d.lift += (tl - d.lift) * Math.min(1, dt * 9);
+      const p = clamp((iT - d.delay) / .26), drop = (1 - bounce(p)) * 2.6;
+      const y = .11 + d.lift * .17 + drop;
+      dm.position.set(d.x, y, d.z); dm.rotation.set(0, 0, 0); dm.updateMatrix(); cells.setMatrixAt(i, dm.matrix);
+      dm.position.y = y + .041; dm.updateMatrix(); tops.setMatrixAt(i, dm.matrix);
+      const wave = .5 + .5 * Math.sin(time * 2.4 - (d.r + d.c * .4) * .9);
+      const g = d.lift * 2.2 + flood * (.25 + .9 * wave) + .05 * wave * wake;
+      tmpC.setRGB(baseTop.r + ACC.r * g, baseTop.g + ACC.g * g, baseTop.b + ACC.b * g); tops.setColorAt(i, tmpC);
+    });
+    cells.instanceMatrix.needsUpdate = tops.instanceMatrix.needsUpdate = true; tops.instanceColor.needsUpdate = true;
+
+    /* modules */
+    const focus = cur[12];
+    MOD.forEach((m, i) => {
+      const lv = cur[8 + i], p = clamp((iT - (.5 + i * .06)) / .26);
+      m.group.position.y = (1 - bounce(p)) * 2.8;
+      coreCol.copy(ACC).multiplyScalar(.1 + lv * 1.3 + flood * .6 * (.6 + .4 * Math.sin(time * 3 + i)));
+      m.coreMat.color.copy(coreCol);
+      m.labelMat.color.copy(white).lerp(ACC, .25 + lv * .4).multiplyScalar(.35 + lv * 1.25);
+      const f = i === 2 ? focus : 0;
+      m.core.position.y = .15 + f * .3; m.cap.position.y = .2 + f * .66;
+      m.cap.rotation.x = f * -.12; m.core.rotation.y = f * .2;
+    });
+
+    composer.render();
+
+    /* callouts */
+    chip.updateMatrixWorld();
+    const kw = smooth(clamp((Wd.katman - .55) / .4));
+    layerCO.forEach(c => place(c.el, v3.set(2.38, L[c.layer].position.y + c.y + (c.layer === 'glass' ? 0 : 0), 0.0), kw));
+    const cw = smooth(clamp((Wd.codex - .55) / .4)), cm = MOD[2];
+    codexCO.forEach(c => { const o = cm[c.part];
+      place(c.el, v3.set(cm.x + .34, L.modules.position.y + cm.group.position.y + o.position.y, cm.z), cw); });
+
+    document.getElementById('scrim').style.opacity = clamp(1 - Wd.hero - Wd.final * .7 - Wd.specs * .3).toFixed(3);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+</script>
+</body>
+</html>

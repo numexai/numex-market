@@ -1,5 +1,5 @@
 {
-  "toplam": 101,
+  "toplam": 104,
   "kategoriler": [
     {
       "ad": "Oyunlar",
@@ -39,7 +39,7 @@
     {
       "ad": "Diğer",
       "simge": "📦",
-      "sayi": 38,
+      "sayi": 41,
       "aciklama": "tanıtım sayfaları, ilan platformu ve daha fazlası"
     }
   ]
