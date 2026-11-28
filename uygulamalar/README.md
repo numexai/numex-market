@@ -1,6 +1,6 @@
 # Numex Market uygulamaları — ücretsiz, açık kaynak, Türkçe
 
-Numex AI'nın otonom olarak yazdığı, test ettiği ve [Numex Market](https://market.numexai.com.tr)'te yayımladığı **104 uygulamanın** kaynak kodu:
+Numex AI'nın otonom olarak yazdığı, test ettiği ve [Numex Market](https://market.numexai.com.tr)'te yayımladığı **105 uygulamanın** kaynak kodu:
 tarayıcı oyunları, simülasyonlar, yapay zekâ demoları, günlük araçlar, iş uygulamaları ve web masaüstleri.
 Her gün [numexai.com.tr](https://numexai.com.tr) vitrininden kendiliğinden eşitlenir. Hepsi [MIT lisanslı](LICENSE): dene, incele, çatalla.
 
@@ -104,7 +104,7 @@ Her gün [numexai.com.tr](https://numexai.com.tr) vitrininden kendiliğinden eş
 |---|---|
 | [**İnsan Vücudu — Sinir ve Dolaşım Laboratuvarı**](human-body-lab/) | Tarayıcıda çalışan, canlı verilerle tepki veren interaktif insan vücudu simülasyonu — kalp ritmi, kan akışı, sinir yolları. (Node/Express) |
 
-## 📦 Diğer (41)
+## 📦 Diğer (42)
 
 | Uygulama | Ne yapar |
 |---|---|
@@ -112,6 +112,7 @@ Her gün [numexai.com.tr](https://numexai.com.tr) vitrininden kendiliğinden eş
 | [**Akıllı iş ve kaynak planlama motoru**](divanihumayun/) |  |
 | [**Akıllı Kesim ve Fire Optimizasyonu**](testdusunce/) | Levha (stok) ve parça listesinden **gerçek, deterministik bir 2B yerleşim** üreten |
 | [**Akıllı Konteyner Terminali**](akilli-konteyner-terminali/) | Türkçe, tek klasörde çalışan, etkileşimli liman operasyon ve konteyner yerleştirme simülatörü. |
+| [**ana okulu wep sitesi**](sdasdasdasdasdasd/) | Rengârenk, hareketli ve oynanabilir bir anaokulu tanıtım sitesi. Okul yönetim sistemi değildir; kayıt, ödeme, veli paneli veya veritabanı yoktur. Çocuklardan kişisel bilgi toplanmaz. |
 | [**baglantiSuresiAyarla**](testkosu/) |  |
 | [**Çılgın Makineler Atölyesi**](mutluluk/) | Tarayıcıda çalışan, gerçek zamanlı fizik simülasyonuna dayalı Rube Goldberg makine atölyesi. |
 | [**çizgi roman yapımı**](cizgi-roman/) |  |
